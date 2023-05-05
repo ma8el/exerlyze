@@ -1,0 +1,7 @@
+{
+  "name": "exerlyze",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
