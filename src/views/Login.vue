@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { IonLabel, IonPage, IonContent, IonGrid, IonRow, IonCol, IonItem, IonInput, IonButton  } from '@ionic/vue';
 
 const email = ref('')
 const router = useRouter();
@@ -24,8 +25,7 @@ const redirect = () => {
             </div>
             <form @submit.prevent="onLogin">
               <ion-item>
-                <ion-label position="floating">Email</ion-label>
-                <ion-input type="email" v-model="email"></ion-input>
+                <ion-input label="Email" label-placement="floating" type="email" v-model="email"></ion-input>
               </ion-item>
               <ion-button expand="block" type="submit" shape="round" class="ion-margin-top">
                 Send magic link
