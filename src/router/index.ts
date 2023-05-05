@@ -17,17 +17,22 @@ const routes: Array<RouteRecordRaw> = [
         redirect: '/tabs/tab1'
       },
       {
-        path: 'tab1',
-        component: () => import('@/views/Tab1Page.vue')
+        path: 'home',
+        component: () => import('@/views/Home.vue')
       },
       {
-        path: 'tab2',
-        component: () => import('@/views/Tab2Page.vue')
+        path: 'workouts',
+        component: () => import('@/views/Workouts.vue')
       },
       {
-        path: 'tab3',
-        component: () => import('@/views/Tab3Page.vue')
+        path: 'nutrition',
+        component: () => import('@/views/Nutrition.vue')
+      },
+      {
+        path: 'you',
+        component: () => import('@/views/You.vue')
       }
+
     ]
   },
   {

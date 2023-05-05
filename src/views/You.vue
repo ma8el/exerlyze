@@ -2,17 +2,17 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Workouts</ion-title>
+        <ion-title>You</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Workouts</ion-title>
+          <ion-title size="large">You</ion-title>
         </ion-toolbar>
       </ion-header>
 
-      <ExploreContainer name="Workouts page" />
+      <ExploreContainer name="You page" />
     </ion-content>
   </ion-page>
 </template>
