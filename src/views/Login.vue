@@ -9,7 +9,7 @@ const onLogin = () => {
   console.log('Login');
 };
 const redirect = () => {
-  router.push('/');
+  router.push('/tabs/tab1');
 };
 </script>
 
