@@ -32,3 +32,4 @@ npm-debug.log*
 /www
 
 tests/e2e/videos
+.env
