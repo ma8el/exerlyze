@@ -2,6 +2,9 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonItem, IonInput, IonButton  } from '@ionic/vue';
+import { useDark } from '@vueuse/core'
+
+const isDark = useDark()
 
 const email = ref('')
 const router = useRouter();
@@ -21,7 +24,8 @@ const redirect = () => {
         <ion-row class="ion-justify-content-center">
           <ion-col size-md="6" size-lg="5" size-xs="12">
             <div class="logo-container">
-              <img src="../../assets/logo_transparent_white.png" alt="Logo" />
+              <img v-if="isDark" src="../../assets/logo_transparent_white.png" alt="Light Logo" />
+              <img v-else src="../../assets/logo_transparent_black.png" alt="Dark Logo" />
             </div>
             <form @submit.prevent="onLogin">
               <ion-item>
