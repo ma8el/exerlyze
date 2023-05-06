@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { IonLabel, IonPage, IonContent, IonGrid, IonRow, IonCol, IonItem, IonInput, IonButton  } from '@ionic/vue';
+import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonItem, IonInput, IonButton  } from '@ionic/vue';
 
 const email = ref('')
 const router = useRouter();
@@ -27,10 +27,10 @@ const redirect = () => {
               <ion-item>
                 <ion-input label="Email" label-placement="floating" type="email" v-model="email"></ion-input>
               </ion-item>
-              <ion-button expand="block" type="submit" shape="round" class="ion-margin-top">
+              <ion-button id="magic-link-button" expand="block" type="submit" shape="round" class="ion-margin-top">
                 Send magic link
               </ion-button>
-              <ion-button @click="redirect" expand="block" shape="round" class="ion-margin-top">
+              <ion-button id="no-login-button" @click="redirect" expand="block" shape="round" class="ion-margin-top">
                 Continue without login
               </ion-button>
             </form>
