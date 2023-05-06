@@ -2,6 +2,7 @@
   import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
   import ExploreContainer from '@/components/ExploreContainer.vue';
   import Toolbar from '@/components/Toolbar.vue';
+  import Calendar from '@/components/Calendar.vue';
 </script>
 
 <template>
@@ -14,7 +15,7 @@
           <ion-title size="large">Nutrition</ion-title>
         </ion-toolbar>
       </ion-header>
-
+      <Calendar />
       <ExploreContainer name="Nutrition page" />
     </ion-content>
   </ion-page>

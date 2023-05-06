@@ -2,6 +2,10 @@
   import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
   import ExploreContainer from '@/components/ExploreContainer.vue';
   import Toolbar from '@/components/Toolbar.vue';
+  import Calendar from '@/components/Calendar.vue';
+  import { useDark } from '@vueuse/core'
+
+  const isDark = useDark()
 </script>
 
 <template>
@@ -13,6 +17,7 @@
           <ion-title size="large">Home</ion-title>
         </ion-toolbar>
       </ion-header>
+      <Calendar />
       <ExploreContainer name="Home page" />
     </ion-content>
   </ion-page>
