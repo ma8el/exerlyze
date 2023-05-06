@@ -1,13 +1,27 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonItem, IonInput, IonButton  } from '@ionic/vue';
+import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonItem, IonInput, IonButton, IonAlert } from '@ionic/vue';
 import { useDark } from '@vueuse/core'
 
 const isDark = useDark()
 
 const email = ref('')
 const router = useRouter();
+const isOpen = ref(false);
+
+const alertButtons = [
+ {
+    text: 'OK',
+    handler: () => {
+      redirect();
+    },
+  },
+];
+
+const setOpen = (value: boolean) => {
+  isOpen.value = value;
+};
 
 const onLogin = () => {
   console.log('Login');
@@ -34,9 +48,18 @@ const redirect = () => {
               <ion-button id="magic-link-button" expand="block" type="submit" shape="round" class="ion-margin-top">
                 Send magic link
               </ion-button>
-              <ion-button id="no-login-button" @click="redirect" expand="block" shape="round" class="ion-margin-top">
+              <ion-button id="no-login-button" @click="setOpen(true)" expand="block" shape="round" class="ion-margin-top">
                 Continue without login
               </ion-button>
+              <ion-alert
+               :is-open="isOpen"
+               header="Alert"
+               sub-header="You are proceeding without login"
+               message="Your data can get lost at any time"
+               :buttons="alertButtons"
+               @didDismiss="setOpen(false)"
+              >
+              </ion-alert>
             </form>
           </ion-col>
         </ion-row>
