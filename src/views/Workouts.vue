@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-  import ExploreContainer from '@/components/ExploreContainer.vue';
+  import StartWorkoutButton from '@/components/StartWorkoutButton.vue';
   import Toolbar from '@/components/Toolbar.vue';
   import Calendar from '@/components/Calendar.vue';
 </script>
@@ -15,7 +15,7 @@
         </ion-toolbar>
       </ion-header>
       <Calendar />
-      <ExploreContainer name="Workouts page" />
+      <StartWorkoutButton/>
     </ion-content>
   </ion-page>
 </template>
