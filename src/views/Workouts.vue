@@ -3,6 +3,7 @@
   import StartWorkoutButton from '@/components/StartWorkoutButton.vue';
   import Toolbar from '@/components/Toolbar.vue';
   import Calendar from '@/components/Calendar.vue';
+  import WorkoutsSegments from '@/components/WorkoutsSegments.vue';
 </script>
 
 <template>
@@ -15,6 +16,7 @@
         </ion-toolbar>
       </ion-header>
       <Calendar />
+      <WorkoutsSegments />
       <StartWorkoutButton/>
     </ion-content>
   </ion-page>
