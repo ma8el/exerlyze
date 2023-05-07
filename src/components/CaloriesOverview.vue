@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonGrid, IonRow, IonCol, IonText } from '@ionic/vue';
+  import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonGrid, IonRow, IonCol, IonText, IonLabel } from '@ionic/vue';
   import { computed, ref } from 'vue';
 
   const calories = ref(3000);
@@ -22,6 +22,7 @@
           <ion-col>
             <ion-text>
               {{ calories }}
+              <ion-label>Calories</ion-label>
             </ion-text>
           </ion-col>
           <ion-col>
@@ -32,6 +33,7 @@
           <ion-col>
             <ion-text>
               {{ intake }}
+              <ion-label>Intake</ion-label>
             </ion-text>
           </ion-col>
           <ion-col>
@@ -42,6 +44,7 @@
           <ion-col>
             <ion-text>
               {{ activity }}
+              <ion-label>Activity</ion-label>
             </ion-text>
           </ion-col>
           <ion-col>
@@ -52,6 +55,7 @@
           <ion-col>
             <ion-text>
               {{ result }}
+              <ion-label>Left</ion-label>
             </ion-text>
           </ion-col>
         </ion-row>
