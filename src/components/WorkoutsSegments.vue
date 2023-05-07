@@ -1,9 +1,10 @@
 <script setup lang="ts">
   import { IonSegment, IonSegmentButton, IonLabel, IonCard } from '@ionic/vue';
-  import { ref, watch } from 'vue';
+  import { ref } from 'vue';
+  import WorkoutCard from './WorkoutCard.vue';
 
   const selectedSegment = ref('workouts');
-  const workoutsSelected = ref(false)
+  const workoutsSelected = ref(true)
   const plansSelected = ref(false)
   const scheduleSelected = ref(false)
 
@@ -38,7 +39,7 @@
       <ion-label>Schedule</ion-label>
     </ion-segment-button>
   </ion-segment>
-  <ion-card v-if="workoutsSelected"> Your workouts </ion-card>
+  <WorkoutCard v-if="workoutsSelected" />
   <ion-card v-if="plansSelected"> Your Plans </ion-card>
   <ion-card v-if="scheduleSelected"> Your Schedule </ion-card>
 </template>
