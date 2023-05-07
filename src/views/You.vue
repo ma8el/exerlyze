@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-  import ExploreContainer from '@/components/ExploreContainer.vue';
   import Toolbar from '@/components/Toolbar.vue';
+  import UserInfoCard from '@/components/UserInfoCard.vue';
 </script>
 
 <template>
@@ -13,8 +13,7 @@
           <ion-title size="large">You</ion-title>
         </ion-toolbar>
       </ion-header>
-
-      <ExploreContainer name="You page" />
+      <UserInfoCard />
     </ion-content>
   </ion-page>
 </template>
