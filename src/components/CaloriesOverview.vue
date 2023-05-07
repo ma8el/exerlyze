@@ -1,0 +1,61 @@
+<script setup lang="ts">
+  import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonGrid, IonRow, IonCol, IonText } from '@ionic/vue';
+  import { computed, ref } from 'vue';
+
+  const calories = ref(3000);
+  const intake = ref(200);
+  const activity = ref(300);
+  const result = computed(() => {
+    return calories.value - intake.value + activity.value;
+  })
+
+</script>
+
+<template>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Calories</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-text>
+              {{ calories }}
+            </ion-text>
+          </ion-col>
+          <ion-col>
+            <ion-text>
+              -
+            </ion-text>
+          </ion-col>
+          <ion-col>
+            <ion-text>
+              {{ intake }}
+            </ion-text>
+          </ion-col>
+          <ion-col>
+            <ion-text>
+              +
+            </ion-text>
+          </ion-col>
+          <ion-col>
+            <ion-text>
+              {{ activity }}
+            </ion-text>
+          </ion-col>
+          <ion-col>
+            <ion-text>
+              =
+            </ion-text>
+          </ion-col>
+          <ion-col>
+            <ion-text>
+              {{ result }}
+            </ion-text>
+          </ion-col>
+        </ion-row>
+     </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</template>

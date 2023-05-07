@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-  import ExploreContainer from '@/components/ExploreContainer.vue';
   import Toolbar from '@/components/Toolbar.vue';
   import Calendar from '@/components/Calendar.vue';
+  import CaloriesOverview from '@/components/CaloriesOverview.vue';
 </script>
 
 <template>
@@ -16,7 +16,7 @@
         </ion-toolbar>
       </ion-header>
       <Calendar />
-      <ExploreContainer name="Nutrition page" />
+      <CaloriesOverview />
     </ion-content>
   </ion-page>
 </template>
