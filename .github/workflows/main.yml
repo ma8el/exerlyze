@@ -46,7 +46,7 @@ jobs:
         run: npm run test:unit
 
   e2e-test:
-    runs-on: cypress-io/github-action@v5
+    runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository
@@ -61,7 +61,7 @@ jobs:
         run: npm ci
 
       - name: Run Cypress
-        run: npm run test:e2e
+        uses: cypress-io/github-action@v5
 
   docker:
     runs-on: ubuntu-latest
