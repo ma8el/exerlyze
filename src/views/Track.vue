@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
   import Toolbar from '@/components/Toolbar.vue';
-  import TrackActionButton from '@/components/TrackActionButton.vue';
+  import TrackActionButton from '@/components/Buttons/TrackActionButton.vue';
 </script>
 
 <template>

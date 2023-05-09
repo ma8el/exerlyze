@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/vue';
-  import WorkoutPlanItem from './WorkoutPlanItem.vue';
+  import WorkoutPlanItem from '@/components/WorkoutPlanItem.vue';
 
   const workouts = [
     {

@@ -2,9 +2,9 @@
   import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
   import Toolbar from '@/components/Toolbar.vue';
   import Calendar from '@/components/Calendar.vue';
-  import CaloriesOverview from '@/components/CaloriesOverview.vue';
-  import TrackActionButton from '@/components/TrackActionButton.vue';
-  import NutritionOverview from '@/components/NutritionOverview.vue';
+  import CaloriesOverview from '@/components/Cards/CaloriesOverview.vue';
+  import TrackActionButton from '@/components/Buttons/TrackActionButton.vue';
+  import NutritionOverview from '@/components/Cards/NutritionOverview.vue';
 </script>
 
 <template>

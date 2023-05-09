@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { IonSegment, IonSegmentButton, IonLabel, IonCard } from '@ionic/vue';
   import { ref } from 'vue';
-  import WorkoutCard from './WorkoutCard.vue';
-  import WorkoutPlanCard from './WorkoutPlanCard.vue';
-  import WorkoutScheduleCard from './WorkoutScheduleCard.vue';
+  import WorkoutCard from '@/components/Cards/WorkoutCard.vue';
+  import WorkoutPlanCard from '@/components/Cards/WorkoutPlanCard.vue';
+  import WorkoutScheduleCard from '@/components/Cards/WorkoutScheduleCard.vue';
 
   const selectedSegment = ref('workouts');
   const workoutsSelected = ref(true)

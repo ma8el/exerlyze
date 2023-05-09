@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
   import Toolbar from '@/components/Toolbar.vue';
-  import UserInfoCard from '@/components/UserInfoCard.vue';
+  import UserInfoCard from '@/components/Cards/UserInfoCard.vue';
 </script>
 
 <template>

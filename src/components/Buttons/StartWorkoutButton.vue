@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { IonButton, modalController, IonRow, IonGrid, IonCol } from '@ionic/vue';
-  import WorkoutModal from '@/components/WorkoutModal.vue';
+  import WorkoutModal from '@/components/Modals/WorkoutModal.vue';
   
   const openModal = async () => {
     const modal = await modalController.create({

@@ -2,7 +2,7 @@
   import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
   import Toolbar from '@/components/Toolbar.vue';
   import Calendar from '@/components/Calendar.vue';
-  import StartWorkoutButton from '@/components/StartWorkoutButton.vue';
+  import StartWorkoutButton from '@/components/Buttons/StartWorkoutButton.vue';
   import { useDark } from '@vueuse/core'
 
   const isDark = useDark()

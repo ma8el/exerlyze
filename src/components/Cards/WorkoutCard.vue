@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel, IonSelect, IonSelectOption, IonInput, IonDatetime } from '@ionic/vue';
-  import ExerciseItem from './ExerciseItem.vue';
+  import ExerciseItem from '@/components/ExerciseItem.vue';
 
   const exercises = [
     {
