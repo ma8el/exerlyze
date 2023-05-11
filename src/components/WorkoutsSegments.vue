@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { IonSegment, IonSegmentButton, IonLabel, IonCard } from '@ionic/vue';
+  import { IonSegment, IonSegmentButton, IonLabel } from '@ionic/vue';
   import { ref } from 'vue';
-  import WorkoutCard from '@/components/Cards/WorkoutCard.vue';
+  import WorkoutsContent from '@/components/WorkoutsContent.vue';
   import WorkoutPlanCard from '@/components/Cards/WorkoutPlanCard.vue';
   import WorkoutScheduleCard from '@/components/Cards/WorkoutScheduleCard.vue';
 
@@ -41,7 +41,7 @@
       <ion-label>Schedule</ion-label>
     </ion-segment-button>
   </ion-segment>
-  <WorkoutCard v-if="workoutsSelected" />
+  <WorkoutsContent v-if="workoutsSelected" />
   <WorkoutPlanCard v-if="plansSelected" />
   <WorkoutScheduleCard v-if="scheduleSelected" />
 </template>
