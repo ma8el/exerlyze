@@ -1,7 +1,12 @@
 <script setup lang="ts">
   import WorkoutCard from './Cards/WorkoutCard.vue';
+  import { useWorkoutStore } from '../store/workoutStore';
+  import { onMounted } from 'vue';
 
-  const workouts = [{
+  const workoutStore = useWorkoutStore();
+
+  onMounted(() => {
+    workoutStore.addWorkout({
     id: 1,
     name: 'Workout 1',
     exercises: [
@@ -12,34 +17,22 @@
         weight: 100
       },
       {
-        name: 'Squat',
-        sets: 5,
-        reps: 5,
-        weight: 140
-      },
-      {
         name: 'Deadlift',
         sets: 5,
         reps: 5,
         weight: 220
       },
-      {
-        name: 'Overhead Press',
-        sets: 5,
-        reps: 5,
-        weight: 50
-      },
     ]
-  },
-{
+    })
+    workoutStore.addWorkout({
     id: 2,
     name: 'Workout 2',
     exercises: [
-     {
-        name: 'Squat',
+      {
+        name: 'Bench Press',
         sets: 5,
         reps: 5,
-        weight: 140
+        weight: 100
       },
       {
         name: 'Deadlift',
@@ -47,19 +40,14 @@
         reps: 5,
         weight: 220
       },
-      {
-        name: 'Overhead Press',
-        sets: 5,
-        reps: 5,
-        weight: 50
-      },
     ]
-  }]
+    })
+})
 </script>
 
 <template>
   <WorkoutCard 
-    v-for="workout in workouts"
+    v-for="workout in workoutStore.workouts"
     :key="workout.id"
     :workout-id="workout.id"
     :workout-name="workout.name"
