@@ -26,10 +26,15 @@ import './theme/variables.css';
 import VCalendar from 'v-calendar';
 import 'v-calendar/style.css'
 
+import { createPinia } from 'pinia'
+
+const pinia = createPinia();
+
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
-  .use(VCalendar, {});
+  .use(VCalendar, {})
+  .use(pinia);
   
 router.isReady().then(() => {
   app.mount('#app');
