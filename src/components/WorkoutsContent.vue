@@ -2,6 +2,7 @@
   import WorkoutCard from './Cards/WorkoutCard.vue';
   import { useWorkoutStore } from '../store/workoutStore';
   import { onMounted } from 'vue';
+  import AddWorkoutButton from '@/components/Buttons/AddWorkoutButton.vue'
 
   const workoutStore = useWorkoutStore();
 
@@ -53,4 +54,5 @@
     :workout-name="workout.name"
     :exercises="workout.exercises"
   />
+  <AddWorkoutButton />
 </template>
