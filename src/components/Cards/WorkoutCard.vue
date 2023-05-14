@@ -10,9 +10,7 @@
            IonButtons,
            IonTitle,
            IonContent,
-           IonLabel,
-           IonInput,
-           IonItem} from '@ionic/vue';
+           IonInput} from '@ionic/vue';
   import ExerciseItem from '@/components/ExerciseItem.vue';
   import { ref } from 'vue';
 
