@@ -9,46 +9,82 @@
           IonItem,
           IonLabel,
           IonCheckbox } from '@ionic/vue';
-  import { ref } from 'vue';
+  import { ref, onMounted, onUnmounted } from 'vue';
 
   const exercises = [
     {
+    id: 1,
     name: 'Deadlift',
-    isSelected: false
     },
     {
+    id: 2,
     name: 'Bench Press',
-    isSelected: false
     },
     {
+    id: 3,
     name: 'Squat',
-    isSelected: false
     },
     {
+    id: 4,
     name: 'Overhead Press',
-    isSelected: false
     },
   ]
 
   const modal = ref(null)
- 
-  const addExercise = () => {
-    console.log('Add Exercise');
-  }
+  const selected = ref([])
+
+  const emit = defineEmits(['confirm'])
  
   const cancel = () => {
     if(modal.value) {
+      resetSelectedBool()
+      selected.value = []
       modal.value.$el.dismiss(null, 'cancel');
     }
   }
  
   const confirm = () => {
-    console.log('Confirm');
+    if(modal.value) {
+      emit('confirm', selected.value)
+      resetSelectedBool()
+      selected.value = []
+      modal.value.$el.dismiss(null, 'cancel');
+    }
   }
  
   const onWillDismiss = () => {
     console.log('Will dismiss');
+    resetSelectedBool()
+    selected.value = []
   }
+
+  const toggleExercise = (exercise) => {
+    exercise.isSelected = !exercise.isSelected
+    if (exercise.isSelected) {
+        selected.value.push(exercise);
+      } else {
+        const index = selected.value.indexOf(exercise);
+        if (index !== -1) {
+          selected.value.splice(index, 1);
+        }
+      }
+  }
+
+  const resetSelectedBool = () => {
+    exercises.forEach((exercise) => {
+      exercise.isSelected = false
+    })
+  }
+
+  onMounted(() => {
+    resetSelectedBool()
+    selected.value = []
+  })
+
+  onUnmounted(() => {
+    resetSelectedBool()
+    selected.value = []
+  })
 
 </script>
 
@@ -56,7 +92,6 @@
   <ion-content class="ion-padding">
     <ion-button
       id="open-modal"
-      @click="addExercise"
       expand="block"
       size="small"
     >
@@ -77,7 +112,7 @@
       <ion-content class="ion-padding">
         <ion-item v-for="exercise in exercises">
           <ion-label>{{ exercise.name }}</ion-label>
-          <ion-checkbox slot="start" v-model="exercise.isSelected" />
+          <ion-checkbox slot="start" :checked="exercise.isSelected" @ionChange="toggleExercise(exercise)"/>
         </ion-item>
       </ion-content>
     </ion-modal>

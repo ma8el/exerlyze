@@ -21,6 +21,9 @@ export const useWorkoutStore = defineStore({
     getters: {
         getWorkouts(): Workout[] {
             return this.workouts;
+        },
+        getNewId(): number {
+            return this.workouts.length + 1;
         }
     },
     actions: {

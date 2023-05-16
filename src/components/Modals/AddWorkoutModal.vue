@@ -10,19 +10,31 @@
   import { ref } from 'vue'
   import { useWorkoutStore } from '../../store/workoutStore';
   import AddExerciseButton from '../Buttons/AddExerciseButton.vue'
+  import ExerciseItem from '../ExerciseItem.vue';
 
   const workoutStore = useWorkoutStore()
 
   const workoutName = ref()
   const description = ref()
+  const exercises = ref([])
   
   const save = () => {
-    console.log('Save')
+    workoutStore.addWorkout({
+      id: workoutStore.getNewId,
+      name: workoutName.value,
+      description: description.value,
+      exercises: exercises.value
+    })
+    modalController.dismiss(null, 'save');
   }
 
   const closeModal = () => {
       return modalController.dismiss(null, 'close');
   };
+
+  const addExercise = (e) => {
+    exercises.value.push(...e)
+  }
 </script>
 
  <template>
@@ -41,7 +53,10 @@
     <ion-content>
       <ion-input fill="outline" shape="round" label="Workout Name" label-placement="stacked" v-model="workoutName"></ion-input>
       <ion-input fill="outline" shape="round" label="Description" label-placement="stacked" v-model="description"></ion-input>
-      <AddExerciseButton/>
+      <ExerciseItem v-for="exercise in exercises"
+        :key="exercise.id" 
+        :exercise-name="exercise.name"/>
+      <AddExerciseButton @confirm="addExercise"/>
     </ion-content>
   </ion-content>
 </template> 
