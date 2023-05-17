@@ -10,15 +10,16 @@
            IonButtons,
            IonTitle,
            IonContent,
-           IonInput} from '@ionic/vue';
+           modalController } from '@ionic/vue';
   import ExerciseItem from '@/components/ExerciseItem.vue';
   import { ref } from 'vue';
+  import { Exercise } from '@/types';
 
-  const props = defineProps({
+  const props = defineProps<{
     workoutId: Number,
     workoutName: String,
-    exercises: Array
-  })
+    exercises: Exercise[]
+  }>()
 
   const modal = ref(null)
 
@@ -27,17 +28,11 @@
   }
 
   const cancel = () => {
-    if (modal.value) {
-      modal.value.$el.dismiss(null, 'cancel')
-    }   
-    return
+    modalController.dismiss(null, 'cancel')
   }
 
   const confirm = () => {
-    if (modal.value) {
-      modal.value.$el.dismiss(null, 'confirm')
-    }
-    return
+    modalController.dismiss(null, 'confirm')
   }
 
 </script>

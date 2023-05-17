@@ -11,12 +11,13 @@
   import { useWorkoutStore } from '../../store/workoutStore';
   import AddExerciseButton from '../Buttons/AddExerciseButton.vue'
   import ExerciseItem from '../ExerciseItem.vue';
+  import { Exercise } from '@/types';
 
   const workoutStore = useWorkoutStore()
 
   const workoutName = ref()
   const description = ref()
-  const exercises = ref([])
+  const exercises = ref<Exercise[]>([])
   
   const save = () => {
     workoutStore.addWorkout({
@@ -32,7 +33,7 @@
       return modalController.dismiss(null, 'close');
   };
 
-  const addExercise = (e) => {
+  const addExercise = (e: Exercise[]) => {
     exercises.value.push(...e)
   }
 </script>

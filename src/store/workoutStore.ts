@@ -1,17 +1,5 @@
 import { defineStore } from 'pinia'
-
-interface Exercise {
-    name: string,
-    sets: number,
-    reps: number,
-    weight: number
-};
-
-interface Workout {
-    id: number,
-    name: string,
-    exercises: Exercise[]
-}
+import { Workout, Exercise } from '@/types';
 
 export const useWorkoutStore = defineStore({
     id: 'workout',

@@ -8,48 +8,61 @@
           IonButtons,
           IonItem,
           IonLabel,
-          IonCheckbox } from '@ionic/vue';
+          IonCheckbox,
+          modalController } from '@ionic/vue';
   import { ref, onMounted, onUnmounted } from 'vue';
+  import { ExerciseSelection } from '@/types';
 
   const exercises = [
     {
-    id: 1,
-    name: 'Deadlift',
+      id: 1,
+      name: 'Deadlift',
+      sets: 0,
+      reps: 0,
+      weight: 0,
+      isSelected: false,
     },
     {
-    id: 2,
-    name: 'Bench Press',
-    },
+      id: 2,
+      name: 'Bench Press',
+      sets: 0,
+      reps: 0,
+      weight: 0,
+      isSelected: false,
+   },
     {
-    id: 3,
-    name: 'Squat',
-    },
+      id: 3,
+      name: 'Squat',
+      sets: 0,
+      reps: 0,
+      weight: 0,
+      isSelected: false,
+   },
     {
-    id: 4,
-    name: 'Overhead Press',
-    },
+      id: 4,
+      name: 'Overhead Press',
+      sets: 0,
+      reps: 0,
+      weight: 0,
+      isSelected: false,
+   },
   ]
 
-  const modal = ref(null)
-  const selected = ref([])
+  const selected = ref<ExerciseSelection[]>([])
 
   const emit = defineEmits(['confirm'])
  
   const cancel = () => {
-    if(modal.value) {
-      resetSelectedBool()
-      selected.value = []
-      modal.value.$el.dismiss(null, 'cancel');
-    }
+    resetSelectedBool()
+    selected.value = []
+    modalController.dismiss(null, 'cancel');
   }
  
   const confirm = () => {
-    if(modal.value) {
-      emit('confirm', selected.value)
-      resetSelectedBool()
-      selected.value = []
-      modal.value.$el.dismiss(null, 'cancel');
-    }
+    emit('confirm', selected.value)
+    resetSelectedBool()
+    selected.value = []
+    modalController.dismiss(null, 'cancel');
   }
  
   const onWillDismiss = () => {
@@ -58,7 +71,7 @@
     selected.value = []
   }
 
-  const toggleExercise = (exercise) => {
+  const toggleExercise = (exercise: ExerciseSelection) => {
     exercise.isSelected = !exercise.isSelected
     if (exercise.isSelected) {
         selected.value.push(exercise);
