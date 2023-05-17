@@ -20,6 +20,7 @@
   const exercises = ref<Exercise[]>([])
   
   const save = () => {
+    console.log(exercises.value)
     workoutStore.addWorkout({
       id: workoutStore.getNewId,
       name: workoutName.value,
@@ -54,9 +55,14 @@
     <ion-content>
       <ion-input fill="outline" shape="round" label="Workout Name" label-placement="stacked" v-model="workoutName"></ion-input>
       <ion-input fill="outline" shape="round" label="Description" label-placement="stacked" v-model="description"></ion-input>
-      <ExerciseItem v-for="exercise in exercises"
-        :key="exercise.id" 
-        :exercise-name="exercise.name"/>
+      <ExerciseItem v-for="(exercise, index) in exercises"
+        v-model:sets="exercises[index].sets"
+        v-model:reps="exercises[index].reps"
+        v-model:weight="exercises[index].weight"
+        :key="index" 
+        :id="exercise.id"
+        :name="exercise.name"
+       />
       <AddExerciseButton @confirm="addExercise"/>
     </ion-content>
   </ion-content>

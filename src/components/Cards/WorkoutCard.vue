@@ -13,13 +13,9 @@
            modalController } from '@ionic/vue';
   import ExerciseItem from '@/components/ExerciseItem.vue';
   import { ref } from 'vue';
-  import { Exercise } from '@/types';
+  import { Workout } from '@/types';
 
-  const props = defineProps<{
-    workoutId: Number,
-    workoutName: String,
-    exercises: Exercise[]
-  }>()
+  const props = defineProps<Workout>()
 
   const modal = ref(null)
 
@@ -38,20 +34,20 @@
 </script>
 
 <template>
-  <ion-card :button="true" :id="`open-modal-${workoutId}`">
+  <ion-card :button="true" :id="`open-modal-${id}`">
     <ion-card-header>
-      <ion-card-title>{{ workoutName }}</ion-card-title>
+      <ion-card-title>{{ name }}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       Meta data
     </ion-card-content>
-    <ion-modal ref="modal" :trigger="`open-modal-${workoutId}`" @willDismiss="onWillDismiss">
+    <ion-modal ref="modal" :trigger="`open-modal-${id}`" @willDismiss="onWillDismiss">
         <ion-header>
           <ion-toolbar>
             <ion-buttons slot="start">
               <ion-button @click="cancel()">Cancel</ion-button>
             </ion-buttons>
-            <ion-title>{{ workoutName }}</ion-title>
+            <ion-title>{{ name }}</ion-title>
             <ion-buttons slot="end">
               <ion-button :strong="true" @click="confirm()">Confirm</ion-button>
             </ion-buttons>
@@ -60,10 +56,12 @@
         <ion-content class="ion-padding">
           <ExerciseItem 
             v-for = "exercise in exercises"
-            :exercise-name="exercise.name"
-            :exercise-sets="exercise.sets"
-            :exercise-reps="exercise.reps"
-            :exercise-weight="exercise.weight"
+            :key="exercise.id"
+            :id="exercise.id"
+            :name="exercise.name"
+            :sets="exercise.sets"
+            :reps="exercise.reps"
+            :weight="exercise.weight"
           />
         </ion-content>
       </ion-modal>
