@@ -36,6 +36,11 @@ export interface DayOfWeek {
     name: string
 }
 
+export interface FullWorkoutPlan extends WorkoutPlan, PlannedWorkout {
+    workout: Workout,
+    dayOfWeek: string
+}
+
 export interface WorkoutSchedule {
     id: number,
     workoutPlanId: number,

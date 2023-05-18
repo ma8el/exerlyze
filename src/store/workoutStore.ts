@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Workout } from '@/types';
+import { Workout, PlannedWorkout, WorkoutPlan, DayOfWeek, FullWorkoutPlan } from '@/types';
 
 export const useWorkoutStore = defineStore({
     id: 'workout',
@@ -29,6 +29,130 @@ export const useWorkoutStore = defineStore({
          updateWorkout(workout: Workout) {
             const index = this.workouts.findIndex(w => w.id === workout.id);
             this.workouts[index] = workout;
+        },
+    }
+});
+
+export const useWorkoutPlanStore = defineStore({
+    id: 'workoutPlan',
+    state: () => ({
+        workoutPlans: [] as WorkoutPlan[],
+    }),
+    getters: {
+        getWorkoutPlans(): WorkoutPlan[] {
+            return this.workoutPlans;
+        },
+        getNewId(): number {
+            return this.workoutPlans.length + 1;
+        },
+        getFullWorkoutPlans(): FullWorkoutPlan[] {
+            const dayOfWeekStore = useDayOfWeekStore();
+            const workoutStore = useWorkoutStore();
+            const plannedWorkoutStore = usePlannedWorkoutStore();
+            const fullWorkoutPlan = plannedWorkoutStore.getPlannedWorkouts.map(w => {
+                const dayOfWeek = dayOfWeekStore.getDayOfWeekById(w.dayOfWeekId);
+                const workout = workoutStore.getWorkoutById(w.workoutId);
+                const workoutPlanName = this.workoutPlans.find(wp => wp.id === w.workoutPlanId)?.name;
+                const workoutPlanDescription = this.workoutPlans.find(wp => wp.id === w.workoutPlanId)?.description;
+                if (dayOfWeek && workout) {
+                    return {
+                        name: workoutPlanName,
+                        description: workoutPlanDescription,
+                        ...w,
+                        dayOfWeek: dayOfWeek.name,
+                        workout: workout
+                    } as FullWorkoutPlan;
+                }
+                return undefined;
+            }).filter(w => w !== undefined) as FullWorkoutPlan[];
+            return fullWorkoutPlan;
+        }
+    },
+    actions: {
+        getWorkoutPlanById(id: number): WorkoutPlan | undefined {
+            const workoutPlan = this.workoutPlans.find(w => w.id === id);
+            if (workoutPlan) {
+                return workoutPlan;
+            }
+            return undefined;
+        },
+        addWorkoutPlan(workoutPlan: WorkoutPlan) {
+            this.workoutPlans.push(workoutPlan);
+        }
+    }
+});
+
+export const usePlannedWorkoutStore = defineStore({
+    id: 'plannedWorkouts',
+    state: () => ({
+        plannedWorkouts: [] as PlannedWorkout[],
+    }),
+    getters: {
+        getPlannedWorkouts(): PlannedWorkout[] {
+            return this.plannedWorkouts;
+        },
+        getNewId(): number {
+            return this.plannedWorkouts.length + 1;
+        }
+    },
+    actions: {
+        getPlannedWorkoutById(id: number): PlannedWorkout | undefined {
+            const plannedWorkout = this.plannedWorkouts.find(w => w.id === id);
+            if (plannedWorkout) {
+                return plannedWorkout;
+            }
+            return undefined;
+        },
+        addPlannedWorkout(plannedWorkout: PlannedWorkout) {
+            this.plannedWorkouts.push(plannedWorkout);
+        }
+    }
+});
+
+export const useDayOfWeekStore = defineStore({
+    id: 'dayOfWeek',
+    state: () => ({
+        daysOfWeek: [{
+            id: 0,
+            name: 'Sunday'
+        },
+        {
+            id: 1,
+            name: 'Monday'
+        },
+        {
+            id: 2,
+            name: 'Tuesday'
+        },
+        {
+            id: 3,
+            name: 'Wednesday'
+        },
+        {
+            id: 4,
+            name: 'Thursday'
+        },
+        {
+            id: 5,
+            name: 'Friday'
+        },
+        {
+            id: 6,
+            name: 'Saturday'
+        }] as DayOfWeek[]
+    }),
+    getters: {
+        getDaysOfWeek(): DayOfWeek[] {
+            return this.daysOfWeek;
+        },
+    },
+    actions: {
+        getDayOfWeekById(id: number): DayOfWeek | undefined {
+            const dayOfWeek = this.daysOfWeek.find(w => w.id === id);
+            if (dayOfWeek) {
+                return dayOfWeek;
+            }
+            return undefined;
         },
     }
 });

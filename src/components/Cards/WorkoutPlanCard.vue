@@ -1,34 +1,32 @@
 <script setup lang="ts">
   import { IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/vue';
   import WorkoutPlanItem from '@/components/WorkoutPlanItem.vue';
+  import { useWorkoutPlanStore } from '@/store/workoutStore';
 
-  const workouts = [
-    {
-      workoutName: 'Workout 1',
-      plannedDay: 'Monday'
-    },
-   {
-      workoutName: 'Workout 2',
-      plannedDay: 'Wednesday'
-    },
-   {
-      workoutName: 'Workout 3',
-      plannedDay: 'Saturday'
-    },
- ]
+  const props = defineProps({
+    workoutPlanId: {
+      type: Number,
+      required: true
+    }
+  })
+
+  const workoutPlanStore = useWorkoutPlanStore();
+
+  const workoutPlan = workoutPlanStore.getWorkoutPlanById(props.workoutPlanId)
+  const plannedWorkouts = workoutPlanStore.getFullWorkoutPlans.filter(plannedWorkout => plannedWorkout.workoutPlanId === props.workoutPlanId)
 
 </script>
 
 <template>
   <ion-card>
     <ion-card-header>
-    <ion-card-title>Workout Plan Name</ion-card-title>
+    <ion-card-title>{{ workoutPlan.name }}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <WorkoutPlanItem 
-        v-for = "workout in workouts"
-        :workoutName="workout.workoutName"
-        :plannedDay="workout.plannedDay"
+        v-for = "workout in plannedWorkouts"
+        :workoutName="workout.workout.name"
+        :plannedDay="workout.dayOfWeek"
       />
     </ion-card-content>
   </ion-card>
