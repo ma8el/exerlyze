@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Workout, Exercise } from '@/types';
+import { Workout } from '@/types';
 
 export const useWorkoutStore = defineStore({
     id: 'workout',
@@ -11,10 +11,18 @@ export const useWorkoutStore = defineStore({
             return this.workouts;
         },
         getNewId(): number {
-            return this.workouts.length + 1;
-        }
+             return this.workouts.length + 1;
+        },
+
     },
     actions: {
+        getWorkoutById(id: number): Workout | undefined {
+            const workout = this.workouts.find(w => w.id === id);
+            if (workout) {
+                return workout;
+            }
+            return undefined;
+        },
         addWorkout(workout: Workout) {
             this.workouts.push(workout);
         },
