@@ -19,7 +19,7 @@ export const useWorkoutStore = defineStore({
             this.workouts.push(workout);
         },
          updateWorkout(workout: Workout) {
-            const index = this.workouts.findIndex(w => w.name === workout.name);
+            const index = this.workouts.findIndex(w => w.id === workout.id);
             this.workouts[index] = workout;
         },
     }
