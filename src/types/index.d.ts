@@ -16,3 +16,29 @@ export interface Workout {
     description: string,
     exercises: Exercise[]
 }
+
+export interface PlannedWorkout {
+    id: number,
+    workoutId: number,
+    workoutPlanId: number,
+    dayOfWeekId: number,
+    timeOfDay: time,
+}
+
+export interface WorkoutPlan {
+    id: number,
+    name: string,
+    description: string
+}
+
+export interface DayOfWeek {
+    id: number,
+    name: string
+}
+
+export interface WorkoutSchedule {
+    id: number,
+    workoutPlanId: number,
+    startsAt: Date,
+    endsAt: Date,
+}
