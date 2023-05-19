@@ -53,8 +53,8 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-input fill="outline" shape="round" label="Workout Name" label-placement="stacked" v-model="workoutName"></ion-input>
-      <ion-input fill="outline" shape="round" label="Description" label-placement="stacked" v-model="description"></ion-input>
+      <ion-input class="ion-padding" fill="outline" shape="round" label="Workout Name" label-placement="stacked" v-model="workoutName"></ion-input>
+      <ion-input class="ion-padding" fill="outline" shape="round" label="Description" label-placement="stacked" v-model="description"></ion-input>
       <ExerciseItem v-for="(exercise, index) in exercises"
         v-model:sets="exercises[index].sets"
         v-model:reps="exercises[index].reps"
