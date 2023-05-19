@@ -7,7 +7,7 @@
 </script>
 
 <template>
- <ion-item>
+  <ion-item>
     <ion-label>{{ workoutName }}</ion-label>
     <ion-note slot="end">{{ plannedDay }}</ion-note>
   </ion-item>

@@ -11,9 +11,9 @@
 </script>
 
 <template>
-    <WorkoutPlanCard 
-      v-for="(workoutPlan, index) in workoutPlanStore.getWorkoutPlans"
-      :key="index"
-      :workoutPlanId="workoutPlan.id"
-    />
+  <WorkoutPlanCard
+    v-for="(workoutPlan, index) in workoutPlanStore.getWorkoutPlans"
+    :key="index"
+    :workoutPlanId="workoutPlan.id"
+  />
 </template>

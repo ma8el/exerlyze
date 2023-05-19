@@ -20,7 +20,7 @@
 <template>
   <ion-card v-if="workoutPlan">
     <ion-card-header>
-    <ion-card-title>{{ workoutPlan.name }}</ion-card-title>
+      <ion-card-title>{{ workoutPlan.name }}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <WorkoutPlanItem 
