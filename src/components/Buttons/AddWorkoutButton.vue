@@ -9,13 +9,6 @@
       cssClass: 'full-screen-modal',
     });
     modal.present();
-
-    const { data, role } = await modal.onWillDismiss();
-    if (role == 'save') {
-      console.log('Save', data);
-    } else {
-      console.log('Close', data);
-    };
   }
 </script>
 
