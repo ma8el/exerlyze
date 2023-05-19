@@ -4,6 +4,7 @@
   import Calendar from '@/components/Calendar.vue';
   import StartWorkoutButton from '@/components/Buttons/StartWorkoutButton.vue';
   import { useDark } from '@vueuse/core'
+  import UpcomingEventsSlide from '@/components/UpcomingEventsSlide.vue';
 
   const isDark = useDark()
 </script>
@@ -18,7 +19,7 @@
         </ion-toolbar>
       </ion-header>
       <Calendar />
-      <StartWorkoutButton/>
+      <UpcomingEventsSlide />
     </ion-content>
   </ion-page>
 </template>
