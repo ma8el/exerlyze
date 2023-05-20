@@ -19,29 +19,11 @@
 </script>
 
 <template>
-  <ion-grid>
-    <ion-row class="button-container ion-align-items-end ion-justify-content-center">
-      <ion-col size="12">
-        <ion-button 
-          id="start-workout-button"
-          @click="openModal"
-          expand="block"
-          shape="round"
-        >
-          Start Workout
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <ion-button 
+    id="start-workout-button"
+    @click="openModal"
+    expand="block"
+  >
+    Start Workout
+  </ion-button>
 </template>
-
-<style scoped>
-  .button-container {
-    text-align: center;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 90%;
-    transform: translateY(-90%);
-  }
-</style>
