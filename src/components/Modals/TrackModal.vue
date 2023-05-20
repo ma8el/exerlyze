@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { IonButton, IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, modalController } from '@ionic/vue';
+import { IonButton,
+         IonContent,
+         IonHeader,
+         IonToolbar,
+         IonTitle,
+         IonButtons,
+         modalController } from '@ionic/vue';
+import AddWeightModal from './AddWeightModal.vue';
 
 const closeModal = () => {
     return modalController.dismiss(null, 'close');
@@ -17,6 +24,7 @@ const closeModal = () => {
       </ion-toolbar>
     </ion-header>
     <ion-content>
+      <AddWeightModal />
     </ion-content>
   </ion-content>
 </template>

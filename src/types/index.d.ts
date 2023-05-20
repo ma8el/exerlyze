@@ -47,3 +47,10 @@ export interface WorkoutSchedule {
     startsAt: Date,
     endsAt: Date,
 }
+
+export interface Weight {
+    id: number,
+    weight: number,
+    createdAt: Date,
+    unit: string
+}
