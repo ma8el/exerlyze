@@ -2,10 +2,7 @@
   import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
   import Toolbar from '@/components/Toolbar.vue';
   import Calendar from '@/components/Calendar.vue';
-  import { useDark } from '@vueuse/core'
   import UpcomingEventsSlide from '@/components/UpcomingEventsSlide.vue';
-
-  const isDark = useDark()
 </script>
 
 <template>
