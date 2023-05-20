@@ -23,6 +23,7 @@
     "@vueuse/core": "^10.1.2",
     "ionicons": "^7.0.0",
     "pinia": "^2.0.36",
+    "swiper": "^9.3.2",
     "v-calendar": "^3.0.3",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
