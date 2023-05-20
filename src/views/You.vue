@@ -15,6 +15,10 @@
         datasets: [
           {
             label: 'Weight',
+            fill: {
+              target: 'origin',
+              above: 'rgba(63, 99, 200, 0.5)',
+            },
             backgroundColor: '#3F63C8',
             data: weightsOfWeek.map((weight) => weight.weight)
           }
@@ -35,6 +39,7 @@
             display: true,
             text: 'Weight',
           },
+          min: 0,
         },
       },
     };

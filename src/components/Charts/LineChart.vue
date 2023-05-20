@@ -7,7 +7,8 @@
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Filler
   } from 'chart.js'
   import { Line } from 'vue-chartjs'
   
@@ -18,7 +19,8 @@
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Filler
   )
  
   const props = defineProps(['chartData', 'options', 'chartTitle'])
