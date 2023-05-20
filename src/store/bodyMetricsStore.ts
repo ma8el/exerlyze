@@ -16,6 +16,14 @@ export const useWeightStore = defineStore({
                 return prev.createdAt > current.createdAt ? prev : current;
             });
             return currentWeight;
+        },
+        getWeightsOfWeek(): Weight[] {
+            const today = new Date();
+            const weekAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+            const weightsOfWeek = this.weights.filter((weight) => {
+                return new Date(weight.createdAt) >= weekAgo;
+            });
+            return weightsOfWeek;
         }
     },
     actions: {
