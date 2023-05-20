@@ -7,6 +7,7 @@
 
   onMounted(() => {
     console.log(workoutPlanStore.getFullWorkoutPlans);
+    console.log(workoutPlanStore.getWorkoutPlans);
   });
 </script>
 

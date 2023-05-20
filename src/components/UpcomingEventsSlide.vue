@@ -8,42 +8,32 @@
   import 'swiper/css';
   import 'swiper/css/pagination';
   import '@ionic/vue/css/ionic-swiper.css';
+  import { onMounted } from 'vue';
 
-  const workoutPlans = useWorkoutPlanStore().getWorkoutPlans;
+  const workoutPlanStore = useWorkoutPlanStore();
+  const plannedWorkouts = workoutPlanStore.getFullWorkoutPlans;
   const modules = [ Pagination ]
+
+  onMounted(() => {
+    console.log(plannedWorkouts);
+  })
 </script>
 
 <template>
   <swiper :modules="modules" :pagination="true" class="swiper">
-<!--    <swiper-slide
-      v-for="workoutPlan in workoutPlans"
+    <swiper-slide
+      v-for="workoutPlan in plannedWorkouts"
       :key="workoutPlan.id"
     >
       <UpcomingEventCard
-        :workoutName="workoutPlan.name"
+        class="swiper ion-margin ion-padding"
+        :workoutPlanName="workoutPlan.name"
+        :workoutName="workoutPlan.workout.name"
+        :plannedDay="workoutPlan.dayOfWeek"
       >
         <StartWorkoutButton />
       </UpcomingEventCard> 
-    </swiper-slide> -->
-    <swiper-slide>
-        <UpcomingEventCard
-            class="swiper ion-margin ion-padding"
-            workoutName="Test"
-            plannedDay="Test"
-        >
-            <StartWorkoutButton />
-        </UpcomingEventCard>
     </swiper-slide>
-    <swiper-slide>
-        <UpcomingEventCard
-            class="swiper ion-margin ion-padding"
-            workoutName="Test"
-            plannedDay="Test"
-        >
-            <StartWorkoutButton />
-        </UpcomingEventCard>
-    </swiper-slide>
-
   </swiper>
 </template>
 

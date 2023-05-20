@@ -3,7 +3,9 @@
     
     const props = defineProps({
         workoutName: String,
-        plannedDay: String
+        workoutPlanName: String,
+        plannedDay: String,
+        plannedTime: String,
     })
 </script>
 
@@ -11,9 +13,10 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title>{{ workoutName }}</ion-card-title>
-      <ion-card-subtitle>{{ plannedDay }}</ion-card-subtitle>
+      <ion-card-subtitle>{{ workoutPlanName }}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content class="ion-margin">
+      Scheduled on {{ plannedDay }}
       <slot></slot>
     </ion-card-content>
   </ion-card>
