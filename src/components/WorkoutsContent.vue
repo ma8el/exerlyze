@@ -1,8 +1,9 @@
 <script setup lang="ts">
   import WorkoutCard from './Cards/WorkoutCard.vue';
   import { useWorkoutStore } from '../store/workoutStore';
-  import AddWorkoutButton from '@/components/Buttons/AddWorkoutButton.vue'
+  import AddFloatingActionButton from '@/components/Buttons/AddFloatingActionButton.vue'
   import { onMounted } from 'vue';
+  import AddWorkoutModal from '@/components/Modals/AddWorkoutModal.vue';
 
   const workoutStore = useWorkoutStore();
 
@@ -20,5 +21,6 @@
     :description="workout.description"
     :exercises="workout.exercises"
   />
-  <AddWorkoutButton />
+  <AddFloatingActionButton :modalComponent="AddWorkoutModal" />
+
 </template>

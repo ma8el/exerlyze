@@ -1,11 +1,18 @@
 <script setup lang="ts">
   import { IonFab, IonFabButton, IonIcon, modalController } from '@ionic/vue';
   import { add } from 'ionicons/icons';
-  import AddWorkoutModal from '@/components/Modals/AddWorkoutModal.vue';
+
+  const props = defineProps({
+    modalComponent: Object
+  })
   
   const openModal = async () => {
+    if (!props.modalComponent) {
+      console.error('modalComponent is undefined');
+      return;
+    }
     const modal = await modalController.create({
-      component: AddWorkoutModal,
+      component: props.modalComponent as any,
       cssClass: 'full-screen-modal',
     });
     modal.present();
