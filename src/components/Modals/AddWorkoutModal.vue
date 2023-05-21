@@ -2,7 +2,7 @@
   import { IonButton,
            IonInput,
            modalController } from '@ionic/vue';
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, onUnmounted } from 'vue'
   import { useWorkoutStore } from '../../store/workoutStore';
   import AddExerciseButton from '../Buttons/AddExerciseButton.vue'
   import ExerciseItem from '../ExerciseItem.vue';
@@ -22,7 +22,6 @@
   const exercises = ref<Exercise[]>([])
 
   const save = () => {
-    console.log(exercises.value)
     workoutStore.addWorkout({
       id: workoutStore.getNewId,
       name: workoutName.value,
@@ -47,13 +46,23 @@
     exercises.value.push(...e)
   }
 
-  onMounted(() => {
-    if (props.workoutId) {
-      const workout = workoutStore.getWorkoutById(props.workoutId)
+  const getWorkoutData = (workoutId: number) => {
+      const workout = workoutStore.getWorkoutById(workoutId)
       if (!workout) return
       workoutName.value = workout.name
       description.value = workout.description
       exercises.value = workout.exercises
+    }
+
+  onMounted(() => {
+    if (props.workoutId) {
+      getWorkoutData(props.workoutId)
+    }
+  })
+  
+  onUnmounted(() => {
+    if (props.workoutId) {
+      getWorkoutData(props.workoutId)
     }
   })
 </script>
@@ -75,7 +84,7 @@
         :id="exercise.id"
         :name="exercise.name"
        />
-      <AddExerciseButton @confirm="addExercise"/>
+      <AddExerciseButton @save-exercises="addExercise"/>
     </template>
   </BaseFullPageModal>
 </template> 
