@@ -1,10 +1,5 @@
 <script setup lang="ts">
   import { IonButton,
-           IonContent,
-           IonHeader, 
-           IonToolbar,
-           IonTitle,
-           IonButtons,
            IonInput,
            modalController } from '@ionic/vue';
   import { ref } from 'vue'
@@ -12,6 +7,7 @@
   import AddExerciseButton from '../Buttons/AddExerciseButton.vue'
   import ExerciseItem from '../ExerciseItem.vue';
   import { Exercise } from '@/types';
+  import BaseFullPageModal from './BaseFullPageModal.vue';
 
   const workoutStore = useWorkoutStore()
 
@@ -30,29 +26,17 @@
     modalController.dismiss(null, 'save');
   }
 
-  const closeModal = () => {
-      return modalController.dismiss(null, 'close');
-  };
-
   const addExercise = (e: Exercise[]) => {
     exercises.value.push(...e)
   }
 </script>
 
  <template>
-  <ion-content>
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-button @click="closeModal">Dismiss</ion-button>
-        </ion-buttons>
-        <ion-title>Add Workout</ion-title>
-        <ion-buttons slot="end">
-          <ion-button @click="save">Save</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
+  <BaseFullPageModal title="Add Workout">
+    <template #saveButton>
+      <ion-button @click="save">Save</ion-button>
+    </template>
+    <template #modalContent>
       <ion-input class="ion-padding" fill="outline" shape="round" label="Workout Name" label-placement="stacked" v-model="workoutName"></ion-input>
       <ion-input class="ion-padding" fill="outline" shape="round" label="Description" label-placement="stacked" v-model="description"></ion-input>
       <ExerciseItem v-for="(exercise, index) in exercises"
@@ -64,6 +48,6 @@
         :name="exercise.name"
        />
       <AddExerciseButton @confirm="addExercise"/>
-    </ion-content>
-  </ion-content>
+    </template>
+  </BaseFullPageModal>
 </template> 
