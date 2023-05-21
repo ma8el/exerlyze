@@ -2,7 +2,7 @@
   import { IonButton,
            IonInput,
            modalController } from '@ionic/vue';
-  import { ref, onMounted, onUnmounted } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { useWorkoutStore } from '../../store/workoutStore';
   import AddExerciseButton from '../Buttons/AddExerciseButton.vue'
   import ExerciseItem from '../ExerciseItem.vue';
@@ -51,16 +51,11 @@
       if (!workout) return
       workoutName.value = workout.name
       description.value = workout.description
-      exercises.value = workout.exercises
+      // Deep copy the exercises array to avoid reactivity issues
+      exercises.value = JSON.parse(JSON.stringify(workout.exercises))
     }
 
   onMounted(() => {
-    if (props.workoutId) {
-      getWorkoutData(props.workoutId)
-    }
-  })
-  
-  onUnmounted(() => {
     if (props.workoutId) {
       getWorkoutData(props.workoutId)
     }
