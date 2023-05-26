@@ -1,14 +1,10 @@
 <script setup lang="ts">
   import WorkoutPlanCard from './Cards/WorkoutPlanCard.vue';
-  import { useWorkoutPlanStore, usePlannedWorkoutStore } from '../store/workoutStore';
-  import { onMounted } from 'vue';
+  import { useWorkoutPlanStore } from '../store/workoutStore';
+  import AddFloatingActionButton from './Buttons/AddFloatingActionButton.vue';
+  import AddWorkoutPlanModal from './Modals/AddWorkoutPlanModal.vue';
 
   const workoutPlanStore = useWorkoutPlanStore();
-
-  onMounted(() => {
-    console.log(workoutPlanStore.getFullWorkoutPlans);
-    console.log(workoutPlanStore.getWorkoutPlans);
-  });
 </script>
 
 <template>
@@ -17,4 +13,5 @@
     :key="index"
     :workoutPlanId="workoutPlan.id"
   />
+  <AddFloatingActionButton :modalComponent="AddWorkoutPlanModal" />
 </template>

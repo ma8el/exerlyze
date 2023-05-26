@@ -17,6 +17,10 @@ export interface Workout {
     exercises: Exercise[]
 }
 
+export interface WorkoutSelection extends Workout {
+    isSelected: boolean
+};
+
 export interface PlannedWorkout {
     id: number,
     workoutId: number,
