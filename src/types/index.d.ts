@@ -48,6 +48,7 @@ export interface FullWorkoutPlan extends WorkoutPlan, PlannedWorkout {
 export interface WorkoutSchedule {
     id: number,
     workoutPlanId: number,
+    createdAt: Date,
     startsAt: Date,
     endsAt: Date,
 }

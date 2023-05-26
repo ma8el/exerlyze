@@ -3,7 +3,7 @@
   import { ref } from 'vue';
   import WorkoutsContent from '@/components/WorkoutsContent.vue';
   import WorkoutPlansContent from '@/components/WorkoutPlansContent.vue';
-  import WorkoutScheduleCard from '@/components/Cards/WorkoutScheduleCard.vue';
+  import WorkoutScheduleContent from '@/components/WorkoutScheduleContent.vue';
 
   const selectedSegment = ref('workouts');
   const workoutsSelected = ref(true)
@@ -43,5 +43,5 @@
   </ion-segment>
   <WorkoutsContent v-if="workoutsSelected" />
   <WorkoutPlansContent v-if="plansSelected" />
-  <WorkoutScheduleCard v-if="scheduleSelected" />
+  <WorkoutScheduleContent v-if="scheduleSelected" />
 </template>

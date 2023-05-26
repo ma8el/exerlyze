@@ -1,5 +1,10 @@
 import { defineStore } from 'pinia'
-import { Workout, PlannedWorkout, WorkoutPlan, DayOfWeek, FullWorkoutPlan } from '@/types';
+import { Workout,
+         PlannedWorkout,
+         WorkoutPlan,
+         DayOfWeek,
+         FullWorkoutPlan,
+         WorkoutSchedule } from '@/types';
 
 export const useWorkoutStore = defineStore({
     id: 'workout',
@@ -169,5 +174,36 @@ export const useDayOfWeekStore = defineStore({
             }
             return undefined;
         },
+    }
+});
+
+export const useWorkoutScheduleStore = defineStore({
+    id: 'workoutSchedule',
+    state: () => ({
+        workoutSchedule: [] as WorkoutSchedule[],
+    }),
+    getters: {
+        getWorkoutSchedule(): WorkoutSchedule[] {
+            return this.workoutSchedule;
+        },
+        getNewId(): number {
+            return this.workoutSchedule.length + 1;
+        }
+    },
+    actions: {
+        getWorkoutScheduleById(id: number): WorkoutSchedule | undefined {
+            const workoutSchedule = this.workoutSchedule.find(w => w.id === id);
+            if (workoutSchedule) {
+                return workoutSchedule;
+            }
+            return undefined;
+        },
+        addWorkoutSchedule(workoutSchedule: WorkoutSchedule) {
+            this.workoutSchedule.push(workoutSchedule);
+        },
+        updateWorkoutSchedule(workoutSchedule: WorkoutSchedule) {
+            const index = this.workoutSchedule.findIndex(w => w.id === workoutSchedule.id);
+            this.workoutSchedule[index] = workoutSchedule;
+        }
     }
 });
