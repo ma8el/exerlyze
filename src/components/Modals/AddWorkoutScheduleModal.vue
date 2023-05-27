@@ -9,6 +9,7 @@
   import { useWorkoutScheduleStore, useWorkoutPlanStore } from '../../store/workoutStore';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import { useDark } from '@vueuse/core'
+  import { dateToIsoString } from '@/helpers/time';
 
   const props = defineProps({
     workoutScheduleId: {
@@ -52,11 +53,11 @@
   }
 
   const startDate = computed(() => {
-    return range.value.start.toISOString().split('T')[0];
+    return dateToIsoString(range.value.start)
   });
 
   const endDate = computed(() => {
-    return range.value.end.toISOString().split('T')[0];
+    return dateToIsoString(range.value.end);
   });
 
   onMounted(() => {

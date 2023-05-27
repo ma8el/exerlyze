@@ -8,6 +8,7 @@
            IonLabel} from '@ionic/vue';
   import { useWorkoutScheduleStore, useWorkoutPlanStore } from '../../store/workoutStore';
   import { computed } from 'vue';
+  import { dateToIsoString } from '@/helpers/time';
 
   const props = defineProps({
     workoutScheduleId: {
@@ -23,11 +24,17 @@
   });
 
   const startDate = computed(() => {
-    return workoutSchedule.value?.startsAt.toISOString().split('T')[0];
+    if (!workoutSchedule.value?.startsAt) {
+      return '';
+    }
+    return dateToIsoString(workoutSchedule.value.startsAt);
   });
 
   const endDate = computed(() => {
-    return workoutSchedule.value?.endsAt.toISOString().split('T')[0];
+    if (!workoutSchedule.value?.endsAt) {
+      return '';
+    }
+    return dateToIsoString(workoutSchedule.value.endsAt)
   });
 
   const workoutPlanName = computed(() => {
