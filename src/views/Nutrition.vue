@@ -3,8 +3,9 @@
   import Toolbar from '@/components/Toolbar.vue';
   import Calendar from '@/components/Calendar.vue';
   import CaloriesOverview from '@/components/Cards/CaloriesOverview.vue';
-  import TrackActionButton from '@/components/Buttons/TrackActionButton.vue';
   import NutritionOverview from '@/components/Cards/NutritionOverview.vue';
+  import AddFloatingActionButton from '@/components/Buttons/AddFloatingActionButton.vue';
+  import AddNutritionModal from '@/components/Modals/AddNutritionModal.vue';
 </script>
 
 <template>
@@ -19,8 +20,8 @@
       </ion-header>
       <Calendar />
       <CaloriesOverview />
-      <TrackActionButton />
       <NutritionOverview />
+      <AddFloatingActionButton :modal-component="AddNutritionModal"/>
     </ion-content>
   </ion-page>
 </template>
