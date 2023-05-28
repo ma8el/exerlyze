@@ -51,7 +51,6 @@
             placeholder="Product name"
             @ionChange="queryProducts"
             @ionInput="queryProducts"
-            @ionBlur="queryProducts"
             @ionClear="removeProducts"
           >
           </ion-searchbar>
