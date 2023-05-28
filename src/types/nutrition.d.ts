@@ -17,6 +17,8 @@ export interface FilteredNutritionApiProduct {
     _keywords: string[],
     product_name: string,
     image_front_thumb_url: string,
+    image_front_small_url: string,
+    image_front_url: string,
     ingredients: Ingredient[],
 //    nutriments: Nutriments,
     nutriments: any,
@@ -31,4 +33,28 @@ export interface NutritionApiSearchResponse {
     page_size: number,
     products: FilteredNutritionApiProduct[],
     skip: number,
+}
+
+export interface FoodDiary {
+    id: number,
+    userId: string,
+    createdAt: Date,
+}
+
+export interface FoodDiaryEntry {
+    id: number,
+    foodDiaryId: number,
+    createdAt: Date,
+    foodId: string,
+    foodName: string,
+    quantity: number,
+    unit: string,
+    calories: number,
+    carbohydrates: number,
+    protein: number,
+    fat: number,
+    fiber: number,
+    sugar: number,
+    salt: number,
+    sodium: number,
 }

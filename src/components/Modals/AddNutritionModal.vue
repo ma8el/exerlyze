@@ -1,24 +1,22 @@
 <script setup lang="ts">
-  import { IonButton,
-           IonList,
+  import { IonList,
            IonSpinner,
            IonLabel,
-           IonThumbnail,
-           IonInput,
-           IonItem } from '@ionic/vue';
+           IonAvatar,
+           IonSearchbar,
+           IonItem,
+           modalController } from '@ionic/vue';
   import BaseFullPageModal from './BaseFullPageModal.vue';
+  import NutritionProductDetailsModal from './NutritionProductDetailsModal.vue';
   import useNutritionApi from '@/composables/nutrition';
   import { ref } from 'vue';
   import { NutritionApiSearchResponse, FilteredNutritionApiProduct } from '@/types/nutrition';
+  import { useFoodDiaryStore } from '@/store/foodDiary';
 
   const loading = ref(false);
   const products = ref<FilteredNutritionApiProduct[]>();
 
-  const save = () => {
-        console.log('save')
-  }
-
-  const queryProduct = (e: any) => {
+  const queryProducts = (e: any) => {
     const searchedProduct: string = e.target.value;
     products.value = [];
     loading.value = true;
@@ -28,23 +26,35 @@
       loading.value = false;
     })
   }
+
+  const removeProducts = () => {
+    products.value = [];
+  }
+
+  const openProductModal = async (product: FilteredNutritionApiProduct) => {
+    const modal = await modalController.create({
+      id: 'nutrition-product-details-modal',
+      component: NutritionProductDetailsModal,
+      componentProps: { product: product },
+      cssClass: 'full-screen-modal',
+    });
+    modal.present();
+  }
 </script>
 
 <template>
   <BaseFullPageModal title="Add Nutrition">
-    <template #saveButton>
-      <ion-button @click="save">Save</ion-button>
-    </template>
     <template #modalContent>
       <ion-list>
         <ion-item>
-          <ion-input 
+          <ion-searchbar 
             placeholder="Product name"
-            label="Search for a product"
-            labelPlacement="stacked"
-            @ionBlur="queryProduct"
+            @ionChange="queryProducts"
+            @ionInput="queryProducts"
+            @ionBlur="queryProducts"
+            @ionClear="removeProducts"
           >
-          </ion-input>
+          </ion-searchbar>
         </ion-item>
       </ion-list>
       <ion-list
@@ -59,10 +69,11 @@
         <ion-item
           v-for="(product, index) in products"
           :key="index"
+          @click="openProductModal(product)"
         >
-          <ion-thumbnail slot="start">
+          <ion-avatar slot="start">
             <img :src="product.image_front_thumb_url" />
-          </ion-thumbnail>
+          </ion-avatar>
           <ion-label>
             {{ product.product_name }}
           </ion-label>
