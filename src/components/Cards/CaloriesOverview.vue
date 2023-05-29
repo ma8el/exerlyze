@@ -1,10 +1,15 @@
 <script setup lang="ts">
   import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonGrid, IonRow, IonCol, IonText, IonLabel } from '@ionic/vue';
   import { computed, ref } from 'vue';
+  import { useFoodDiaryStore } from '@/store/foodDiary';
 
   const calories = ref(3000);
-  const intake = ref(200);
-  const activity = ref(300);
+  const activity = ref(0);
+
+  const intake = computed(() => {
+    return useFoodDiaryStore().getCaloriesOfDate(new Date());
+  })
+
   const result = computed(() => {
     return calories.value - intake.value + activity.value;
   })
