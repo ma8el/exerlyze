@@ -10,6 +10,10 @@ export interface ExerciseSelection extends Exercise {
     isSelected: boolean
 };
 
+export interface ActiveExercise extends Exercise {
+    currentSet: number,
+}
+
 export interface Workout {
     id: number,
     name: string,

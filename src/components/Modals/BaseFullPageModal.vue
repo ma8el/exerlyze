@@ -33,4 +33,5 @@
         <slot name="modalContent"></slot>
     </ion-content>
   </ion-content>
+  <slot name="modalFooter"></slot>
 </template>
