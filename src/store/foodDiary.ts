@@ -50,6 +50,20 @@ export const useFoodDiaryStore = defineStore({
                 return prev + current.carbohydrates;
             }, 0);
             return carbohydrates;
+        },
+        getProteinOfDate(date: Date): number {
+            const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
+            const proteins = foodDiaryEntries.reduce((prev, current) => {
+                return prev + current.protein;
+            }, 0);
+            return proteins;
+        },
+        getFatOfDate(date: Date): number {
+            const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
+            const fats = foodDiaryEntries.reduce((prev, current) => {
+                return prev + current.fat;
+            }, 0);
+            return fats;
         }
     }
 })
