@@ -2,10 +2,7 @@
   import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
   import Toolbar from '@/components/Toolbar.vue';
   import Calendar from '@/components/Calendar.vue';
-  import CaloriesOverview from '@/components/Cards/CaloriesOverview.vue';
-  import NutritionOverview from '@/components/Cards/NutritionOverview.vue';
-  import AddFloatingActionButton from '@/components/Buttons/AddFloatingActionButton.vue';
-  import AddNutritionModal from '@/components/Modals/AddNutritionModal.vue';
+  import NutritionSegments from '@/components/NutritionSegments.vue';
 </script>
 
 <template>
@@ -19,9 +16,7 @@
         </ion-toolbar>
       </ion-header>
       <Calendar />
-      <CaloriesOverview />
-      <NutritionOverview />
-      <AddFloatingActionButton :modal-component="AddNutritionModal"/>
+      <NutritionSegments />
     </ion-content>
   </ion-page>
 </template>

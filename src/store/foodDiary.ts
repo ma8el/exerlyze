@@ -64,6 +64,27 @@ export const useFoodDiaryStore = defineStore({
                 return prev + current.fat;
             }, 0);
             return fats;
+        },
+        getBreakfastEntriesOfDate(date: Date): FoodDiaryEntry[] {
+            const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
+            const breakfastEntries = foodDiaryEntries.filter((foodDiaryEntry) => {
+                return foodDiaryEntry.createdAt.getHours() < 12;
+            });
+            return breakfastEntries;
+        },
+        getLunchEntriesOfDate(date: Date): FoodDiaryEntry[] {
+            const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
+            const lunchEntries = foodDiaryEntries.filter((foodDiaryEntry) => {
+                return foodDiaryEntry.createdAt.getHours() >= 12 && foodDiaryEntry.createdAt.getHours() < 18;
+            });
+            return lunchEntries;
+        },
+        getDinnerEntriesOfDate(date: Date): FoodDiaryEntry[] {
+            const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
+            const dinnerEntries = foodDiaryEntries.filter((foodDiaryEntry) => {
+                return foodDiaryEntry.createdAt.getHours() >= 18;
+            });
+            return dinnerEntries;
         }
     }
 })
