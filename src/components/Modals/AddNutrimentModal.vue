@@ -82,6 +82,7 @@
       <ion-input
         type="number"
         placeholder="Amount (g)"
+        :clear-on-edit="true"
         v-model="amount"
       >
         Amount (g)
