@@ -31,7 +31,7 @@
         :workoutName="workoutPlan.workout.name"
         :plannedDay="workoutPlan.dayOfWeek"
       >
-        <StartWorkoutButton />
+        <StartWorkoutButton :workoutId="workoutPlan.workoutId" />
       </UpcomingEventCard> 
     </swiper-slide>
   </swiper>

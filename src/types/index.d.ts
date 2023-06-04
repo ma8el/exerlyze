@@ -11,6 +11,8 @@ export interface ExerciseSelection extends Exercise {
 };
 
 export interface ActiveExercise extends Exercise {
+    plannedReps: number,
+    plannedWeight: number,
     currentSet: number,
 }
 
@@ -62,4 +64,38 @@ export interface Weight {
     weight: number,
     createdAt: Date,
     unit: string
+}
+
+export interface WorkoutSession {
+    id: number,
+    userId: string,
+    workoutId: number,
+    createdAt: Date,
+    updatedAt: Date,
+    scheduledAt: Date,
+    startedAt: Date,
+    finishedAt: Date,
+    notes: string,
+}
+
+export interface WorkoutSessionPerformance {
+    id: number,
+    userId: string,
+    workoutSessionId: number,
+    exerciseId: number,
+    set: number,
+    plannedReps: number,
+    performedReps: number,
+    plannedWeight: number,
+    performedWeight: number,
+    plannedRir?: number,
+    performedRir?: number,
+    restTime: number,
+    createdAt: Date,
+    updatedAt: Date,
+}
+
+export interface FullWorkoutSession extends WorkoutSession {
+    workout: Workout,
+    workoutPerformance: WorkoutSessionPerformance[]
 }

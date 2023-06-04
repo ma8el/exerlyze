@@ -4,7 +4,10 @@ import { Workout,
          WorkoutPlan,
          DayOfWeek,
          FullWorkoutPlan,
-         WorkoutSchedule } from '@/types';
+         WorkoutSchedule,
+         WorkoutSession,
+         WorkoutSessionPerformance,
+         FullWorkoutSession } from '@/types';
 
 export const useWorkoutStore = defineStore({
     id: 'workout',
@@ -205,5 +208,76 @@ export const useWorkoutScheduleStore = defineStore({
             const index = this.workoutSchedule.findIndex(w => w.id === workoutSchedule.id);
             this.workoutSchedule[index] = workoutSchedule;
         }
+    }
+});
+
+export const useWorkoutSessionStore = defineStore({
+    id: 'workoutSession',
+    state: () => ({
+        workoutSessions: [] as WorkoutSession[],
+        workoutSessionPerformances: [] as WorkoutSessionPerformance[]
+    }),
+    getters: {
+        getWorkoutSessions(): WorkoutSession[] {
+            return this.workoutSessions;
+        },
+        getWorkoutSessionPerformances(): WorkoutSessionPerformance[] {
+            return this.workoutSessionPerformances;
+        },
+        getNewWorkoutSessionId(): number {
+            return this.workoutSessions.length + 1;
+        },
+        getNewWorkoutSessionPerformanceId(): number {
+            return this.workoutSessionPerformances.length + 1;
+        },
+        getFullWorkoutSessions(): FullWorkoutSession[] {
+            const workoutStore = useWorkoutStore();
+            const fullWorkoutSessions = this.workoutSessions.map(w => {
+                const workout = workoutStore.getWorkoutById(w.workoutId);
+                if (workout) {
+                    return {
+                        ...w,
+                        workout: workout
+                    } as FullWorkoutSession;
+                }
+                return undefined;
+            }).filter(w => w !== undefined) as FullWorkoutSession[];
+            return fullWorkoutSessions;
+        }
+    },
+    actions: {
+        getWorkoutSessionById(id: number): WorkoutSession | undefined {
+            const workoutSession = this.workoutSessions.find(w => w.id === id);
+            if (workoutSession) {
+                return workoutSession;
+            }
+            return undefined;
+        },
+        addWorkoutSession(workoutSession: WorkoutSession) {
+            this.workoutSessions.push(workoutSession);
+        },
+        addWorkoutSessionPerformances(workoutSessionPerformances: WorkoutSessionPerformance[]) {
+            this.workoutSessionPerformances.push(...workoutSessionPerformances);
+        },
+        createFullWorkoutSessionSets(workoutId: number) {
+            const workoutStore = useWorkoutStore();
+            const workout = workoutStore.getWorkoutById(workoutId);
+            if (workout) {
+                const sets = workout.exercises.flatMap(exercise => {
+                    return Array.from({ length: exercise.sets }, (_, i) => ({
+                      id: exercise.id,
+                      name: exercise.name,
+                      sets: exercise.sets,
+                      currentSet: i + 1,
+                      plannedReps: exercise.reps,
+                      reps: exercise.reps,
+                      plannedWeight: exercise.weight,
+                      weight: exercise.weight
+                    }));
+                  });
+                return sets;
+            }
+            return undefined;
+        },
     }
 });

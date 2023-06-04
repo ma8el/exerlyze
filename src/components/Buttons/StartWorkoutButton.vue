@@ -1,10 +1,20 @@
 <script setup lang="ts">
-  import { IonButton, modalController, IonRow, IonGrid, IonCol } from '@ionic/vue';
+  import { IonButton, modalController } from '@ionic/vue';
   import WorkoutModal from '@/components/Modals/WorkoutModal.vue';
+
+  const props = defineProps({
+    workoutId: {
+      type: Number,
+      required: true
+    }
+  });
   
   const openModal = async () => {
     const modal = await modalController.create({
       component: WorkoutModal,
+      componentProps: {
+        workoutId: props.workoutId
+      },
       cssClass: 'full-screen-modal',
     });
     modal.present();
