@@ -1,8 +1,7 @@
 <script setup lang="ts">
-  import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-  import Toolbar from '@/components/Toolbar.vue';
   import UserInfoCard from '@/components/Cards/UserInfoCard.vue';
   import LineChart from '@/components/Charts/LineChart.vue';
+  import AppLayout from '@/layouts/AppLayout.vue';
   import { useWeightStore } from '@/store/bodyMetricsStore';
   import { useDayOfWeekStore } from '@/store/workoutStore';
 
@@ -47,16 +46,8 @@
 </script>
 
 <template>
-  <ion-page>
-    <Toolbar title="You" />
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">You</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <UserInfoCard />
-      <LineChart :chartData="weightChartData" :options="options" chartTitle="Weight" />
-    </ion-content>
-  </ion-page>
+  <AppLayout title="You">
+    <UserInfoCard />
+    <LineChart :chartData="weightChartData" :options="options" chartTitle="Weight" />
+  </AppLayout>
 </template>
