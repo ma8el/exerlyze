@@ -1,12 +1,10 @@
 <script setup lang="ts">
-  import Calendar from '@/components/Calendar.vue';
   import WorkoutsSegments from '@/components/WorkoutsSegments.vue';
-  import AppLayout from '@/layouts/AppLayout.vue';
+  import PageWithCalendar from '@/layouts/PageWithCalendar.vue';
 </script>
 
 <template>
-  <AppLayout title="Workouts">
-   <Calendar />
+  <PageWithCalendar title="Workouts">
     <WorkoutsSegments />
-  </AppLayout>
+  </PageWithCalendar>
 </template>
