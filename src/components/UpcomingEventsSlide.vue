@@ -42,7 +42,8 @@
     :modules="modules"
     :pagination="true"
     :loop="true"
-    :initial-slide="1"
+    :initial-slide="nextWorkout"
+    v-if="nextWorkout"
   >
     <swiper-slide
       v-for="workoutPlan in sortedPlannedWorkouts"
