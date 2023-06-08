@@ -8,21 +8,44 @@
   import 'swiper/css';
   import 'swiper/css/pagination';
   import '@ionic/vue/css/ionic-swiper.css';
-  import { onMounted } from 'vue';
+  import { onMounted, ref, watch } from 'vue';
 
   const workoutPlanStore = useWorkoutPlanStore();
-  const plannedWorkouts = workoutPlanStore.getFullWorkoutPlans;
+  const plannedWorkouts = workoutPlanStore.getFullWorkoutPlans
+  const sortedPlannedWorkouts = plannedWorkouts.sort((a, b) => a.dayOfWeekId - b.dayOfWeekId);
   const modules = [ Pagination ]
+  const nextWorkout = ref();
+
+  const getNextEventIndex = (currentDay: number, events: number[]) => {
+    events.sort((a, b) => a - b);
+    let nextEventIndex = events.findIndex(event => event >= currentDay);
+    if (nextEventIndex === -1 || currentDay > events[events.length - 1]) {
+        return 0;
+    }
+    return nextEventIndex;
+  }
+
+  const setNextWorkout = () => {
+    const today = new Date().getDay();
+    const workoutDays = sortedPlannedWorkouts.map((workoutPlan) => workoutPlan.dayOfWeekId);
+    nextWorkout.value = getNextEventIndex(today, workoutDays);
+  }
 
   onMounted(() => {
-    console.log(plannedWorkouts);
+    setNextWorkout();
   })
 </script>
 
 <template>
-  <swiper :modules="modules" :pagination="true" class="swiper">
+  <swiper 
+    class="swiper"
+    :modules="modules"
+    :pagination="true"
+    :loop="true"
+    :initial-slide="1"
+  >
     <swiper-slide
-      v-for="workoutPlan in plannedWorkouts"
+      v-for="workoutPlan in sortedPlannedWorkouts"
       :key="workoutPlan.id"
     >
       <UpcomingEventCard
