@@ -43,7 +43,7 @@
     :pagination="true"
     :loop="true"
     :initial-slide="nextWorkout"
-    v-if="nextWorkout"
+    v-if="nextWorkout !== undefined"
   >
     <swiper-slide
       v-for="workoutPlan in sortedPlannedWorkouts"
