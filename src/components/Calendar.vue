@@ -1,7 +1,9 @@
 <script setup lang="ts">
-  import { IonGrid, IonRow } from '@ionic/vue';
+  import { IonGrid, IonRow, modalController } from '@ionic/vue';
   import { useDark } from '@vueuse/core'
   import { ref, PropType } from 'vue'
+  import ActivitiesModal from './Modals/ActivitiesModal.vue';
+  
 
   const props = defineProps({
     workoutEventDates: {
@@ -35,17 +37,31 @@
       dates: props.workoutEventDates,
   }
   ])
+
+  const selectedDate = ref()
+
+  const openModal = async () => {
+    const modal = await modalController.create({
+        component: ActivitiesModal,
+        componentProps: {
+          selectedDate: selectedDate.value
+        },
+      });
+      await modal.present();
+  }
 </script>
 
 <template>
   <ion-grid>
     <ion-row class="ion-justify-content-center">
-        <VCalendar 
+        <VDatePicker 
           expanded 
           transparent 
           borderless 
           :is-dark="isDark" 
           view="weekly"
+          v-model="selectedDate"
+          @click="openModal"
           :attributes="attributes"
         />
     </ion-row>

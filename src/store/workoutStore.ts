@@ -237,7 +237,8 @@ export const useWorkoutSessionStore = defineStore({
                 if (workout) {
                     return {
                         ...w,
-                        workout: workout
+                        workout: workout,
+                        workoutPerformance: this.workoutSessionPerformances.filter(p => p.workoutSessionId === w.id)
                     } as FullWorkoutSession;
                 }
                 return undefined;
@@ -250,6 +251,27 @@ export const useWorkoutSessionStore = defineStore({
             const workoutSession = this.workoutSessions.find(w => w.id === id);
             if (workoutSession) {
                 return workoutSession;
+            }
+            return undefined;
+        },
+        getWorkoutSessionsByDate(date: Date): WorkoutSession[] | undefined {
+            const workoutSessions = this.workoutSessions.filter(w => w.finishedAt.toDateString() === date.toDateString());
+            if (workoutSessions) {
+                return workoutSessions;
+            }
+            return undefined;
+        },
+        getFullWorkoutSessionsByDate(date: Date): FullWorkoutSession[] | undefined {
+            const fullWorkoutSessions = this.getFullWorkoutSessions;
+            if (fullWorkoutSessions) {
+                return fullWorkoutSessions.filter(w => w.finishedAt.toDateString() === date.toDateString());
+            }
+            return undefined;
+        },
+        getWorkoutSessionPerformanceByDate(date: Date): WorkoutSessionPerformance[] | undefined {
+            const workoutSessionPerformances = this.workoutSessionPerformances.filter(w => w.createdAt.toDateString() === date.toDateString());
+            if (workoutSessionPerformances) {
+                return workoutSessionPerformances;
             }
             return undefined;
         },
