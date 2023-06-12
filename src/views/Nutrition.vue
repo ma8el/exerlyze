@@ -2,12 +2,22 @@
   import { IonGrid, IonRow } from '@ionic/vue';
   import NutritionSegments from '@/components/NutritionSegments.vue';
   import AppLayout from '@/layouts/AppLayout.vue';
-  import { ref, provide, readonly } from 'vue';
+  import { ref, provide, readonly, reactive } from 'vue';
   import { useDark } from '@vueuse/core'
   import { selectedDateKey } from '@/keys';
+  import { useFoodDiaryStore } from '@/store/foodDiary';
+  import { getCurrentWeekDates } from '@/helpers/time';
 
   const isDark = useDark()
+  const selectedDate = ref<Date>(new Date())
+  provide(selectedDateKey, readonly(selectedDate))
 
+  const nutritionStore = useFoodDiaryStore();
+  let nutritionEventDates = reactive<Date[]>([])
+  nutritionEventDates = getCurrentWeekDates().filter(
+    date => nutritionStore.getFoodDiaryEntries.some(foodEntry => foodEntry.createdAt.getDay() === date.getDay()))
+
+  console.log(nutritionEventDates)
   const attributes = ref([{
     key: 'today',
     highlight: {
@@ -17,18 +27,21 @@
     dates: new Date(),
   },
   {
-    key: 'workoutEvent',
+    key: 'nutritionEvent',
     dot: {
       style: {
         backgroundColor: '#3F63C8',
       },
     },
-    dates: [],
+    dates: nutritionEventDates,
   }
   ])
 
-  const selectedDate = ref<Date>(new Date())
-  provide(selectedDateKey, readonly(selectedDate))
+  nutritionStore.$subscribe((mutation, state) => {
+    console.log('mutation', mutation);
+    nutritionEventDates = getCurrentWeekDates().filter(
+      date => nutritionStore.getFoodDiaryEntries.some(foodEntry => foodEntry.createdAt.getDay() === date.getDay()))
+  });
 </script>
 
 <template>
