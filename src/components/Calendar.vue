@@ -1,9 +1,11 @@
 <script setup lang="ts">
-  import { IonGrid, IonRow, modalController } from '@ionic/vue';
+  import { IonGrid,
+           IonRow,
+           modalController } from '@ionic/vue';
   import { useDark } from '@vueuse/core'
-  import { ref, PropType } from 'vue'
+  import { ref,
+           PropType } from 'vue'
   import ActivitiesModal from './Modals/ActivitiesModal.vue';
-  
 
   const props = defineProps({
     workoutEventDates: {
@@ -17,37 +19,46 @@
       default: () => []
     },
   })
+
   const isDark = useDark()
 
   const attributes = ref([{
-      key: 'today',
-      highlight: {
-        color: '#3F63C8',
-        fillMode: 'solid',
-      },
-      dates: new Date(),
+    key: 'today',
+    highlight: {
+      color: '#3F63C8',
+      fillMode: 'light',
+    },
+    dates: new Date(),
   },
   {
-      key: 'workoutEvent',
-      dot: {
-        style: {
-          backgroundColor: '#3F63C8',
-        },
+    key: 'workoutEvent',
+    dot: {
+      style: {
+        backgroundColor: '#3F63C8',
       },
-      dates: props.workoutEventDates,
+    },
+    dates: props.workoutEventDates,
   }
   ])
 
   const selectedDate = ref()
 
   const openModal = async () => {
+    if ( !selectedDate.value ) {
+      return
+    }
     const modal = await modalController.create({
-        component: ActivitiesModal,
-        componentProps: {
-          selectedDate: selectedDate.value
-        },
-      });
-      await modal.present();
+      component: ActivitiesModal,
+      componentProps: {
+        selectedDate: selectedDate.value
+      },
+    });
+    await modal.present();
+
+    const { data, role } = await modal.onDidDismiss();
+    if ( role === 'close' || role === 'backdrop') {
+      selectedDate.value = null
+    }
   }
 </script>
 
