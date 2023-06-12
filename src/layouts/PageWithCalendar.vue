@@ -21,8 +21,8 @@
   workoutPlanStore.$subscribe((mutation, state) => {
     console.log('mutation', mutation);
     workoutEventDates = getCurrentWeekDates().filter(
-      date => workoutPlanStore.getFullWorkoutPlans.some(workout => workout.dayOfWeekId === date.getDay()))
-  }, );
+      date => workoutPlanStore.getFullWorkoutPlans.some(workout => workout.dayOfWeekId === date.getDay()));
+  });
 </script>
 
 <template>
