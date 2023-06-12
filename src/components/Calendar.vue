@@ -13,12 +13,7 @@
       required: false,
       default: () => []
     },
-    nutitionDiaryEventDates: {
-      type: Array as PropType<Date[]>,
-      required: false,
-      default: () => []
-    },
-  })
+ })
 
   const isDark = useDark()
 
@@ -41,7 +36,7 @@
   }
   ])
 
-  const selectedDate = ref()
+  const selectedDate = ref<Date>()
 
   const openModal = async () => {
     if ( !selectedDate.value ) {
@@ -57,7 +52,7 @@
 
     const { data, role } = await modal.onDidDismiss();
     if ( role === 'close' || role === 'backdrop') {
-      selectedDate.value = null
+      selectedDate.value = undefined
     }
   }
 </script>

@@ -6,9 +6,11 @@
            IonCard } from '@ionic/vue';
   import { useFoodDiaryStore } from '@/store/foodDiary';
   import FoodItem from './FoodItem.vue';
+  import { inject } from 'vue';
+  import { selectedDateKey } from '@/keys';
 
+  const selectedDate = inject(selectedDateKey)
   const foodDiaryStore = useFoodDiaryStore();
-  const today = new Date();
 </script>
 
 <template>
@@ -21,7 +23,8 @@
           </ion-label>
         </ion-item-divider>
         <FoodItem 
-          v-for="(foodItem, index) in foodDiaryStore.getBreakfastEntriesOfDate(today)"
+          v-for="(foodItem, index) in foodDiaryStore.getBreakfastEntriesOfDate(selectedDate)"
+          v-if="selectedDate"
           :key="foodItem.id"
           :foodName="foodItem.foodName"
           :calories="foodItem.calories"
@@ -34,7 +37,8 @@
           </ion-label>
         </ion-item-divider>
         <FoodItem 
-          v-for="(foodItem, index) in foodDiaryStore.getLunchEntriesOfDate(today)"
+          v-for="(foodItem, index) in foodDiaryStore.getLunchEntriesOfDate(selectedDate)"
+          v-if="selectedDate"
           :key="foodItem.id"
           :foodName="foodItem.foodName"
           :calories="foodItem.calories"
@@ -47,7 +51,8 @@
           </ion-label>
         </ion-item-divider>
         <FoodItem 
-          v-for="(foodItem, index) in foodDiaryStore.getDinnerEntriesOfDate(today)"
+          v-for="(foodItem, index) in foodDiaryStore.getDinnerEntriesOfDate(selectedDate)"
+          v-if="selectedDate"
           :key="foodItem.id"
           :foodName="foodItem.foodName"
           :calories="foodItem.calories"

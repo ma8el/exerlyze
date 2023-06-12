@@ -5,20 +5,32 @@
   import AddNutritionModal from './Modals/AddNutritionModal.vue';
   import NutritionDoughnutChart from './Charts/NutritionDoughnutChart.vue';
   import { useFoodDiaryStore } from '@/store/foodDiary';
-import { computed } from 'vue';
+  import { computed, inject } from 'vue';
+  import { selectedDateKey } from '@/keys';
+
+  const selectedDate = inject(selectedDateKey);
 
   const foodDiaryStore = useFoodDiaryStore();
 
   const carbsOfDay = computed(() => {
-    return foodDiaryStore.getCarbohydratesOfDate(new Date());
+    if (!selectedDate) {
+      return 0;
+    }
+    return foodDiaryStore.getCarbohydratesOfDate(selectedDate.value);
   });
 
   const proteinsOfDay = computed(() => {
-    return foodDiaryStore.getProteinOfDate(new Date());
+    if (!selectedDate) {
+      return 0;
+    }
+    return foodDiaryStore.getProteinOfDate(selectedDate.value);
   });
 
   const fatsOfDay = computed(() => {
-    return foodDiaryStore.getFatOfDate(new Date());
+    if (!selectedDate) {
+      return 0;
+    }
+    return foodDiaryStore.getFatOfDate(selectedDate.value);
   });
 
   const data = computed(() => {

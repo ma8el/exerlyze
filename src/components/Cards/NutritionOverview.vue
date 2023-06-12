@@ -1,7 +1,10 @@
 <script setup lang="ts">
   import { IonCard, IonList, IonItem, IonLabel, IonNote, IonListHeader } from '@ionic/vue';
-  import { computed } from 'vue';
+  import { computed, inject } from 'vue';
   import { useFoodDiaryStore } from '@/store/foodDiary';
+  import { selectedDateKey }  from '@/keys';
+
+  const selectedDate = inject(selectedDateKey);
 
   const dailyCalories = 3000;
   const dailyCarbs = 150;
@@ -9,19 +12,31 @@
   const dailyProtein = 100;
 
   const intake = computed(() => {
-    return useFoodDiaryStore().getCaloriesOfDate(new Date());
+    if (!selectedDate) {
+      return 0;
+    }
+    return useFoodDiaryStore().getCaloriesOfDate(selectedDate.value);
   })
 
   const intakeCarbs = computed(() => {
-    return useFoodDiaryStore().getCarbohydratesOfDate(new Date());
+    if (!selectedDate) {
+      return 0;
+    }
+    return useFoodDiaryStore().getCarbohydratesOfDate(selectedDate.value);
   })
 
   const intakeFat = computed(() => {
-    return useFoodDiaryStore().getFatOfDate(new Date());
+    if (!selectedDate) {
+      return 0;
+    }
+    return useFoodDiaryStore().getFatOfDate(selectedDate.value);
   })
 
   const intakeProtein = computed(() => {
-    return useFoodDiaryStore().getProteinOfDate(new Date());
+    if (!selectedDate) {
+      return 0;
+    }
+    return useFoodDiaryStore().getProteinOfDate(selectedDate.value);
   })
 </script>
 
