@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { IonRow, IonCol, IonCard, IonCardContent } from '@ionic/vue';
+  import { IonRow, IonCol, IonCard, IonCardSubtitle, IonCardContent } from '@ionic/vue';
   import NutritionOverview from './Cards/NutritionOverview.vue';
   import AddFloatingActionButton from './Buttons/AddFloatingActionButton.vue';
   import AddNutritionModal from './Modals/AddNutritionModal.vue';
