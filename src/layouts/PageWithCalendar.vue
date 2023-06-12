@@ -3,6 +3,7 @@
   import Calendar from '@/components/Calendar.vue';
   import { useWorkoutPlanStore } from '@/store/workoutStore';
   import { reactive } from 'vue';
+  import { getCurrentWeekDates } from '@/helpers/time'
 
   const props = defineProps({
     title: {
@@ -12,23 +13,6 @@
   });
 
   const workoutPlanStore = useWorkoutPlanStore();
-
-  const getCurrentWeekDates = () => {
-    var now = new Date();
-    var dayOfWeek = now.getDay();
-    var numDay = dayOfWeek !== 0 ? dayOfWeek - 1 : 6;
-
-    now.setDate(now.getDate() - numDay);
-
-    var dates = [];
-
-    for(var i = 0; i < 7; i++) {
-        dates.push(new Date(now));
-        now.setDate(now.getDate() + 1);
-    }
-
-    return dates;
-  }
 
   let workoutEventDates = reactive<Date[]>([])
   workoutEventDates = getCurrentWeekDates().filter(
