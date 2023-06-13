@@ -5,15 +5,22 @@ import {
   Title,
   Legend,
   BarElement,
+  Tooltip,
   CategoryScale,
   LinearScale
 } from 'chart.js'
 import { Bar } from 'vue-chartjs'
-import { useDayOfWeekStore } from '@/store/workoutStore';
+import { useDayOfWeekStore, useWorkoutSessionStore } from '@/store/workoutStore';
+import { getCurrentWeekDates } from '@/helpers/time';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Legend)
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Legend, Tooltip)
 
 const dayOfWeekStore = useDayOfWeekStore();
+const weekDays = getCurrentWeekDates();
+const workoutSessionStore = useWorkoutSessionStore();
+const weeklyWorkoutVolume = weekDays.map(day => 
+  workoutSessionStore.getWorkoutSessionPerformanceByDate(day)?.reduce(
+    (acc, curr) => acc + curr.performedReps * curr.performedWeight, 0));
 
 const data = {
   labels: dayOfWeekStore.daysOfWeek.map(d => d.name),
@@ -21,7 +28,7 @@ const data = {
     {
       label: 'Workout Volume',
       backgroundColor: '#3F63C8',
-      data: [40, 20, 12, 39, 10, 40, 39]
+      data: weeklyWorkoutVolume
     }
   ]
 }
@@ -38,7 +45,9 @@ const options = {
       <ion-card-title>Workout Volume</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <Bar :data="data" :options="options" />
+      <Bar 
+        :data="data"
+        :options="options" />
     </ion-card-content>
   </ion-card>
 </template>
