@@ -270,14 +270,14 @@ export const useWorkoutSessionStore = defineStore({
             return undefined;
         },
         getWorkoutSessionPerformanceByDate(date: Date): WorkoutSessionPerformance[] | undefined {
-            const workoutSessionPerformances = this.workoutSessionPerformances.filter(w => w.createdAt.toDateString() === date.toDateString());
+            const workoutSessionPerformances = this.workoutSessionPerformances.filter(w => new Date(w.createdAt).toDateString() === date.toDateString());
             if (workoutSessionPerformances) {
                 return workoutSessionPerformances;
             }
             return undefined;
         },
         getWorkoutSessionPerformanceByDateRange(startDate: Date, endDate: Date): WorkoutSessionPerformance[] | undefined {
-            const workoutSessionPerformances = this.workoutSessionPerformances.filter(w => w.createdAt >= startDate && w.createdAt <= endDate);
+            const workoutSessionPerformances = this.workoutSessionPerformances.filter(w => new Date(w.createdAt) >= startDate && new Date(w.createdAt) <= endDate);
             if (workoutSessionPerformances) {
                 return workoutSessionPerformances;
             }
