@@ -9,17 +9,26 @@
   import { useWeightStore } from '@/store/bodyMetricsStore';
   import { ref } from 'vue';
 
-  const weight = ref();
+  const weight = ref<number>();
 
   const closeModal = () => {
       return modalController.dismiss(null, 'close');
   };
 
   const saveWeight = () => {
+    if (!weight.value) {
+      return
+    }
+    console.log(weight.value)
     const weightStore = useWeightStore();
-    weightStore.addWeight(weight.value);
+    weightStore.addWeight({
+      'id': weightStore.getNewId,
+      'weight': weight.value,
+      'createdAt': new Date(),
+      'unit': 'kg'
+    });
     closeModal();
-    weight.value = null;
+    weight.value = undefined;
   };
 </script>
 

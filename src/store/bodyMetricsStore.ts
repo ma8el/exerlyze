@@ -9,6 +9,9 @@ export const useWeightStore = defineStore({
         weights: useStorage('weights', [] as Weight[]),
     }),
     getters: {
+        getNewId(): number {
+            return this.weights.length + 1
+        },
         getWeights(): Weight[] {
             return this.weights;
         },

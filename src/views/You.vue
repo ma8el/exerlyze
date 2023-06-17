@@ -10,7 +10,7 @@
   const dayOfWeekStore = useDayOfWeekStore();
 
   const weightChartData = {
-        labels: weightsOfWeek.map((weight) => dayOfWeekStore.getDayOfWeekById(weight.createdAt.getDay())?.name),
+        labels: weightsOfWeek.map((weight) => dayOfWeekStore.getDayOfWeekById(new Date(weight.createdAt).getDay())?.name),
         datasets: [
           {
             label: 'Weight',
