@@ -8,11 +8,12 @@ import { Workout,
          WorkoutSession,
          WorkoutSessionPerformance,
          FullWorkoutSession } from '@/types';
+import { useStorage } from '@vueuse/core';
 
 export const useWorkoutStore = defineStore({
     id: 'workout',
     state: () => ({
-        workouts: [] as Workout[]
+        workouts: useStorage('workouts', [] as Workout[])
     }),
     getters: {
         getWorkouts(): Workout[] {
@@ -44,7 +45,7 @@ export const useWorkoutStore = defineStore({
 export const useWorkoutPlanStore = defineStore({
     id: 'workoutPlan',
     state: () => ({
-        workoutPlans: [] as WorkoutPlan[],
+        workoutPlans: useStorage('workoutPlans', [] as WorkoutPlan[]),
     }),
     getters: {
         getWorkoutPlans(): WorkoutPlan[] {
@@ -97,7 +98,7 @@ export const useWorkoutPlanStore = defineStore({
 export const usePlannedWorkoutStore = defineStore({
     id: 'plannedWorkouts',
     state: () => ({
-        plannedWorkouts: [] as PlannedWorkout[],
+        plannedWorkouts: useStorage('plannedWorkouts', [] as PlannedWorkout[]),
     }),
     getters: {
         getPlannedWorkouts(): PlannedWorkout[] {
@@ -183,7 +184,7 @@ export const useDayOfWeekStore = defineStore({
 export const useWorkoutScheduleStore = defineStore({
     id: 'workoutSchedule',
     state: () => ({
-        workoutSchedule: [] as WorkoutSchedule[],
+        workoutSchedule: useStorage('workoutSchedule', [] as WorkoutSchedule[]),
     }),
     getters: {
         getWorkoutSchedule(): WorkoutSchedule[] {
@@ -214,8 +215,8 @@ export const useWorkoutScheduleStore = defineStore({
 export const useWorkoutSessionStore = defineStore({
     id: 'workoutSession',
     state: () => ({
-        workoutSessions: [] as WorkoutSession[],
-        workoutSessionPerformances: [] as WorkoutSessionPerformance[]
+        workoutSessions: useStorage('workoutSessions', [] as WorkoutSession[]),
+        workoutSessionPerformances: useStorage('workoutSessionPerformance', [] as WorkoutSessionPerformance[])
     }),
     getters: {
         getWorkoutSessions(): WorkoutSession[] {

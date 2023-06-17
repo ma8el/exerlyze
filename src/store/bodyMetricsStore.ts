@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
+import { useStorage } from "@vueuse/core";
 import { Weight } from "@/types";
 
 export const useWeightStore = defineStore({
     id: "weight",
     state: () => ({
-        currentWeight: {} as Weight,
-        weights: [] as Weight[],
+        currentWeight: useStorage('currentWeight', {} as Weight),
+        weights: useStorage('weights', [] as Weight[]),
     }),
     getters: {
         getWeights(): Weight[] {

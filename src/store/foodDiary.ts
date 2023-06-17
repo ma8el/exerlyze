@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
+import { useStorage } from "@vueuse/core";
 import { FoodDiary, FoodDiaryEntry } from "@/types/nutrition";
 
 export const useFoodDiaryStore = defineStore({
     id: "nutriment",
     state: () => ({
-        foodDiary: {} as FoodDiary,
-        foodDiaryEntries: [] as FoodDiaryEntry[],
+        foodDiary: useStorage('foodDiary', {} as FoodDiary),
+        foodDiaryEntries: useStorage('foodDiaryEntries', [] as FoodDiaryEntry[]),
     }),
     getters: {
        getFoodDiary(): FoodDiary {
