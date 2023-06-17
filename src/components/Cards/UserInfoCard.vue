@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { IonGrid, IonRow, IonCol, IonAvatar } from '@ionic/vue';
+  import { IonCard, IonGrid, IonRow, IonCol, IonAvatar } from '@ionic/vue';
   import { ref } from 'vue';
 
   const avatar = ref('')

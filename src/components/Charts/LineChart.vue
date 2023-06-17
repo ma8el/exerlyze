@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/vue'
   import {
     Chart as ChartJS,
     CategoryScale,
