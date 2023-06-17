@@ -18,9 +18,13 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Legend, Tooltip)
 const dayOfWeekStore = useDayOfWeekStore();
 const weekDays = getCurrentWeekDates();
 const workoutSessionStore = useWorkoutSessionStore();
-const weeklyWorkoutVolume = weekDays.map(day => 
-  workoutSessionStore.getWorkoutSessionPerformanceByDate(day)?.reduce(
-    (acc, curr) => acc + curr.performedReps * curr.performedWeight, 0));
+const weeklyWorkoutVolume = weekDays.map(day => {
+  const workoutSessions = workoutSessionStore.getWorkoutSessionPerformanceByDate(day)
+  return workoutSessions
+  ? workoutSessions.reduce(
+    (acc, curr) => acc + curr.performedReps * curr.performedWeight, 0)
+  : 0
+  });
 
 const data = {
   labels: dayOfWeekStore.daysOfWeek.map(d => d.name),
