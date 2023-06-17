@@ -69,21 +69,24 @@ export const useFoodDiaryStore = defineStore({
         getBreakfastEntriesOfDate(date: Date): FoodDiaryEntry[] {
             const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
             const breakfastEntries = foodDiaryEntries.filter((foodDiaryEntry) => {
-                return foodDiaryEntry.createdAt.getHours() < 12;
+                const createdAt = new Date(foodDiaryEntry.createdAt);
+                return createdAt.getHours() < 12;
             });
             return breakfastEntries;
         },
         getLunchEntriesOfDate(date: Date): FoodDiaryEntry[] {
             const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
             const lunchEntries = foodDiaryEntries.filter((foodDiaryEntry) => {
-                return foodDiaryEntry.createdAt.getHours() >= 12 && foodDiaryEntry.createdAt.getHours() < 18;
+                const createdAt = new Date(foodDiaryEntry.createdAt);
+                return createdAt.getHours() >= 12 && createdAt.getHours() < 18;
             });
             return lunchEntries;
         },
         getDinnerEntriesOfDate(date: Date): FoodDiaryEntry[] {
             const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
             const dinnerEntries = foodDiaryEntries.filter((foodDiaryEntry) => {
-                return foodDiaryEntry.createdAt.getHours() >= 18;
+                const createdAt = new Date(foodDiaryEntry.createdAt);
+                return createdAt.getHours() >= 18;
             });
             return dinnerEntries;
         }

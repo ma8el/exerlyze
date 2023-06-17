@@ -256,7 +256,7 @@ export const useWorkoutSessionStore = defineStore({
             return undefined;
         },
         getWorkoutSessionsByDate(date: Date): WorkoutSession[] | undefined {
-            const workoutSessions = this.workoutSessions.filter(w => w.finishedAt.toDateString() === date.toDateString());
+            const workoutSessions = this.workoutSessions.filter(w => new Date(w.finishedAt).toDateString() === date.toDateString());
             if (workoutSessions) {
                 return workoutSessions;
             }
@@ -265,7 +265,7 @@ export const useWorkoutSessionStore = defineStore({
         getFullWorkoutSessionsByDate(date: Date): FullWorkoutSession[] | undefined {
             const fullWorkoutSessions = this.getFullWorkoutSessions;
             if (fullWorkoutSessions) {
-                return fullWorkoutSessions.filter(w => w.finishedAt.toDateString() === date.toDateString());
+                return fullWorkoutSessions.filter(w => new Date(w.finishedAt).toDateString() === date.toDateString());
             }
             return undefined;
         },
