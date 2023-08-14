@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <PageWithCalendar title="Workouts">
+  <PageWithCalendar :title="$t('titleWorkouts')">
     <WorkoutsSegments />
   </PageWithCalendar>
 </template>

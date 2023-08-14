@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <PageWithCalendar title="Home">
+  <PageWithCalendar :title="$t('titleHome')">
     <UpcomingEventsSlide />
     <WorkoutVolumeBarChart />
   </PageWithCalendar>

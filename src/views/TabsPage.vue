@@ -35,12 +35,12 @@
       <ion-tab-bar slot="bottom" class="custom-tab-bar">
         <ion-tab-button tab="home" href="/tabs/home">
           <ion-icon aria-hidden="true" :icon="homeSharp" />
-          <ion-label>Home</ion-label>
+          <ion-label>{{ $t('titleHome') }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="workouts" href="/tabs/workouts">
           <ion-icon aria-hidden="true" :icon="barbellOutline" />
-          <ion-label>Workouts</ion-label>
+          <ion-label>{{ $t('titleWorkouts') }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button @click="openModal" class="floating-action-button">
@@ -49,12 +49,12 @@
 
         <ion-tab-button tab="nutrition" href="/tabs/nutrition">
           <ion-icon aria-hidden="true" :icon="nutritionOutline" />
-          <ion-label>Nutrition</ion-label>
+          <ion-label>{{ $t('titleNutrition') }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="you" href="/tabs/you">
           <ion-icon aria-hidden="true" :icon="personCircleOutline" />
-          <ion-label>You</ion-label>
+          <ion-label>{{ $t('titleYou') }}</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>

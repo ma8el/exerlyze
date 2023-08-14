@@ -25,6 +25,6 @@
     size="small"
     @click="openModal"
   >
-    Add Exercise
+    {{ $t('addExercise') }}
   </ion-button>
 </template>
