@@ -1,13 +1,22 @@
 export const messages = {
     en: {
         language: "Language",
-        titleHome: "Home",
-        titleWorkouts: "Workouts",
-        titleNutrition: "Nutrition",
-        titleYou: "You",
-        homeWorkoutVolume: "Workout Volume",
-        workoutsPlans: "Plans",
-        workoutsSchedule: "Schedule",
+        home: { title: "Home",
+            workoutVolume: "@:message.workouts.workout @:message.workouts.volume",
+        },
+        workouts: {
+            title: "Workouts",
+            workout: "Workout | Workouts",
+            volume: "Volume",
+            plan: "no Plan | one Plan | {n} Plans",
+            schedule: "Schedule",
+        },
+        nutrition: {
+            title: "Nutrition"
+        },
+        you: {
+            title: "You"
+        },
         track: "Track",
         add: "Add",
         weight: "Weight",
@@ -25,13 +34,23 @@ export const messages = {
     },
     de: {
         language: "Sprache",
-        titleHome: "Startseite",
-        titleWorkouts: "Workouts",
-        titleNutrition: "Ernährung",
-        titleYou: "Du",
-        homeWorkoutVolume: "Workout Volumen",
-        workoutsPlans: "Pläne",
-        workoutsSchedule: "Kalender",
+        home: {
+            title: "Startseite",
+            workoutVolume: "@:message.workouts.workout @:message.workouts.volume",
+        },
+        workouts: {
+            title: "Workouts",
+            workout: "Workout | Workouts",
+            volume: "Volumen",
+            plan: "kein Plan | ein Plan | {n} Pläne",
+            schedule: "Kalender",
+        },
+        nutrition: {
+            title: "Ernährung"
+        },
+        you: {
+            title: "Du"
+        },
         track: "Tracken",
         add: "Hinzufügen",
         weight: "Gewicht",

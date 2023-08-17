@@ -45,7 +45,7 @@
 </script>
 
 <template>
-  <AppLayout :title="$t('titleNutrition')">
+  <AppLayout :title="$t('nutrition.title')">
     <ion-grid>
       <ion-row class="ion-justify-content-center">
           <VDatePicker 
