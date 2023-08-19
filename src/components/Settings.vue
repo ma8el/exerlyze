@@ -3,14 +3,18 @@
   import { ref } from 'vue';
   import { useI18n } from 'vue-i18n';
   import BaseFullPageModal from './Modals/BaseFullPageModal.vue';
+  import { useUserSettingsStore } from '@/store/userSettingsStore';
   
   const setting1 = ref(false);
   const setting2 = ref(false);
   const i18n = useI18n();
 
+  const userSettingsStore = useUserSettingsStore()
+  const selectedLang = userSettingsStore.getLang()
+
   const changeLocale = (lang: string) => {
+    userSettingsStore.setLang(lang)
     i18n.locale.value = lang;
-    console.log('changeLocale', lang);
   };
 
   const save = () => {
@@ -29,6 +33,7 @@
           <ion-select 
             :label="$t('language')"
             :placeholder="$t('language')"
+            v-model="selectedLang"
             @ionChange="changeLocale($event.detail.value)"
           >
             <ion-select-option value="en">English</ion-select-option>
