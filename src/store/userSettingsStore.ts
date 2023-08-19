@@ -3,19 +3,19 @@ import { useStorage } from "@vueuse/core";
 import { ref } from 'vue'
 
 export const useUserSettingsStore = defineStore('userSettings', () => {
-    const lang = useStorage('selectedLang', ref<string | undefined>())
-    const getLang = (): string | undefined => {
-        if (lang.value === undefined) {
-            setLang('en')
+    const locale = useStorage('selectedLocale', ref<string | undefined>())
+    const getLocale = (): string | undefined => {
+        if (locale.value === undefined) {
+            setLocale('en')
         }
-        return lang.value
+        return locale.value
     }
-    const setLang = (newLang: string) => {
-        lang.value = newLang
+    const setLocale = (newLang: string) => {
+        locale.value = newLang
     }
     return {
-        lang,
-        getLang,
-        setLang
+        locale,
+        getLocale,
+        setLocale,
     }
 })

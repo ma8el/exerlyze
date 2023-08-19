@@ -10,10 +10,10 @@
   const i18n = useI18n();
 
   const userSettingsStore = useUserSettingsStore()
-  const selectedLang = userSettingsStore.getLang()
+  const selectedLang = userSettingsStore.getLocale()
 
   const changeLocale = (lang: string) => {
-    userSettingsStore.setLang(lang)
+    userSettingsStore.setLocale(lang)
     i18n.locale.value = lang;
   };
 
@@ -25,7 +25,7 @@
 <template>
   <BaseFullPageModal title="Settings">
     <template #saveButton>
-          <ion-button @click="save">Save</ion-button>
+          <ion-button @click="save">{{ $t('save') }}</ion-button>
     </template>
     <template #modalContent>
       <ion-list>
