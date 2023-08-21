@@ -38,7 +38,7 @@
 </script>
 
 <template>
-  <BaseFullPageModal title="Add Nutrition">
+  <BaseFullPageModal :title="$t('nutrition.addNutrition')">
     <template #modalContent>
       <ion-img
         :src="product.image_front_url"
@@ -72,7 +72,7 @@
         class="ion-padding-bottom"
       >
         <ion-item>
-            <ion-label>Nutriments (per 100g)</ion-label>
+            <ion-label>{{ $t('nutrition.nutriments') }} ({{ $t('per') }} {{ $t('weightUnitSmall', 100) }})</ion-label>
         </ion-item>
         <ion-list
           v-for="(detail, index) in nutritionDetails"

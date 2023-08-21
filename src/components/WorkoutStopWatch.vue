@@ -48,8 +48,8 @@
       <ion-card-title>{{hours}} : {{minutes}} : {{seconds}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-button @click="startStopwatch">Start</ion-button>
-      <ion-button @click="stopStopwatch">Pause</ion-button>
+      <ion-button @click="startStopwatch">{{ $t('start') }}</ion-button>
+      <ion-button @click="stopStopwatch">{{ $t('pause') }}</ion-button>
 <!--      <ion-button @click="resetStopwatch">Reset</ion-button> -->
     </ion-card-content>
   </ion-card>

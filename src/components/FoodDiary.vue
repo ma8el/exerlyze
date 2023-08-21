@@ -19,7 +19,7 @@
       <ion-item-group>
         <ion-item-divider>
           <ion-label>
-            Breakfast
+            {{ $t('nutrition.breakfast') }}
           </ion-label>
         </ion-item-divider>
         <FoodItem 
@@ -33,7 +33,7 @@
       <ion-item-group>
         <ion-item-divider>
           <ion-label>
-            Lunch
+            {{ $t('nutrition.lunch') }}
           </ion-label>
         </ion-item-divider>
         <FoodItem 
@@ -47,7 +47,7 @@
       <ion-item-group>
         <ion-item-divider>
           <ion-label>
-            Dinner
+            {{ $t('nutrition.dinner') }}
           </ion-label>
         </ion-item-divider>
         <FoodItem 

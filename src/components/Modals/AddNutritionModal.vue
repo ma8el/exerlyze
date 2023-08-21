@@ -43,12 +43,12 @@
 </script>
 
 <template>
-  <BaseFullPageModal title="Add Nutrition">
+  <BaseFullPageModal :title="$t('nutrition.addNutrition')">
     <template #modalContent>
       <ion-list>
         <ion-item>
           <ion-searchbar 
-            placeholder="Product name"
+            :placeholder="$t('nutrition.productName')"
             @ionChange="queryProducts"
             @ionInput="queryProducts"
             @ionClear="removeProducts"

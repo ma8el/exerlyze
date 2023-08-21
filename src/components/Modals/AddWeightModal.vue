@@ -19,7 +19,6 @@
     if (!weight.value) {
       return
     }
-    console.log(weight.value)
     const weightStore = useWeightStore();
     weightStore.addWeight({
       'id': weightStore.getNewId,
@@ -40,7 +39,7 @@
     fill="outline"
     shape="round"
     >
-    Add Weight
+    {{ $t('addWeight') }}
   </ion-button>
   <ion-modal
     id="add-weight-modal"
@@ -49,23 +48,23 @@
     <ion-card fill="outline" class="weight-card">
       <ion-card-header>
         <ion-card-title>
-          Add Weight
+          {{ $t('addWeight') }}
         </ion-card-title>
       </ion-card-header>
       <ion-input
         class="ion-padding"
         fill="outline"
         shape="round"
-        label="Weight"
-        placeholder="Enter your weight"
+        :label="$t('weight')"
+        :placeholder="$t('enterWeight')"
         label-placement="stacked"
         v-model="weight"
       ></ion-input>
       <ion-button fill="clear" @click="saveWeight">
-        Save
+        {{ $t('save') }}
       </ion-button>
       <ion-button fill="clear" @click="closeModal">
-        Cancel
+        {{ $t('dismiss') }}
       </ion-button>
     </ion-card>
   </ion-modal>

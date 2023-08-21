@@ -112,7 +112,7 @@ onMounted(() => {
 <template>
   <BaseFullPageModal v-if="workout" :title="workout.name">
     <template #saveButton>
-      <ion-button @click="save">Save</ion-button>
+      <ion-button @click="save">{{ $t('save') }}</ion-button>
     </template>
     <template v-if="workoutSessionSets" #modalContent>
       <ActiveExerciseCard v-if="currentWorkoutSet"
@@ -142,9 +142,9 @@ onMounted(() => {
             :key="index"
           >
             <ion-item>
-              <ion-label slot="start">Set: {{ set }}</ion-label>
-              <ion-label slot="end">{{ exercise.reps }} Reps</ion-label>
-              <ion-label slot="end">{{ exercise.weight }} kg</ion-label>
+              <ion-label slot="start">{{ $t('workout.set') }}: {{ set }}</ion-label>
+              <ion-label slot="end">{{ $t('workout.reps', exercise.reps) }}</ion-label>
+              <ion-label slot="end">{{ $t('weightUnitBig', exercise.weight) }}</ion-label>
             </ion-item>
           </div>
         </ion-accordion>

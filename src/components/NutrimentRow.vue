@@ -9,25 +9,25 @@
     <ion-col size="3">
       <ion-label>
         <h3>{{ calories }} kcal</h3>
-        <p>Calories</p>
+        <p>{{ $t('nutrition.calories') }}</p>
       </ion-label>
     </ion-col>
     <ion-col size="3">
       <ion-label>
         <h3>{{ carbs }} g</h3>
-        <p>Carbs</p>
+        <p>{{ $t('nutrition.carbs') }}</p>
       </ion-label>
     </ion-col>
     <ion-col size="3">
       <ion-label>
         <h3>{{ protein }} g</h3>
-        <p>Protein</p>
+        <p>{{ $t('nutrition.protein') }}</p>
       </ion-label>
     </ion-col>
     <ion-col size="3">
       <ion-label>
         <h3>{{ fat }} g</h3>
-        <p>Fat</p>
+        <p>{{ $t('nutrition.fat') }}</p>
       </ion-label>
     </ion-col>
     <ion-col>

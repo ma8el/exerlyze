@@ -15,7 +15,7 @@
       <h3>{{ name }}</h3>
       <div class="single-line">
         <ion-input
-          label="Sets"
+          :label="$t('workouts.sets')"
           label-placement="stacked"
           :value="props.sets"
           @input="emit('update:sets', $event.target.value)"
@@ -23,7 +23,7 @@
         >
         </ion-input>
         <ion-input
-          label="Reps"
+          :label="$t('workouts.reps')"
           label-placement="stacked"
           :value="props.reps"
           @input="emit('update:reps', $event.target.value)"
@@ -31,7 +31,7 @@
         >
         </ion-input>
         <ion-input
-          label="Weight"
+          :label="$t('weight')"
           label-placement="stacked"
           :value="props.weight"
           @input="emit('update:weight', $event.target.value)"

@@ -25,7 +25,7 @@
 <template>
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Calories</ion-card-title>
+      <ion-card-title>{{ $t('nutrition.calories') }}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-grid>
@@ -33,7 +33,7 @@
           <ion-col>
             <ion-text>
               {{ calories }}
-              <ion-label>Calories</ion-label>
+              <ion-label>{{ $t('nutrition.calories') }}</ion-label>
             </ion-text>
           </ion-col>
           <ion-col>
@@ -44,7 +44,7 @@
           <ion-col>
             <ion-text>
               {{ intake }}
-              <ion-label>Intake</ion-label>
+              <ion-label>{{ $t('nutrition.intake') }}</ion-label>
             </ion-text>
           </ion-col>
           <ion-col>
@@ -55,7 +55,7 @@
           <ion-col>
             <ion-text>
               {{ activity }}
-              <ion-label>Activity</ion-label>
+              <ion-label>{{ $t('nutrition.activity') }}</ion-label>
             </ion-text>
           </ion-col>
           <ion-col>
@@ -66,7 +66,7 @@
           <ion-col>
             <ion-text>
               {{ result }}
-              <ion-label>Left</ion-label>
+              <ion-label>{{ $t('nutrition.left') }}</ion-label>
             </ion-text>
           </ion-col>
         </ion-row>

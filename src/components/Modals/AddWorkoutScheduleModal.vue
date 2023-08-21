@@ -76,8 +76,8 @@
 <template>
   <BaseFullPageModal title="Add Workout">
     <template #saveButton>
-      <ion-button v-if="workoutScheduleId" @click="update">Update</ion-button>
-      <ion-button v-else @click="save">Save</ion-button>
+      <ion-button v-if="workoutScheduleId" @click="update">{{ $t('update') }}</ion-button>
+      <ion-button v-else @click="save">{{ $t('save') }}</ion-button>
     </template>
     <template #modalContent>
       <ion-item>
@@ -105,7 +105,7 @@
             size="small"
             @click="togglePopover"
           >
-            Select schedule duration
+            {{ $t('workouts.selectScheduleDuration') }}
           </ion-button>
         </template>
       </VDatePicker>

@@ -31,7 +31,7 @@
     <ion-item v-if="workoutId">
         <ion-label slot="start">{{ workoutName }}</ion-label>
        <ion-select 
-         label="Weekday"
+         :label="$t('weekday')"
          label-placement="floating"
          fill="solid"
          :value="props.dayOfWeekId"

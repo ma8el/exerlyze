@@ -50,14 +50,14 @@
 </script>
 
 <template>
-  <BaseFullPageModal title="Add workouts">
+  <BaseFullPageModal :title="$t('workouts.addWorkout')">
     <template #saveButton>
-      <ion-button @click="save">Save</ion-button>
+      <ion-button @click="save">{{ $t('save') }}</ion-button>
     </template>
     <template #modalContent>
       <ion-item v-for="workout in workoutsSelection">
         <ion-label>{{ workout.name }}</ion-label>
-        <ion-checkbox slot="start" :checked="workout.isSelected" @ionChange="toggleWorkout(workout)" aria-label="Workout"/>
+        <ion-checkbox slot="start" :checked="workout.isSelected" @ionChange="toggleWorkout(workout)" :aria-label="$t('workouts.workout')"/>
       </ion-item>
     </template>
   </BaseFullPageModal>

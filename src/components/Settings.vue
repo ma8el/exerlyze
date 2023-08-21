@@ -23,7 +23,7 @@
 </script>
 
 <template>
-  <BaseFullPageModal title="Settings">
+  <BaseFullPageModal :title="$t('settings.title')">
     <template #saveButton>
           <ion-button @click="save">{{ $t('save') }}</ion-button>
     </template>

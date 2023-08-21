@@ -55,9 +55,9 @@
       </ion-col>
       <ion-col size="6">
         <ion-card-content>
-          <ion-card-subtitle :style="{color: '#FFFFFF'}">Carbs: {{ carbsOfDay }} g</ion-card-subtitle>
-          <ion-card-subtitle :style="{color: '#3F63C8'}">Protein: {{ proteinsOfDay }} g</ion-card-subtitle>
-          <ion-card-subtitle :style="{color: '#5598ff'}">Fat: {{ fatsOfDay }} g</ion-card-subtitle>
+          <ion-card-subtitle :style="{color: '#FFFFFF'}">{{ $t('nutrition.carbs') }}: {{ carbsOfDay }} g</ion-card-subtitle>
+          <ion-card-subtitle :style="{color: '#3F63C8'}">{{ $t('nutrition.protein') }}: {{ proteinsOfDay }} g</ion-card-subtitle>
+          <ion-card-subtitle :style="{color: '#5598ff'}">{{ $t('nutrition.fat') }}: {{ fatsOfDay }} g</ion-card-subtitle>
         </ion-card-content>
       </ion-col>
     </ion-row>

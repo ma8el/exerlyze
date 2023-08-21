@@ -35,11 +35,11 @@
     </ion-card-header>
     <ion-card-content>
       <ion-item>
-        <ion-label slot="start">Set: {{ currentSet }}</ion-label>
+        <ion-label slot="start">{{ $t('workouts.set') }}: {{ currentSet }}</ion-label>
         <ion-input 
           type="number" 
           slot="end"
-          label="Reps"
+          :label="$t('workouts.reps')"
           label-placement="stacked"
           :clear-on-edit="true"
           :value="reps"
@@ -47,7 +47,7 @@
         >
         </ion-input>
         <ion-input 
-          label="Weight"
+          :label="$t('weight')"
           slot="end"
           type="number"
           label-placement="stacked"

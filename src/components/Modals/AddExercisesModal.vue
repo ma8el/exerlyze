@@ -84,7 +84,7 @@
 <template>
   <BaseFullPageModal>
     <template #saveButton>
-      <ion-button @click="save">Save</ion-button>
+      <ion-button @click="save">{{ $t('save') }}</ion-button>
     </template>
     <template #modalContent>
       <ion-item v-for="exercise in exercises">

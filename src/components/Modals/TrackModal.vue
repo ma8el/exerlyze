@@ -17,9 +17,9 @@ const closeModal = () => {
   <ion-content>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Track</ion-title>
+        <ion-title>{{ $t('track') }}</ion-title>
         <ion-buttons slot="end">
-          <ion-button @click="closeModal">Dismiss</ion-button>
+          <ion-button @click="closeModal">{{ $t('dismiss') }}</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>

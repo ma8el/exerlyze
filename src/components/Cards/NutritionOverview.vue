@@ -44,22 +44,22 @@
   <ion-card>
     <ion-list>
       <ion-list-header>
-        <ion-label>Nutrition Facts</ion-label>
+        <ion-label>{{ $t('nutrition.nutritionOverview') }}</ion-label>
       </ion-list-header>
       <ion-item>
-        <ion-label>Caloies</ion-label>
+        <ion-label>{{ $t('nutrition.calories') }}</ion-label>
         <ion-note slot="end">{{ intake }} / {{ dailyCalories }}</ion-note>
       </ion-item>
       <ion-item>
-        <ion-label>Carbs</ion-label>
+        <ion-label>{{ $t('nutrition.carbs') }}</ion-label>
         <ion-note slot="end">{{ intakeCarbs }} g / {{ dailyCarbs }} g</ion-note>
       </ion-item>
       <ion-item>
-        <ion-label>Fat</ion-label>
+        <ion-label>{{ $t('nutrition.fat') }}</ion-label>
         <ion-note slot="end">{{ intakeFat }} g / {{ dailyFat }} g</ion-note>
       </ion-item>
       <ion-item>
-        <ion-label>Protein</ion-label>
+        <ion-label>{{ $t('nutrition.protein') }}</ion-label>
         <ion-note slot="end">{{ intakeProtein }} g / {{ dailyProtein }} g</ion-note>
       </ion-item>
     </ion-list>

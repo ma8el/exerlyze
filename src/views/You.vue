@@ -48,6 +48,6 @@
 <template>
   <AppLayout :title="$t('you.title')">
     <UserInfoCard />
-    <LineChart :chartData="weightChartData" :options="options" chartTitle="Weight" />
+    <LineChart :chartData="weightChartData" :options="options" :chartTitle="$t('weight')" />
   </AppLayout>
 </template>

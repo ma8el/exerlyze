@@ -34,6 +34,6 @@
     @click="openModal"
     expand="block"
   >
-    Start Workout
+    {{ $t('workouts.startWorkout') }}
   </ion-button>
 </template>

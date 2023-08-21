@@ -63,14 +63,14 @@
 </script>
 
  <template>
-  <BaseFullPageModal title="Add Workout">
+  <BaseFullPageModal :title="$t('workouts.addWorkout')">
     <template #saveButton>
-      <ion-button v-if="!workoutId" @click="save">Save</ion-button>
-      <ion-button v-else @click="update">Update</ion-button>
+      <ion-button v-if="!workoutId" @click="save">{{ $t('save') }}</ion-button>
+      <ion-button v-else @click="update">{{ $t('update') }}</ion-button>
     </template>
     <template #modalContent>
-      <ion-input class="ion-padding" fill="outline" shape="round" label="Workout Name" label-placement="stacked" v-model="workoutName"></ion-input>
-      <ion-input class="ion-padding" fill="outline" shape="round" label="Description" label-placement="stacked" v-model="description"></ion-input>
+      <ion-input class="ion-padding" fill="outline" shape="round" :label="$t('workouts.workoutName')" label-placement="stacked" v-model="workoutName"></ion-input>
+      <ion-input class="ion-padding" fill="outline" shape="round" :label="$t('description')" label-placement="stacked" v-model="description"></ion-input>
       <ExerciseItem v-for="(exercise, index) in exercises"
         v-model:sets="exercises[index].sets"
         v-model:reps="exercises[index].reps"

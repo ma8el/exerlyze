@@ -81,11 +81,11 @@
     <ion-card>
       <ion-input
         type="number"
-        placeholder="Amount (g)"
+        :placeholder="$t('nutrition.amount')"
         :clear-on-edit="true"
         v-model="amount"
       >
-        Amount (g)
+        {{ $t('nutrition.amount') }} ({{ $t('weightUnitSmall') }})
       </ion-input>
       <NutrimentRow
         :calories="calories"
@@ -99,7 +99,7 @@
         @click="addNutriment"
       >
         <ion-icon :icon="addCircleOutline"></ion-icon>
-        Add
+        {{ $t('add') }}
       </ion-button>
     </ion-card>
  </ion-content>

@@ -21,7 +21,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button @click="closeModal">Dismiss</ion-button>
+          <ion-button @click="closeModal">{{ $t('dismiss') }}</ion-button>
         </ion-buttons>
         <ion-title>{{ title }}</ion-title>
         <ion-buttons slot="end">

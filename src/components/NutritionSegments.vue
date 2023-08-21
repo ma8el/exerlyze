@@ -22,10 +22,10 @@
 <template>
   <ion-segment :value="selectedSegment">
    <ion-segment-button value="day" @click="selectYourDay">
-      <ion-label>Your day</ion-label>
+      <ion-label>{{ $t('nutrition.yourDay') }}</ion-label>
     </ion-segment-button>
     <ion-segment-button value="diary" @click="selectDiary">
-      <ion-label>Food Diary</ion-label>
+      <ion-label>{{ $t('nutrition.foodDiary') }}</ion-label>
     </ion-segment-button>
   </ion-segment>
   <NutritionFoodDiaryContent v-if="diarySelected" />

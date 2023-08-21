@@ -30,7 +30,7 @@
 <template>
   <BaseFullPageModal title="Activities">
     <template #saveButton>
-      <ion-button @click="closeModal">Save</ion-button>
+      <ion-button @click="closeModal">{{ $t('save') }}</ion-button>
     </template>
     <template #modalContent>
       <ion-card

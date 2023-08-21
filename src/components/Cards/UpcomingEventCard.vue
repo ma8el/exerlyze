@@ -16,7 +16,7 @@
       <ion-card-subtitle>{{ workoutPlanName }}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content class="ion-margin">
-      Scheduled on {{ plannedDay }}
+      {{ $t('scheduledOn') }} {{ plannedDay }}
       <slot></slot>
     </ion-card-content>
   </ion-card>
