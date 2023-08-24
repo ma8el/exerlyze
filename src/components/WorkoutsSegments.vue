@@ -37,11 +37,11 @@
     <ion-segment-button value="plans" @click="selectPlans">
       <ion-label>{{ $t('workouts.plan', 2) }}</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="schedule" @click="selectSchedule">
+<!--    <ion-segment-button value="schedule" @click="selectSchedule">
       <ion-label>{{ $t('workouts.schedule') }}</ion-label>
-    </ion-segment-button>
+    </ion-segment-button>-->
   </ion-segment>
   <WorkoutsContent v-if="workoutsSelected" />
   <WorkoutPlansContent v-if="plansSelected" />
-  <WorkoutScheduleContent v-if="scheduleSelected" />
+<!--  <WorkoutScheduleContent v-if="scheduleSelected" /> -->
 </template>
