@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonItem, IonInput, IonButton, IonAlert } from '@ionic/vue';
 import { useDark } from '@vueuse/core'
+import { supabase } from '@/supabase';
 
-const isDark = useDark()
+const isDark = useDark();
 
-const email = ref('')
+const email = ref('');
 const router = useRouter();
 const isOpen = ref(false);
+const loading = ref(false);
 
 const alertButtons = [
  {
@@ -23,12 +25,40 @@ const setOpen = (value: boolean) => {
   isOpen.value = value;
 };
 
-const onLogin = () => {
-  console.log('Login');
-};
+const onLogin = async () => {
+  try {
+    loading.value = true
+    const { error } = await supabase.auth.signInWithOtp({
+      email: email.value,
+    })
+    if (error) throw error
+    alert('Check your email for the login link!')
+  } catch (error) {
+    if (error instanceof Error) {
+      alert(error.message)
+    }
+  } finally {
+    loading.value = false
+  }
+}
+
 const redirect = () => {
   router.push('/tabs/home');
 };
+
+const session = ref()
+onMounted(() => {
+  supabase.auth.getSession().then(({ data }) => {
+    session.value = data.session
+  })
+
+  supabase.auth.onAuthStateChange((_, _session) => {
+    session.value = _session
+  })
+  if (session) {
+    redirect()
+  }
+})
 </script>
 
 <template>
@@ -45,10 +75,10 @@ const redirect = () => {
               <ion-item>
                 <ion-input label="Email" label-placement="floating" type="email" v-model="email"></ion-input>
               </ion-item>
-              <ion-button id="magic-link-button" expand="block" type="submit" shape="round" class="ion-margin-top">
+              <ion-button id="magic-link-button" expand="block" type="submit" shape="round" class="ion-margin-top" :disabled="loading">
                 Send magic link
               </ion-button>
-              <ion-button id="no-login-button" @click="setOpen(true)" expand="block" shape="round" class="ion-margin-top">
+              <ion-button id="no-login-button" @click="setOpen(true)" expand="block" shape="round" class="ion-margin-top" :disabled="loading">
                 Continue without login
               </ion-button>
               <ion-alert
