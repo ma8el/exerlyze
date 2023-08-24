@@ -20,6 +20,9 @@ export const messages = {
             startWorkout: "@:start @:workouts.workout",
             workoutName: "@:workouts.workout @:name",
             workoutPlanName: "@:workouts.workout @:plan @:name",
+            noWorkoutsYet: "No workouts yet",
+            noWorkoutPlansYet: "No workout plans yet",
+            noWorkoutsYetSubtitle: "@:add one by clicking below"
         },
         nutrition: {
             title: "Nutrition",
@@ -71,7 +74,8 @@ export const messages = {
         weekday: "Weekday",
         scheduledOn: "Scheduled on",
         name: "Name",
-        description: "Description"
+        description: "Description",
+        noUpcomingEvent: "No upcoming workouts"
     },
     de: {
         language: "Sprache",
@@ -93,6 +97,9 @@ export const messages = {
             startWorkout: "Starte @:workouts.workout",
             workoutName: "@:workouts.workout Name",
             workoutPlanName: "@:workouts.workout @:plan @:name",
+            noWorkoutsYet: "Noch keine Workouts",
+            noWorkoutYet: "Noch keine Trainingspläne",
+            noWorkoutsYetSubtitle: "Füge welche hinzu indem du unten klickst"
         },
         nutrition: {
             title: "Ernährung",
@@ -144,6 +151,7 @@ export const messages = {
         weekday: "Wochentag",
         scheduledOn: "Geplant für",
         name: "Name",
-        description: "Beschreibung"
+        description: "Beschreibung",
+        noUpcomengEvents: "Keine geplanten Workouts"
     },
 }

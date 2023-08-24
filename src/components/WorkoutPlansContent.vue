@@ -3,6 +3,7 @@
   import { useWorkoutPlanStore } from '../store/workoutStore';
   import AddFloatingActionButton from './Buttons/AddFloatingActionButton.vue';
   import AddWorkoutPlanModal from './Modals/AddWorkoutPlanModal.vue';
+  import BaseCard from './Cards/BaseCard.vue';
 
   const workoutPlanStore = useWorkoutPlanStore();
 </script>
@@ -13,5 +14,10 @@
     :key="index"
     :workoutPlanId="workoutPlan.id"
   />
+  <BaseCard
+    v-if="workoutPlanStore.getWorkoutPlans.length == 0"
+    :title="$t('workouts.noWorkoutPlansYet')"
+    :subTitle="$t('workouts.noWorkoutsYetSubtitle')"
+  ></BaseCard>
   <AddFloatingActionButton :modalComponent="AddWorkoutPlanModal" />
 </template>
