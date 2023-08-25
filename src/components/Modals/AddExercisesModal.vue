@@ -2,52 +2,40 @@
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import { IonButton,
            IonItem,
-           IonLabel,
            IonCheckbox,
            modalController } from '@ionic/vue';
   import { ref, onMounted, onUnmounted } from 'vue';
   import { ExerciseSelection } from '@/types';
+  import { supabase } from '@/supabase';
 
-  const exercises = [
-    {
-      id: 1,
-      name: 'Deadlift',
-      sets: 0,
-      reps: 0,
-      weight: 0,
-      isSelected: false,
-    },
-    {
-      id: 2,
-      name: 'Bench Press',
-      sets: 0,
-      reps: 0,
-      weight: 0,
-      isSelected: false,
-   },
-    {
-      id: 3,
-      name: 'Squat',
-      sets: 0,
-      reps: 0,
-      weight: 0,
-      isSelected: false,
-   },
-    {
-      id: 4,
-      name: 'Overhead Press',
-      sets: 0,
-      reps: 0,
-      weight: 0,
-      isSelected: false,
-   },
-  ]
+  const exercises = ref<ExerciseSelection[]>([])
+
+  const getExercises = () => {
+    supabase
+      .from('exercises')
+      .select('id, name_en')
+      .then((response) => {
+        if (response.error) {
+          console.log(response.error)
+        } else {
+          exercises.value = response.data.map((exercise) => {
+            return {
+              id: exercise.id,
+              name: exercise.name_en,
+              sets: 0,
+              reps: 0,
+              weight: 0,
+              isSelected: false,
+            }
+          })
+        }
+      })
+  }
 
   const selected = ref<ExerciseSelection[]>([])
 
   const save = () => {
     modalController.dismiss(selected.value, 'save');
-    resetSelectedBool()
     selected.value = []
   }
  
@@ -63,33 +51,26 @@
       }
   }
 
-  const resetSelectedBool = () => {
-    exercises.forEach((exercise) => {
-      exercise.isSelected = false
-    })
-  }
-
   onMounted(() => {
-    resetSelectedBool()
     selected.value = []
+    getExercises()
   })
 
   onUnmounted(() => {
-    resetSelectedBool()
     selected.value = []
   })
-
 </script>
 
 <template>
-  <BaseFullPageModal>
+  <BaseFullPageModal :title="$t('workouts.addExercises')">
     <template #saveButton>
       <ion-button @click="save">{{ $t('save') }}</ion-button>
     </template>
     <template #modalContent>
       <ion-item v-for="exercise in exercises">
-        <ion-label>{{ exercise.name }}</ion-label>
-        <ion-checkbox slot="start" :checked="exercise.isSelected" @ionChange="toggleExercise(exercise)"/>
+        <ion-checkbox slot="start" label-placement="end" :checked="exercise.isSelected" @ionChange="toggleExercise(exercise)">
+          {{ exercise.name }}
+        </ion-checkbox>
       </ion-item>
     </template>
   </BaseFullPageModal>

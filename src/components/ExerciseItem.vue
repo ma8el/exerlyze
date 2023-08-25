@@ -15,7 +15,7 @@
       <h3>{{ name }}</h3>
       <div class="single-line">
         <ion-input
-          :label="$t('workouts.sets')"
+          :label="$t('workouts.set')"
           label-placement="stacked"
           :value="props.sets"
           @input="emit('update:sets', $event.target.value)"
