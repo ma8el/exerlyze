@@ -1,15 +1,61 @@
 <script setup lang="ts">
-  import { IonInput, IonItem, IonLabel, IonThumbnail } from '@ionic/vue';
+  import { IonInput, IonItem, IonLabel, IonThumbnail, IonSpinner } from '@ionic/vue';
   import { Exercise } from '@/types'
+  import { supabase } from '@/supabase';
+  import { ref, watch, onMounted } from 'vue';
 
   const props = defineProps<Exercise>()
   const emit = defineEmits(['update:sets', 'update:reps', 'update:weight'])
+  const bucketUrl = ref<string>()
+  const url = ref<string>()
+  const loading = ref<boolean>(true)
+
+  onMounted(async () => {
+    console.log(props.id)
+    loading.value = true
+    await supabase
+      .from('exercises')
+      .select('image_url')
+      .eq('id', props.id)
+      .single()
+      .then((response) => {
+        if (response.error) {
+          console.log(response.error)
+        } else {
+          bucketUrl.value = response.data.image_url
+        }
+      })
+  })
+
+  watch(() => url.value, () => {
+    loading.value = false
+  })
+
+  watch(() => bucketUrl.value, () => {
+    if (!bucketUrl.value) return
+    supabase
+      .storage
+      .from('exercise_images')
+      .createSignedUrl(bucketUrl.value, 60, {
+        transform: {
+          width: 100,
+          height: 100,
+        }
+    }).then((response) => {
+      if (response.error) {
+        console.log(response.error)
+      } else {
+        url.value = response.data.signedUrl
+      }
+    })
+  })
 </script>
 
 <template>
   <ion-item>
     <ion-thumbnail slot="start">
-      <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
+      <img v-if="!loading" alt="Exercise Image" :src="url" />
+      <ion-spinner v-else/>
     </ion-thumbnail>
     <ion-label>
       <h3>{{ name }}</h3>
