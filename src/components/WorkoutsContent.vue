@@ -2,15 +2,11 @@
   import WorkoutCard from './Cards/WorkoutCard.vue';
   import { useWorkoutStore } from '../store/workoutStore';
   import AddFloatingActionButton from '@/components/Buttons/AddFloatingActionButton.vue'
-  import { onMounted } from 'vue';
   import AddWorkoutModal from '@/components/Modals/AddWorkoutModal.vue';
   import BaseCard from './Cards/BaseCard.vue';
 
   const workoutStore = useWorkoutStore();
 
-  onMounted(() => {
-    console.log(workoutStore.getWorkouts)
-  })
 </script>
 
 <template>
