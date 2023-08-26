@@ -76,6 +76,7 @@ export const messages = {
         scheduledOn: "Scheduled on",
         name: "Name",
         description: "Description",
+        execution: "Execution",
         noUpcomingEvent: "No upcoming workouts"
     },
     de: {
@@ -154,6 +155,7 @@ export const messages = {
         scheduledOn: "Geplant für",
         name: "Name",
         description: "Beschreibung",
+        execution: "Ausführung",
         noUpcomengEvents: "Keine geplanten Workouts"
     },
 }

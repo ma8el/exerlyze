@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { IonInput, IonItem, IonLabel, IonThumbnail, IonSpinner } from '@ionic/vue';
+  import { IonInput, IonItem, IonLabel, IonThumbnail, IonSpinner, modalController } from '@ionic/vue';
+  import ExerciseDetailModal from './Modals/ExerciseDetailModal.vue';
   import { Exercise } from '@/types'
   import { supabase } from '@/supabase';
   import { ref, watch, onMounted } from 'vue';
@@ -11,7 +12,6 @@
   const loading = ref<boolean>(true)
 
   onMounted(async () => {
-    console.log(props.id)
     loading.value = true
     await supabase
       .from('exercises')
@@ -26,6 +26,14 @@
         }
       })
   })
+
+  const openExerciseDetailModal = async () => {
+    const modal = await modalController.create({
+      component: ExerciseDetailModal,
+      componentProps: { exerciseId: props.id, exerciseUrl: url.value },
+    });
+    modal.present();
+  }
 
   watch(() => url.value, () => {
     loading.value = false
@@ -52,7 +60,7 @@
 </script>
 
 <template>
-  <ion-item>
+  <ion-item :button="true" @click="openExerciseDetailModal()">
     <ion-thumbnail slot="start">
       <img v-if="!loading" alt="Exercise Image" :src="url" />
       <ion-spinner v-else/>

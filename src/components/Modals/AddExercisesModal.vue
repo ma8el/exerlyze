@@ -7,13 +7,16 @@
   import { ref, onMounted, onUnmounted } from 'vue';
   import { ExerciseSelection } from '@/types';
   import { supabase } from '@/supabase';
+  import { useUserSettingsStore } from '@/store/userSettingsStore';
 
   const exercises = ref<ExerciseSelection[]>([])
+  const userSettingsStore = useUserSettingsStore()
 
   const getExercises = () => {
+    const setLocale = userSettingsStore.getLocale()
     supabase
       .from('exercises')
-      .select('id, name_en')
+      .select(`id, name_${setLocale}`)
       .then((response) => {
         if (response.error) {
           console.log(response.error)
@@ -21,7 +24,7 @@
           exercises.value = response.data.map((exercise) => {
             return {
               id: exercise.id,
-              name: exercise.name_en,
+              name: exercise[`name_${setLocale}`],
               sets: 0,
               reps: 0,
               weight: 0,
