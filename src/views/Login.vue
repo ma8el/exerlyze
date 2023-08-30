@@ -103,6 +103,13 @@ ion-item {
   border-radius: 20px;
   --padding-bottom: 10px;
 }
+ion-content {
+  --background: none;
+  background-image: url('../../assets/background.jpg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .logo-container {
   display: flex;
   justify-content: center;
