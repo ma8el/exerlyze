@@ -23,7 +23,9 @@
         } else {
           exercises.value = response.data.map((exercise) => {
             return {
+              // @ts-ignore
               id: exercise.id,
+              // @ts-ignore
               name: exercise[`name_${setLocale}`],
               sets: 0,
               reps: 0,
