@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { IonButton, IonList, IonItem, IonToggle, IonSelect, IonSelectOption, modalController } from '@ionic/vue';
+  import { IonButton, IonList, IonListHeader, IonItem, IonToggle, IonSelect, IonSelectOption, modalController } from '@ionic/vue';
   import { ref } from 'vue';
   import { useI18n } from 'vue-i18n';
   import BaseFullPageModal from './Modals/BaseFullPageModal.vue';
@@ -29,6 +29,7 @@
     </template>
     <template #modalContent>
       <ion-list>
+        <ion-list-header>{{ $t('settings.general') }}</ion-list-header>
         <ion-item>
           <ion-select 
             :label="$t('language')"
@@ -36,15 +37,26 @@
             v-model="selectedLang"
             @ionChange="changeLocale($event.detail.value)"
           >
-            <ion-select-option value="en">English</ion-select-option>
-            <ion-select-option value="de">Deutsch</ion-select-option>
+            <ion-select-option value="en">🇬🇧 English</ion-select-option>
+            <ion-select-option value="de">🇩🇪 Deutsch</ion-select-option>
           </ion-select>
         </ion-item>
         <ion-item>
-          <ion-toggle v-model="setting1">Setting 1</ion-toggle>
+          <ion-toggle v-model="setting1">Darkmode</ion-toggle>
+        </ion-item>
+        <ion-list-header>{{ $t('settings.workout') }}</ion-list-header>
+        <ion-item>
+          <ion-toggle v-model="setting1">Cycle Length</ion-toggle>
         </ion-item>
         <ion-item>
-          <ion-toggle v-model="setting2">Setting 2</ion-toggle>
+          <ion-toggle v-model="setting2">Pause time</ion-toggle>
+        </ion-item>
+        <ion-list-header>{{ $t('settings.progression') }}</ion-list-header>
+        <ion-item>
+          <ion-toggle v-model="setting2">Set progression</ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-toggle v-model="setting2">Weight progression</ion-toggle>
         </ion-item>
       </ion-list>
     </template>

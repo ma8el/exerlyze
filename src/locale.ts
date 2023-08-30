@@ -49,7 +49,10 @@ export const messages = {
             title: "You"
         },
         settings: {
-            title: "Settings"
+            title: "Settings",
+            general: "General",
+            workout: "Workout settings",
+            progression: "Progression settings",
         },
         track: "Track",
         add: "Add",
@@ -128,7 +131,10 @@ export const messages = {
             title: "Du"
         },
         settings: {
-            title: "Einstellungen"
+            title: "Einstellungen",
+            general: "Allgemein",
+            workout: "Trainingseinstellungen",
+            progression: "Progressions Einstellungen",
         },
         track: "Tracken",
         add: "Hinzufügen",
