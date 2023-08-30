@@ -3,9 +3,9 @@
            IonRow,
            modalController } from '@ionic/vue';
   import { useDark } from '@vueuse/core'
-  import { ref,
-           PropType } from 'vue'
+  import { ref, watch, onMounted, PropType } from 'vue'
   import ActivitiesModal from './Modals/ActivitiesModal.vue';
+  import { useUserSettingsStore } from '@/store/userSettingsStore';
 
   const props = defineProps({
     workoutEventDates: {
@@ -16,6 +16,8 @@
  })
 
   const isDark = useDark()
+  const userSettingsStore = useUserSettingsStore()
+  const setLocale = ref(userSettingsStore.getLocale())
 
   const attributes = ref([{
     key: 'today',
@@ -55,12 +57,23 @@
       selectedDate.value = undefined
     }
   }
+
+  onMounted(() => {
+    setLocale.value = userSettingsStore.getLocale()
+  })
+
+  watch(() => userSettingsStore.setLocale, () => {
+    setLocale.value = userSettingsStore.getLocale()
+  })
+  const weekdayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 </script>
 
 <template>
   <ion-grid>
     <ion-row class="ion-justify-content-center">
         <VDatePicker 
+        :weekday-labels="weekdayLabels"
+          :locale=setLocale
           expanded 
           transparent 
           borderless 
