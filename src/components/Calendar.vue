@@ -65,14 +65,12 @@
   watch(() => userSettingsStore.setLocale, () => {
     setLocale.value = userSettingsStore.getLocale()
   })
-  const weekdayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 </script>
 
 <template>
   <ion-grid>
     <ion-row class="ion-justify-content-center">
         <VDatePicker 
-        :weekday-labels="weekdayLabels"
           :locale=setLocale
           expanded 
           transparent 
