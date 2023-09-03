@@ -1,5 +1,9 @@
 <script setup lang="ts">
-  import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, modalController } from '@ionic/vue';
+  import { IonCard,
+           IonCardHeader,
+           IonCardTitle,
+           IonCardContent,
+           modalController} from '@ionic/vue';
   import WorkoutPlanItem from '@/components/WorkoutPlanItem.vue';
   import AddWorkoutPlanModal from '../Modals/AddWorkoutPlanModal.vue';
   import { useWorkoutPlanStore } from '@/store/workoutStore';
@@ -39,5 +43,5 @@
         :plannedDay="workout.dayOfWeek"
       />
     </ion-card-content>
-  </ion-card>
+ </ion-card>
 </template>
