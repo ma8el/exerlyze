@@ -1,7 +1,17 @@
 <script setup lang="ts">
+import { IonPage,
+         IonContent,
+         IonGrid,
+         IonRow,
+         IonIcon,
+         IonCol,
+         IonItem,
+         IonInput,
+         IonButton,
+         IonAlert } from '@ionic/vue';
 import { onMounted, ref } from 'vue';
+import { mailOutline } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
-import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonItem, IonInput, IonButton, IonAlert } from '@ionic/vue';
 import { useDark } from '@vueuse/core'
 import { supabase } from '@/supabase';
 
@@ -72,16 +82,46 @@ onMounted(() => {
               <img v-else src="../../assets/logo_transparent_black.png" alt="Dark Logo" />
             </div>
             <form @submit.prevent="onLogin">
-              <ion-item>
-                <ion-input label="Email" label-placement="floating" type="email" v-model="email"></ion-input>
+              <ion-item lines="none">
+                <ion-icon :icon="mailOutline" slot="end"></ion-icon>
+                <ion-input 
+                  label="Email"
+                  type="email"
+                  label-placement="floating"
+                  v-model="email"
+                  fill="solid">
+                </ion-input>
               </ion-item>
-              <ion-button id="magic-link-button" expand="block" type="submit" shape="round" class="ion-margin-top" :disabled="loading">
+              <ion-button id="magic-link-button" expand="block" type="submit" class="ion-margin-top" :disabled="loading">
                 Send magic link
               </ion-button>
-              <ion-button id="no-login-button" @click="setOpen(true)" expand="block" shape="round" class="ion-margin-top" :disabled="loading">
-                Continue without login
-              </ion-button>
-              <ion-alert
+
+              <div class="line">
+                <hr>
+                <ion-label class="or_lbl">or</ion-label>
+                <hr>
+              </div>
+
+              <div class="social-button">
+                <ion-buttons slot="start">
+                  <ion-button>
+                    <img src="../../assets/google.png" alt="">
+                  </ion-button>
+                </ion-buttons>
+        
+                <ion-buttons slot="start">
+                  <ion-button>
+                    <img src="../../assets/facebook.png" alt="">
+                  </ion-button>
+                </ion-buttons>
+              </div>
+
+              <div class="end">
+                <ion-label class="end_lbl">
+                  Want to try the app first? <span @click="setOpen(true)">Skip</span>
+                </ion-label>
+              </div>
+             <ion-alert
                :is-open="isOpen"
                header="Alert"
                sub-header="You are proceeding without login"
@@ -120,5 +160,54 @@ ion-content {
 .logo-container img {
   max-width: 80%;
   max-height: 50%;
+}
+
+
+.line {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  hr {
+      width: 100%;
+      height: 1px;
+      border-bottom: 1px solid lightgrey;
+      margin-bottom: 10px;
+      margin-top: 10px;
+  }
+  .or_lbl {
+      margin: 10px;
+  }
+}
+
+.social-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ion-buttons {
+      margin: 20px;
+      ion-button {
+          height: 50px;
+          width: 50px;
+          border: 1px solid lightgray;
+          border-radius: 10px;
+          img {
+              height: 22px;
+              width: 22px;
+              margin: 10px;
+          }
+      }
+  }
+}
+.end {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .end_lbl {
+      font-size: 16px;
+      margin-top: 10px;
+      span {
+          color: #c58bf2;
+      }
+  }
 }
 </style>
