@@ -70,8 +70,11 @@
 <template>
   <ion-grid>
     <ion-row class="ion-justify-content-center">
+      <ion-card class="ion-margin">
         <VDatePicker 
+          class="vc-arrow-icon"
           :locale=setLocale
+          title-position="left"
           expanded 
           transparent 
           borderless 
@@ -81,6 +84,13 @@
           @click="openModal"
           :attributes="attributes"
         />
+      </ion-card>
     </ion-row>
   </ion-grid>
 </template>
+
+<style scoped lang="scss">
+  ion-card {
+    width: 100%;
+  }
+</style>
