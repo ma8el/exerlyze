@@ -59,13 +59,13 @@
           <ion-label>{{ $t('you.title') }}</ion-label>
         </ion-tab-button>
 
-        <ion-fab vertical="bottom" horizontal="center" translucent="true">
-          <ion-fab-button @click="openModal">
-            <ion-icon :icon="addOutline"/>
-          </ion-fab-button>
-        </ion-fab>
      </ion-tab-bar>
     </ion-tabs>
+    <ion-fab vertical="bottom" horizontal="center" translucent="true">
+      <ion-fab-button @click="openModal">
+        <ion-icon :icon="addOutline"/>
+      </ion-fab-button>
+    </ion-fab>
   </ion-page>
 </template>
 
@@ -75,7 +75,6 @@ ion-tabs{
 		margin-bottom: env(safe-area-inset-bottom); /* fix notch ios*/
 		ion-fab-button {
 			--box-shadow: none;
-      z-index: -1;
 		}
 	}
 	ion-tab-bar {
