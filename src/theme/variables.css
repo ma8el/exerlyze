@@ -153,7 +153,9 @@ http://ionicframework.com/docs/theming/ */
    */
 
   .ios body {
-    --ion-background-color: #222222;
+/*    --ion-background-color: #222222;
+*/
+    --ion-background-color: #000000;
     --ion-background-color-rgb: 34, 34, 34;
 
     --ion-text-color: #ffffff;
@@ -181,7 +183,10 @@ http://ionicframework.com/docs/theming/ */
 
     --ion-item-background: #303030;
 
-    --ion-card-background: #1c1c1d;
+/*    --ion-card-background: #1c1c1d;
+*/
+    --ion-card-background: #1E1F24;
+    ;
   }
 
   .ios ion-modal {
