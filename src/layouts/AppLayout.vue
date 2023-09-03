@@ -50,8 +50,12 @@
 
 <style scoped lang="scss">
   ion-toolbar {
-    --background: var(--ion-color-primary);
-    padding: 0 0 20px 0;
+    --background: none;
+    background-image: url('../../assets/app_background.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 0 0 50px 0;
   }
   ion-title {
     color: white;
