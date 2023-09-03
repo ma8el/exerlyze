@@ -11,11 +11,12 @@
 
 <template>
   <ion-card>
+    <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" />
     <ion-card-header>
       <ion-card-title>{{ workoutName }}</ion-card-title>
       <ion-card-subtitle>{{ workoutPlanName }}</ion-card-subtitle>
     </ion-card-header>
-    <ion-card-content class="ion-margin">
+    <ion-card-content>
       {{ $t('scheduledOn') }} {{ plannedDay }}
       <slot></slot>
     </ion-card-content>
