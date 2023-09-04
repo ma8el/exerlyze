@@ -55,3 +55,9 @@ const options = {
     </ion-card-content>
   </ion-card>
 </template>
+
+<style scoped>
+ion-card {
+  margin-bottom: 100px;
+}
+</style>
