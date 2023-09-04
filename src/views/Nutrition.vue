@@ -7,6 +7,7 @@
   import { useFoodDiaryStore } from '@/store/foodDiary';
   import { getCurrentWeekDates } from '@/helpers/time';
 
+  import BaseSegments from '@/components/BaseSegments.vue';
   import NutritionFoodDiaryContent from '@/components/NutritionFoodDiaryContent.vue';
   import NutritionYourDayContent from '@/components/NutritionYourDayContent.vue';
 
@@ -75,14 +76,12 @@
           />
       </ion-row>
     </ion-grid>
-    <ion-segment :value="selectedSegment">
-     <ion-segment-button value="day" @click="selectYourDay">
-        <ion-label>{{ $t('nutrition.yourDay') }}</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="diary" @click="selectDiary">
-        <ion-label>{{ $t('nutrition.foodDiary') }}</ion-label>
-      </ion-segment-button>
-    </ion-segment>
+    <BaseSegments
+      :leftSegmentLabel="$t('nutrition.yourDay')"
+      :rightSegmentLabel="$t('nutrition.foodDiary')"
+      @leftSegmentSelected="selectYourDay"
+      @rightSegmentSelected="selectDiary"
+    />
     <NutritionFoodDiaryContent v-if="diarySelected" />
     <NutritionYourDayContent v-if="yourDaySelected" />
   </AppLayout>
