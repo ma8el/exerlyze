@@ -49,6 +49,9 @@
 </template>
 
 <style scoped lang="scss">
+ion-header {
+  display: block;
+}
   ion-toolbar {
     --background: none;
     background-image: url('../../assets/app_background.jpg');
