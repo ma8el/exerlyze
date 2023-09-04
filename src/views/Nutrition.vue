@@ -1,12 +1,28 @@
 <script setup lang="ts">
-  import { IonGrid, IonRow } from '@ionic/vue';
-  import NutritionSegments from '@/components/NutritionSegments.vue';
+  import { IonGrid, IonRow, IonSegment, IonSegmentButton, IonLabel } from '@ionic/vue';
   import AppLayout from '@/layouts/AppLayout.vue';
   import { ref, provide, readonly, reactive } from 'vue';
   import { useDark } from '@vueuse/core'
   import { selectedDateKey } from '@/keys';
   import { useFoodDiaryStore } from '@/store/foodDiary';
   import { getCurrentWeekDates } from '@/helpers/time';
+
+  import NutritionFoodDiaryContent from '@/components/NutritionFoodDiaryContent.vue';
+  import NutritionYourDayContent from '@/components/NutritionYourDayContent.vue';
+
+  const selectedSegment = ref('day');
+  const diarySelected = ref(false)
+  const yourDaySelected = ref(true)
+
+  const selectDiary = () => {
+     diarySelected.value = true;
+     yourDaySelected.value = false;
+  }
+
+  const selectYourDay = () => {
+     diarySelected.value = false;
+     yourDaySelected.value = true;
+  }
 
   const isDark = useDark()
   const selectedDate = ref<Date>(new Date())
@@ -59,6 +75,15 @@
           />
       </ion-row>
     </ion-grid>
-    <NutritionSegments />
+    <ion-segment :value="selectedSegment">
+     <ion-segment-button value="day" @click="selectYourDay">
+        <ion-label>{{ $t('nutrition.yourDay') }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="diary" @click="selectDiary">
+        <ion-label>{{ $t('nutrition.foodDiary') }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    <NutritionFoodDiaryContent v-if="diarySelected" />
+    <NutritionYourDayContent v-if="yourDaySelected" />
   </AppLayout>
 </template>
