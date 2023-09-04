@@ -24,5 +24,4 @@
     :subTitle="$t('workouts.noWorkoutsYetSubtitle')"
   ></BaseCard>
   <AddFloatingActionButton :modalComponent="AddWorkoutModal" />
-
 </template>
