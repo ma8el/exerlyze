@@ -6,6 +6,7 @@
   import UpcomingEventCard from './Cards/UpcomingEventCard.vue';
   import StartWorkoutButton from './Buttons/StartWorkoutButton.vue';
   import BaseCard from './Cards/BaseCard.vue';
+  import Slider from './Slider.vue';
   import { onMounted, ref } from 'vue';
 
   const router = useRouter()
@@ -40,24 +41,17 @@
 </script>
 
 <template>
-  <div class="main_content_div">
-  <div class="content_div">
-  <div class="service_slider" >
-    <div class="single_slider" v-for="workoutPlan in sortedPlannedWorkouts" :key="workoutPlan.id">
+  <Slider :items="sortedPlannedWorkouts">
+    <template v-slot:default="slotProps">
       <UpcomingEventCard
-        class="swiper ion-margin ion-padding"
-        :workoutPlanName="workoutPlan.name"
-        :workoutName="workoutPlan.workout.name"
-        :plannedDay="workoutPlan.dayOfWeek"
+        :workoutPlanName="slotProps.item.name"
+        :workoutName="slotProps.item.workout.name"
+        :plannedDay="slotProps.item.dayOfWeek"
       >
-         <StartWorkoutButton :workoutId="workoutPlan.workoutId" />
-      </UpcomingEventCard> 
- 
-
-    </div>
-  </div>
-    </div>
-  </div>
+        <StartWorkoutButton :workoutId="slotProps.item.workoutId" />
+      </UpcomingEventCard>
+    </template>
+  </Slider>
 
   <BaseCard
     v-if="nextWorkout == -1"
@@ -75,38 +69,3 @@
     </ion-button>
   </BaseCard>
 </template>
-
-<style scoped lang="scss">
-.swiper {
-  width: 95%;
-  --bullet-background: #fff;
-  --bullet-background-active: #3F63C8;
-}
-.main_content_div {
-  .content_div {
-    .service_slider {
-      display: flex;
-      overflow: scroll;
-
-      .single_slider {
-        width: 100%;
-        min-width: 300px;
-        border-radius: 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        margin-right: 5px;
-        // box-shadow: 0px 3px 6px rgb(0 0 0 / 30%);
-        // border-radius: 10px;
-
-        .back_image {
-          width: 100%;
-          height: 100%;
-          border-top-left-radius: 10px;
-          border-top-right-radius: 10px;
-        }
-      }
-    }
-  }
-}
-</style>
