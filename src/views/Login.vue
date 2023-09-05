@@ -145,7 +145,7 @@ ion-item {
 }
 ion-content {
   --background: none;
-  background-image: url('../../assets/background.jpg');
+  background-image: url('../../assets/login_background.jpg');
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
