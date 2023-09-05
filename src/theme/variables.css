@@ -1,8 +1,14 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
 
+@font-face {
+  font-family: 'SF-Pro-Display';
+  src: url('../../assets/font/SF-Pro-Display/SF-Pro-Display-Bold.otf');
+}
+
 /** Ionic CSS Variables **/
 :root {
+  --ion-font-family: 'SF-Pro-Display';
   /** primary **/
   --ion-color-primary: #3F63C8;
   --ion-color-primary-rgb: 63, 99, 200;
