@@ -35,7 +35,7 @@
 
 <style scoped lang="scss">
   ion-segment {
-    background: black;
+    background: none;
 
     ion-segment-button {
       --indicator-color: #3F63C8;
