@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/vue'
+import BaseCard from '../Cards/BaseCard.vue';
 import {
   Chart as ChartJS,
   Title,
@@ -44,20 +45,12 @@ const options = {
 </script>
 
 <template>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>{{ $t('home.workoutVolume') }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <Bar 
-        :data="data"
-        :options="options" />
-    </ion-card-content>
-  </ion-card>
+  <BaseCard
+    :title="$t('home.workoutVolume')"
+    :content="true"
+  >
+    <Bar 
+      :data="data"
+      :options="options" />
+  </BaseCard>
 </template>
-
-<style scoped>
-ion-card {
-  margin-bottom: 100px;
-}
-</style>

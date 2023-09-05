@@ -7,6 +7,12 @@
 <template>
   <PageWithCalendar :title="$t('home.title')">
     <UpcomingEventsSlide />
-    <WorkoutVolumeBarChart />
+    <WorkoutVolumeBarChart class="last-component"/>
   </PageWithCalendar>
 </template>
+
+<style scoped>
+.last-component {
+    margin-bottom: 100px;
+}
+</style>

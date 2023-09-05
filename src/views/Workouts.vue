@@ -32,7 +32,7 @@
       @leftSegmentSelected="selectWorkouts"
       @rightSegmentSelected="selectPlans"
     />
-   <WorkoutsContent v-if="workoutsSelected" />
+    <WorkoutsContent v-if="workoutsSelected" />
     <WorkoutPlansContent v-if="plansSelected" />
   </PageWithCalendar>
 </template>
