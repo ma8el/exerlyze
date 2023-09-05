@@ -36,12 +36,12 @@
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom" class="custom-tab-bar">
         <ion-tab-button tab="home" href="/tabs/home">
-          <ion-icon aria-hidden="true" :icon="homeSharp" />
+          <ion-icon aria-hidden="true" src="../../assets/icons/home_1.svg" />
           <ion-label>{{ $t('home.title') }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="workouts" href="/tabs/workouts">
-          <ion-icon aria-hidden="true" :icon="barbellOutline" />
+          <ion-icon aria-hidden="true" src="../../assets/icons/workout_1.svg" />
           <ion-label>{{ $t('workouts.title') }}</ion-label>
         </ion-tab-button>
 
@@ -50,12 +50,12 @@
         </svg>
 
         <ion-tab-button tab="nutrition" href="/tabs/nutrition">
-          <ion-icon aria-hidden="true" :icon="nutritionOutline" />
+          <ion-icon aria-hidden="true" src="../../assets/icons/nutrition_1.svg" />
           <ion-label>{{ $t('nutrition.title') }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="you" href="/tabs/you">
-          <ion-icon aria-hidden="true" :icon="personCircleOutline" />
+          <ion-icon aria-hidden="true" src="../../assets/icons/profile_1.svg" />
           <ion-label>{{ $t('you.title') }}</ion-label>
         </ion-tab-button>
 

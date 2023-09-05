@@ -83,7 +83,7 @@ onMounted(() => {
             </div>
             <form @submit.prevent="onLogin">
               <ion-item lines="none">
-                <ion-icon :icon="mailOutline" slot="end"></ion-icon>
+                <ion-icon src="../../assets/icons/email.svg" slot="end"></ion-icon>
                 <ion-input 
                   label="Email"
                   type="email"
