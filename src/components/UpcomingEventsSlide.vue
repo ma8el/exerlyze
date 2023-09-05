@@ -3,7 +3,6 @@
   import { IonButton, IonIcon } from '@ionic/vue';
   import { useRouter } from 'vue-router';
   import { useWorkoutPlanStore } from '../store/workoutStore';
-  import UpcomingEventCard from './Cards/UpcomingEventCard.vue';
   import StartWorkoutButton from './Buttons/StartWorkoutButton.vue';
   import BaseCard from './Cards/BaseCard.vue';
   import Slider from './Slider.vue';
@@ -43,13 +42,15 @@
 <template>
   <Slider :items="sortedPlannedWorkouts">
     <template v-slot:default="slotProps">
-      <UpcomingEventCard
-        :workoutPlanName="slotProps.item.name"
-        :workoutName="slotProps.item.workout.name"
-        :plannedDay="slotProps.item.dayOfWeek"
+      <BaseCard
+        img_src="https://ionicframework.com/docs/img/demos/card-media.png"
+        :sub-title="slotProps.item.name"
+        :title="slotProps.item.workout.name"
+        :content="true"
       >
+        {{ $t('scheduledOn') }} {{ slotProps.item.dayOfWeek }}
         <StartWorkoutButton :workoutId="slotProps.item.workoutId" />
-      </UpcomingEventCard>
+      </BaseCard>
     </template>
   </Slider>
 

@@ -5,16 +5,18 @@
         title: String,
         subTitle: String,
         content: Boolean,
+        img_src: String
     })
 </script>
 
 <template>
   <ion-card>
+    <img v-if="img_src" :src="img_src" />
     <ion-card-header>
       <ion-card-title v-if="title">{{ title }}</ion-card-title>
       <ion-card-subtitle v-if="subTitle">{{ subTitle }}</ion-card-subtitle>
     </ion-card-header>
-    <ion-card-content class="ion-margin" v-if="content">
+    <ion-card-content v-if="content">
       <slot></slot>
     </ion-card-content>
   </ion-card>
