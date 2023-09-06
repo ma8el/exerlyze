@@ -17,11 +17,6 @@ const props = defineProps({
 </template>
 
 <style scoped lang="scss">
-.swiper {
-  width: 95%;
-  --bullet-background: #fff;
-  --bullet-background-active: #3F63C8;
-}
 .main_content_div {
   .content_div {
     .service_slider {
