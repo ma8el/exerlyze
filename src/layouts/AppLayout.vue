@@ -43,24 +43,33 @@
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    <ion-content class="app-content" :fullscreen="true">
+    <ion-content :fullscreen="true">
       <slot></slot>
     </ion-content>
   </ion-page>
 </template>
 
 <style scoped lang="scss">
-ion-toolbar {
-  --background: none;
-  background-image: url('../../assets/header_background.jpg');
-  background-position: center center;
-  background-size: cover;
-  padding: 20px 0 20px 0;
-  box-sizing: inherit;
+* { 
+  box-sizing: unset;
+ion-header {
+  ion-toolbar {
+    --background: none;
+    background-image: url('../../assets/header_background.jpg');
+    background-position: center center;
+    background-size: cover;
+    padding: 10px 0 10px 0;
+  }
+  ion-buttons {
+    padding-top: 10px;
+  }
 }
 ion-content {
+  border-radius: 20px 20px 0 0;
+	overflow: hidden;
   --background: none;
   background-image: url('../../assets/app_background.jpg');
   background-size: cover;
+}
 }
 </style>
