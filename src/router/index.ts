@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import TabsPage from '../views/TabsPage.vue'
 import Login from '../views/Login.vue'
+import CompleteProfile from '@/views/CompleteProfile.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -37,6 +38,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     component: Login
+  },
+  {
+    path: '/complete-profile',
+    component: CompleteProfile
   }
 ]
 

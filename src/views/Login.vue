@@ -53,7 +53,7 @@ const onLogin = async () => {
 }
 
 const redirect = () => {
-  router.push('/tabs/home');
+  router.push('/complete-profile');
 };
 
 const session = ref()
