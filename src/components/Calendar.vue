@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { IonGrid,
+           IonCard,
            IonRow,
            modalController } from '@ionic/vue';
   import { useDark } from '@vueuse/core'
