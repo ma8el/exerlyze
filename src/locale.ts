@@ -45,8 +45,8 @@ export const messages = {
             left: "Left",
             nutritionOverview: "@:nutrition.title @:overview"
         },
-        you: {
-            title: "You"
+        profile: {
+            title: "Profile"
         },
         settings: {
             title: "Settings",
@@ -127,8 +127,8 @@ export const messages = {
             left: "Übrig",
             nutritionOverview: "Nähstoffüberblick"
         },
-        you: {
-            title: "Du"
+        profile: {
+            title: "Profil",
         },
         settings: {
             title: "Einstellungen",

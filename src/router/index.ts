@@ -30,8 +30,8 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/Nutrition.vue')
       },
       {
-        path: 'you',
-        component: () => import('@/views/You.vue')
+        path: 'profile',
+        component: () => import('@/views/Profile.vue')
       },
     ]
   },

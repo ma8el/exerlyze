@@ -46,7 +46,7 @@
 </script>
 
 <template>
-  <AppLayout :title="$t('you.title')">
+  <AppLayout :title="$t('profile.title')">
     <UserInfoCard />
     <LineChart :chartData="weightChartData" :options="options" :chartTitle="$t('weight')" />
   </AppLayout>

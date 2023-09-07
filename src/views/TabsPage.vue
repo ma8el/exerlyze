@@ -54,9 +54,9 @@
           <ion-label>{{ $t('nutrition.title') }}</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="you" href="/tabs/you">
+        <ion-tab-button tab="profile" href="/tabs/profile">
           <ion-icon aria-hidden="true" src="../../assets/icons/profile_1.svg" />
-          <ion-label>{{ $t('you.title') }}</ion-label>
+          <ion-label>{{ $t('profile.title') }}</ion-label>
         </ion-tab-button>
 
      </ion-tab-bar>
