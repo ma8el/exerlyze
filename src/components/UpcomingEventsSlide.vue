@@ -40,7 +40,7 @@
 </script>
 
 <template>
-  <Slider :items="sortedPlannedWorkouts">
+  <Slider :items="sortedPlannedWorkouts" min-width="300px">
     <template v-slot:default="slotProps">
       <BaseCard
         img_src="https://ionicframework.com/docs/img/demos/card-media.png"
