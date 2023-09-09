@@ -2,8 +2,8 @@
   import { IonInput, IonItem, IonLabel, IonThumbnail, IonSpinner, modalController } from '@ionic/vue';
   import ExerciseDetailModal from './Modals/ExerciseDetailModal.vue';
   import { Exercise } from '@/types'
-  import { supabase } from '@/supabase';
   import { ref, watch, onMounted } from 'vue';
+  import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
 
   const props = defineProps<Exercise>()
   const emit = defineEmits(['update:sets', 'update:reps', 'update:weight'])
@@ -13,18 +13,13 @@
 
   onMounted(async () => {
     loading.value = true
-    await supabase
-      .from('exercises')
-      .select('image_url')
-      .eq('id', props.id)
-      .single()
-      .then((response) => {
-        if (response.error) {
-          console.log(response.error)
-        } else {
-          bucketUrl.value = response.data.image_url
-        }
-      })
+    await getBucketUrlFromTable('exercises', props.id).then((response) => {
+      bucketUrl.value = response.data?.image_url
+    })
+    if (!bucketUrl.value) return
+    await getSignedObjectUrl('exercise_images', bucketUrl.value).then((response) => {
+      url.value = response.data?.signedUrl
+    })
   })
 
   const openExerciseDetailModal = async () => {
@@ -38,31 +33,12 @@
   watch(() => url.value, () => {
     loading.value = false
   })
-
-  watch(() => bucketUrl.value, () => {
-    if (!bucketUrl.value) return
-    supabase
-      .storage
-      .from('exercise_images')
-      .createSignedUrl(bucketUrl.value, 60, {
-        transform: {
-          width: 100,
-          height: 100,
-        }
-    }).then((response) => {
-      if (response.error) {
-        console.log(response.error)
-      } else {
-        url.value = response.data.signedUrl
-      }
-    })
-  })
 </script>
 
 <template>
   <ion-item :button="true" @click="openExerciseDetailModal()">
     <ion-thumbnail slot="start">
-      <img v-if="!loading" alt="Exercise Image" :src="url" />
+      <img v-if="!loading" alt="Exercise Image" :src="url ? url: defaultImage" />
       <ion-spinner v-else/>
     </ion-thumbnail>
     <ion-label>
