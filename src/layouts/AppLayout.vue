@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { IonHeader, IonPage, IonContent, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, modalController } from '@ionic/vue';
-  import HeaderFloatingActionButton from '@/components/Buttons/HeaderFloatingActionButton.vue';
+  import FloatingActionButton from '@/components/Buttons/FloatingActionButton.vue';
   import Settings from '@/components/Settings.vue';
 
   const props = defineProps({
@@ -36,7 +36,7 @@
       <ion-toolbar>
         <ion-title size="large">{{ title }}</ion-title>
         <ion-buttons slot="end">
-          <header-floating-action-button 
+          <FloatingActionButton 
             icon="../../assets/icons/setting.svg"
             @click="openModal"
           />
