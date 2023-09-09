@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import { modalController } from '@ionic/vue';
-  import { Workout } from '@/types';
+  import { modalController, IonCol, IonButton} from '@ionic/vue';
   import AddWorkoutModal from '../Modals/AddWorkoutModal.vue';
   import BaseCard from '@/components/Cards/BaseCard.vue';
   import Slider from '@/components/Slider.vue';
-  import { onMounted } from 'vue';
+  import ExerciseCard from './ExerciseCard.vue';
+  import { Workout } from '@/types';
 
   const props = defineProps<Workout>()
 
@@ -24,23 +24,34 @@
     :content="true"
     class="workout-card"
   >
-    <Slider :items="exercises" minWidth="200px" class="exercise-slider">
+    <template #titleEnd>
+      <ion-col offset="4" offset-md="2" offset-lg="1" size="3">
+        <ion-button fill="clear" size="small" class="title-button" @click="openModal()">
+          {{ $t('workouts.viewAll') }}
+        </ion-button>
+      </ion-col>
+    </template>
+    <Slider :items="exercises" minWidth="200px" maxWidth="200px" class="exercise-slider">
       <template v-slot:default="slotProps">
-        <BaseCard
-          class="exercise-card"
-          img_src="https://ionicframework.com/docs/img/demos/card-media.png"
-          :title="slotProps.item.name"
-          :sub-title="`Sets: ${slotProps.item.sets} Reps: ${slotProps.item.reps} Weight: ${slotProps.item.weight}`"
-        >
-        </BaseCard>
+        <ExerciseCard
+          :id="slotProps.item.id"
+          :name="slotProps.item.name"
+          :sets="slotProps.item.sets"
+          :reps="slotProps.item.reps"
+          :weight="slotProps.item.weight"
+        />
       </template>
     </Slider>
   </BaseCard>
 </template>
 
 <style scoped>
+  .title-button {
+    --color: var(--ion-color-primary);
+  }
   .workout-card {
     --background: none;
+    margin: 0;
   }
   .exercise-slider { 
     min-width: 200px;

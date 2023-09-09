@@ -23,7 +23,8 @@ export const messages = {
             workoutPlanName: "@:workouts.workout @:plan @:name",
             noWorkoutsYet: "No workouts yet",
             noWorkoutPlansYet: "No workout plans yet",
-            noWorkoutsYetSubtitle: "@:add one by clicking below"
+            noWorkoutsYetSubtitle: "@:add one by clicking below",
+            viewAll: "View all"
         },
         nutrition: {
             title: "Nutrition",
@@ -105,7 +106,8 @@ export const messages = {
             workoutPlanName: "@:workouts.workout @:plan @:name",
             noWorkoutsYet: "Noch keine Workouts",
             noWorkoutYet: "Noch keine Trainingspläne",
-            noWorkoutsYetSubtitle: "Füge welche hinzu indem du unten klickst"
+            noWorkoutsYetSubtitle: "Füge welche hinzu indem du unten klickst",
+            viewAll: "Alle ansehen"
         },
         nutrition: {
             title: "Ernährung",
