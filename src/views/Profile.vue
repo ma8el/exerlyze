@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import UserInfoCard from '@/components/Cards/UserInfoCard.vue';
-  import LineChart from '@/components/Charts/LineChart.vue';
   import AppLayout from '@/layouts/AppLayout.vue';
   import { useWeightStore } from '@/store/bodyMetricsStore';
   import { useDayOfWeekStore } from '@/store/workoutStore';
@@ -142,10 +140,11 @@
 ion-content {
   ion-item {
     margin-top: 10px;
+    border-radius: 10px;
     ion-thumbnail {
       img {
-        height: 60px;
-        width: 60px;
+        height: 50px;
+        width: 50px;
         border-radius: 50%;
       }
     }
@@ -220,7 +219,7 @@ ion-content {
   .other {
     padding: 10px;
     margin-top: 1rem;
-    border-radius: 10px;
+    margin-bottom: 100px;
     .head_lbl {
       font-size: 18px;
     }
@@ -228,7 +227,7 @@ ion-content {
       ion-icon {
         font-size: 20px;
       }
-      ion-label {
+     ion-label {
         font-size: 14px;
       }
     }
