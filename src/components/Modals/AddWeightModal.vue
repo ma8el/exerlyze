@@ -32,42 +32,28 @@
 </script>
 
 <template>
-  <ion-button
-    id="add-weight-modal-button"
-    color="primary"
-    expand="block"
-    fill="outline"
-    shape="round"
-    >
-    {{ $t('addWeight') }}
-  </ion-button>
-  <ion-modal
-    id="add-weight-modal"
-    trigger="add-weight-modal-button"
-    >
-    <ion-card fill="outline" class="weight-card">
-      <ion-card-header>
-        <ion-card-title>
-          {{ $t('addWeight') }}
-        </ion-card-title>
-      </ion-card-header>
-      <ion-input
-        class="ion-padding"
-        fill="outline"
-        shape="round"
-        :label="$t('weight')"
-        :placeholder="$t('enterWeight')"
-        label-placement="stacked"
-        v-model="weight"
-      ></ion-input>
-      <ion-button fill="clear" @click="saveWeight">
-        {{ $t('save') }}
-      </ion-button>
-      <ion-button fill="clear" @click="closeModal">
-        {{ $t('dismiss') }}
-      </ion-button>
-    </ion-card>
-  </ion-modal>
+  <ion-card fill="outline" class="weight-card">
+    <ion-card-header>
+      <ion-card-title>
+        {{ $t('addWeight') }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-input
+      class="ion-padding"
+      fill="outline"
+      shape="round"
+      :label="$t('weight')"
+      :placeholder="$t('enterWeight')"
+      label-placement="stacked"
+      v-model="weight"
+    ></ion-input>
+    <ion-button fill="clear" @click="saveWeight">
+      {{ $t('save') }}
+    </ion-button>
+    <ion-button fill="clear" @click="closeModal">
+      {{ $t('dismiss') }}
+    </ion-button>
+  </ion-card>
 </template>
 
 <style scoped>

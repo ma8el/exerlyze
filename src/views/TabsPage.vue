@@ -6,17 +6,20 @@
            IonIcon,
            IonPage,
            IonFab,
+           IonFabList,
            IonFabButton,
            IonRouterOutlet,
            modalController} from '@ionic/vue';
-  import { personCircleOutline, nutritionOutline, barbellOutline, homeSharp, addOutline } from 'ionicons/icons';
-  import TrackModal from '@/components/Modals/TrackModal.vue';
+  import { scale, clipboard, addOutline } from 'ionicons/icons';
+  import AddWorkoutModal from '@/components/Modals/AddWorkoutModal.vue';
+  import AddWorkoutPlanModal from '@/components/Modals/AddWorkoutPlanModal.vue';
+  import AddNutritionModal from '@/components/Modals/AddNutritionModal.vue';
+  import AddWeightModal from '@/components/Modals/AddWeightModal.vue';
   
-  const openModal = async () => {
+  const openWorkoutModal = async () => {
     const modal = await modalController.create({
-      component: TrackModal,
+      component: AddWorkoutModal,
       cssClass: 'full-screen-modal',
-      initialBreakpoint: 0.5,
     });
     modal.present();
 
@@ -28,6 +31,50 @@
     };
   }
 
+  const openWorkoutPlanModal = async () => {
+    const modal = await modalController.create({
+      component: AddWorkoutPlanModal,
+      cssClass: 'full-screen-modal',
+    });
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    if (role == 'save') {
+      console.log('Save', data);
+    } else {
+      console.log('Close', data);
+    };
+  }
+
+  const openWeightModal = async () => {
+    const modal = await modalController.create({
+      component: AddWeightModal,
+      cssClass: 'full-screen-modal',
+    });
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    if (role == 'save') {
+      console.log('Save', data);
+    } else {
+      console.log('Close', data);
+    };
+  }
+
+  const openNutritionModal = async () => {
+    const modal = await modalController.create({
+      component: AddNutritionModal,
+      cssClass: 'full-screen-modal',
+    });
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    if (role == 'save') {
+      console.log('Save', data);
+    } else {
+      console.log('Close', data);
+    };
+  }
 </script>
 
 <template>
@@ -62,9 +109,23 @@
      </ion-tab-bar>
     </ion-tabs>
     <ion-fab vertical="bottom" horizontal="center" translucent="true">
-      <ion-fab-button @click="openModal">
+      <ion-fab-button>
         <ion-icon :icon="addOutline"/>
       </ion-fab-button>
+      <ion-fab-list side="top">
+        <ion-fab-button color="primary" @click="openWeightModal">
+          <ion-icon :icon="scale"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button color="primary" @click="openNutritionModal">
+          <ion-icon src="../../assets/icons/nutrition_white.svg"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button color="primary" @click="openWorkoutPlanModal">
+          <ion-icon :icon="clipboard"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button color="primary" @click="openWorkoutModal">
+          <ion-icon src="../../assets/icons/workout_white.svg"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
     </ion-fab>
   </ion-page>
 </template>

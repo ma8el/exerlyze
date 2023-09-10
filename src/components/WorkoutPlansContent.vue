@@ -1,8 +1,6 @@
 <script setup lang="ts">
   import WorkoutPlanCard from './Cards/WorkoutPlanCard.vue';
   import { useWorkoutPlanStore } from '../store/workoutStore';
-  import AddFloatingActionButton from './Buttons/AddFloatingActionButton.vue';
-  import AddWorkoutPlanModal from './Modals/AddWorkoutPlanModal.vue';
   import BaseCard from './Cards/BaseCard.vue';
 
   const workoutPlanStore = useWorkoutPlanStore();
@@ -19,5 +17,4 @@
     :title="$t('workouts.noWorkoutPlansYet')"
     :subTitle="$t('workouts.noWorkoutsYetSubtitle')"
   ></BaseCard>
-  <AddFloatingActionButton :modalComponent="AddWorkoutPlanModal" />
 </template>

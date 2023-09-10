@@ -1,8 +1,6 @@
 <script setup lang="ts">
   import { IonRow, IonCol, IonCard, IonCardSubtitle, IonCardContent } from '@ionic/vue';
   import NutritionOverview from './Cards/NutritionOverview.vue';
-  import AddFloatingActionButton from './Buttons/AddFloatingActionButton.vue';
-  import AddNutritionModal from './Modals/AddNutritionModal.vue';
   import NutritionDoughnutChart from './Charts/NutritionDoughnutChart.vue';
   import { useFoodDiaryStore } from '@/store/foodDiary';
   import { computed, inject } from 'vue';
@@ -84,7 +82,6 @@
     </ion-row>
   </ion-card>
   <NutritionOverview />
-  <AddFloatingActionButton :modal-component="AddNutritionModal"/>
 </template>
 
 <style scoped lang="scss">
