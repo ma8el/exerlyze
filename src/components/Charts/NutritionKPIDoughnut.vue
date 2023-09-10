@@ -1,16 +1,32 @@
 <script setup lang="ts">
   import { use } from 'echarts/core'
   import { BarChart } from 'echarts/charts'
-  import { PolarComponent, LegendComponent } from 'echarts/components'
-  import { onMounted, computed, ref, provide } from 'vue';
+  import { PolarComponent, LegendComponent, TitleComponent } from 'echarts/components'
+  import { computed, provide } from 'vue';
   import VChart, { THEME_KEY } from 'vue-echarts';
-  import { CanvasRenderer } from 'echarts/renderers'
+  import { SVGRenderer } from 'echarts/renderers'
 
-  use([PolarComponent, LegendComponent, BarChart, CanvasRenderer])
+  use([PolarComponent, LegendComponent, BarChart, SVGRenderer, TitleComponent])
 
   const props = defineProps({
-    chartData: {
-      type: Array as () => number[],
+    data: {
+      type: Number,
+      required: true
+    },
+    maxValue: {
+      type: Number,
+      required: true
+    },
+    radius: {
+      type: Number,
+      required: true
+    },
+    color: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
       required: true
     },
   })
@@ -18,23 +34,31 @@
   const option = computed(() => {
     const commonOption = {
       backgroundColor: '#1E1F24',
-      barWidth: '15px',
+      barWidth: '8px',
       radiusAxis: {
           type: 'category',
-          data: ['Fat', 'Protein', 'Carbs'],
+          data: [props.name],
           min: 0,
           show: false
       },
       polar: {
-          radius: [120, '10%']
+          radius: [props.radius, '10%']
       },
       legend: {
           show: false,
-          data: ['Carbs', 'Protein', 'Fat']
-      }
+          data: [props.name]
+      },
+      title: {
+        text: `${props.name}\n${props.data}`,
+        textStyle: {
+          fontSize: 15,
+          fontWeight: 'bold',
+        },
+        left: 'center', 
+        top: 'middle',
     }
-    const sum = props.chartData.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-    if(sum == 0) {
+    }
+    if(props.data == 0) {
       return {
         ...commonOption,       
         angleAxis: {
@@ -44,7 +68,7 @@
         series: [
         {
             type: 'bar',
-            data: [1, 1, 1],  // Assuming 8 is the max value
+            data: [1],  // Assuming 8 is the max value
             coordinateSystem: 'polar',
             name: 'Background',
             itemStyle: {
@@ -60,12 +84,13 @@
         ...commonOption,
         angleAxis: {
             show: false,
-            max: sum
+            max: props.maxValue
         },
         series: [
+            // Background series
             {
                 type: 'bar',
-                data: [sum, sum, sum],
+                data: [props.maxValue],  // Assuming 8 is the max value
                 coordinateSystem: 'polar',
                 name: 'Background',
                 itemStyle: {
@@ -76,11 +101,11 @@
             },
             {
                 type: 'bar',
-                data: [props.chartData[0], 0, 0],
+                data: [props.data],
                 coordinateSystem: 'polar',
-                name: 'Carbs',
+                name: props.name,
                 stack: 'a',
-                color: '#3F63C8',
+                color: props.color,
                 itemStyle: {
                   borderRadius: [10, 10] // Rounded outer edge
                 },
@@ -88,34 +113,6 @@
                     focus: 'series'
                 }
             },
-            {
-                type: 'bar',
-                data: [0, props.chartData[1], 0],
-                coordinateSystem: 'polar',
-                name: 'Protein',
-                stack: 'a',
-                color: '#86A0E7',
-                itemStyle: {
-                  borderRadius: [10, 10] // Rounded outer edge
-                },
-                emphasis: {
-                    focus: 'series'
-                }
-            },
-            {
-                type: 'bar',
-                data: [0, 0, props.chartData[2]],
-                coordinateSystem: 'polar',
-                name: 'Fat',
-                stack: 'a',
-                color: '#FFFFFF',
-                itemStyle: {
-                  borderRadius: [10, 10] // Rounded outer edge
-                },
-                emphasis: {
-                    focus: 'series'
-                }
-            }
         ],
      }
     };
