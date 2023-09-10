@@ -1,9 +1,12 @@
 <script setup lang="ts">
-  import { Chart as ChartJS, ArcElement, Legend } from 'chart.js';
-  import { Doughnut } from 'vue-chartjs';
-  import { computed } from 'vue';
+  import { use } from 'echarts/core'
+  import { BarChart } from 'echarts/charts'
+  import { PolarComponent, LegendComponent } from 'echarts/components'
+  import { onMounted, computed, ref, provide } from 'vue';
+  import VChart, { THEME_KEY } from 'vue-echarts';
+  import { CanvasRenderer } from 'echarts/renderers'
 
-  ChartJS.register(ArcElement, Legend);
+  use([PolarComponent, LegendComponent, BarChart, CanvasRenderer])
 
   const props = defineProps({
     chartData: {
@@ -12,35 +15,127 @@
     },
   })
 
-  const data = computed(() => {
+  const option = computed(() => {
+    const commonOption = {
+      backgroundColor: '#1E1F24',
+      barWidth: '15px',
+      radiusAxis: {
+          type: 'category',
+          data: ['Fat', 'Protein', 'Carbs'],
+          min: 0,
+          show: false
+      },
+      polar: {
+          radius: [120, '10%']
+      },
+      legend: {
+          show: false,
+          data: ['Carbs', 'Protein', 'Fat']
+      }
+    }
     const sum = props.chartData.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    console.log(sum)
+    console.log(props.chartData[0])
+    console.log(props.chartData[1])
+    console.log(props.chartData[2])
     if(sum == 0) {
       return {
-        datasets: [
+        ...commonOption,       
+        angleAxis: {
+            show: false,
+            max: 1
+        },
+        series: [
         {
-          data: [1],
-          backgroundColor: ['#DCDCDC'],
+            type: 'bar',
+            data: [1, 1, 1],  // Assuming 8 is the max value
+            coordinateSystem: 'polar',
+            name: 'Background',
+            itemStyle: {
+                color: 'rgba(220, 220, 220, 0.5)'  // Light gray background
+            },
+            stack: 'a',
+            z: 1  // Behind the actual data
         },
         ],
       };
     } else {
       return {
-        datasets: [
-          {
-            label: 'Nutrition',
-            data: props.chartData,
-            backgroundColor: ['#FFFFFF', '#3F63C8', '#5598ff'],
-          },
+        ...commonOption,
+        angleAxis: {
+            show: false,
+            max: sum
+        },
+        series: [
+            // Background series
+            {
+                type: 'bar',
+                data: [sum, sum, sum],  // Assuming 8 is the max value
+                coordinateSystem: 'polar',
+                name: 'Background',
+                itemStyle: {
+                    color: 'rgba(220, 220, 220, 0.5)'  // Light gray background
+                },
+                stack: 'a',
+                z: 1  // Behind the actual data
+            },
+            {
+                type: 'bar',
+                data: [props.chartData[0], 0, 0],
+                coordinateSystem: 'polar',
+                name: 'Carbs',
+                stack: 'a',
+                color: '#3F63C8',
+                itemStyle: {
+                  borderRadius: [10, 10] // Rounded outer edge
+                },
+                emphasis: {
+                    focus: 'series'
+                }
+            },
+            {
+                type: 'bar',
+                data: [0, props.chartData[1], 0],
+                coordinateSystem: 'polar',
+                name: 'Protein',
+                stack: 'a',
+                color: '#86A0E7',
+                itemStyle: {
+                  borderRadius: [10, 10] // Rounded outer edge
+                },
+                emphasis: {
+                    focus: 'series'
+                }
+            },
+            {
+                type: 'bar',
+                data: [0, 0, props.chartData[2]],
+                coordinateSystem: 'polar',
+                name: 'Fat',
+                stack: 'a',
+                color: '#FFFFFF',
+                itemStyle: {
+                  borderRadius: [10, 10] // Rounded outer edge
+                },
+                emphasis: {
+                    focus: 'series'
+                }
+            }
         ],
+     }
     };
-  }
-  })
+  });
 
-  const options = {
-    responsive: true,
-  }
+  provide(THEME_KEY, 'dark');
 </script>
 
 <template>
-  <Doughnut :data="data" :options="options" />
+  <v-chart class="echarts" :option="option" autoresize />
 </template>
+
+<style scoped lang="scss">
+  .echarts {
+    width: 100%;
+    height: 100%;
+  }
+</style>

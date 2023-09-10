@@ -46,18 +46,39 @@
 <template>
   <ion-card>
     <ion-row >
-      <ion-col size="6">
-        <div :style="{width: '100%', height: '200px'}">
+      <ion-col size="8">
+        <div :style="{width: '100%', height: '250px'}">
             <NutritionDoughnutChart 
                 :chart-data="data"
             />
         </div>
       </ion-col>
-      <ion-col size="6">
+      <ion-col size="4">
         <ion-card-content>
-          <ion-card-subtitle :style="{color: '#FFFFFF'}">{{ $t('nutrition.carbs') }}: {{ carbsOfDay }} g</ion-card-subtitle>
-          <ion-card-subtitle :style="{color: '#3F63C8'}">{{ $t('nutrition.protein') }}: {{ proteinsOfDay }} g</ion-card-subtitle>
-          <ion-card-subtitle :style="{color: '#5598ff'}">{{ $t('nutrition.fat') }}: {{ fatsOfDay }} g</ion-card-subtitle>
+          <ion-card-subtitle class="carbs">
+            <ion-row>
+              {{ carbsOfDay }} g
+            </ion-row>
+            <ion-row>
+              {{ $t('nutrition.carbs') }} 
+            </ion-row>
+          </ion-card-subtitle>
+          <ion-card-subtitle class="protein">
+            <ion-row>
+              {{ proteinsOfDay }} g
+            </ion-row>
+            <ion-row>
+              {{ $t('nutrition.protein') }}
+            </ion-row>
+          </ion-card-subtitle>
+          <ion-card-subtitle class="fat">
+            <ion-row>
+              {{ fatsOfDay }} g
+            </ion-row>
+            <ion-row>
+              {{ $t('nutrition.fat') }}
+            </ion-row>
+          </ion-card-subtitle>
         </ion-card-content>
       </ion-col>
     </ion-row>
@@ -65,3 +86,23 @@
   <NutritionOverview />
   <AddFloatingActionButton :modal-component="AddNutritionModal"/>
 </template>
+
+<style scoped lang="scss">
+.carbs {
+  color: var(--ion-color-primary);
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.protein {
+  color: var(--ion-color-secondary);
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.fat {
+  color: #FFFFFF;
+  font-size: 13px;
+  margin-bottom: 10px;
+} 
+</style>

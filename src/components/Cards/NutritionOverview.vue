@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { IonCard, IonList, IonItem, IonLabel, IonNote, IonListHeader, IonThumbnail } from '@ionic/vue';
+  import { IonList, IonItem, IonLabel, IonNote, IonThumbnail } from '@ionic/vue';
   import BaseCard from './BaseCard.vue';
   import { computed, inject } from 'vue';
   import { useFoodDiaryStore } from '@/store/foodDiary';
