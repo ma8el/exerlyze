@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { IonButton, IonList, IonListHeader, IonItem, IonToggle, IonSelect, IonSelectOption, modalController } from '@ionic/vue';
+  import { IonIcon, IonList, IonListHeader, IonItem, IonToggle, IonSelect, IonSelectOption, modalController } from '@ionic/vue';
+  import { bookmarkOutline } from 'ionicons/icons';
   import { ref } from 'vue';
   import { useI18n } from 'vue-i18n';
   import BaseFullPageModal from './Modals/BaseFullPageModal.vue';
@@ -23,9 +24,12 @@
 </script>
 
 <template>
-  <BaseFullPageModal :title="$t('settings.title')">
+  <BaseFullPageModal>
     <template #saveButton>
-          <ion-button @click="save">{{ $t('save') }}</ion-button>
+      <ion-icon :icon="bookmarkOutline" @click="save"/>
+    </template>
+    <template #modalHeader>
+      <p class="header-title">{{ $t('settings.title') }}</p>
     </template>
     <template #modalContent>
       <ion-list>
@@ -62,3 +66,12 @@
     </template>
   </BaseFullPageModal>
 </template>
+
+<style scoped>
+  .header-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+  }
+</style>
