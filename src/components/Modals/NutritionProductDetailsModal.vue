@@ -38,13 +38,15 @@
 </script>
 
 <template>
-  <BaseFullPageModal :title="$t('nutrition.addNutrition')">
-    <template #modalContent>
+  <BaseFullPageModal :saveButton="false" backColor="dark">
+    <template #modalHeader>
       <ion-img
         :src="product.image_front_url"
         alt="product image"
       >
-      </ion-img>
+    </ion-img>
+    </template>
+    <template #modalContent>
       <ion-card
         :button="true"
         @click="openAddNutrimentModal(product)"
@@ -90,9 +92,8 @@
 
 <style scoped>
   ion-img {
-      width: 100%;
-      height: 40%;
-      object-fit: cover;
-      border-radius: 50px;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
   }
 </style>

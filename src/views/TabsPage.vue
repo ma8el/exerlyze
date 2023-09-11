@@ -83,7 +83,7 @@
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom" class="custom-tab-bar">
         <ion-tab-button tab="home" href="/tabs/home">
-          <ion-icon aria-hidden="true" src="../../assets/icons/home_1.svg" />
+          <ion-icon aria-hidden="true" src="../assets/icons/home_1.svg" />
           <ion-label>{{ $t('home.title') }}</ion-label>
         </ion-tab-button>
 

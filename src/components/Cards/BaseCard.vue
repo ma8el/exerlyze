@@ -1,5 +1,11 @@
 <script setup lang="ts">
-    import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent } from '@ionic/vue';
+    import { IonCard,
+             IonCardHeader,
+             IonCardSubtitle,
+             IonCardTitle,
+             IonCardContent,
+             IonRow,
+             IonCol } from '@ionic/vue';
     
     const props = defineProps({
         title: String,

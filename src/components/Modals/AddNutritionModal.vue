@@ -43,7 +43,10 @@
 </script>
 
 <template>
-  <BaseFullPageModal :title="$t('nutrition.addNutrition')">
+  <BaseFullPageModal :save-button="false">
+    <template #modalHeader>
+      <p class="header-title">{{ $t('nutrition.addNutrition') }}</p>
+    </template>
     <template #modalContent>
       <ion-list>
         <ion-item>
@@ -81,3 +84,12 @@
     </template> 
   </BaseFullPageModal>
 </template>
+
+<style scoped>
+  .header-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+  }
+</style>

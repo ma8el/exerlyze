@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { IonButton,
+  import { IonIcon,
            IonInput,
            modalController} from '@ionic/vue';
+  import { bookmarkOutline } from 'ionicons/icons';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import AddPlannedWorkoutButton from '../Buttons/AddPlannedWorkoutButton.vue';
   import PlannedWorkoutItem from '../PlannedWorkoutItem.vue';
@@ -107,12 +108,16 @@
 </script>
 
 <template>
-  <BaseFullPageModal :title="$t('workouts.addWorkoutPlan')">
+  <BaseFullPageModal>
     <template #saveButton>
-      <ion-button v-if="workoutPlanId" @click="update">{{ $t('update') }}</ion-button>
-      <ion-button v-else @click="save">{{ $t('save') }}</ion-button>
+      <ion-icon v-if="!workoutPlanId" :icon="bookmarkOutline" @click="save"/>
+      <ion-icon v-else src="../../../assets/icons/update.svg" @click="update"/>
     </template>
-    <template #modalContent>
+    <template #modalHeader>
+      <p v-if="!workoutPlanId" class="header-title">{{ $t('workouts.addWorkoutPlan') }}</p>
+      <p v-else class="header-title">{{ $t('workouts.updateWorkoutPlan') }}</p>
+    </template>
+   <template #modalContent>
       <ion-input class="ion-padding" fill="outline" shape="round" label="Workout Plan Name" label-placement="stacked" v-model="workoutPlanName"></ion-input>
       <ion-input class="ion-padding" fill="outline" shape="round" :label="$t('description')" label-placement="stacked" v-model="description"></ion-input>
       <PlannedWorkoutItem 
@@ -126,3 +131,12 @@
     </template>
   </BaseFullPageModal>
 </template>
+
+<style scoped>
+.header-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+</style>
