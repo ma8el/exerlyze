@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { IonButton, IonContent, IonCard, IonInput, IonIcon, modalController } from '@ionic/vue';
-    import { addCircleOutline, calculator } from 'ionicons/icons';
+    import { addOutline } from 'ionicons/icons';
     import { FilteredNutritionApiProduct } from '@/types/nutrition';
     import { PropType, ref, computed } from 'vue';
     import NutrimentRow from '../NutrimentRow.vue';
@@ -84,8 +84,9 @@
         :placeholder="$t('nutrition.amount')"
         :clear-on-edit="true"
         v-model="amount"
+        :label="$t('nutrition.amount') + ' (' + $t('weightUnitSmall') + '):'"
+        fill="solid"
       >
-        {{ $t('nutrition.amount') }} ({{ $t('weightUnitSmall') }})
       </ion-input>
       <NutrimentRow
         :calories="calories"
@@ -93,14 +94,24 @@
         :protein="protein"
         :fat="fat"
       />
-      <ion-button
-        expand="block"
-        size="small"
-        @click="addNutriment"
-      >
-        <ion-icon :icon="addCircleOutline"></ion-icon>
+      <ion-button @click="addNutriment">
+        <ion-icon :icon="addOutline"></ion-icon>
         {{ $t('add') }}
       </ion-button>
     </ion-card>
  </ion-content>
 </template>
+
+<style scoped lang="scss">
+  ion-card {
+    --background: none;
+    --color: none;
+  }
+  ion-button {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+</style>
