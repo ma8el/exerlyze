@@ -12,7 +12,8 @@
         subTitle: String,
         content: Boolean,
         img_src: String,
-        img_height: String
+        img_height: String,
+        titleSize: String
     })
 </script>
 
@@ -22,7 +23,12 @@
     <ion-card-header>
       <ion-row class="ion-justify-content-between ion-align-items-center">
         <ion-col size="auto">
-          <ion-card-title v-if="title">{{ title }}</ion-card-title>
+          <ion-card-title 
+            v-if="title"
+            :style="{'font-size': titleSize}"
+          >
+            {{ title }}
+          </ion-card-title>
         </ion-col>
         <slot name="titleEnd"></slot>
       </ion-row>

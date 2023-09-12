@@ -1,19 +1,18 @@
 <script setup lang="ts">
   import { IonImg,
-           IonCard,
-           IonCardHeader,
+           IonButton,
            IonCardContent,
-           IonCardTitle,
            IonLabel,
-           IonIcon,
-           IonRow,
            IonList,
            IonItem,
+           IonRow,
            IonCol,
+           IonThumbnail,
            modalController } from '@ionic/vue';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import AddNutrimentModal from './AddNutrimentModal.vue';
   import NutrimentRow from '../NutrimentRow.vue';
+  import BaseCard from '../Cards/BaseCard.vue';
   import { FilteredNutritionApiProduct } from '@/types/nutrition';
   import { PropType } from 'vue';
   import { addCircleOutline } from 'ionicons/icons';
@@ -47,45 +46,103 @@
     </ion-img>
     </template>
     <template #modalContent>
-      <ion-card
-        :button="true"
-        @click="openAddNutrimentModal(product)"
+      <BaseCard
+        :title="product.product_name"
+        title-size="2rem"
+        :content="true"
+        class="nutrition-overview-card ion-no-margin"
       >
-        <ion-card-header>
+        <template #titleEnd>
+          <ion-col offset="4" offset-md="2" offset-lg="1" size="3">
+            <ion-button fill="clear" @click="openAddNutrimentModal(product)">
+              + {{ $t('add') }}
+            </ion-button>
+          </ion-col>
+        </template>
+ 
+        <ion-card-content class="nutrition-overview-content">
           <ion-row>
-            <ion-col size="10">
-            <ion-card-title>{{ product.product_name }}</ion-card-title>
+            <ion-col size="6">
+              <ion-item>
+                <ion-thumbnail>
+                  <div class="nutrition-thumb">
+                    <img src="../../../assets/icons/burn_white.svg" />
+                  </div>
+                </ion-thumbnail>
+                <ion-label>
+                <p>{{ $t('nutrition.calories') }}</p>
+                <p class="nutrition-value">{{ product.nutriments['energy-kcal_100g'] }} kcal</p>
+                </ion-label>
+              </ion-item>
             </ion-col>
-            <ion-col size="2">
-              <ion-icon size="large" :icon="addCircleOutline"></ion-icon>
+ 
+            <ion-col size="6">
+              <ion-item>
+                <ion-thumbnail>
+                  <div class="nutrition-thumb">
+                    <img src="../../../assets/icons/carbs.svg" />
+                  </div>
+                </ion-thumbnail>
+                <ion-label>
+                  <p>{{ $t('nutrition.carbs') }}</p>
+                  <p class="nutrition-value">{{ product.nutriments.carbohydrates_100g }} g</p>
+                </ion-label>
+              </ion-item>
             </ion-col>
           </ion-row>
-        </ion-card-header>
-        <ion-card-content>
-          <NutrimentRow
-            :calories="product.nutriments['energy-kcal_100g']"
-            :carbs="product.nutriments.carbohydrates_100g"
-            :protein="product.nutriments.proteins_100g"
-            :fat="product.nutriments.fat_100g"
-          />
+          <ion-row>
+            <ion-col size="6">
+              <ion-item>
+                <ion-thumbnail>
+                  <div class="nutrition-thumb">
+                    <img src="../../../assets/icons/fat.svg" />
+                  </div>
+                </ion-thumbnail>
+                <ion-label>
+                  <p>{{ $t('nutrition.fat') }}</p>
+                  <p class="nutrition-value">{{ product.nutriments.proteins_100g }} g</p>
+                </ion-label>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item>
+                <ion-thumbnail>
+                  <div class="nutrition-thumb">
+                    <img src="../../../assets/icons/protein.svg" />
+                  </div>
+                </ion-thumbnail>
+                <ion-label>
+                  <p>{{ $t('nutrition.protein') }}</p>
+                  <p class="nutrition-value">{{ product.nutriments.fat_100g }} g</p>
+                </ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
         </ion-card-content>
-      </ion-card>
-      <ion-card
-        class="ion-padding-bottom"
+      </BaseCard>
+
+      <BaseCard
+        :title="$t('nutrition.nutriments')"
+        :content="true"
+        class="nutrition-overview-card ion-no-margin"
       >
-        <ion-item>
-            <ion-label>{{ $t('nutrition.nutriments') }} ({{ $t('per') }} {{ $t('weightUnitSmall', 100) }})</ion-label>
-        </ion-item>
+        <template #titleEnd>
+          <ion-col offset="4" offset-md="2" offset-lg="1" size="3">
+              <ion-label class="nutrition-list-title-end">{{ $t('per') }} {{ $t('weightUnitSmall', 100) }}</ion-label>
+          </ion-col>
+        </template>
         <ion-list
           v-for="(detail, index) in nutritionDetails"
           :key="index"
+          lines="none"
+          class="nutrition-list"
         >
-        <ion-item>
-          <ion-label>{{ detail.name }}</ion-label>
-          <ion-label slot="end">{{ product.nutriments[detail.value] }} {{ product.nutriments[detail.unit] }}</ion-label>
-        </ion-item>
+          <ion-item class="nutrition-list-item">
+            <ion-label>{{ detail.name }}</ion-label>
+            <ion-label slot="end">{{ product.nutriments[detail.value] }} {{ product.nutriments[detail.unit] }}</ion-label>
+          </ion-item>
         </ion-list>
-      </ion-card>
+      </BaseCard>
     </template>
   </BaseFullPageModal>
 </template>
@@ -96,4 +153,59 @@
     height: 300px;
     object-fit: cover;
   }
+  .nutrition-overview-card {
+    --background: none;
+  }
+  .nutrition-overview-content {
+    padding: 0;
+  }
+  .nutrition-list {
+    margin: 0;
+    background: none;
+  }
+  .nutrition-list-item {
+    border-radius: 10px;
+    margin: 10px 0 0 0;
+  }
+
+  .nutrition-list-title-end {
+    color: var(--ion-color-primary);
+  }
+  .nutrition-thumb {
+    background: var(--ion-color-secondary);
+    border-radius: 20%;
+    width: 80%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0 0 0;
+    padding: 0;
+    img {
+      width: 70%;
+      height: 70%;
+    }
+  }
+
+  ion-item {
+    color: none;
+    border-radius: 10px;
+    margin: 0;
+    padding: 0;
+    ion-label {
+      margin: 0;
+      padding: 0;
+      p {
+        margin: 0;
+        padding: 0;
+        color: white;
+      }
+    }
+ }
+
+ .nutrition-value {
+   font-size: 1rem;
+   font-weight: bold;
+ }
+ 
 </style>
