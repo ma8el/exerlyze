@@ -1,5 +1,14 @@
 <script setup lang="ts">
-  import { IonInput, IonItem, IonLabel, IonThumbnail, IonSpinner, modalController } from '@ionic/vue';
+  import { IonInput,
+     IonItem,
+     IonLabel,
+     IonCard,
+     IonCardContent,
+     IonSpinner,
+     IonRow,
+     IonCol,
+     IonIcon,
+     modalController } from '@ionic/vue';
   import ExerciseDetailModal from './Modals/ExerciseDetailModal.vue';
   import { Exercise } from '@/types'
   import { ref, watch, onMounted } from 'vue';
@@ -36,45 +45,109 @@
 </script>
 
 <template>
-  <ion-item :button="true" @click="openExerciseDetailModal()">
-    <ion-thumbnail slot="start">
-      <img v-if="!loading" alt="Exercise Image" :src="url ? url: defaultImage" />
-      <ion-spinner v-else/>
-    </ion-thumbnail>
-    <ion-label>
-      <h3>{{ name }}</h3>
-      <div class="single-line">
-        <ion-input
-          :label="$t('workouts.set')"
-          label-placement="stacked"
-          :value="props.sets"
-          @input="emit('update:sets', $event.target.value)"
-          fill="solid"
-        >
-        </ion-input>
-        <ion-input
-          :label="$t('workouts.reps')"
-          label-placement="stacked"
-          :value="props.reps"
-          @input="emit('update:reps', $event.target.value)"
-          fill="solid"
-        >
-        </ion-input>
-        <ion-input
-          :label="$t('weight')"
-          label-placement="stacked"
-          :value="props.weight"
-          @input="emit('update:weight', $event.target.value)"
-          fill="solid"
-        >
-        </ion-input>
+  <ion-card>
+    <ion-card-content>
+      <div class="thumbnail-card">
+        <img 
+          v-if="!loading"
+          alt="Exercise Image"
+          :src="url ? url: defaultImage"
+          class="thumbnail-img"
+          @click="openExerciseDetailModal"
+        />
+        <ion-spinner v-else/>
+        <div class="thumbnail-content">
+          <h3>{{ name }}</h3>
+          <ion-row>
+            <ion-col size="6">
+              <ion-item>
+                <ion-icon slot="start" src="../../assets/icons/set.svg"></ion-icon>
+                <ion-input
+                  :value="props.sets"
+                  @input="emit('update:sets', $event.target.value)"
+                >
+                </ion-input>
+                <ion-label slot="end">{{ $t('workouts.set') }}</ion-label>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item>
+                <ion-icon slot="start" src="../../assets/icons/reps.svg"></ion-icon>
+                <ion-input
+                  :value="props.reps"
+                  @input="emit('update:reps', $event.target.value)"
+                >
+                </ion-input>
+                <ion-label slot="end">{{ $t('workouts.reps') }}</ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-icon slot="start" src="../../assets/icons/weight.svg"></ion-icon>
+                <ion-input
+                  :value="props.weight"
+                  @input="emit('update:weight', $event.target.value)"
+                >
+                </ion-input>
+                <ion-label slot="end">{{ $t('weight') }}</ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </div>
       </div>
-    </ion-label>
-  </ion-item>
+    </ion-card-content>
+  </ion-card>
 </template>
 
 <style scoped>
-.single-line {
-  display: inline-flex;
+ion-card-content {
+  padding: 0;
+  padding-inline-start: 10px;
+  padding-inline-end: 0px;
+}
+h3 {
+  font-size: 1rem;
+  color: white;
+  font-weight: bold;
+}
+ion-row {
+  margin: 0;
+  padding: 0;
+}
+ion-col {
+  margin: 0;
+  padding: 0;
+}
+ion-item {
+  padding: 0;
+  margin: 0;
+  ion-label {
+    font-size: 0.7rem;
+  }
+  ion-icon {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.thumbnail-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin: 0 8px 0 0;
+  border-radius: 10px;
+}
+
+.thumbnail-card {
+  display: flex;
+  align-items: center;
+}
+
+.thumbnail-content {
+  flex: 1;
+  margin: 0;
+  padding: 0;
 }
 </style>

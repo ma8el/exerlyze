@@ -76,15 +76,17 @@
     <template #modalContent>
       <ion-input class="ion-padding" fill="outline" shape="round" :label="$t('workouts.workoutName')" label-placement="stacked" v-model="workoutName"></ion-input>
       <ion-input class="ion-padding" fill="outline" shape="round" :label="$t('description')" label-placement="stacked" v-model="description"></ion-input>
-      <ExerciseItem v-for="(exercise, index) in exercises"
+      <ExerciseItem 
+        v-for="(exercise, index) in exercises"
         v-model:sets="exercises[index].sets"
         v-model:reps="exercises[index].reps"
         v-model:weight="exercises[index].weight"
         :key="index" 
         :id="exercise.id"
         :name="exercise.name"
+        class="exercise-item ion-margin"
        />
-      <AddExerciseButton @save-exercises="addExercise"/>
+      <AddExerciseButton class="ion-margin" @save-exercises="addExercise"/>
     </template>
   </BaseFullPageModal>
 </template> 
@@ -95,5 +97,9 @@
     font-weight: bold;
     display: flex;
     justify-content: center;
+  }
+
+  .exercise-item {
+    border-radius: 10px;
   }
 </style>
