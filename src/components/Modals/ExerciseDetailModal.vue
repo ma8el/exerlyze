@@ -1,9 +1,20 @@
 <script setup lang="ts">
+  import { IonCard,
+           IonImg,
+           IonCardTitle,
+           IonCardHeader,
+           IonCardContent,
+           IonItem,
+           IonLabel,
+           IonRow,
+           IonCol,
+           IonList,
+           IonSkeletonText } from '@ionic/vue';
   import BaseFullPageModal from './BaseFullPageModal.vue';
-  import { IonCard, IonImg, IonCardTitle, IonCardHeader, IonCardContent, IonList, IonSkeletonText } from '@ionic/vue';
   import { supabase } from '@/supabase';
   import { ref, onMounted, watch } from 'vue';
   import { useUserSettingsStore } from '@/store/userSettingsStore';
+import { body, bodyOutline } from 'ionicons/icons';
 
   const props = defineProps({
     exerciseId: {
@@ -78,31 +89,84 @@
         </ion-card-content>
     </ion-card>
   </ion-list>
-  <BaseFullPageModal v-else :title="exerciseName">
+  <BaseFullPageModal 
+    v-else
+    :saveButton="false"
+    backColor="dark"
+  >
+    <template #modalHeader>
+      <ion-img
+        :src="props.exerciseUrl"
+        alt="Exercise Image"
+      ></ion-img>
+    </template>
     <template #modalContent>
-        <ion-img
-          :src="props.exerciseUrl"
-          alt="Exercise Image"
-        ></ion-img>
-        <ion-card-title class="ion-margin">
-            {{ exerciseName }}
-        </ion-card-title>
-        <ion-card>
-            <ion-card-header>
-                <ion-card-title>{{ $t('description') }}</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-                <p>{{ exerciseDescription}}</p>
-            </ion-card-content>
-        </ion-card>
-        <ion-card>
-            <ion-card-header>
-                <ion-card-title>{{ $t('execution') }}</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-                <p>{{ exerciseExecution }}</p>
-            </ion-card-content>
-        </ion-card>
-   </template>
+      <ion-card-title class="ion-margin">
+        {{ exerciseName }}
+      </ion-card-title>
+      <p class="exercise-description ion-padding ion-margin">
+        {{ exerciseDescription}}
+      </p>
+ 
+      <ion-row>
+        <ion-col size="6" class="ion-padding">
+          <ion-item
+            class="exercise-item"
+            color="dark"
+          >
+            <ion-icon
+              class="ion-margin-end exercise-icon"
+              src="../../../assets/icons/level.svg"
+            ></ion-icon>
+            <ion-label>
+              <p class="exercise-paragraph-header">{{ $t('workouts.type') }}</p>
+              <p>Compound</p>
+            </ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6" class="ion-padding">
+          <ion-item
+            class="exercise-item"
+            color="dark"
+          >
+            <ion-icon
+              class="ion-margin-end exercise-icon"
+              :icon="bodyOutline"
+            ></ion-icon>
+            <ion-label>
+              <p class="exercise-paragraph-header">{{ $t('workouts.muscle') }}</p>
+              <p>Biceps</p>
+            </ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>{{ $t('execution') }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>{{ exerciseExecution }}</p>
+        </ion-card-content>
+      </ion-card>
+    </template>
   </BaseFullPageModal>
 </template>
+
+<style scoped>
+.exercise-description {
+    font-size: 0.9rem;
+}
+.exercise-item {
+  border-radius: 10px;
+}
+.exercise-icon {
+  width: 25px;
+  height: 25px;
+  color: var(--ion-color-primary);
+}
+.exercise-paragraph-header {
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+</style>

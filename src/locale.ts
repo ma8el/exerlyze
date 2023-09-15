@@ -26,7 +26,9 @@ export const messages = {
             noWorkoutsYet: "No workouts yet",
             noWorkoutPlansYet: "No workout plans yet",
             noWorkoutsYetSubtitle: "@:add one by clicking below",
-            viewAll: "View all"
+            viewAll: "View all",
+            muscle: "Muscle | Muscles",
+            type: "Type | Types",
         },
         nutrition: {
             title: "Nutrition",
@@ -111,7 +113,9 @@ export const messages = {
             noWorkoutsYet: "Noch keine Workouts",
             noWorkoutYet: "Noch keine Trainingspläne",
             noWorkoutsYetSubtitle: "Füge welche hinzu indem du unten klickst",
-            viewAll: "Alle ansehen"
+            viewAll: "Alle ansehen",
+            muscle: "Muskel | Muskeln",
+            type: "Typ | Typen",
         },
         nutrition: {
             title: "Ernährung",
