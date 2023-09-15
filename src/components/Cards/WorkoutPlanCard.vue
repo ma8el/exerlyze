@@ -1,11 +1,10 @@
 <script setup lang="ts">
-  import { IonCard,
-           IonCardHeader,
-           IonCardTitle,
-           IonCardContent,
+  import { IonCol,
+           IonButton,
            modalController} from '@ionic/vue';
-  import WorkoutPlanItem from '@/components/WorkoutPlanItem.vue';
   import AddWorkoutPlanModal from '../Modals/AddWorkoutPlanModal.vue';
+  import Slider from '../Slider.vue';
+  import BaseCard from './BaseCard.vue';
   import { useWorkoutPlanStore } from '@/store/workoutStore';
 
   const props = defineProps({
@@ -32,16 +31,39 @@
 </script>
 
 <template>
-  <ion-card v-if="workoutPlan" :button="true" @click="openModal">
-    <ion-card-header>
-      <ion-card-title>{{ workoutPlan.name }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <WorkoutPlanItem 
-        v-for = "workout in plannedWorkouts"
-        :workoutName="workout.workout.name"
-        :plannedDay="workout.dayOfWeek"
-      />
-    </ion-card-content>
- </ion-card>
+  <BaseCard 
+    v-if="workoutPlan"
+    :title="workoutPlan.name"
+    :content="true"
+    class="workout-card"
+  >
+     <template #titleEnd>
+      <ion-col offset="4" offset-md="2" offset-lg="1" size="3">
+        <ion-button fill="clear" size="small" class="title-button" @click="openModal()">
+          {{ $t('workouts.viewAll') }}
+        </ion-button>
+      </ion-col>
+    </template>
+    <Slider :items="plannedWorkouts" minWidth="200px" maxWidth="200px" class="exercise-slider">
+      <template v-slot:default="slotProps">
+        <BaseCard
+          img_src="https://ionicframework.com/docs/img/demos/card-media.png"
+          :title="slotProps.item.workout.name"
+          :content="true"
+        >
+          <p>{{ $t('scheduledOn') }} {{ slotProps.item.dayOfWeek }}</p>
+        </BaseCard>
+      </template>
+    </Slider>
+ </BaseCard>
 </template>
+
+<style scoped>
+  .workout-card {
+    --background: none;
+    margin: 0;
+  }
+  .exercise-slider { 
+    min-width: 200px;
+  }
+</style>
