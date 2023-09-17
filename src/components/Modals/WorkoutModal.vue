@@ -24,6 +24,8 @@ const props = defineProps({
 const workoutStore = useWorkoutStore();
 const workoutSessionStore = useWorkoutSessionStore();
 
+const setRefs = ref<HTMLElement[]>([]);
+
 const startedAt = ref<Date>(new Date());
 const currentSet = ref<number>(0);
 const currentReps = ref<number>(0);
@@ -100,14 +102,19 @@ watch(currentSet, (newValue) => {
   if(workoutSessionSets && workoutSessionSets[newValue]) {
     currentReps.value = workoutSessionSets[newValue].reps;
     currentWeight.value = workoutSessionSets[newValue].weight;
-    console.log(workoutSessionSets[newValue]);
+    if (setRefs.value.length > 0) {
+      setRefs.value[newValue].$el.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center',
+      });
+    }
   }
 }, { immediate: true });
 
 onMounted(() => {
   currentSet.value = 0;
   startedAt.value = new Date();
-  console.log(currentWorkoutSet.value);
 });
 </script>
 
@@ -138,6 +145,7 @@ onMounted(() => {
         <ion-item 
           lines="none"
           :class="{ 'highlighted': currentSet === set.id  }"
+          ref="setRefs"
         >
           <ion-item lines="none" slot="start">
             <ion-label>
@@ -223,7 +231,8 @@ onMounted(() => {
     ion-input {
       --background: var(--ion-color-step-100);
       border-radius: 10px;
-      margin: 0 5px 0 5px;
+      margin: 0 2px 0 2px;
+      padding: 0;
     }
     ion-item {
       margin: 10px 0 10px 0;
