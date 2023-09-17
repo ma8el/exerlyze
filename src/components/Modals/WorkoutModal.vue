@@ -63,7 +63,7 @@ const save = () => {
         id: workoutSessionStore.getNewWorkoutSessionPerformanceId + index,
         userId: userId,
         workoutSessionId: workoutSessionId,
-        exerciseId: set.id,
+        exerciseId: set.exerciseId,
         set: index,
         plannedReps: set.plannedReps,
         performedReps: set.reps,
@@ -100,7 +100,7 @@ watch(currentSet, (newValue) => {
   if(workoutSessionSets && workoutSessionSets[newValue]) {
     currentReps.value = workoutSessionSets[newValue].reps;
     currentWeight.value = workoutSessionSets[newValue].weight;
-    console.log(workoutSessionSets);
+    console.log(workoutSessionSets[newValue]);
   }
 }, { immediate: true });
 
@@ -119,7 +119,7 @@ onMounted(() => {
     <template #modalHeader>
       <ActiveExerciseCard v-if="currentWorkoutSet"
         class="active-exercise-card"
-        :exerciseId="currentWorkoutSet.id"
+        :exerciseId="currentWorkoutSet.exerciseId"
         :name="currentWorkoutSet.name"
       />
     </template>
@@ -128,13 +128,17 @@ onMounted(() => {
         <div
           v-for = "(set, index) in workoutSessionSets"
           :key="index"
+          class="ion-padding"
         >
         <ion-list-header
           v-if="set.currentSet === 1"
         >
           {{ set.name }}
         </ion-list-header>
-        <ion-item lines="none">
+        <ion-item 
+          lines="none"
+          :class="{ 'highlighted': currentSet === set.id  }"
+        >
           <ion-item lines="none" slot="start">
             <ion-label>
               <ion-icon src="../../../assets/icons/set.svg"></ion-icon>
@@ -202,16 +206,19 @@ onMounted(() => {
 }
 
 .exercise-list {
-  margin: 0 0 20px 0;
   background: none;
   ion-list-header {
     margin-bottom: 15px;
   }
   ion-item {
-    padding: 10px 10px 10px 10px;
-    border-radius: 25%;
+    border-radius: 10px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0.5;
+    transform: scale(1);
     ion-icon {
       margin-right: 5px;
+      width: 15px;
+      height: 15px;
     }
     ion-input {
       --background: var(--ion-color-step-100);
@@ -222,6 +229,20 @@ onMounted(() => {
       margin: 10px 0 10px 0;
       padding: 0;
     }
+  }
+}
+
+ion-item.highlighted {
+  opacity: 1 !important;
+  transform: scale(1.05) !important;
+  ion-icon {
+    opacity: 1 !important;
+  }
+  ion-input {
+    opacity: 1 !important;
+  }
+  ion-item {
+    opacity: 1 !important;
   }
 }
 </style>

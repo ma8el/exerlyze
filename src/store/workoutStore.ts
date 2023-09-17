@@ -292,18 +292,23 @@ export const useWorkoutSessionStore = defineStore({
         createFullWorkoutSessionSets(workoutId: number) {
             const workoutStore = useWorkoutStore();
             const workout = workoutStore.getWorkoutById(workoutId);
+            let uniqueId = -1;
             if (workout) {
                 const sets = workout.exercises.flatMap(exercise => {
-                    return Array.from({ length: exercise.sets }, (_, i) => ({
-                      id: exercise.id,
-                      name: exercise.name,
-                      sets: exercise.sets,
-                      currentSet: i + 1,
-                      plannedReps: exercise.reps,
-                      reps: exercise.reps,
-                      plannedWeight: exercise.weight,
-                      weight: exercise.weight
-                    }));
+                    return Array.from({ length: exercise.sets }, (_, i) => {
+                      uniqueId++;
+                      return {
+                        id: uniqueId,
+                        exerciseId: exercise.id,
+                        name: exercise.name,
+                        sets: exercise.sets,
+                        currentSet: i + 1,
+                        plannedReps: exercise.reps,
+                        reps: exercise.reps,
+                        plannedWeight: exercise.weight,
+                        weight: exercise.weight
+                      };
+                    });
                   });
                 return sets;
             }
