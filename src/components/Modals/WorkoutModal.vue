@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { IonButton,
-         IonAccordion,
-         IonAccordionGroup,
-         IonItem,
+import { IonItem,
+         IonList,
+         IonListHeader,
          IonLabel,
+         IonInput,
          IonFab,
          IonFabButton,
          IonIcon,
          modalController } from '@ionic/vue';
-import { playForwardOutline, checkmarkDoneOutline } from 'ionicons/icons';
+import { bookmarkOutline, playForwardOutline, checkmarkDoneOutline } from 'ionicons/icons';
 import BaseFullPageModal from './BaseFullPageModal.vue';
 import ActiveExerciseCard from '../Cards/ActiveExerciseCard.vue';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
@@ -100,55 +100,70 @@ watch(currentSet, (newValue) => {
   if(workoutSessionSets && workoutSessionSets[newValue]) {
     currentReps.value = workoutSessionSets[newValue].reps;
     currentWeight.value = workoutSessionSets[newValue].weight;
+    console.log(workoutSessionSets);
   }
 }, { immediate: true });
 
 onMounted(() => {
   currentSet.value = 0;
   startedAt.value = new Date();
+  console.log(currentWorkoutSet.value);
 });
 </script>
 
 <template>
-  <BaseFullPageModal v-if="workout" :title="workout.name">
+  <BaseFullPageModal v-if="workout" back-color="dark">
     <template #saveButton>
-      <ion-button @click="save">{{ $t('save') }}</ion-button>
+      <ion-icon :icon="bookmarkOutline" @click="save"/>
+    </template>
+    <template #modalHeader>
+      <ActiveExerciseCard v-if="currentWorkoutSet"
+        class="active-exercise-card"
+        :exerciseId="currentWorkoutSet.id"
+        :name="currentWorkoutSet.name"
+      />
     </template>
     <template v-if="workoutSessionSets" #modalContent>
-      <ActiveExerciseCard v-if="currentWorkoutSet"
-        :name="currentWorkoutSet.name"
-        :currentSet="currentWorkoutSet.currentSet"
-        v-model:reps="currentReps"
-        v-model:weight="currentWeight"
-      />
-      <ion-accordion-group 
-        v-if="workout"
-        :multiple="true"
-        :value="['0']"
-      >
-        <ion-accordion
-          v-for="(exercise, index) in workout.exercises"
-          :value="index.toString()"
+      <ion-list class="exercise-list">
+        <div
+          v-for = "(set, index) in workoutSessionSets"
           :key="index"
         >
-          <ion-item slot="header">
+        <ion-list-header
+          v-if="set.currentSet === 1"
+        >
+          {{ set.name }}
+        </ion-list-header>
+        <ion-item lines="none">
+          <ion-item lines="none" slot="start">
             <ion-label>
-              {{ exercise.name }}
+              <ion-icon src="../../../assets/icons/set.svg"></ion-icon>
+              {{ set.currentSet }}
             </ion-label>
           </ion-item>
-          <div
-            slot="content"
-            v-for="(set, index) in exercise.sets"
-            :key="index"
-          >
-            <ion-item>
-              <ion-label slot="start">{{ $t('workout.set') }}: {{ set }}</ion-label>
-              <ion-label slot="end">{{ $t('workout.reps', exercise.reps) }}</ion-label>
-              <ion-label slot="end">{{ $t('weightUnitBig', exercise.weight) }}</ion-label>
-            </ion-item>
-          </div>
-        </ion-accordion>
-      </ion-accordion-group>
+          <ion-item lines="none">
+            <ion-icon slot="start" src="../../../assets/icons/reps.svg"></ion-icon>
+            <ion-input 
+              :value="set.plannedReps"
+              :clear-on-edit="true"
+              v-model="set.reps"
+            >
+            </ion-input>
+            <ion-label slot="end">{{ $t('workouts.reps') }}</ion-label>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-icon slot="start" src="../../../assets/icons/weight.svg"></ion-icon>
+            <ion-input 
+              :value="set.plannedWeight"
+              :clear-on-edit="true"
+              v-model="set.weight"
+            >
+            </ion-input>
+            <ion-label slot="end">{{ $t('weightUnitBig') }}</ion-label>
+          </ion-item>
+        </ion-item>
+        </div>
+      </ion-list>
     </template>
     <template #modalFooter>
       <ion-fab 
@@ -180,3 +195,33 @@ onMounted(() => {
     </template>
   </BaseFullPageModal>
 </template>
+
+<style scoped>
+.active-exercise-card {
+  margin: 0 0 20px 0;
+}
+
+.exercise-list {
+  margin: 0 0 20px 0;
+  background: none;
+  ion-list-header {
+    margin-bottom: 15px;
+  }
+  ion-item {
+    padding: 10px 10px 10px 10px;
+    border-radius: 25%;
+    ion-icon {
+      margin-right: 5px;
+    }
+    ion-input {
+      --background: var(--ion-color-step-100);
+      border-radius: 10px;
+      margin: 0 5px 0 5px;
+    }
+    ion-item {
+      margin: 10px 0 10px 0;
+      padding: 0;
+    }
+  }
+}
+</style>

@@ -77,6 +77,7 @@ export const messages = {
         start: "Start",
         pause: "Pause",
         weightUnitSmall: "g | {n}g",
+        weightUnitBig: "kg | {n}kg",
         duration: "duration",
         per: "per",
         overview: "Overview",

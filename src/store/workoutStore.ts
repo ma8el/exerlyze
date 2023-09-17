@@ -307,7 +307,7 @@ export const useWorkoutSessionStore = defineStore({
                   });
                 return sets;
             }
-            return undefined;
+            return [];
         },
     }
 });
