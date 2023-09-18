@@ -1,45 +1,22 @@
 <script setup lang="ts">
+  import {
+    IonItem,
+    IonThumbnail,
+    IonButton,
+    IonLabel,
+    IonRow,
+    IonCol,
+    IonCard,
+    IonToggle,
+    IonIcon,
+  } from '@ionic/vue';
   import AppLayout from '@/layouts/AppLayout.vue';
-  import { useWeightStore } from '@/store/bodyMetricsStore';
-  import { useDayOfWeekStore } from '@/store/workoutStore';
+  import { useRouter } from 'vue-router';
 
-  const weightStore = useWeightStore();
-  const weightsOfWeek = weightStore.getWeightsOfWeek;
-  const dayOfWeekStore = useDayOfWeekStore();
-
-  const weightChartData = {
-        labels: weightsOfWeek.map((weight) => dayOfWeekStore.getDayOfWeekById(new Date(weight.createdAt).getDay())?.name),
-        datasets: [
-          {
-            label: 'Weight',
-            fill: {
-              target: 'origin',
-              above: 'rgba(63, 99, 200, 0.5)',
-            },
-            backgroundColor: '#3F63C8',
-            data: weightsOfWeek.map((weight) => weight.weight)
-          }
-        ]
-      }
-
-  const options = {
-      responsive: true,
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'Date and Time',
-          },
-        },
-        y: {
-          title: {
-            display: true,
-            text: 'Weight',
-          },
-          min: 0,
-        },
-      },
-    };
+  const router = useRouter();
+  const openActivityHistory = () => {
+    router.push('/activity-history');
+  };
 
 </script>
 
@@ -93,7 +70,7 @@
           <ion-label>Achievement</ion-label>
           <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
         </ion-item>
-        <ion-item lines="none">
+        <ion-item lines="none" :button="true" @click="openActivityHistory()">
           <ion-icon name="tennisball-outline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>Activity Histrory</ion-label>
           <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>

@@ -2,6 +2,10 @@ export const dateToIsoString = (date: Date): string => {
     return date.toISOString().split('T')[0];
 }
 
+export const extractTimeFromTS = (date: Date): string => {
+    return date.toISOString().split('T')[1].split('.')[0];
+}
+
 export const getCurrentWeekDates = () => {
     var now = new Date();
     var dayOfWeek = now.getDay();

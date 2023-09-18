@@ -86,7 +86,8 @@ export const messages = {
         name: "Name",
         description: "Description",
         execution: "Execution",
-        noUpcomingEvent: "No upcoming workouts"
+        noUpcomingEvent: "No upcoming workouts",
+        activityHistory: "Activity History"
     },
     de: {
         language: "Sprache",
@@ -173,6 +174,7 @@ export const messages = {
         name: "Name",
         description: "Beschreibung",
         execution: "Ausführung",
-        noUpcomengEvents: "Keine geplanten Workouts"
+        noUpcomengEvents: "Keine geplanten Workouts",
+        activityHistory: "Aktivitätsverlauf"
     },
 }
