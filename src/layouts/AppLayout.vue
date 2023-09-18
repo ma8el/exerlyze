@@ -1,14 +1,38 @@
 <script setup lang="ts">
-  import { IonHeader, IonPage, IonContent, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, modalController } from '@ionic/vue';
-  import FloatingActionButton from '@/components/Buttons/FloatingActionButton.vue';
+  import { IonHeader,
+           IonPage,
+           IonContent,
+           IonToolbar,
+           IonTitle,
+           IonFab,
+           IonFabButton,
+           IonButtons, 
+           IonIcon,
+           modalController } from '@ionic/vue';
+  import { arrowBackOutline } from 'ionicons/icons';
   import Settings from '@/components/Settings.vue';
+  import { useRouter } from 'vue-router';
+
+  const router = useRouter();
 
   const props = defineProps({
       title: {
         type: String,
         required: true
+      },
+      settingsButton: {
+        type: Boolean,
+        default: true 
+      },
+      backButton: {
+        type: Boolean,
+        default: false
       }
   });
+
+  const navigateBack = () => {
+    router.back();
+  };
 
   const openModal = async () => {
     const modal = await modalController.create({
@@ -34,12 +58,31 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title size="large">{{ title }}</ion-title>
-        <ion-buttons slot="end">
-          <FloatingActionButton 
-            icon="../../assets/icons/setting.svg"
-            @click="openModal"
-          />
+        <ion-title 
+          size="large"
+          :class="{'ion-text-center': backButton}"
+        >
+          {{ title }}
+        </ion-title>
+        <ion-buttons 
+          slot="end"
+          v-if="settingsButton"
+        >
+          <ion-fab horizontal="end">
+            <ion-fab-button color="dark" size="small" @click="openModal">
+              <ion-icon src="../../assets/icons/setting.svg"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+        </ion-buttons>
+        <ion-buttons 
+          slot="start"
+          v-if="backButton"
+        >
+          <ion-fab>
+            <ion-fab-button color="dark" size="small" @click="navigateBack">
+              <ion-icon :icon="arrowBackOutline"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
