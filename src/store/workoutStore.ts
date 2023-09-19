@@ -255,6 +255,19 @@ export const useWorkoutSessionStore = defineStore({
             }
             return undefined;
         },
+        updateWorkoutSessionById(id: number, workoutSessionPerformances: WorkoutSessionPerformance[]) {
+            const index = this.workoutSessions.findIndex(w => w.id === id);
+            this.workoutSessions[index].updatedAt = new Date();
+            this.workoutSessionPerformances = this.workoutSessionPerformances.filter(w => w.workoutSessionId !== id);
+            this.workoutSessionPerformances.push(...workoutSessionPerformances);
+        },
+        getFullWorkoutSessionById(id: number): FullWorkoutSession | undefined {
+            const fullWorkoutSession = this.getFullWorkoutSessions.find(w => w.id === id);
+            if (fullWorkoutSession) {
+                return fullWorkoutSession;
+            }
+            return undefined;
+        },
         getWorkoutSessionsByDate(date: Date): WorkoutSession[] | undefined {
             const workoutSessions = this.workoutSessions.filter(w => new Date(w.finishedAt).toDateString() === date.toDateString());
             if (workoutSessions) {

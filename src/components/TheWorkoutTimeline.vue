@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { modalController } from '@ionic/vue';
 import BaseCard from './Cards/BaseCard.vue';
-import ActivitiesModal from './Modals/ActivitiesModal.vue';
+import ActivityDetailModal from './Modals/ActivityDetailModal.vue';
 import { extractTimeFromTS, dateToIsoString } from '@/helpers/time';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
 import { defaultImage } from '@/composables/supabase';
@@ -19,14 +19,14 @@ const getWorkoutName = (workoutId: number) => {
     return workout.name;
 }
 
-const openModal = async (selectedDate: Date) => {
-  if ( !selectedDate ) {
+const openModal = async (workoutSessionId: Number) => {
+  if ( !workoutSessionId ) {
     return
   }
   const modal = await modalController.create({
-    component: ActivitiesModal,
+    component: ActivityDetailModal,
     componentProps: {
-      selectedDate: selectedDate
+      workoutSessionId: workoutSessionId
     },
   });
   await modal.present();
@@ -49,7 +49,7 @@ const openModal = async (selectedDate: Date) => {
           :img_src="defaultImage"
           :title="getWorkoutName(workoutSession.workoutId)"
           :button="true"
-          @click="openModal(new Date(workoutSession.finishedAt))"
+          @click="openModal(workoutSession.id)"
         />
       </div>
     </div>

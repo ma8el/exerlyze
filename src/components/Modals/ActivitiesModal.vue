@@ -1,15 +1,12 @@
 <script setup lang="ts">
-  import { IonCard,
-           IonCardTitle,
-           IonCardHeader,
-           IonCardSubtitle,
-           IonList,
-           IonItem,
-           IonLabel,
-           IonButton,
+  import { IonList,
            modalController } from '@ionic/vue';
   import BaseFullPageModal from './BaseFullPageModal.vue';
+  import BaseCard from '../Cards/BaseCard.vue';
+  import ActivityDetailModal from './ActivityDetailModal.vue';
+  import { dateToIsoString, extractTimeFromTS } from '@/helpers/time';
   import { useWorkoutSessionStore } from '@/store/workoutStore';
+  import { defaultImage } from '@/composables/supabase';
 
   const props = defineProps({
     selectedDate: {
@@ -20,39 +17,85 @@
 
   const workoutSessionStore = useWorkoutSessionStore();
   const workoutSessions = workoutSessionStore.getFullWorkoutSessionsByDate(props.selectedDate);
-  console.log(workoutSessions)
 
-  const closeModal = () => {
-      return modalController.dismiss(null, 'close');
-  };
+  const openModal = async (workoutSessionId: Number) => {
+    if ( !workoutSessionId ) {
+      return
+    }
+    const modal = await modalController.create({
+      component: ActivityDetailModal,
+      componentProps: {
+        workoutSessionId: workoutSessionId
+      },
+    });
+    await modal.present();
+  }
 </script>
 
 <template>
-  <BaseFullPageModal title="Activities">
-    <template #saveButton>
-      <ion-button @click="closeModal">{{ $t('save') }}</ion-button>
+  <BaseFullPageModal
+    :saveButton="false"
+  >
+    <template #modalHeader>
+      <p class="header-title">{{ $t('activities') }}</p>
     </template>
     <template #modalContent>
-      <ion-card
-        v-for="workoutSession in workoutSessions"
-        :key="workoutSession.id"
-        class="mb-4"
+      <ion-list 
+        v-if="workoutSessions"
+        class="exercise-list"
       >
-      <ion-card-header>
-        <ion-card-title>{{ workoutSession.workout.name }}</ion-card-title>
-        <ion-card-subtitle>{{ selectedDate.toDateString() }}</ion-card-subtitle>
-      </ion-card-header>
-        <ion-list
-          v-for="exercise in workoutSession.workoutPerformance"
+        <ion-list-header>
+          {{ dateToIsoString(selectedDate) }}
+        </ion-list-header>
+        <div
+          v-for="(workoutSession, index) in workoutSessions"
+          :key="index"
         >
-          <ion-item 
-          >
-            <ion-label>{{ exercise.exerciseId }}</ion-label>
-            <ion-label>{{ exercise.performedReps }}</ion-label>
-            <ion-label>{{ exercise.performedWeight }}</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-card>
+          <BaseCard
+            :img_src="defaultImage"
+            :title="workoutSession.workout.name"
+            :subTitle="workoutSession.workout.exercises.length + ' exercises'"
+            :button="true"
+            @click="openModal(workoutSession.id)"
+          />
+        </div>
+      </ion-list>
     </template>
   </BaseFullPageModal>
 </template>
+
+<style scoped>
+.header-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+}
+.exercise-list {
+  background: none;
+  ion-list-header {
+    margin-bottom: 15px;
+  }
+  ion-item {
+    border-radius: 10px;
+    ion-icon {
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+    ion-input {
+      --background: var(--ion-color-step-100);
+      border-radius: 10px;
+      margin: 0 2px 0 2px;
+      padding: 0;
+    }
+    ion-item {
+      margin: 5px 0 5px 0;
+      padding: 0;
+    }
+  }
+}
+.exercise-list-item {
+  margin: 10px;
+}
+</style>

@@ -14,7 +14,7 @@ export const messages = {
             select: "Select",
             selectScheduleDuration: "Select schedule duration",
             reps: "Reps",
-            set: "Set | {n} Sets",
+            set: "Set | Sets",
             addWorkout: "@:add @:workouts.workout",
             updateWorkout: "@:update @:workouts.workout",
             addWorkoutPlan: "@:add @:workouts.workout @:workouts.plan",
@@ -78,7 +78,7 @@ export const messages = {
         pause: "Pause",
         weightUnitSmall: "g | {n}g",
         weightUnitBig: "kg | {n}kg",
-        duration: "duration",
+        duration: "Duration",
         per: "per",
         overview: "Overview",
         weekday: "Weekday",
@@ -87,7 +87,8 @@ export const messages = {
         description: "Description",
         execution: "Execution",
         noUpcomingEvent: "No upcoming workouts",
-        activityHistory: "Activity History"
+        activityHistory: "Activity History",
+        activities: "Activities",
     },
     de: {
         language: "Sprache",
@@ -103,7 +104,7 @@ export const messages = {
             schedule: "Kalender",
             selectScheduleDuration: "Plandauer auswählen",
             reps: "Wdh",
-            set: "Satz | {n} Sätze",
+            set: "Satz | Sätze",
             addWorkout: "@:workouts.workout @:add",
             updateWorkout: "@:workouts.workout ändern",
             addWorkoutPlan: "Trainingsplan @:add",
@@ -175,6 +176,7 @@ export const messages = {
         description: "Beschreibung",
         execution: "Ausführung",
         noUpcomengEvents: "Keine geplanten Workouts",
-        activityHistory: "Aktivitätsverlauf"
+        activityHistory: "Aktivitätsverlauf",
+        activities: "Aktivitäten",
     },
 }
