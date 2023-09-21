@@ -48,7 +48,8 @@ export const messages = {
             intake: "Intake",
             activity: "Activity",
             left: "Left",
-            nutritionOverview: "@:nutrition.title @:overview"
+            nutritionOverview: "@:nutrition.title @:overview",
+            diet: "Diet",
         },
         profile: {
             title: "Profile"
@@ -139,7 +140,8 @@ export const messages = {
             intake: "Aufnahme",
             activity: "Aktivität",
             left: "Übrig",
-            nutritionOverview: "Nähstoffüberblick"
+            nutritionOverview: "Nähstoffüberblick",
+            diet: "Ernährung"
         },
         profile: {
             title: "Profil",

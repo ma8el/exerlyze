@@ -84,6 +84,7 @@
             </ion-fab-button>
           </ion-fab>
         </ion-buttons>
+        <slot name="header"></slot>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
