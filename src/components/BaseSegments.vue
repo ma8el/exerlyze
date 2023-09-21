@@ -1,10 +1,6 @@
 <script setup lang="ts">
-  import { IonGrid, IonRow, IonSegment, IonSegmentButton, IonLabel } from '@ionic/vue';
-  import { ref, provide, readonly, reactive } from 'vue';
-  import { useDark } from '@vueuse/core'
-  import { selectedDateKey } from '@/keys';
-  import { useFoodDiaryStore } from '@/store/foodDiary';
-  import { getCurrentWeekDates } from '@/helpers/time';
+  import { IonSegment, IonSegmentButton, IonLabel } from '@ionic/vue';
+  import { ref } from 'vue';
 
   const props = defineProps({
     leftSegmentLabel: {
