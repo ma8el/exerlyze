@@ -4,6 +4,7 @@ import TabsPage from '../views/TabsPage.vue'
 import Login from '../views/Login.vue'
 import CompleteProfile from '@/views/CompleteProfile.vue';
 import ActivityHistory from '@/views/ActivityHistory.vue';
+import Insights from '@/views/Insights.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -47,6 +48,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/activity-history',
     component: ActivityHistory
+  },
+  {
+    path: '/insights',
+    component: Insights
   }
 ]
 

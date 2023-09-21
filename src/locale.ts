@@ -89,6 +89,7 @@ export const messages = {
         noUpcomingEvent: "No upcoming workouts",
         activityHistory: "Activity History",
         activities: "Activities",
+        insights: "Insights",
     },
     de: {
         language: "Sprache",
@@ -178,5 +179,6 @@ export const messages = {
         noUpcomengEvents: "Keine geplanten Workouts",
         activityHistory: "Aktivitätsverlauf",
         activities: "Aktivitäten",
+        insights: "Insights",
     },
 }

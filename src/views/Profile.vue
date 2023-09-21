@@ -9,13 +9,49 @@
     IonCard,
     IonToggle,
     IonIcon,
+    modalController,
   } from '@ionic/vue';
   import AppLayout from '@/layouts/AppLayout.vue';
+  import Settings from '@/components/Settings.vue';
+  import Insights from '@/views/Insights.vue';
   import { useRouter } from 'vue-router';
+  import { 
+    personOutline,
+    documentTextOutline,
+    barChartOutline,
+    notificationsOutline,
+    mailOutline,
+    checkboxOutline,
+    settingsOutline,
+    listOutline
+  } from 'ionicons/icons';
 
   const router = useRouter();
   const openActivityHistory = () => {
     router.push('/activity-history');
+  };
+
+  const openInsights = () => {
+    router.push('/insights');
+  };
+
+  const openSettingsModal = async () => {
+    const modal = await modalController.create({
+      component: Settings,
+      cssClass: 'full-screen-modal',
+      componentProps: {
+        setting1: true,
+        setting2: false
+      }
+    });
+    modal.present();
+ 
+    const { data, role } = await modal.onWillDismiss();
+    if (role == 'save') {
+      console.log('Save', data);
+    } else {
+      console.log('Close', data);
+    };
   };
 
 </script>
@@ -61,23 +97,23 @@
       <ion-label class="head_lbl">Account</ion-label>
       <div class="info">
         <ion-item lines="none">
-          <ion-icon name="person-outline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-icon :icon="personOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>Personal Data</ion-label>
           <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
         </ion-item>
         <ion-item lines="none">
-          <ion-icon name="document-text-outline" color="primary" style="margin-right: 10px;"></ion-icon>
-          <ion-label>Achievement</ion-label>
+          <ion-icon :icon="documentTextOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>Workout Settings</ion-label>
           <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
         </ion-item>
         <ion-item lines="none" :button="true" @click="openActivityHistory()">
-          <ion-icon name="tennisball-outline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-icon :icon="listOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>Activity Histrory</ion-label>
           <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
         </ion-item>
-        <ion-item lines="none">
-          <ion-icon name="bar-chart-outline" color="primary" style="margin-right: 10px;"></ion-icon>
-          <ion-label>Workout Progress</ion-label>
+        <ion-item lines="none" :button="true" @click="openInsights()">
+          <ion-icon :icon="barChartOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>Insights</ion-label>
           <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
         </ion-item>
       </div>
@@ -86,7 +122,7 @@
     <div class="notification">
       <ion-label class="head_lbl">Notification</ion-label>
       <ion-item lines="none">
-        <ion-icon name="notifications-outline" color="primary" style="margin-right: 10px;"></ion-icon>
+        <ion-icon :icon="notificationsOutline" color="primary" style="margin-right: 10px;"></ion-icon>
         <ion-label>Pop-out Notificatioon</ion-label>
         <ion-toggle mode="ios" color="primary" checked></ion-toggle>
       </ion-item>
@@ -95,17 +131,17 @@
     <div class="other">
       <ion-label class="head_lbl">Other</ion-label>
       <ion-item lines="none">
-        <ion-icon name="mail-outline" color="primary" style="margin-right: 10px;"></ion-icon>
+        <ion-icon :icon="mailOutline" color="primary" style="margin-right: 10px;"></ion-icon>
         <ion-label>Contact Us</ion-label>
         <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
       </ion-item>
       <ion-item lines="none">
-        <ion-icon name="checkbox-outline" color="primary" style="margin-right: 10px;"></ion-icon>
+        <ion-icon :icon="checkboxOutline" color="primary" style="margin-right: 10px;"></ion-icon>
         <ion-label>Privacy Policy</ion-label>
         <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
       </ion-item>
-      <ion-item lines="none">
-        <ion-icon name="settings-outline" color="primary" style="margin-right: 10px;"></ion-icon>
+      <ion-item lines="none" :button="true" @click="openSettingsModal()">
+        <ion-icon :icon="settingsOutline" color="primary" style="margin-right: 10px;"></ion-icon>
         <ion-label>Settings</ion-label>
         <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
       </ion-item>
