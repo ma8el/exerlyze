@@ -13,15 +13,14 @@ import { IonButton,
           modalController } from '@ionic/vue';
 import { ref } from 'vue';
 
-const weekSelected = ref(false);
-const monthSelected = ref(false);
+const radio = ref('week');
 
 const closeModal = () => {
-    return modalController.dismiss(null, 'close');
+  return modalController.dismiss(null, 'close');
 };
 
 const save = () => {
-    return modalController.dismiss({'weekSelected': weekSelected.value, 'monthSelected': monthSelected.value}, 'save');
+  return modalController.dismiss({'selected': radio.value}, 'save');
 };
 </script>
 
@@ -38,12 +37,12 @@ const save = () => {
     <ion-content>
       <ion-grid>
         <ion-row class="ion-padding ion-justify-content-center">
-          <ion-radio-group>
+          <ion-radio-group v-model="radio">
             <ion-col >
               <div class="radio-chip">
                 <ion-radio 
                   label-placement="start"
-                  @click="weekSelected = !weekSelected"
+                  value="week"
                 >
                   Week
                 </ion-radio>
@@ -53,9 +52,29 @@ const save = () => {
               <div class="radio-chip">
                 <ion-radio 
                   label-placement="start"
-                  @click="monthSelected = !monthSelected"
+                  value="month"
                 >
                   Month
+                </ion-radio>
+              </div>
+            </ion-col>
+            <ion-col>
+              <div class="radio-chip">
+                <ion-radio 
+                  label-placement="start"
+                  value="year"
+                >
+                  Year
+                </ion-radio>
+              </div>
+            </ion-col>
+            <ion-col>
+              <div class="radio-chip">
+                <ion-radio 
+                  label-placement="start"
+                  value="all"
+                >
+                  All
                 </ion-radio>
               </div>
             </ion-col>
@@ -78,12 +97,6 @@ const save = () => {
   margin: 4px;
   border-radius: 16px;
   cursor: pointer;
-}
-
-/* You can add custom styles for selected radio */
-.radio-chip ion-radio[aria-checked="true"] + ion-label {
-  background-color: blue;
-  color: white;
 }
 
 .save-button {

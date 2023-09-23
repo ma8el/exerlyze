@@ -73,6 +73,6 @@
 
 <style scoped>
 ion-buttons {
-  padding-top: 20px;
+  padding-top: 15px;
 }
 </style>
