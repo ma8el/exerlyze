@@ -22,8 +22,17 @@
     settingsOutline,
     listOutline
   } from 'ionicons/icons';
+  import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
 
   const router = useRouter();
+  const userStore = useUserStore();
+  const userWeightStore = useWeightStore();
+
+  const userName = userStore.getUserName();
+  const userAge = userStore.getAge();
+  const userHeight = userStore.getHeight();
+  const userWeight = userWeightStore.getCurrentWeight;
+
   const openActivityHistory = () => {
     router.push('/activity-history');
   };
@@ -60,28 +69,28 @@
         <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
       </div>
       <div class="name">
-        <ion-label class="name_lbl">Stefani Wong</ion-label>
+        <ion-label class="name_lbl">{{ userName }}</ion-label>
       </div>
     </template>
  
     <ion-row>
       <ion-col size="4">
         <ion-card class="data">
-          <ion-label class="frst_lbl">180cm</ion-label>
+          <ion-label class="frst_lbl">{{ userHeight }} cm</ion-label>
           <ion-label class="scnd_lbl">Height</ion-label>
         </ion-card>
       </ion-col>
   
       <ion-col size="4">
         <ion-card class="data">
-          <ion-label class="frst_lbl">65kg</ion-label>
+          <ion-label class="frst_lbl">{{ userWeight.weight }} kg</ion-label>
           <ion-label class="scnd_lbl">Weight</ion-label>
         </ion-card>
       </ion-col>
   
       <ion-col size="4">
         <ion-card class="data">
-          <ion-label class="frst_lbl">22yo</ion-label>
+          <ion-label class="frst_lbl">{{ userAge }}</ion-label>
           <ion-label class="scnd_lbl">Age</ion-label>
         </ion-card>
       </ion-col>
