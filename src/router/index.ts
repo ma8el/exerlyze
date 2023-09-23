@@ -3,6 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 import TabsPage from '../views/TabsPage.vue'
 import Login from '../views/Login.vue'
 import CompleteProfile from '@/views/CompleteProfile.vue';
+import ProfileSettings from '@/views/ProfileSettings.vue';
 import ActivityHistory from '@/views/ActivityHistory.vue';
 import Insights from '@/views/Insights.vue';
 
@@ -45,6 +46,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/complete-profile',
     component: CompleteProfile
   },
+  {
+    path: '/profile-settings',
+    component: ProfileSettings
+  },
+ 
   {
     path: '/activity-history',
     component: ActivityHistory

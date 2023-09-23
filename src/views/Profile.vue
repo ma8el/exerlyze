@@ -33,6 +33,10 @@
   const userHeight = userStore.getHeight();
   const userWeight = userWeightStore.getCurrentWeight;
 
+  const openProfileSettings = () => {
+    router.push('/profile-settings');
+  };
+
   const openActivityHistory = () => {
     router.push('/activity-history');
   };
@@ -99,7 +103,7 @@
     <div class="account">
       <ion-label class="head_lbl">Account</ion-label>
       <div class="info">
-        <ion-item lines="none">
+        <ion-item lines="none" :button="true" @click="openProfileSettings">
           <ion-icon :icon="personOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>Personal Data</ion-label>
           <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>

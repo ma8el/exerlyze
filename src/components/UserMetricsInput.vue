@@ -12,9 +12,10 @@ import { peopleOutline,
          scaleOutline,
          swapVerticalOutline,
          chevronForward } from 'ionicons/icons';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
+import { dateToIsoString } from '@/helpers/time';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -45,6 +46,7 @@ const save = () => {
         return;
     }
     userStore.setUserName(userName.value);
+    console.log(dateOfBirth.value)
     if (dateOfBirth.value === undefined || dateOfBirth.value === '') {
         return;
     }
@@ -69,6 +71,14 @@ const save = () => {
     userStore.setHeight(height.value);
     router.push(props.saveRedirectPath);
 };
+
+onMounted(() => {
+    userName.value = userStore.getUserName()
+    gender.value = userStore.getGender()
+    dateOfBirth.value = dateToIsoString(userStore.getDateOfBirth())
+    weight.value = weightStore.getCurrentWeight.weight
+    height.value = userStore.getHeight()
+});
 </script>
 
 <template>

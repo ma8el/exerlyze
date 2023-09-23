@@ -1,5 +1,7 @@
-export const dateToIsoString = (date: Date): string => {
-    return date.toISOString().split('T')[0];
+export const dateToIsoString = (date: Date | undefined): string => {
+    console.log(date)
+    if (date === undefined) return '1900-01-01'
+    return new Date(date).toISOString().split('T')[0];
 }
 
 export const extractTimeFromTS = (date: Date): string => {
