@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 import { Weight } from "@/types";
+import { computed, ref } from "vue";
 
 export const useWeightStore = defineStore({
     id: "weight",
@@ -34,5 +35,83 @@ export const useWeightStore = defineStore({
         addWeight(weight: Weight) {
             this.weights.push(weight);
         }
+    }
+})
+
+export const useUserStore = defineStore('userStore', () => {
+    const userName = useStorage('userName', ref<string | undefined>());
+    const gender = useStorage('gender', ref<string | undefined>());
+    const dateOfBirth = useStorage('dateOfBirth', ref<Date | undefined>());
+    const height = useStorage('height', ref<number | undefined>());
+    const isComplete = computed(() => {
+        if (userName.value === undefined) {
+            return false
+        }
+        if (gender.value === undefined) {
+            return false
+        }
+        if (dateOfBirth.value === undefined) {
+            return false
+        }
+        if (height.value === undefined) {
+            return false
+        }
+        return true
+    })
+    const getUserName = (): string => {
+        if (userName.value === undefined) {
+            return 'Anonymous'
+        }
+        return userName.value
+    }
+    const getGender = (): string | undefined => {
+        return gender.value
+    }
+    const getDateOfBirth = (): Date | undefined => {
+        return dateOfBirth.value
+    }
+    const getAge = (): number | undefined => {
+        if (dateOfBirth.value === undefined) {
+            return undefined
+        }
+        const today = new Date()
+        const birthDate = new Date(dateOfBirth.value)
+        let age = today.getFullYear() - birthDate.getFullYear()
+        const month = today.getMonth() - birthDate.getMonth()
+        if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+            age--
+        }
+        return age
+    }
+    const getHeight = (): number | undefined => {
+        return height.value
+    }
+    const setUserName = (name: string) => {
+        userName.value = name
+    }
+    const setGender = (selectedGender: string) => {
+        gender.value = selectedGender
+    }
+    const setDateOfBirth = (selectedDateOfBirth: Date) => {
+        dateOfBirth.value = selectedDateOfBirth
+    }
+    const setHeight = (selectedHeight: number) => {
+        height.value = selectedHeight
+    }
+    return {
+        userName,
+        gender,
+        dateOfBirth,
+        height,
+        isComplete,
+        getUserName,
+        getGender,
+        getDateOfBirth,
+        getAge,
+        getHeight,
+        setUserName,
+        setGender,
+        setDateOfBirth,
+        setHeight,
     }
 })

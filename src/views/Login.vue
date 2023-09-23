@@ -10,10 +10,12 @@ import { IonPage,
          IonButton,
          IonAlert } from '@ionic/vue';
 import { onMounted, ref } from 'vue';
-import { mailOutline } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { useDark } from '@vueuse/core'
 import { supabase } from '@/supabase';
+import { useUserStore } from '@/store/bodyMetricsStore';
+
+const userStore = useUserStore();
 
 const isDark = useDark();
 
@@ -53,7 +55,12 @@ const onLogin = async () => {
 }
 
 const redirect = () => {
+  console.log(userStore.isComplete)
+  if (userStore.isComplete) {
+    router.push('/tabs/home');
+  } else {
   router.push('/complete-profile');
+  }
 };
 
 const session = ref()
