@@ -1,8 +1,6 @@
 <script setup lang="ts">
   import {
     IonItem,
-    IonThumbnail,
-    IonButton,
     IonLabel,
     IonRow,
     IonCol,
@@ -13,7 +11,6 @@
   } from '@ionic/vue';
   import AppLayout from '@/layouts/AppLayout.vue';
   import Settings from '@/components/Settings.vue';
-  import Insights from '@/views/Insights.vue';
   import { useRouter } from 'vue-router';
   import { 
     personOutline,
@@ -58,18 +55,15 @@
 
 <template>
   <AppLayout :title="$t('profile.title')">
-    <ion-item lines="none">
-      <ion-thumbnail>
+    <template #avatar>
+      <div class="avatar-wrapper">
         <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-      </ion-thumbnail>
+      </div>
       <div class="name">
         <ion-label class="name_lbl">Stefani Wong</ion-label>
       </div>
-      <ion-button slot="end" shape="round">
-        Edit
-      </ion-button>
-    </ion-item>
-  
+    </template>
+ 
     <ion-row>
       <ion-col size="4">
         <ion-card class="data">
@@ -150,32 +144,37 @@
 </template>
 
 <style scoped lang="scss">
+.avatar-wrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  position: absolute;
+  top: 30px;
+  left: 50%; /* Center the avatar */
+  transform: translateX(-50%); /* Adjust for exact centering */
+  border: 3px solid white;
+  z-index: 10;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+}
+.name {
+  display: flex;
+  font-size: 1.5rem;
+  margin-left: 10px;
+  flex-direction: column;
+  align-items: center;
+  .name_lbl {
+    margin: 50px 0 5px 0;
+  }
+}
 ion-content {
   ion-item {
     margin-top: 10px;
     border-radius: 10px;
-    ion-thumbnail {
-      img {
-        height: 50px;
-        width: 50px;
-        border-radius: 50%;
-      }
-    }
-    .name {
-      display: flex;
-      margin-left: 10px;
-      flex-direction: column;
-      .name_lbl {
-        margin-bottom: 5px;
-      }
-      .prgrm_lbl {
-        font-size: 14px;
-      }
-    }
-    ion-button {
-      width: 70px;
-      height: 30px;
-    }
   }
   ion-row {
     margin: 0 1rem 0 0;

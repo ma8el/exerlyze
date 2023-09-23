@@ -87,6 +87,7 @@
         <slot name="header"></slot>
       </ion-toolbar>
     </ion-header>
+      <slot name="avatar"></slot>
     <ion-content :fullscreen="true">
       <slot></slot>
     </ion-content>
