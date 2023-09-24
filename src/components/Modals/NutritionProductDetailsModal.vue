@@ -172,7 +172,7 @@
     color: var(--ion-color-primary);
   }
   .nutrition-thumb {
-    background: var(--ion-color-secondary);
+    background: var(--ion-color-primary-tint);
     border-radius: 20%;
     width: 80%;
     height: 80%;

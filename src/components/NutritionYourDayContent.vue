@@ -92,7 +92,7 @@
 }
 
 .protein {
-  color: var(--ion-color-secondary);
+  color: var(--ion-color-primary-tint);
   font-size: 13px;
   margin-bottom: 10px;
 }
