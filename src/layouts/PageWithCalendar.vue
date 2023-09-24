@@ -27,6 +27,9 @@
 
 <template>
   <AppLayout :title="title">
+    <template #toolbarContent>
+      <slot name="toolbarContent"></slot>
+    </template>
     <Calendar
       :workout-event-dates="workoutEventDates"
     />

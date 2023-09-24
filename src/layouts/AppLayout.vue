@@ -8,7 +8,8 @@
            IonFabButton,
            IonButtons, 
            IonIcon,
-           modalController } from '@ionic/vue';
+           modalController, 
+  } from '@ionic/vue';
   import { arrowBackOutline } from 'ionicons/icons';
   import Settings from '@/components/Settings.vue';
   import { useRouter } from 'vue-router';
@@ -27,8 +28,12 @@
       backButton: {
         type: Boolean,
         default: false
+      },
+      titleSize: {
+        type: String,
+        default: '2rem'
       }
-  });
+ });
 
   const navigateBack = () => {
     router.back();
@@ -58,12 +63,15 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title 
-          size="large"
-          :class="{'ion-text-center': backButton}"
-        >
-          {{ title }}
-        </ion-title>
+        <slot name="toolbarContent">
+         <ion-title 
+            size="large"
+            :class="{'ion-text-center': backButton}"
+            :style="`font-size: ${titleSize};`"
+          >
+            {{ title }}
+          </ion-title>
+        </slot>
         <ion-buttons 
           slot="end"
           v-if="settingsButton"
@@ -106,7 +114,10 @@ ion-header {
     padding: 10px 0 10px 0;
   }
   ion-buttons {
-    padding-top: 10px;
+    padding-top: 5px;
+  }
+  ion-title {
+    align-items: center;
   }
 }
 ion-content {

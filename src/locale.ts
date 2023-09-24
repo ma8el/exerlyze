@@ -3,6 +3,7 @@ export const messages = {
         language: "Language",
         home: { 
             title: "Home",
+            hello: "Hello",
             workoutVolume: "@:workouts.workout @:workouts.volume",
         },
         workouts: {
@@ -96,6 +97,7 @@ export const messages = {
         language: "Sprache",
         home: {
             title: "Startseite",
+            hello: "Hallo",
             workoutVolume: "@:workouts.workout @:workouts.volume",
         },
         workouts: {
