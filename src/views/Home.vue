@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { IonItem, IonThumbnail, IonTitle } from '@ionic/vue';
+  import { IonItem, IonThumbnail, IonTitle, IonCard } from '@ionic/vue';
   import UpcomingEventsSlide from '@/components/UpcomingEventsSlide.vue';
   import PageWithCalendar from '@/layouts/PageWithCalendar.vue';
   import WorkoutVolumeBarChart from '@/components/Charts/WorkoutVolumeBarChart.vue';
@@ -27,13 +27,23 @@
       </ion-item>
     </template> 
     <UpcomingEventsSlide />
-    <WorkoutVolumeBarChart class="last-component"/>
+    <ion-card class="last-component">
+    <div 
+        class="chart-container ion-padding"
+      >
+        <WorkoutVolumeBarChart />
+      </div>
+    </ion-card>
   </PageWithCalendar>
 </template>
 
 <style scoped>
 .last-component {
     margin-bottom: 100px;
+}
+.chart-container {
+  width: 100%;
+  height: 300px;
 }
 ion-item {
   --background: none;

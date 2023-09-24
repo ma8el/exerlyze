@@ -138,32 +138,33 @@ export const useDayOfWeekStore = defineStore({
     state: () => ({
         daysOfWeek: [{
             id: 0,
-            name: 'Sunday'
-        },
-        {
-            id: 1,
             name: 'Monday'
         },
         {
-            id: 2,
+            id: 1,
             name: 'Tuesday'
         },
         {
-            id: 3,
+            id: 2,
             name: 'Wednesday'
         },
         {
-            id: 4,
+            id: 3,
             name: 'Thursday'
         },
         {
-            id: 5,
+            id: 4,
             name: 'Friday'
         },
         {
-            id: 6,
+            id: 5,
             name: 'Saturday'
-        }] as DayOfWeek[]
+        },
+        {
+            id: 6,
+            name: 'Sunday'
+        },
+    ] as DayOfWeek[]
     }),
     getters: {
         getDaysOfWeek(): DayOfWeek[] {
