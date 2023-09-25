@@ -92,6 +92,7 @@ export const messages = {
         activityHistory: "Activity History",
         activities: "Activities",
         insights: "Insights",
+        noData: "No data",
     },
     de: {
         language: "Sprache",
@@ -184,5 +185,6 @@ export const messages = {
         activityHistory: "Aktivitätsverlauf",
         activities: "Aktivitäten",
         insights: "Insights",
+        noData: "Keine Daten",
     },
 }

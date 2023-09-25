@@ -8,6 +8,8 @@ import VChart, { THEME_KEY } from 'vue-echarts';
 import { useI18n } from 'vue-i18n';
 import { useDayOfWeekStore, useWorkoutSessionStore } from '@/store/workoutStore';
 import { getCurrentWeekDates } from '@/helpers/time';
+import BaseChartContainer from './BaseChartContainer.vue';
+import { computed } from 'vue';
 
 use([TitleComponent, LegendComponent, GridComponent, LineChart, CanvasRenderer])
 
@@ -22,6 +24,10 @@ const weeklyWorkoutVolume = weekDays.map(day => {
   ? workoutSessions.reduce(
     (acc, curr) => acc + curr.performedReps * curr.performedWeight, 0)
   : 0
+});
+
+const hasData = computed (() => {
+  return weeklyWorkoutVolume.reduce((acc, curr) => acc + curr, 0) > 0;
 });
 
 const option = {
@@ -67,7 +73,7 @@ const option = {
       type: 'line',
       areaStyle: {},
       smooth: true,
-      color: '#FC4D55',
+      color: '#3F63C8',
     }
   ]
 };
@@ -75,12 +81,7 @@ const option = {
 </script>
 
 <template>
-  <v-chart class="echarts" :option="option" autoresize />
+<BaseChartContainer :hasData="hasData">
+  <v-chart :option="option" autoresize />
+</BaseChartContainer>
 </template>
-
-<style scoped>
-  .echarts {
-    width: 100%;
-    height: 100%;
-  }
-</style>
