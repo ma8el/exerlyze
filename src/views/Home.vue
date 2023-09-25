@@ -4,6 +4,7 @@
   import PageWithCalendar from '@/layouts/PageWithCalendar.vue';
   import WorkoutVolumeBarChart from '@/components/Charts/WorkoutVolumeBarChart.vue';
   import NutritionLineChart from '@/components/Charts/NutritionLineChart.vue';
+  import NutritionParallelChart from '@/components/Charts/NutritionParallelChart.vue';
   import { useUserStore } from '@/store/bodyMetricsStore';
 
   const userStore = useUserStore();
@@ -35,11 +36,18 @@
         <WorkoutVolumeBarChart />
       </div>
     </ion-card>
-    <ion-card class="last-component">
+    <ion-card>
       <div 
         class="chart-container ion-padding"
       >
         <NutritionLineChart />
+      </div>
+    </ion-card>
+    <ion-card class="last-component">
+      <div 
+        class="chart-container ion-padding"
+      >
+        <NutritionParallelChart />
       </div>
     </ion-card>
   </PageWithCalendar>
