@@ -5,6 +5,7 @@ export const messages = {
             title: "Home",
             hello: "Hello",
             workoutVolume: "@:workouts.workout @:workouts.volume",
+            consumedCalories: "Consumed calories",
         },
         workouts: {
             title: "Workouts",
@@ -100,6 +101,7 @@ export const messages = {
             title: "Startseite",
             hello: "Hallo",
             workoutVolume: "@:workouts.workout @:workouts.volume",
+            consumedCalories: "Eingenommene Kalorien",
         },
         workouts: {
             title: "Workouts",

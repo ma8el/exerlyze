@@ -7,6 +7,7 @@ export const useFoodDiaryStore = defineStore({
     state: () => ({
         foodDiary: useStorage('foodDiary', {} as FoodDiary),
         foodDiaryEntries: useStorage('foodDiaryEntries', [] as FoodDiaryEntry[]),
+        dailyCalories: useStorage('dailyCalories', 2500),
     }),
     getters: {
        getFoodDiary(): FoodDiary {

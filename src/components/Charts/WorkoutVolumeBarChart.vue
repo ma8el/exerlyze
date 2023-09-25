@@ -38,7 +38,7 @@ const option = {
     },
   },
   legend: {
-    data: ['Workout Volume'],
+    data: [t('home.workoutVolume')],
     textStyle: {
       color: 'white',
     },
@@ -68,7 +68,7 @@ const option = {
   },
   series: [
     {
-      name: 'Workout Volume',
+      name: t('home.workoutVolume'),
       data: weeklyWorkoutVolume,
       type: 'line',
       areaStyle: {},

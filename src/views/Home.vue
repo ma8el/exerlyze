@@ -3,6 +3,7 @@
   import UpcomingEventsSlide from '@/components/UpcomingEventsSlide.vue';
   import PageWithCalendar from '@/layouts/PageWithCalendar.vue';
   import WorkoutVolumeBarChart from '@/components/Charts/WorkoutVolumeBarChart.vue';
+  import NutritionLineChart from '@/components/Charts/NutritionLineChart.vue';
   import { useUserStore } from '@/store/bodyMetricsStore';
 
   const userStore = useUserStore();
@@ -27,11 +28,18 @@
       </ion-item>
     </template> 
     <UpcomingEventsSlide />
-    <ion-card class="last-component">
-    <div 
+    <ion-card>
+      <div 
         class="chart-container ion-padding"
       >
         <WorkoutVolumeBarChart />
+      </div>
+    </ion-card>
+    <ion-card class="last-component">
+      <div 
+        class="chart-container ion-padding"
+      >
+        <NutritionLineChart />
       </div>
     </ion-card>
   </PageWithCalendar>
