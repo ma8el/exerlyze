@@ -4,8 +4,6 @@
            IonCardTitle,
            IonCardHeader,
            IonCardContent,
-           IonItem,
-           IonLabel,
            IonRow,
            IonCol,
            IonList,
@@ -14,7 +12,8 @@
   import { supabase } from '@/supabase';
   import { ref, onMounted, watch } from 'vue';
   import { useUserSettingsStore } from '@/store/userSettingsStore';
-import { body, bodyOutline } from 'ionicons/icons';
+  import { bodyOutline } from 'ionicons/icons';
+  import BaseInfoCard from '../Cards/BaseInfoCard.vue';
 
   const props = defineProps({
     exerciseId: {
@@ -110,34 +109,18 @@ import { body, bodyOutline } from 'ionicons/icons';
  
       <ion-row>
         <ion-col size="6" class="ion-padding">
-          <ion-item
-            class="exercise-item"
-            color="dark"
-          >
-            <ion-icon
-              class="ion-margin-end exercise-icon"
-              src="../../../assets/icons/level.svg"
-            ></ion-icon>
-            <ion-label>
-              <p class="exercise-paragraph-header">{{ $t('workouts.type') }}</p>
-              <p>Compound</p>
-            </ion-label>
-          </ion-item>
+          <BaseInfoCard
+            :title="$t('workouts.type')"
+            :subTitle="`Compound`"
+            iconSource="../../../assets/icons/level.svg"
+          />
         </ion-col>
         <ion-col size="6" class="ion-padding">
-          <ion-item
-            class="exercise-item"
-            color="dark"
-          >
-            <ion-icon
-              class="ion-margin-end exercise-icon"
-              :icon="bodyOutline"
-            ></ion-icon>
-            <ion-label>
-              <p class="exercise-paragraph-header">{{ $t('workouts.muscle') }}</p>
-              <p>Biceps</p>
-            </ion-label>
-          </ion-item>
+          <BaseInfoCard
+            :title="$t('workouts.muscle')"
+            subTitle="Biceps"
+            :iconSource="bodyOutline"
+          />
         </ion-col>
       </ion-row>
 
@@ -157,16 +140,9 @@ import { body, bodyOutline } from 'ionicons/icons';
 .exercise-description {
     font-size: 0.9rem;
 }
-.exercise-item {
-  border-radius: 10px;
-}
 .exercise-icon {
   width: 25px;
   height: 25px;
   color: var(--ion-color-primary);
-}
-.exercise-paragraph-header {
-  font-size: 0.7rem;
-  font-weight: bold;
 }
 </style>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { IonItem, IonIcon, IonLabel } from '@ionic/vue';
+
 const props = defineProps({
     title: {
         type: String,
@@ -9,9 +11,13 @@ const props = defineProps({
     },
     iconSource: {
         type: String,
-        required: true
+        required: false
+    },
+    icon: {
+      type: String,
+      required: false
     }
-})
+  })
 </script>
 
 <template>
@@ -21,14 +27,14 @@ const props = defineProps({
   >
     <ion-icon
       class="ion-margin-end exercise-icon"
-      :src="iconSource"
+      :src="iconSource ? iconSource : ''"
+      :icon="icon ? icon : ''"
     ></ion-icon>
     <ion-label>
       <p class="exercise-paragraph-header">{{ title }}</p>
       <p>{{ subTitle }}</p>
     </ion-label>
   </ion-item>
- 
 </template>
 
 <style scoped>
