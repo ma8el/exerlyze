@@ -6,16 +6,15 @@ import { CanvasRenderer } from 'echarts/renderers'
 import VChart from 'vue-echarts';
 
 import { useI18n } from 'vue-i18n';
-import { useDayOfWeekStore } from '@/store/workoutStore';
 import { useFoodDiaryStore } from '@/store/foodDiary';
 import { getCurrentWeekDates } from '@/helpers/time';
 import BaseChartContainer from './BaseChartContainer.vue';
+import { computed } from 'vue';
 
 use([VisualMapComponent, ParallelComponent, ParallelChart, CanvasRenderer])
 
 const { t } = useI18n();
 
-const dayOfWeekStore = useDayOfWeekStore();
 const weekDays = getCurrentWeekDates();
 const foodDiaryStore = useFoodDiaryStore();
 
@@ -24,6 +23,10 @@ const weeklyConsumedNutrition = weekDays.map(day => {
   const consumedProtein = foodDiaryStore.getProteinOfDate(day)
   const consumedFat = foodDiaryStore.getFatOfDate(day)
   return Array.of(consumedCarbs, consumedProtein, consumedFat)
+});
+
+const hasData = computed(() => {
+  return weeklyConsumedNutrition.some(day => day.some(nutrition => nutrition > 0));
 });
 
 const maxValue = Math.max(...weeklyConsumedNutrition.flat());
@@ -71,7 +74,7 @@ const option = {
 </script>
 
 <template>
-  <BaseChartContainer :hasData="true">
+  <BaseChartContainer :hasData="hasData">
     <v-chart :option="option" autoresize />
   </BaseChartContainer>
 </template>
