@@ -46,7 +46,6 @@ const save = () => {
         return;
     }
     userStore.setUserName(userName.value);
-    console.log(dateOfBirth.value)
     if (dateOfBirth.value === undefined || dateOfBirth.value === '') {
         return;
     }

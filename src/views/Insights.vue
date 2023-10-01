@@ -33,7 +33,6 @@
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
-    console.log(data, role);
     if (role == 'save') {
       console.log('Save', data);
     } else {

@@ -35,7 +35,6 @@
 
   const getExerciseData = async (exerciseId: number) => {
     const setLocale = userSettingsStore.getLocale()
-    console.log(setLocale)
       await supabase
       .from('exercises')
       .select(`id, name_${setLocale}, description_${setLocale}, execution_${setLocale}, image_url`)
@@ -55,7 +54,6 @@
   })
 
   watch(() => exercise.value, () => {
-    console.log(exercise.value)
     loading.value = false
     exerciseName.value = exercise.value[`name_${userSettingsStore.getLocale()}`]
     exerciseDescription.value = exercise.value[`description_${userSettingsStore.getLocale()}`]

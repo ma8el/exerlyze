@@ -55,7 +55,6 @@ const onLogin = async () => {
 }
 
 const redirect = () => {
-  console.log(userStore.isComplete)
   if (userStore.isComplete) {
     router.push('/tabs/home');
   } else {

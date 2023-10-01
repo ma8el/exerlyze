@@ -10,7 +10,7 @@ import { useDayOfWeekStore } from '@/store/workoutStore';
 import { useFoodDiaryStore } from '@/store/foodDiary';
 import { getCurrentWeekDates } from '@/helpers/time';
 import BaseChartContainer from './BaseChartContainer.vue';
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 
 use([TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, MarkLineComponent, LineChart, CanvasRenderer])
 
@@ -107,10 +107,6 @@ const option = {
     },
   ]
 };
-
-onMounted (() => {
-    console.log(weeklyConsumedCalories)
-});
 </script>
 
 <template>

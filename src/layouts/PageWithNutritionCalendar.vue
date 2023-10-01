@@ -47,7 +47,6 @@
   ])
 
   nutritionStore.$subscribe((mutation, state) => {
-    console.log('mutation', mutation);
     nutritionEventDates = getCurrentWeekDates().filter(
       date => nutritionStore.getFoodDiaryEntries.some(foodEntry => new Date(foodEntry.createdAt).getDay() === date.getDay()))
   });
