@@ -7,6 +7,9 @@ export const messages = {
             workoutVolume: "@:workouts.workout @:workouts.volume",
             consumedCalories: "Consumed calories",
             macroDistribution: "Macro distribution",
+            missingProtein: "Missing Protein",
+            performedWorkouts: "Performed Workouts",
+            performedVolume: "Performed Volume"
         },
         workouts: {
             title: "Workouts",
@@ -104,6 +107,9 @@ export const messages = {
             workoutVolume: "@:workouts.workout @:workouts.volume",
             consumedCalories: "Eingenommene Kalorien",
             macroDistribution: "Makroverteilung",
+            missingProtein: "Proteinlücke",
+            performedWorkouts: "Absolvierte Workouts",
+            performedVolume: "Bewältigtes Volume"
         },
         workouts: {
             title: "Workouts",

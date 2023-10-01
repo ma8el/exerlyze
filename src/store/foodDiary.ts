@@ -8,6 +8,9 @@ export const useFoodDiaryStore = defineStore({
         foodDiary: useStorage('foodDiary', {} as FoodDiary),
         foodDiaryEntries: useStorage('foodDiaryEntries', [] as FoodDiaryEntry[]),
         dailyCalories: useStorage('dailyCalories', 2500),
+        dailyCarbs: useStorage('daylyCarbs', 300),
+        dailyProtein: useStorage('dailyProtein', 100),
+        dailyFat: useStorage('dailyFat', 100),
     }),
     getters: {
        getFoodDiary(): FoodDiary {
@@ -66,6 +69,11 @@ export const useFoodDiaryStore = defineStore({
                 return prev + current.fat;
             }, 0);
             return fats;
+        },
+        getMissingProteinsOfToday(): number {
+            const proteins = this.getProteinOfDate(new Date());
+            const missingProteins = this.dailyProtein - proteins;
+            return missingProteins;
         },
         getBreakfastEntriesOfDate(date: Date): FoodDiaryEntry[] {
             const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);

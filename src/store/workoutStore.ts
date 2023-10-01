@@ -328,5 +328,25 @@ export const useWorkoutSessionStore = defineStore({
             }
             return [];
         },
+        getPerformedWorkoutsThisWeek(): number {
+            const today = new Date()
+            const firstDayOfWeek = new Date(new Date(today.setDate(today.getDate() - today.getDay())).setHours(0,0,0,0));
+            const lastDayOfWeek = new Date(new Date(today.setDate(today.getDate() - today.getDay() + 6)).setHours(0, 0, 0, 0));
+
+            const performedWorkouts = this.workoutSessions.filter(w => new Date(w.finishedAt) >= firstDayOfWeek && new Date(w.finishedAt) <= lastDayOfWeek);
+            return performedWorkouts.length;
+        },
+        getPerformedWorkoutVolumeThisWeek(): number {
+            const today = new Date();
+            const firstDayOfWeek = new Date(new Date(today.setDate(today.getDate() - today.getDay())).setHours(0,0,0,0));
+            const lastDayOfWeek = new Date(new Date(today.setDate(today.getDate() - today.getDay() + 6)).setHours(0, 0, 0, 0));
+            const sessionsOfWeek = this.workoutSessions.filter(w => new Date(w.finishedAt) >= firstDayOfWeek && new Date(w.finishedAt) <= lastDayOfWeek);
+            const sessionIdsOfWeek = sessionsOfWeek.map((s: WorkoutSession) => s.id)
+ 
+            const sessionPerformanceOfWeek = this.workoutSessionPerformances.filter((w: any) => sessionIdsOfWeek.includes(w.workoutSessionId)) 
+            const volumeOfWeek = sessionPerformanceOfWeek.reduce(
+                   (acc, curr) => acc + curr.performedReps * curr.performedWeight, 0)
+            return volumeOfWeek;
+        }
     }
 });
