@@ -20,7 +20,7 @@
     mailOutline,
     checkboxOutline,
     settingsOutline,
-    listOutline
+    listOutline,
   } from 'ionicons/icons';
   import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
 
@@ -106,22 +106,18 @@
         <ion-item lines="none" :button="true" @click="openProfileSettings">
           <ion-icon :icon="personOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>Personal Data</ion-label>
-          <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
         </ion-item>
         <ion-item lines="none">
           <ion-icon :icon="documentTextOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>Workout Settings</ion-label>
-          <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
         </ion-item>
         <ion-item lines="none" :button="true" @click="openActivityHistory()">
           <ion-icon :icon="listOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>Activity Histrory</ion-label>
-          <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
         </ion-item>
         <ion-item lines="none" :button="true" @click="openInsights()">
           <ion-icon :icon="barChartOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>Insights</ion-label>
-          <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
         </ion-item>
       </div>
     </div>
@@ -140,17 +136,14 @@
       <ion-item lines="none">
         <ion-icon :icon="mailOutline" color="primary" style="margin-right: 10px;"></ion-icon>
         <ion-label>Contact Us</ion-label>
-        <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
       </ion-item>
       <ion-item lines="none">
         <ion-icon :icon="checkboxOutline" color="primary" style="margin-right: 10px;"></ion-icon>
         <ion-label>Privacy Policy</ion-label>
-        <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
       </ion-item>
       <ion-item lines="none" :button="true" @click="openSettingsModal()">
         <ion-icon :icon="settingsOutline" color="primary" style="margin-right: 10px;"></ion-icon>
         <ion-label>Settings</ion-label>
-        <ion-icon slot="end" name="chevron-forward" color="medium"></ion-icon>
       </ion-item>
     </div>
   </AppLayout>
