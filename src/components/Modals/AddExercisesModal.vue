@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import BaseFullPageModal from './BaseFullPageModal.vue';
-  import { IonButton,
-           IonItem,
+  import { IonItem,
            IonCheckbox,
            modalController } from '@ionic/vue';
   import { ref, onMounted, onUnmounted } from 'vue';
   import { ExerciseSelection } from '@/types';
   import { supabase } from '@/supabase';
   import { useUserSettingsStore } from '@/store/userSettingsStore';
+  import { bookmarkOutline } from 'ionicons/icons';
 
   const exercises = ref<ExerciseSelection[]>([])
   const userSettingsStore = useUserSettingsStore()
@@ -67,9 +67,12 @@
 </script>
 
 <template>
-  <BaseFullPageModal :title="$t('workouts.addExercises')">
+  <BaseFullPageModal>
     <template #saveButton>
-      <ion-button @click="save">{{ $t('save') }}</ion-button>
+      <ion-icon :icon="bookmarkOutline" @click="save"/>
+    </template>
+    <template #modalHeader>
+      <p class="header-title">{{ $t('workouts.addExercises') }}</p>
     </template>
     <template #modalContent>
       <ion-item v-for="exercise in exercises">
@@ -80,3 +83,12 @@
     </template>
   </BaseFullPageModal>
 </template>
+
+<style scoped>
+  .header-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+  }
+</style>
