@@ -17,7 +17,7 @@ export const useWorkoutStore = defineStore({
     }),
     getters: {
         getWorkouts(): Workout[] {
-            return this.workouts;
+            return this.workouts.filter(w => !w.deleted);
         },
         getNewId(): number {
              return this.workouts.length + 1;
@@ -62,7 +62,7 @@ export const useWorkoutPlanStore = defineStore({
     }),
     getters: {
         getWorkoutPlans(): WorkoutPlan[] {
-            return this.workoutPlans;
+            return this.workoutPlans.filter(w => !w.deleted);
         },
         getNewId(): number {
             return this.workoutPlans.length + 1;
@@ -107,7 +107,7 @@ export const useWorkoutPlanStore = defineStore({
         },
         deleteWorkoutPlan(id: number) {
             const index = this.workoutPlans.findIndex(w => w.id === id);
-            this.workoutPlans.splice(index, 1);
+            this.workoutPlans[index].deleted = true
         }
     }
 });

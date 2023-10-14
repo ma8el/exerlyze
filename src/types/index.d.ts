@@ -39,7 +39,8 @@ export interface PlannedWorkout {
 export interface WorkoutPlan {
     id: number,
     name: string,
-    description: string
+    description: string,
+    deleted: boolean
 }
 
 export interface DayOfWeek {

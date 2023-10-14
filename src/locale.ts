@@ -25,6 +25,7 @@ export const messages = {
             deleteWorkout: "@:delete @:workouts.workout",
             updateWorkout: "@:update @:workouts.workout",
             addWorkoutPlan: "@:add @:workouts.workout @:workouts.plan",
+            deleteWorkoutPlan: "@:delete @:workouts.workout @:workouts.plan",
             updateWorkoutPlan: "@:update @:workouts.workout @:workouts.plan",
             addExercises: "@:add exercises",
             startWorkout: "@:start @:workouts.workout",
@@ -38,6 +39,8 @@ export const messages = {
             type: "Type | Types",
             alreadyPlannedAlert: "This workout is planned!",
             alreadyPlannedAlertMessage: "Delete the workout plan first.",
+            deleteWorkoutPlanAlert: "Are you sure?",
+            deleteWorkoutPlanAlertMessage: "You are about to delete this plan"
         },
         nutrition: {
             title: "Nutrition",
@@ -129,6 +132,7 @@ export const messages = {
             updateWorkout: "@:workouts.workout ändern",
             addWorkoutPlan: "Trainingsplan @:add",
             updateWorkoutPlan: "Trainingsplan ändern",
+            deleteWorkoutPlan: "Trainingsplan löschen",
             addExercises: "Übungen @:add",
             startWorkout: "Starte @:workouts.workout",
             workoutName: "@:workouts.workout Name",
@@ -141,6 +145,8 @@ export const messages = {
             type: "Typ | Typen",
             alreadyPlannedAlert: "Dieses Workout ist geplant!",
             alreadyPlannedAlertMessage: "Lösche zuerst den zugehörigen Plan.",
+            deleteWorkoutPlanAlert: "Bist du sicher?",
+            deleteWorkoutPlanAlertMessage: "Dies löscht den ausgewählten Plan"
         },
         nutrition: {
             title: "Ernährung",

@@ -57,3 +57,9 @@
  
     </ion-item>
 </template>
+
+<style scoped>
+ion-item {
+  border-radius: 10px;
+}
+</style>

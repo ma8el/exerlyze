@@ -7,11 +7,15 @@
 </script>
 
 <template>
-  <WorkoutPlanCard
+  <template
     v-for="(workoutPlan, index) in workoutPlanStore.getWorkoutPlans"
     :key="index"
-    :workoutPlanId="workoutPlan.id"
-  />
+  >
+    <WorkoutPlanCard
+      v-if="!workoutPlan.deleted"
+      :workoutPlanId="workoutPlan.id"
+    />
+  </template>
   <BaseCard
     v-if="workoutPlanStore.getWorkoutPlans.length == 0"
     :title="$t('workouts.noWorkoutPlansYet')"
