@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { IonIcon,
            IonInput,
+           IonButton,
+           IonAlert,
            modalController } from '@ionic/vue';
   import { ref, onMounted } from 'vue'
   import { useWorkoutStore } from '../../store/workoutStore';
@@ -22,12 +24,16 @@
   const description = ref()
   const exercises = ref<Exercise[]>([])
 
+  const isOpen = ref<boolean>(false)
+  const alertButtons = ['OK'];
+
   const save = () => {
     workoutStore.addWorkout({
       id: workoutStore.getNewId,
       name: workoutName.value,
       description: description.value,
-      exercises: exercises.value
+      exercises: exercises.value,
+      deleted: false
     })
     modalController.dismiss(null, 'save');
   }
@@ -38,9 +44,20 @@
       id: props.workoutId,
       name: workoutName.value,
       description: description.value,
-      exercises: exercises.value
+      exercises: exercises.value,
+      deleted: false
     })
     modalController.dismiss(null, 'save');
+  }
+
+  const deleteWorkout = () => {
+    if (!props.workoutId) return
+    const hasDeleted = workoutStore.deleteWorkout(props.workoutId)
+    if (hasDeleted) {
+      modalController.dismiss(null, 'save');
+    } else {
+      isOpen.value = true
+    }
   }
 
   const addExercise = (e: Exercise[]) => {
@@ -54,7 +71,11 @@
       description.value = workout.description
       // Deep copy the exercises array to avoid reactivity issues
       exercises.value = JSON.parse(JSON.stringify(workout.exercises))
-    }
+  }
+
+  const setOpen = (state: boolean) => {
+    isOpen.value = state;
+  };
 
   onMounted(() => {
     if (props.workoutId) {
@@ -87,6 +108,24 @@
         class="exercise-item ion-margin"
        />
       <AddExerciseButton class="ion-margin" @save-exercises="addExercise"/>
+      <ion-button
+        v-if="workoutId"
+        class="ion-margin"
+        expand="block"
+        size="small"
+        color="secondary"
+        @click="deleteWorkout"
+      >
+        {{ $t('workouts.deleteWorkout') }}
+      </ion-button>
+
+      <ion-alert
+        :is-open="isOpen"
+        :header="$t('workouts.alreadyPlannedAlert')"
+        :sub-header="$t('workouts.alreadyPlannedAlertMessage')"
+        :buttons="alertButtons"
+        @didDismiss="setOpen(false)"
+      ></ion-alert>
     </template>
   </BaseFullPageModal>
 </template> 

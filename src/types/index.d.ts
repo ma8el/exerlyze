@@ -20,7 +20,8 @@ export interface Workout {
     id: number,
     name: string,
     description: string,
-    exercises: Exercise[]
+    exercises: Exercise[],
+    deleted: boolean
 }
 
 export interface WorkoutSelection extends Workout {
