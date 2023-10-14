@@ -36,6 +36,11 @@ export const useFoodDiaryStore = defineStore({
         addFoodDiaryEntry(foodDiaryEntry: FoodDiaryEntry) {
             this.foodDiaryEntries.push(foodDiaryEntry);
         },
+        deleteFoodDiaryEntry(foodDiaryEntryId: number) {
+            this.foodDiaryEntries = this.foodDiaryEntries.filter((foodDiaryEntry) => {
+                return foodDiaryEntry.id !== foodDiaryEntryId;
+            });
+        },
         getFoodDiaryEntriesOfDate(date: Date): FoodDiaryEntry[] {
             const foodDiaryEntries = this.foodDiaryEntries.filter((foodDiaryEntry) => {
                 return new Date(foodDiaryEntry.createdAt).getDate() === date.getDate();

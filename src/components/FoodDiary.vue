@@ -23,14 +23,18 @@ import { chevronDownOutline } from 'ionicons/icons';
         </ion-label>
         <ion-icon :icon="chevronDownOutline" slot="end"></ion-icon>
       </ion-item-divider>
+      <template
+        v-if="selectedDate"
+      >
       <FoodItem 
         v-for="(foodItem, index) in foodDiaryStore.getBreakfastEntriesOfDate(selectedDate)"
-        v-if="selectedDate"
         :key="foodItem.id"
+        :id="foodItem.id"
         :foodName="foodItem.foodName"
         :calories="foodItem.calories"
         :quantity="foodItem.quantity"
       />
+      </template>
     </ion-item-group>
     <ion-item-group class="ion-padding-bottom">
       <ion-item-divider>
@@ -39,14 +43,18 @@ import { chevronDownOutline } from 'ionicons/icons';
         </ion-label>
         <ion-icon :icon="chevronDownOutline" slot="end"></ion-icon>
       </ion-item-divider>
+      <template
+        v-if="selectedDate"
+      >
       <FoodItem 
         v-for="(foodItem, index) in foodDiaryStore.getLunchEntriesOfDate(selectedDate)"
-        v-if="selectedDate"
         :key="foodItem.id"
+        :id="foodItem.id"
         :foodName="foodItem.foodName"
         :calories="foodItem.calories"
         :quantity="foodItem.quantity"
       />
+      </template>
     </ion-item-group>
     <ion-item-group class="ion-padding-bottom">
       <ion-item-divider>
@@ -55,14 +63,18 @@ import { chevronDownOutline } from 'ionicons/icons';
         </ion-label>
         <ion-icon :icon="chevronDownOutline" slot="end"></ion-icon>
       </ion-item-divider>
+      <template
+        v-if="selectedDate"
+      >
       <FoodItem 
         v-for="(foodItem, index) in foodDiaryStore.getDinnerEntriesOfDate(selectedDate)"
-        v-if="selectedDate"
         :key="foodItem.id"
+        :id="foodItem.id"
         :foodName="foodItem.foodName"
         :calories="foodItem.calories"
         :quantity="foodItem.quantity"
       />
+      </template>
     </ion-item-group>
   </ion-list>
 </template>

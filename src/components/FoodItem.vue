@@ -1,7 +1,14 @@
 <script setup lang="ts">
-  import { IonItem, IonLabel, IonNote, IonAvatar } from '@ionic/vue';
+  import { IonItem, IonLabel, IonNote, IonItemSliding, IonItemOptions, IonItemOption } from '@ionic/vue';
+  import { useFoodDiaryStore } from '@/store/foodDiary';
+
+  const foodDiaryStore = useFoodDiaryStore()
 
   const props = defineProps({
+    id: {
+      type: Number,
+      required: true
+    },
     foodName: {
       type: String,
       required: true
@@ -23,9 +30,14 @@
       default: 'g'
     }
   })
+
+  const deleteFoodItem = () => {
+    foodDiaryStore.deleteFoodDiaryEntry(props.id)
+  }
 </script>
 
 <template>
+<ion-item-sliding>
   <ion-item>
     <img :src="foodImage" class="product-img" />
     <ion-label>
@@ -34,6 +46,15 @@
     </ion-label>
     <ion-note slot="end">{{ calories }} kcal</ion-note>
   </ion-item>
+  <ion-item-options>
+    <ion-item-option 
+      @click="deleteFoodItem"
+      color="secondary"
+    >
+      Delete
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>
 </template>
 
 <style scoped>
@@ -50,6 +71,13 @@ ion-item {
   };
   ion-note {
     color: white;
+  }
+}
+ion-item-sliding {
+  border-radius: 10px;
+  ion-item-options {
+    padding-bottom: 10px;
+    border-radius: 10px;
   }
 }
 </style>
