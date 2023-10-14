@@ -34,6 +34,7 @@ export interface PlannedWorkout {
     workoutPlanId: number,
     dayOfWeekId: number,
     timeOfDay: time,
+    deleted: boolean
 }
 
 export interface WorkoutPlan {

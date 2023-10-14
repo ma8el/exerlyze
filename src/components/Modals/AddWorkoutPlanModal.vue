@@ -57,7 +57,8 @@
           'workoutPlanId': workoutPlanStore.getNewId,
           'workoutId': workout.id,
           'dayOfWeekId': 1,
-          'timeOfDay': '12:00'
+          'timeOfDay': '12:00',
+          'deleted': false
         })
     })
   }
@@ -78,7 +79,8 @@
           'workoutPlanId': plannedWorkout.workoutPlanId,
           'workoutId': plannedWorkout.workoutId,
           'dayOfWeekId': plannedWorkout.dayOfWeekId,
-          'timeOfDay': plannedWorkout.timeOfDay
+          'timeOfDay': plannedWorkout.timeOfDay,
+          'deleted': false
         }
       )
     });
@@ -105,7 +107,8 @@
           'workoutPlanId': plannedWorkout.workoutPlanId,
           'workoutId': plannedWorkout.workoutId,
           'dayOfWeekId': plannedWorkout.dayOfWeekId,
-          'timeOfDay': plannedWorkout.timeOfDay
+          'timeOfDay': plannedWorkout.timeOfDay,
+          'deleted': false
         }
       )
     });

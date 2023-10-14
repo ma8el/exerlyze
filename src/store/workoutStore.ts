@@ -106,8 +106,13 @@ export const useWorkoutPlanStore = defineStore({
             this.workoutPlans[index] = workoutPlan;
         },
         deleteWorkoutPlan(id: number) {
+            const plannedWorkoutStore = usePlannedWorkoutStore();
             const index = this.workoutPlans.findIndex(w => w.id === id);
+            const plannedWorkouts = plannedWorkoutStore.getPlannedWorkoutsByWorkoutPlanId(id);
             this.workoutPlans[index].deleted = true
+            plannedWorkouts.forEach(w => {
+                plannedWorkoutStore.deletePlannedWorkout(w.id);
+            })
         }
     }
 });
@@ -119,7 +124,7 @@ export const usePlannedWorkoutStore = defineStore({
     }),
     getters: {
         getPlannedWorkouts(): PlannedWorkout[] {
-            return this.plannedWorkouts;
+            return this.plannedWorkouts.filter(w => !w.deleted);
         },
         getNewId(): number {
             return this.plannedWorkouts.length + 1;
@@ -146,6 +151,10 @@ export const usePlannedWorkoutStore = defineStore({
         updatePlannedWorkoutsOfWorkoutPlan(workoutPlanId: number, plannedWorkouts: PlannedWorkout[]) {
             const index = this.plannedWorkouts.findIndex(w => w.workoutPlanId === workoutPlanId);
             this.plannedWorkouts.splice(index, 1, ...plannedWorkouts);
+        },
+        deletePlannedWorkout(id: number) {
+            const index = this.plannedWorkouts.findIndex(w => w.id === id);
+            this.plannedWorkouts[index].deleted = true
         }
     }
 });
