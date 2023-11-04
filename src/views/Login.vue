@@ -58,13 +58,13 @@ const redirect = () => {
   if (userStore.isComplete) {
     router.push('/tabs/home');
   } else {
-  router.push('/complete-profile');
+    router.push('/complete-profile');
   }
 };
 
 const session = ref()
-onMounted(() => {
-  supabase.auth.getSession().then(({ data }) => {
+onMounted(async () => {
+  await supabase.auth.getSession().then(({ data }) => {
     session.value = data.session
   })
 
