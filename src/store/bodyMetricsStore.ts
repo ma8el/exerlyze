@@ -1,3 +1,4 @@
+import { supabase } from "@/supabase";
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 import { Weight } from "@/types";
@@ -68,7 +69,10 @@ export const useUserStore = defineStore('userStore', () => {
         return gender.value
     }
     const getDateOfBirth = (): Date | undefined => {
-        return dateOfBirth.value
+        if (dateOfBirth.value === undefined) {
+            return undefined
+        }
+        return new Date(dateOfBirth.value)
     }
     const getAge = (): number | undefined => {
         if (dateOfBirth.value === undefined) {
@@ -93,10 +97,30 @@ export const useUserStore = defineStore('userStore', () => {
         gender.value = selectedGender
     }
     const setDateOfBirth = (selectedDateOfBirth: Date) => {
-        dateOfBirth.value = selectedDateOfBirth
+        dateOfBirth.value = new Date(selectedDateOfBirth)
     }
     const setHeight = (selectedHeight: number) => {
         height.value = selectedHeight
+    }
+    const fetchUser = async () => {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+          const userData = supabase.from('profiles').select()
+        }
+    }
+    const syncUser = async () => {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            const { error } = await supabase.from('profiles')
+            .upsert({
+                id: session.data.session.user?.id,
+                username: getUserName(),
+                height: getHeight(),
+                gender: getGender(),
+                date_of_birth: getDateOfBirth(),
+            })
+            console.log(error)
+        }
     }
     return {
         userName,
@@ -113,5 +137,7 @@ export const useUserStore = defineStore('userStore', () => {
         setGender,
         setDateOfBirth,
         setHeight,
+        fetchUser,
+        syncUser,
     }
 })
