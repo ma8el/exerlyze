@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { supabase } from '@/supabase';
+import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
 import AppLayout from '@/layouts/AppLayout.vue';
 import UserMetricsInput from '@/components/UserMetricsInput.vue';
-import { IonButton, useIonRouter, loadingController } from '@ionic/vue';
+import { IonButton, useIonRouter } from '@ionic/vue';
 
 const session = ref();
 const router = useIonRouter();
@@ -11,6 +12,13 @@ const loading = ref(true);
 
 const redirect = () => {
   router.push('/login');
+};
+
+const sync = async () => {
+  const userStore = useUserStore();
+  const weightStore = useWeightStore();
+  userStore.syncUser();
+  weightStore.syncWeights;
 };
 
 onMounted(async () => {
@@ -50,6 +58,14 @@ onMounted(async () => {
           @click="() => redirect()"
         >
           Login
+        </IonButton>
+        <IonButton
+          expand="block"
+          color="primary"
+          :style="`margin-top: 20px;`"
+          @click="() => sync()"
+        >
+          Sync Data
         </IonButton>
       </div>
     </div>

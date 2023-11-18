@@ -41,7 +41,7 @@ const props = defineProps({
     },
 });
 
-const save = () => {
+const save = async () => {
     if (userName.value === undefined || userName.value === '') {
         return;
     }
@@ -58,8 +58,10 @@ const save = () => {
         return;
     }
     weightStore.addWeight({
-        id: 1,
-        createdAt: new Date(),
+        id: weightStore.getNewId,
+        user_id: await userStore.getUserId(),
+        created_at: new Date(),
+        updated_at: new Date(),
         weight: weight.value,
         unit: 'kg'
     }

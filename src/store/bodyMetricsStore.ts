@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 import { Weight } from "@/types";
 import { computed, ref } from "vue";
+import { v4 as uuidv4 } from 'uuid';
 
 export const useWeightStore = defineStore({
     id: "weight",
@@ -11,15 +12,15 @@ export const useWeightStore = defineStore({
         weights: useStorage('weights', [] as Weight[]),
     }),
     getters: {
-        getNewId(): number {
-            return this.weights.length + 1
+        getNewId(): string {
+            return uuidv4();
         },
         getWeights(): Weight[] {
             return this.weights;
         },
         getCurrentWeight(): Weight {
             const currentWeight = this.weights.reduce((prev, current) => {
-                return prev.createdAt > current.createdAt ? prev : current;
+                return prev.created_at > current.created_at ? prev : current;
             });
             return currentWeight;
         },
@@ -27,9 +28,16 @@ export const useWeightStore = defineStore({
             const today = new Date();
             const weekAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
             const weightsOfWeek = this.weights.filter((weight) => {
-                return new Date(weight.createdAt) >= weekAgo;
+                return new Date(weight.created_at) >= weekAgo;
             });
             return weightsOfWeek;
+        },
+        async syncWeights(): Promise<void> {
+            const session = await supabase.auth.getSession()
+            if (session.data.session !== null) {
+                const { error } = await supabase.from('weights')
+                .upsert(this.weights)
+            }
         }
     },
     actions: {
@@ -40,6 +48,7 @@ export const useWeightStore = defineStore({
 })
 
 export const useUserStore = defineStore('userStore', () => {
+    const userId = useStorage('userId', ref<string>());
     const userName = useStorage('userName', ref<string | undefined>());
     const gender = useStorage('gender', ref<string | undefined>());
     const dateOfBirth = useStorage('dateOfBirth', ref<Date | undefined>());
@@ -59,6 +68,15 @@ export const useUserStore = defineStore('userStore', () => {
         }
         return true
     })
+    const getUserId = async (): Promise<string> => {
+        const session = await supabase.auth.getSession()
+        if (session.data.session === null) {
+            return ''
+        }
+        else {
+            return userId.value = session.data.session.user?.id
+        }
+    }
     const getUserName = (): string => {
         if (userName.value === undefined) {
             return 'Anonymous'
@@ -119,10 +137,10 @@ export const useUserStore = defineStore('userStore', () => {
                 gender: getGender(),
                 date_of_birth: getDateOfBirth(),
             })
-            console.log(error)
         }
     }
     return {
+        getUserId,
         userName,
         gender,
         dateOfBirth,

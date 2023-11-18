@@ -63,9 +63,11 @@ export interface WorkoutSchedule {
 }
 
 export interface Weight {
-    id: number,
+    id: string,
+    user_id: string,
     weight: number,
-    createdAt: Date,
+    created_at: Date,
+    updated_at: Date,
     unit: string
 }
 
