@@ -55,7 +55,6 @@
 
   const addWorkouts = async (w: Workout[]) => {
     w.forEach(async (workout) => {
-      console.log(plannedWorkoutStore.getNewId())
       plannedWorkouts.value.push(
         {
           'id': plannedWorkoutStore.getNewId(),
