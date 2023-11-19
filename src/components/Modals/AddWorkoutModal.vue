@@ -105,6 +105,8 @@
   onMounted(() => {
     if (props.workoutId) {
       getWorkoutData(props.workoutId)
+    } else {
+      generatedWorkoutId.value = uuidv4()
     }
   })
 </script>
