@@ -1,4 +1,6 @@
+import { v4 as uuidv4 } from 'uuid';
 import { defineStore } from 'pinia'
+import { supabase } from '@/supabase';
 import { Workout,
          PlannedWorkout,
          WorkoutPlan,
@@ -19,13 +21,13 @@ export const useWorkoutStore = defineStore({
         getWorkouts(): Workout[] {
             return this.workouts.filter(w => !w.deleted);
         },
-        getNewId(): number {
-             return this.workouts.length + 1;
+        getNewId(): string {
+             return uuidv4();
         },
 
     },
     actions: {
-        getWorkoutById(id: number): Workout | undefined {
+        getWorkoutById(id: string): Workout | undefined {
             const workout = this.workouts.find(w => w.id === id);
             if (workout) {
                 return workout;
@@ -39,7 +41,7 @@ export const useWorkoutStore = defineStore({
             const index = this.workouts.findIndex(w => w.id === workout.id);
             this.workouts[index] = workout;
         },
-        deleteWorkout(id: number) {
+        deleteWorkout(id: string) {
             const plannedWorkoutStore = usePlannedWorkoutStore();
 
             const plannedWorkouts = plannedWorkoutStore.getPlannedWorkouts;
@@ -51,6 +53,38 @@ export const useWorkoutStore = defineStore({
             const index = this.workouts.findIndex(w => w.id === id);
             this.workouts[index].deleted = true
             return true;
+        },
+        async syncWorkouts(): Promise<void> {
+            const session = await supabase.auth.getSession()
+            if (session.data.session !== null) {
+                for (const workout of this.workouts) {
+                    const { error } = await supabase.from('workouts')
+                    .upsert({
+                        id: workout.id,
+                        created_at: workout.created_at,
+                        updated_at: workout.updated_at,
+                        user_id: workout.user_id,
+                        name: workout.name,
+                        description: workout.description,
+                        deleted: workout.deleted
+                    })
+                    for (const exercise of workout.exercises) {
+                      await supabase.from('workout_exercises')
+                      .upsert({
+                          id: exercise.id,
+                          created_at: workout.created_at,
+                          updated_at: workout.updated_at,
+                          workout_id: workout.id,
+                          exercise_id: exercise.exercise_id,
+                          sets: exercise.sets,
+                          reps: exercise.reps,
+                          weight: exercise.weight,
+                          valid: true,
+                          user_id: workout.user_id,
+                      })
+                    }
+                }
+            }
         }
     }
 });

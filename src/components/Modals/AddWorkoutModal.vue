@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { v4 as uuidv4 } from 'uuid';
   import { IonIcon,
            IonInput,
            IonButton,
@@ -6,30 +7,37 @@
            modalController } from '@ionic/vue';
   import { ref, onMounted } from 'vue'
   import { useWorkoutStore } from '../../store/workoutStore';
+  import { useUserStore } from '@/store/bodyMetricsStore';
   import AddExerciseButton from '../Buttons/AddExerciseButton.vue'
   import ExerciseItem from '../ExerciseItem.vue';
   import BaseFullPageModal from './BaseFullPageModal.vue';
-  import { Exercise } from '@/types';
+  import { Exercise, ExerciseSelection } from '@/types';
   import { bookmarkOutline } from 'ionicons/icons';
 
   const props = defineProps({
     workoutId: {
-      type: Number,
+      type: String,
     }
   })
 
   const workoutStore = useWorkoutStore()
+  const userStore = useUserStore()
   
-  const workoutName = ref()
-  const description = ref()
+  const generatedWorkoutId = ref<string>(uuidv4())
+  const workoutName = ref<string>('Workout')
+  const createdAt = ref<Date>(new Date())
+  const description = ref<string>('')
   const exercises = ref<Exercise[]>([])
 
   const isOpen = ref<boolean>(false)
   const alertButtons = ['OK'];
 
-  const save = () => {
+  const save = async () => {
     workoutStore.addWorkout({
-      id: workoutStore.getNewId,
+      id: generatedWorkoutId.value,
+      created_at: new Date(),
+      updated_at: new Date(),
+      user_id: await userStore.getUserId(),
       name: workoutName.value,
       description: description.value,
       exercises: exercises.value,
@@ -38,10 +46,13 @@
     modalController.dismiss(null, 'save');
   }
 
-  const update = () => {
+  const update = async () => {
     if (!props.workoutId) return
     workoutStore.updateWorkout({
       id: props.workoutId,
+      created_at: createdAt.value,
+      updated_at: new Date(),
+      user_id: await userStore.getUserId(),
       name: workoutName.value,
       description: description.value,
       exercises: exercises.value,
@@ -60,15 +71,29 @@
     }
   }
 
-  const addExercise = (e: Exercise[]) => {
-    exercises.value.push(...e)
+  const addExercise = async (e: ExerciseSelection[]) => {
+    for (const exercise of e) {
+      exercises.value.push({
+        id: exercise.id,
+        created_at: new Date(),
+        updated_at: new Date(),
+        user_id: await userStore.getUserId(),
+        workout_id: generatedWorkoutId.value,
+        exercise_id: exercise.exercise_id,
+        name: exercise.name,
+        sets: exercise.sets,
+        reps: exercise.reps,
+        weight: exercise.weight,
+      })
+    }
   }
 
-  const getWorkoutData = (workoutId: number) => {
+  const getWorkoutData = (workoutId: string) => {
       const workout = workoutStore.getWorkoutById(workoutId)
       if (!workout) return
       workoutName.value = workout.name
       description.value = workout.description
+      createdAt.value = workout.created_at
       // Deep copy the exercises array to avoid reactivity issues
       exercises.value = JSON.parse(JSON.stringify(workout.exercises))
   }
@@ -104,6 +129,11 @@
         v-model:weight="exercises[index].weight"
         :key="index" 
         :id="exercise.id"
+        :created_at="exercise.created_at"
+        :updated_at="exercise.updated_at"
+        :user_id="exercise.user_id"
+        :workout_id="exercise.workout_id"
+        :exercise_id="exercise.exercise_id"
         :name="exercise.name"
         class="exercise-item ion-margin"
        />

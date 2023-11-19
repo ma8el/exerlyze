@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { supabase } from '@/supabase';
 import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
+import { useWorkoutStore } from '@/store/workoutStore';
 import AppLayout from '@/layouts/AppLayout.vue';
 import UserMetricsInput from '@/components/UserMetricsInput.vue';
 import { IonButton, useIonRouter } from '@ionic/vue';
@@ -17,14 +18,15 @@ const redirect = () => {
 const sync = async () => {
   const userStore = useUserStore();
   const weightStore = useWeightStore();
+  const workoutStore = useWorkoutStore();
   userStore.syncUser();
   weightStore.syncWeights;
+  workoutStore.syncWorkouts();
 };
 
 onMounted(async () => {
   session.value = await supabase.auth.getSession();
   loading.value = false;
-  console.log(session.value.data.session);
 });
 </script>
 

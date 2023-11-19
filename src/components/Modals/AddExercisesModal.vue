@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { v4 as uuidv4 } from 'uuid';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import { IonItem,
            IonCheckbox,
@@ -24,7 +25,9 @@
           exercises.value = response.data.map((exercise) => {
             return {
               // @ts-ignore
-              id: exercise.id,
+              id: uuidv4(),
+              // @ts-ignore
+              exercise_id: exercise.id,
               // @ts-ignore
               name: exercise[`name_${setLocale}`],
               sets: 0,

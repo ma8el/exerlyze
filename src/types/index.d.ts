@@ -1,12 +1,23 @@
 export interface Exercise {
-    id: number,
+    id: string,
+    created_at: Date,
+    updated_at: Date,
+    workout_id: string,
+    exercise_id: number,
     name: string,
     sets: number,
     reps: number,
-    weight: number
+    weight: number,
+    user_id: string,
 };
 
-export interface ExerciseSelection extends Exercise {
+export interface ExerciseSelection {
+    id: string,
+    exercise_id: number,
+    name: string,
+    sets: number,
+    reps: number,
+    weight: number,
     isSelected: boolean
 };
 
@@ -17,7 +28,10 @@ export interface ActiveExercise extends Exercise {
 }
 
 export interface Workout {
-    id: number,
+    id: string,
+    created_at: Date,
+    updated_at: Date,
+    user_id: string,
     name: string,
     description: string,
     exercises: Exercise[],
@@ -30,7 +44,7 @@ export interface WorkoutSelection extends Workout {
 
 export interface PlannedWorkout {
     id: number,
-    workoutId: number,
+    workoutId: string,
     workoutPlanId: number,
     dayOfWeekId: number,
     timeOfDay: time,

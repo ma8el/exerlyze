@@ -12,7 +12,7 @@
 
   onMounted(async () => {
     loading.value = true
-    await getBucketUrlFromTable('exercises', props.id).then((response) => {
+    await getBucketUrlFromTable('exercises', props.exercise_id).then((response) => {
       bucketUrl.value = response.data?.image_url
     })
     if (!bucketUrl.value) return
