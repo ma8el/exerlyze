@@ -9,7 +9,7 @@
 
   const props = defineProps({
     workoutPlanId: {
-      type: Number,
+      type: String,
       required: true
     }
   })
@@ -26,7 +26,7 @@
   const workoutPlanStore = useWorkoutPlanStore();
 
   const workoutPlan = workoutPlanStore.getWorkoutPlanById(props.workoutPlanId)
-  const plannedWorkouts = workoutPlanStore.getFullWorkoutPlans.filter(plannedWorkout => plannedWorkout.workoutPlanId === props.workoutPlanId)
+  const plannedWorkouts = workoutPlanStore.getFullWorkoutPlans.filter(plannedWorkout => plannedWorkout.workout_plan_id === props.workoutPlanId)
 
 </script>
 

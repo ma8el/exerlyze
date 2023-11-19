@@ -1,28 +1,33 @@
 <script setup lang="ts">
+  import { v4 as uuidv4 } from 'uuid';
   import { IonIcon,
            IonInput,
            IonAlert,
            modalController} from '@ionic/vue';
-  import { bookmarkOutline } from 'ionicons/icons';
+  import { bookmarkOutline, create } from 'ionicons/icons';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import AddPlannedWorkoutButton from '../Buttons/AddPlannedWorkoutButton.vue';
   import PlannedWorkoutItem from '../PlannedWorkoutItem.vue';
   import { PlannedWorkout, Workout } from '@/types';
   import { useWorkoutPlanStore, usePlannedWorkoutStore } from '@/store/workoutStore';
+  import { useUserStore } from '@/store/bodyMetricsStore';
   import { ref, onMounted } from 'vue'
 
   const props = defineProps({
       workoutPlanId: {
-        type: Number,
+        type: String,
       }
   })
 
-  const workoutPlanName = ref('')
-  const description = ref('')
+  const generatedWorkoutPlanId = ref<string>(uuidv4())
+  const workoutPlanName = ref<string>('')
+  const description = ref<string>('')
+  const createdAt = ref<Date>(new Date())
   const plannedWorkouts = ref<PlannedWorkout[]>([])
 
   const workoutPlanStore = useWorkoutPlanStore()
   const plannedWorkoutStore = usePlannedWorkoutStore()
+  const userStore = useUserStore()
 
   const isOpen = ref<boolean>(false)
   const alertButtons = [
@@ -48,39 +53,44 @@
     plannedWorkouts.value = []
   }
 
-  const addWorkouts = (w: Workout[]) => {
-    w.forEach((workout) => {
+  const addWorkouts = async (w: Workout[]) => {
+    w.forEach(async (workout) => {
+      console.log(plannedWorkoutStore.getNewId())
       plannedWorkouts.value.push(
         {
-          // TODO: This is not the correct way to get the id
-          'id': plannedWorkoutStore.getNewId,
-          'workoutPlanId': workoutPlanStore.getNewId,
-          'workoutId': workout.id,
-          'dayOfWeekId': 1,
-          'timeOfDay': '12:00',
-          'deleted': false
+          'id': plannedWorkoutStore.getNewId(),
+          'workout_plan_id': generatedWorkoutPlanId.value,
+          'workout_id': workout.id,
+          'day_of_week_id': 1,
+          'time_of_day': '12:00',
+          'deleted': false,
+          'user_id': await userStore.getUserId()
         })
     })
   }
 
-  const save = () => {
+  const save = async () => {
     workoutPlanStore.addWorkoutPlan(
       {
-        'id': workoutPlanStore.getNewId,
+        'id': generatedWorkoutPlanId.value,
+        'created_at': new Date(),
+        'updated_at': new Date(),
+        'user_id': await userStore.getUserId(),
         'name': workoutPlanName.value,
         'description': description.value,
         'deleted': false
       }
     );
-    plannedWorkouts.value.forEach((plannedWorkout: PlannedWorkout) => {
+    plannedWorkouts.value.forEach(async (plannedWorkout: PlannedWorkout) => {
       plannedWorkoutStore.addPlannedWorkout(
         {
-          'id': plannedWorkoutStore.getNewId,
-          'workoutPlanId': plannedWorkout.workoutPlanId,
-          'workoutId': plannedWorkout.workoutId,
-          'dayOfWeekId': plannedWorkout.dayOfWeekId,
-          'timeOfDay': plannedWorkout.timeOfDay,
-          'deleted': false
+          'id': plannedWorkout.id,
+          'workout_plan_id': plannedWorkout.workout_plan_id,
+          'workout_id': plannedWorkout.workout_id,
+          'day_of_week_id': plannedWorkout.day_of_week_id,
+          'time_of_day': plannedWorkout.time_of_day,
+          'deleted': false,
+          'user_id': await userStore.getUserId()
         }
       )
     });
@@ -88,27 +98,31 @@
     modalController.dismiss();
   }
 
-  const update = () => {
+  const update = async () => {
     if (!props.workoutPlanId) {
       return
     }
     workoutPlanStore.updateWorkoutPlan(
       {
         'id': props.workoutPlanId,
+        'created_at': createdAt.value,
+        'updated_at': new Date(),
+        'user_id': await userStore.getUserId(),
         'name': workoutPlanName.value,
         'description': description.value,
         'deleted': false
       }
     );
-    plannedWorkouts.value.forEach((plannedWorkout: PlannedWorkout) => {
+    plannedWorkouts.value.forEach(async (plannedWorkout: PlannedWorkout) => {
       plannedWorkoutStore.updatePlannedWorkout(
         {
           'id': plannedWorkout.id,
-          'workoutPlanId': plannedWorkout.workoutPlanId,
-          'workoutId': plannedWorkout.workoutId,
-          'dayOfWeekId': plannedWorkout.dayOfWeekId,
-          'timeOfDay': plannedWorkout.timeOfDay,
-          'deleted': false
+          'workout_plan_id': plannedWorkout.workout_plan_id,
+          'workout_id': plannedWorkout.workout_id,
+          'day_of_week_id': plannedWorkout.day_of_week_id,
+          'time_of_day': plannedWorkout.time_of_day,
+          'deleted': false,
+          'user_id': await userStore.getUserId()
         }
       )
     });
@@ -133,8 +147,10 @@
       if (!workoutPlan) {
         return
       }
+      generatedWorkoutPlanId.value = uuidv4()
       workoutPlanName.value = workoutPlan.name
       description.value = workoutPlan.description
+      createdAt.value = workoutPlan.created_at
       const plannedWorkoutsForWorkoutPlan = plannedWorkoutStore.getPlannedWorkoutsByWorkoutPlanId(props.workoutPlanId)
       plannedWorkouts.value = plannedWorkoutsForWorkoutPlan
     }
@@ -159,9 +175,9 @@
         class="ion-margin"
         v-for="(plannedWorkout, index) in plannedWorkouts"
         :key="index"
-        v-model:day-of-week-id="plannedWorkouts[index].dayOfWeekId"
-        v-model:time-of-day="plannedWorkouts[index].timeOfDay"
-        :workout-id="plannedWorkout.workoutId"
+        v-model:day-of-week-id="plannedWorkouts[index].day_of_week_id"
+        v-model:time-of-day="plannedWorkouts[index].time_of_day"
+        :workout-id="plannedWorkout.workout_id"
       />
       <AddPlannedWorkoutButton 
         class="ion-margin"

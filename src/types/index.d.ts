@@ -43,16 +43,20 @@ export interface WorkoutSelection extends Workout {
 };
 
 export interface PlannedWorkout {
-    id: number,
-    workoutId: string,
-    workoutPlanId: number,
-    dayOfWeekId: number,
-    timeOfDay: time,
-    deleted: boolean
+    id: string,
+    workout_id: string,
+    workout_plan_id: string,
+    day_of_week_id: number,
+    time_of_day: time,
+    deleted: boolean,
+    user_id: string
 }
 
 export interface WorkoutPlan {
-    id: number,
+    id: string,
+    created_at: Date,
+    updated_at: Date,
+    user_id: string,
     name: string,
     description: string,
     deleted: boolean
@@ -88,7 +92,7 @@ export interface Weight {
 export interface WorkoutSession {
     id: number,
     userId: string,
-    workoutId: number,
+    workoutId: string,
     createdAt: Date,
     updatedAt: Date,
     scheduledAt: Date,
