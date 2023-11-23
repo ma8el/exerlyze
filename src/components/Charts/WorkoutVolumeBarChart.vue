@@ -22,7 +22,7 @@ const weeklyWorkoutVolume = weekDays.map(day => {
   const workoutSessions = workoutSessionStore.getWorkoutSessionPerformanceByDate(day)
   return workoutSessions
   ? workoutSessions.reduce(
-    (acc, curr) => acc + curr.performedReps * curr.performedWeight, 0)
+    (acc, curr) => acc + curr.performed_reps * curr.performed_weight, 0)
   : 0
 });
 
