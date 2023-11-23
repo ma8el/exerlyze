@@ -12,17 +12,19 @@ import { bookmarkOutline, playForwardOutline, checkmarkDoneOutline } from 'ionic
 import BaseFullPageModal from './BaseFullPageModal.vue';
 import ActiveExerciseCard from '../Cards/ActiveExerciseCard.vue';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
+import { useUserStore } from '@/store/bodyMetricsStore';
 import { ref, onMounted, computed, watch } from 'vue';
 
 const props = defineProps({
   workoutId: {
-    type: Number,
+    type: String,
     required: true
   }
 });
 
 const workoutStore = useWorkoutStore();
 const workoutSessionStore = useWorkoutSessionStore();
+const userStore = useUserStore();
 
 const setRefs = ref<HTMLElement[]>([]);
 
@@ -41,39 +43,40 @@ const currentWorkoutSet = computed(() => {
   return workoutSessionSets[currentSet.value];
 });
 
-const save = () => {
+const save = async () => {
     if (!workoutSessionSets) {
       return;
     }
-    const workoutSessionId = workoutSessionStore.getNewWorkoutSessionId
-    const userId = 'markus';
+    const workoutSessionId = workoutSessionStore.getNewWorkoutSessionId();
+    const userId = await userStore.getUserId();
     // TODO: Track not fully completed workouts
     workoutSessionStore.addWorkoutSession({
       id: workoutSessionId,
-      userId: userId,
-      workoutId: props.workoutId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      user_id: userId,
+      workout_id: props.workoutId,
+      created_at: new Date(),
+      updated_at: new Date(),
       // TODO: scheduledAt should come from workoutSchedule
-      scheduledAt: new Date(),
-      startedAt: startedAt.value,
-      finishedAt: new Date(),
+      scheduled_at: new Date(),
+      started_at: startedAt.value,
+      finished_at: new Date(),
+      // TODO: Add note text field
       notes: '',
     })
     workoutSessionStore.addWorkoutSessionPerformances(
       workoutSessionSets.map((set, index) => ({
-        id: workoutSessionStore.getNewWorkoutSessionPerformanceId + index,
-        userId: userId,
-        workoutSessionId: workoutSessionId,
-        exerciseId: set.exerciseId,
+        id: set.id,
+        user_id: userId,
+        workout_session_id: workoutSessionId,
+        exercise_id: set.exerciseId,
         set: index,
-        plannedReps: set.plannedReps,
-        performedReps: set.reps,
-        plannedWeight: set.plannedWeight,
-        performedWeight: set.weight,
-        restTime: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        planned_reps: set.plannedReps,
+        performed_reps: set.reps,
+        planned_weight: set.plannedWeight,
+        performed_weight: set.weight,
+        resttime: 0,
+        created_at: new Date(),
+        updated_at: new Date(),
       }))
     );
     return modalController.dismiss(null, 'close');
@@ -115,6 +118,7 @@ watch(currentSet, (newValue) => {
 onMounted(() => {
   currentSet.value = 0;
   startedAt.value = new Date();
+  console.log(workoutSessionSets)
 });
 </script>
 
@@ -144,7 +148,7 @@ onMounted(() => {
         </ion-list-header>
         <ion-item 
           lines="none"
-          :class="{ 'highlighted': currentSet === set.id  }"
+          :class="{ 'highlighted': currentSet === index  }"
           ref="setRefs"
         >
           <ion-item lines="none" slot="start">

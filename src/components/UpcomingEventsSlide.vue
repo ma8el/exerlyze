@@ -12,7 +12,7 @@
 
   const workoutPlanStore = useWorkoutPlanStore();
   const plannedWorkouts = workoutPlanStore.getFullWorkoutPlans
-  const sortedPlannedWorkouts = plannedWorkouts.sort((a, b) => a.dayOfWeekId - b.dayOfWeekId);
+  const sortedPlannedWorkouts = plannedWorkouts.sort((a, b) => a.day_of_week_id - b.day_of_week_id);
   const nextWorkout = ref();
 
   const getNextEventIndex = (currentDay: number, events: number[]) => {
@@ -26,7 +26,7 @@
 
   const setNextWorkout = () => {
     const today = new Date().getDay();
-    const workoutDays = sortedPlannedWorkouts.map((workoutPlan) => workoutPlan.dayOfWeekId);
+    const workoutDays = sortedPlannedWorkouts.map((workoutPlan) => workoutPlan.day_of_week_id);
     nextWorkout.value = getNextEventIndex(today, workoutDays);
   }
 
@@ -49,7 +49,7 @@
         :content="true"
       >
         {{ $t('scheduledOn') }} {{ slotProps.item.dayOfWeek }}
-        <StartWorkoutButton :workoutId="slotProps.item.workoutId" />
+        <StartWorkoutButton :workoutId="slotProps.item.workout_id" />
       </BaseCard>
     </template>
   </Slider>

@@ -97,9 +97,6 @@ export const useWorkoutPlanStore = defineStore({
         getWorkoutPlans(): WorkoutPlan[] {
             return this.workoutPlans.filter(w => !w.deleted);
         },
-        getNewId(): string {
-            return uuidv4();
-        },
         getFullWorkoutPlans(): FullWorkoutPlan[] {
             const dayOfWeekStore = useDayOfWeekStore();
             const workoutStore = useWorkoutStore();
@@ -124,6 +121,9 @@ export const useWorkoutPlanStore = defineStore({
         }
     },
     actions: {
+        getNewId(): string {
+            return uuidv4();
+        },
         getWorkoutPlanById(id: string): WorkoutPlan | undefined {
             const workoutPlan = this.workoutPlans.find(w => w.id === id);
             if (workoutPlan) {
@@ -301,21 +301,15 @@ export const useWorkoutSessionStore = defineStore({
         getWorkoutSessionPerformances(): WorkoutSessionPerformance[] {
             return this.workoutSessionPerformances;
         },
-        getNewWorkoutSessionId(): number {
-            return this.workoutSessions.length + 1;
-        },
-        getNewWorkoutSessionPerformanceId(): number {
-            return this.workoutSessionPerformances.length + 1;
-        },
         getFullWorkoutSessions(): FullWorkoutSession[] {
             const workoutStore = useWorkoutStore();
             const fullWorkoutSessions = this.workoutSessions.map(w => {
-                const workout = workoutStore.getWorkoutById(w.workoutId);
+                const workout = workoutStore.getWorkoutById(w.workout_id);
                 if (workout) {
                     return {
                         ...w,
                         workout: workout,
-                        workoutPerformance: this.workoutSessionPerformances.filter(p => p.workoutSessionId === w.id)
+                        workoutPerformance: this.workoutSessionPerformances.filter(p => p.workout_session_id === w.id)
                     } as FullWorkoutSession;
                 }
                 return undefined;
@@ -324,20 +318,26 @@ export const useWorkoutSessionStore = defineStore({
         }
     },
     actions: {
-        getWorkoutSessionById(id: number): WorkoutSession | undefined {
+        getNewWorkoutSessionId(): string {
+            return uuidv4();
+        },
+        getNewWorkoutSessionPerformanceId(): string {
+            return uuidv4();
+        },
+        getWorkoutSessionById(id: string): WorkoutSession | undefined {
             const workoutSession = this.workoutSessions.find(w => w.id === id);
             if (workoutSession) {
                 return workoutSession;
             }
             return undefined;
         },
-        updateWorkoutSessionById(id: number, workoutSessionPerformances: WorkoutSessionPerformance[]) {
+        updateWorkoutSessionById(id: string, workoutSessionPerformances: WorkoutSessionPerformance[]) {
             const index = this.workoutSessions.findIndex(w => w.id === id);
-            this.workoutSessions[index].updatedAt = new Date();
-            this.workoutSessionPerformances = this.workoutSessionPerformances.filter(w => w.workoutSessionId !== id);
+            this.workoutSessions[index].updated_at = new Date();
+            this.workoutSessionPerformances = this.workoutSessionPerformances.filter(w => w.workout_session_id !== id);
             this.workoutSessionPerformances.push(...workoutSessionPerformances);
         },
-        getFullWorkoutSessionById(id: number): FullWorkoutSession | undefined {
+        getFullWorkoutSessionById(id: string): FullWorkoutSession | undefined {
             const fullWorkoutSession = this.getFullWorkoutSessions.find(w => w.id === id);
             if (fullWorkoutSession) {
                 return fullWorkoutSession;
@@ -345,7 +345,7 @@ export const useWorkoutSessionStore = defineStore({
             return undefined;
         },
         getWorkoutSessionsByDate(date: Date): WorkoutSession[] | undefined {
-            const workoutSessions = this.workoutSessions.filter(w => new Date(w.finishedAt).toDateString() === date.toDateString());
+            const workoutSessions = this.workoutSessions.filter(w => new Date(w.finished_at).toDateString() === date.toDateString());
             if (workoutSessions) {
                 return workoutSessions;
             }
@@ -354,19 +354,19 @@ export const useWorkoutSessionStore = defineStore({
         getFullWorkoutSessionsByDate(date: Date): FullWorkoutSession[] | undefined {
             const fullWorkoutSessions = this.getFullWorkoutSessions;
             if (fullWorkoutSessions) {
-                return fullWorkoutSessions.filter(w => new Date(w.finishedAt).toDateString() === date.toDateString());
+                return fullWorkoutSessions.filter(w => new Date(w.finished_at).toDateString() === date.toDateString());
             }
             return undefined;
         },
         getWorkoutSessionPerformanceByDate(date: Date): WorkoutSessionPerformance[] | undefined {
-            const workoutSessionPerformances = this.workoutSessionPerformances.filter(w => new Date(w.createdAt).toDateString() === date.toDateString());
+            const workoutSessionPerformances = this.workoutSessionPerformances.filter(w => new Date(w.created_at).toDateString() === date.toDateString());
             if (workoutSessionPerformances) {
                 return workoutSessionPerformances;
             }
             return undefined;
         },
         getWorkoutSessionPerformanceByDateRange(startDate: Date, endDate: Date): WorkoutSessionPerformance[] | undefined {
-            const workoutSessionPerformances = this.workoutSessionPerformances.filter(w => new Date(w.createdAt) >= startDate && new Date(w.createdAt) <= endDate);
+            const workoutSessionPerformances = this.workoutSessionPerformances.filter(w => new Date(w.created_at) >= startDate && new Date(w.created_at) <= endDate);
             if (workoutSessionPerformances) {
                 return workoutSessionPerformances;
             }
@@ -381,14 +381,12 @@ export const useWorkoutSessionStore = defineStore({
         createFullWorkoutSessionSets(workoutId: string) {
             const workoutStore = useWorkoutStore();
             const workout = workoutStore.getWorkoutById(workoutId);
-            let uniqueId = -1;
             if (workout) {
                 const sets = workout.exercises.flatMap(exercise => {
                     return Array.from({ length: exercise.sets }, (_, i) => {
-                      uniqueId++;
                       return {
-                        id: uniqueId,
-                        exerciseId: exercise.id,
+                        id: this.getNewWorkoutSessionPerformanceId(),
+                        exerciseId: exercise.exercise_id,
                         name: exercise.name,
                         sets: exercise.sets,
                         currentSet: i + 1,
@@ -408,20 +406,31 @@ export const useWorkoutSessionStore = defineStore({
             const firstDayOfWeek = new Date(new Date(today.setDate(today.getDate() - today.getDay())).setHours(0,0,0,0));
             const lastDayOfWeek = new Date(new Date(today.setDate(today.getDate() - today.getDay() + 6)).setHours(0, 0, 0, 0));
 
-            const performedWorkouts = this.workoutSessions.filter(w => new Date(w.finishedAt) >= firstDayOfWeek && new Date(w.finishedAt) <= lastDayOfWeek);
+            const performedWorkouts = this.workoutSessions.filter(w => new Date(w.finished_at) >= firstDayOfWeek && new Date(w.finished_at) <= lastDayOfWeek);
             return performedWorkouts.length;
         },
         getPerformedWorkoutVolumeThisWeek(): number {
             const today = new Date();
             const firstDayOfWeek = new Date(new Date(today.setDate(today.getDate() - today.getDay())).setHours(0,0,0,0));
             const lastDayOfWeek = new Date(new Date(today.setDate(today.getDate() - today.getDay() + 6)).setHours(0, 0, 0, 0));
-            const sessionsOfWeek = this.workoutSessions.filter(w => new Date(w.finishedAt) >= firstDayOfWeek && new Date(w.finishedAt) <= lastDayOfWeek);
+            const sessionsOfWeek = this.workoutSessions.filter(w => new Date(w.finished_at) >= firstDayOfWeek && new Date(w.finished_at) <= lastDayOfWeek);
             const sessionIdsOfWeek = sessionsOfWeek.map((s: WorkoutSession) => s.id)
  
             const sessionPerformanceOfWeek = this.workoutSessionPerformances.filter((w: any) => sessionIdsOfWeek.includes(w.workoutSessionId)) 
             const volumeOfWeek = sessionPerformanceOfWeek.reduce(
-                   (acc, curr) => acc + curr.performedReps * curr.performedWeight, 0)
+                   (acc, curr) => acc + curr.performed_reps * curr.performed_weight, 0)
             return volumeOfWeek;
+        },
+        async syncWorkoutSessions() {
+            const session = await supabase.auth.getSession()
+            if (session.data.session !== null) {
+                const { error } = await supabase.from('workout_sessions')
+                .upsert(this.workoutSessions)
+                for (const workoutSessionPerformance of this.workoutSessionPerformances) {
+                    await supabase.from('workout_session_performances')
+                    .upsert(workoutSessionPerformance)
+                }
+            }
         }
     }
 });

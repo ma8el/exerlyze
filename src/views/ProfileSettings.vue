@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { supabase } from '@/supabase';
 import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
-import { useWorkoutStore, useWorkoutPlanStore, usePlannedWorkoutStore } from '@/store/workoutStore';
+import { useWorkoutStore, useWorkoutPlanStore, usePlannedWorkoutStore, useWorkoutSessionStore } from '@/store/workoutStore';
 import AppLayout from '@/layouts/AppLayout.vue';
 import UserMetricsInput from '@/components/UserMetricsInput.vue';
 import { IonButton, useIonRouter } from '@ionic/vue';
@@ -21,11 +21,13 @@ const sync = async () => {
   const workoutStore = useWorkoutStore();
   const workoutPlanStore = useWorkoutPlanStore();
   const plannedWorkoutStore = usePlannedWorkoutStore();
+  const workoutSessionStore = useWorkoutSessionStore();
   userStore.syncUser();
   weightStore.syncWeights;
   workoutStore.syncWorkouts();
   workoutPlanStore.syncWorkoutPlans();
   plannedWorkoutStore.syncPlannedWorkouts();
+  workoutSessionStore.syncWorkoutSessions();
 };
 
 onMounted(async () => {

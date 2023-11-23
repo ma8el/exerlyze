@@ -4,7 +4,7 @@
 
   const props = defineProps({
     workoutId: {
-      type: Number,
+      type: String,
       required: true
     }
   });

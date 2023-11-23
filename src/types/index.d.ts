@@ -90,32 +90,32 @@ export interface Weight {
 }
 
 export interface WorkoutSession {
-    id: number,
-    userId: string,
-    workoutId: string,
-    createdAt: Date,
-    updatedAt: Date,
-    scheduledAt: Date,
-    startedAt: Date,
-    finishedAt: Date,
+    id: string,
+    user_id: string,
+    workout_id: string,
+    created_at: Date,
+    updated_at: Date,
+    scheduled_at: Date,
+    started_at: Date,
+    finished_at: Date,
     notes: string,
 }
 
 export interface WorkoutSessionPerformance {
-    id: number,
-    userId: string,
-    workoutSessionId: number,
-    exerciseId: number,
+    id: string,
+    user_id: string,
+    workout_session_id: string,
+    exercise_id: number,
     set: number,
-    plannedReps: number,
-    performedReps: number,
-    plannedWeight: number,
-    performedWeight: number,
-    plannedRir?: number,
-    performedRir?: number,
-    restTime: number,
-    createdAt: Date,
-    updatedAt: Date,
+    planned_reps: number,
+    performed_reps: number,
+    planned_weight: number,
+    performed_weight: number,
+    planned_rir?: number,
+    performed_rir?: number,
+    resttime: number,
+    created_at: Date,
+    updated_at: Date,
 }
 
 export interface FullWorkoutSession extends WorkoutSession {
