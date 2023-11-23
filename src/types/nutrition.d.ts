@@ -36,17 +36,18 @@ export interface NutritionApiSearchResponse {
 }
 
 export interface FoodDiary {
-    id: number,
-    userId: string,
-    createdAt: Date,
+    id: string,
+    user_id: string,
+    created_at: Date,
 }
 
 export interface FoodDiaryEntry {
-    id: number,
-    foodDiaryId: number,
-    createdAt: Date,
-    foodId: string,
-    foodName: string,
+    id: string,
+    user_id: string,
+    food_diary_id: string,
+    created_at: Date,
+    food_id: string,
+    food_name: string,
     quantity: number,
     unit: string,
     calories: number,
@@ -57,4 +58,5 @@ export interface FoodDiaryEntry {
     sugar: number,
     salt: number,
     sodium: number,
+    deleted: boolean,
 }

@@ -30,7 +30,7 @@ import { chevronDownOutline } from 'ionicons/icons';
         v-for="(foodItem, index) in foodDiaryStore.getBreakfastEntriesOfDate(selectedDate)"
         :key="foodItem.id"
         :id="foodItem.id"
-        :foodName="foodItem.foodName"
+        :foodName="foodItem.food_name"
         :calories="foodItem.calories"
         :quantity="foodItem.quantity"
       />
@@ -50,7 +50,7 @@ import { chevronDownOutline } from 'ionicons/icons';
         v-for="(foodItem, index) in foodDiaryStore.getLunchEntriesOfDate(selectedDate)"
         :key="foodItem.id"
         :id="foodItem.id"
-        :foodName="foodItem.foodName"
+        :foodName="foodItem.food_name"
         :calories="foodItem.calories"
         :quantity="foodItem.quantity"
       />
@@ -70,7 +70,7 @@ import { chevronDownOutline } from 'ionicons/icons';
         v-for="(foodItem, index) in foodDiaryStore.getDinnerEntriesOfDate(selectedDate)"
         :key="foodItem.id"
         :id="foodItem.id"
-        :foodName="foodItem.foodName"
+        :foodName="foodItem.food_name"
         :calories="foodItem.calories"
         :quantity="foodItem.quantity"
       />
