@@ -13,7 +13,7 @@ import BaseFullPageModal from './BaseFullPageModal.vue';
 import ActiveExerciseCard from '../Cards/ActiveExerciseCard.vue';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
 import { useUserStore } from '@/store/bodyMetricsStore';
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, reactive, onMounted, computed, watch } from 'vue';
 
 const props = defineProps({
   workoutId: {
@@ -34,7 +34,7 @@ const currentReps = ref<number>(0);
 const currentWeight = ref<number>(0);
 
 const workout = workoutStore.getWorkoutById(props.workoutId);
-const workoutSessionSets = workoutSessionStore.createFullWorkoutSessionSets(props.workoutId);
+let workoutSessionSets = reactive(workoutSessionStore.createFullWorkoutSessionSets(props.workoutId));
 
 const currentWorkoutSet = computed(() => {
   if (!workoutSessionSets) {
@@ -49,7 +49,6 @@ const save = async () => {
     }
     const workoutSessionId = workoutSessionStore.getNewWorkoutSessionId();
     const userId = await userStore.getUserId();
-    console.log(workoutSessionSets)
     // TODO: Track not fully completed workouts
     workoutSessionStore.addWorkoutSession({
       id: workoutSessionId,
@@ -65,7 +64,7 @@ const save = async () => {
       notes: '',
     })
     workoutSessionStore.addWorkoutSessionPerformances(
-      workoutSessionSets.map((set, index) => ({
+      workoutSessionSets.map((set: any, index: number) => ({
         id: set.id,
         user_id: userId,
         workout_session_id: workoutSessionId,
@@ -116,6 +115,36 @@ watch(currentSet, (newValue) => {
   }
 }, { immediate: true });
 
+const updatePerformedWeight = (index: number, value: any) => {
+  if (!workoutSessionSets) {
+    return;
+  }
+  workoutSessionSets = workoutSessionSets.map((set: any, i: number) => {
+    if (i === index) {
+      return {
+        ...set,
+        weight: parseFloat(value.detail.value),
+      };
+    }
+    return set;
+  });
+};
+
+const updatePerformedReps = (index: number, value: any) => {
+  if (!workoutSessionSets) {
+    return;
+  }
+  workoutSessionSets = workoutSessionSets.map((set: any, i: number) => {
+    if (i === index) {
+      return {
+        ...set,
+        reps: parseInt(value.detail.value),
+      };
+    }
+    return set;
+  });
+};
+
 onMounted(() => {
   currentSet.value = 0;
   startedAt.value = new Date();
@@ -162,7 +191,7 @@ onMounted(() => {
             <ion-input 
               :value="set.plannedReps"
               :clear-on-edit="true"
-              v-model="set.reps"
+              @ion-input="value => updatePerformedReps(index, value)"
               type="number"
               inputmode="numeric"
             >
@@ -174,7 +203,7 @@ onMounted(() => {
             <ion-input 
               :value="set.plannedWeight"
               :clear-on-edit="true"
-              v-model="set.weight"
+              @ion-input="value => updatePerformedWeight(index, value)"
               type="number"
               inputmode="numeric"
             >
