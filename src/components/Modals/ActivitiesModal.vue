@@ -18,7 +18,7 @@
   const workoutSessionStore = useWorkoutSessionStore();
   const workoutSessions = workoutSessionStore.getFullWorkoutSessionsByDate(props.selectedDate);
 
-  const openModal = async (workoutSessionId: Number) => {
+  const openModal = async (workoutSessionId: String) => {
     if ( !workoutSessionId ) {
       return
     }

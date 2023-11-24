@@ -1,28 +1,28 @@
 <script setup lang="ts">
   import { IonInput,
-           IonCardTitle,
-           IonCardHeader,
-           IonCardSubtitle,
            IonIcon,
+           IonRow,
+           IonCol,
+           IonListHeader,
            IonList,
            IonItem,
            IonLabel,
            modalController } from '@ionic/vue';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import BaseInfoCard from '../Cards/BaseInfoCard.vue';
-  import { bookmarkOutline } from 'ionicons/icons';
   import { useWorkoutSessionStore } from '@/store/workoutStore';
   import { computed } from 'vue';
+  import { WorkoutSessionPerformance } from '@/types';
 
   const props = defineProps({
     workoutSessionId: {
-      type: Number,
+      type: String,
       required: true
     }
   })
 
   const workoutSessionStore = useWorkoutSessionStore();
-  const workoutSession = workoutSessionStore.getFullWorkoutSessionById(props.workoutSessionId);
+  const workoutSession = JSON.parse(JSON.stringify(workoutSessionStore.getFullWorkoutSessionById(props.workoutSessionId)));
 
   const totalSets = computed(() => {
     if (!workoutSession) {
@@ -35,27 +35,34 @@
     if (!workoutSession) {
       return 0;
     }
-    console.log(workoutSession.workoutPerformance.reduce((acc, set) => acc + set.performedReps, 0));
-    return workoutSession.workoutPerformance.reduce((acc, set) => acc + parseInt(set.performedReps), 0);
+    return workoutSession.workoutPerformance.reduce((acc: number, set: WorkoutSessionPerformance) => acc + set.performed_reps, 0);
   });
 
   const totalWeight = computed(() => {
     if (!workoutSession) {
       return 0;
     }
-    return workoutSession.workoutPerformance.reduce((acc, set) => acc + parseFloat(set.performedWeight), 0);
+    return workoutSession.workoutPerformance.reduce((acc: number, set: WorkoutSessionPerformance) => acc + set.performed_weight, 0);
   });
 
   const workoutDuration = computed(() => {
     if (!workoutSession) {
       return 0;
     }
-    const hours = Math.abs(new Date(workoutSession.finishedAt).getHours() - new Date(workoutSession.startedAt).getHours());
-    const minutes = Math.abs(new Date(workoutSession.finishedAt).getMinutes() - new Date(workoutSession.startedAt).getMinutes());
-    const seconds = Math.abs(new Date(workoutSession.finishedAt).getSeconds() - new Date(workoutSession.startedAt).getSeconds());
+    const hours = Math.abs(new Date(workoutSession.finished_at).getHours() - new Date(workoutSession.started_at).getHours());
+    const minutes = Math.abs(new Date(workoutSession.finished_at).getMinutes() - new Date(workoutSession.started_at).getMinutes());
+    const seconds = Math.abs(new Date(workoutSession.finished_at).getSeconds() - new Date(workoutSession.started_at).getSeconds());
     const formattedDuration = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     return formattedDuration;
   });
+
+  const updatePerformedWeight = (index: number, value: any) => {
+    workoutSession.workoutPerformance[index].performed_weight = parseFloat(value.detail.value)
+  };
+
+  const updatePerformedReps = (index: number, value: any) => {
+    workoutSession.workoutPerformance[index].performed_reps = parseInt(value.detail.value)
+  };
 
   const update = () => {
     if (workoutSession) {
@@ -122,7 +129,7 @@
           </ion-list-header>
  
           <div
-            v-for = "(set, index) in workoutSession.workoutPerformance.filter(set => set.exerciseId === exercise.id)"
+            v-for = "(set, index) in workoutSession.workoutPerformance.filter((set: WorkoutSessionPerformance) => set.exercise_id === exercise.exercise_id)"
             :key="index"
             class="exercise-list-item"
           >
@@ -139,9 +146,11 @@
               <ion-item lines="none">
                 <ion-icon slot="start" src="../../../assets/icons/reps.svg"></ion-icon>
                 <ion-input 
-                  :value="set.performedReps"
+                  :value="set.performed_reps"
                   :clear-on-edit="true"
-                  v-model="set.performedReps"
+                  @ion-input="value => updatePerformedReps(index, value)"
+                  type="number"
+                  inputmode="numeric"
                 >
                 </ion-input>
                 <ion-label slot="end">{{ $t('workouts.reps') }}</ion-label>
@@ -149,9 +158,11 @@
               <ion-item lines="none">
                 <ion-icon slot="start" src="../../../assets/icons/weight.svg"></ion-icon>
                 <ion-input 
-                  :value="set.performedWeight"
+                  :value="set.performed_weight"
                   :clear-on-edit="true"
-                  v-model="set.performedWeight"
+                  @ion-input="value => updatePerformedWeight(index, value)"
+                  type="number"
+                  inputmode="numeric"
                 >
                 </ion-input>
                 <ion-label slot="end">{{ $t('weightUnitBig') }}</ion-label>

@@ -11,7 +11,7 @@ const workoutSessionStore = useWorkoutSessionStore();
 const workoutStore = useWorkoutStore();
 const workoutSessions = ref(workoutSessionStore.getWorkoutSessions);
 
-const getWorkoutName = (workoutId: number) => {
+const getWorkoutName = (workoutId: string) => {
   const workout = workoutStore.getWorkoutById(workoutId);
   if (!workout) {
     return 'Workout';
@@ -19,7 +19,7 @@ const getWorkoutName = (workoutId: number) => {
     return workout.name;
 }
 
-const openModal = async (workoutSessionId: Number) => {
+const openModal = async (workoutSessionId: string) => {
   if ( !workoutSessionId ) {
     return
   }
@@ -42,12 +42,12 @@ const openModal = async (workoutSessionId: Number) => {
     >
       <div class="timeline-header">
         <div class="timeline-dot"></div>
-        <div class="timeline-title">{{ dateToIsoString(new Date(workoutSession.finishedAt)) + ` ` + extractTimeFromTS(new Date(workoutSession.finishedAt)) }}</div>
+        <div class="timeline-title">{{ dateToIsoString(new Date(workoutSession.finished_at)) + ` ` + extractTimeFromTS(new Date(workoutSession.finished_at)) }}</div>
       </div>
       <div class="timeline-content">
         <BaseCard
           :img_src="defaultImage"
-          :title="getWorkoutName(workoutSession.workoutId)"
+          :title="getWorkoutName(workoutSession.workout_id)"
           :button="true"
           @click="openModal(workoutSession.id)"
         />

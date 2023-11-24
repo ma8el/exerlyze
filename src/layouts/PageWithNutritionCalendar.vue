@@ -25,7 +25,7 @@
 
   let nutritionEventDates = reactive<Date[]>([])
   nutritionEventDates = getCurrentWeekDates().filter(
-    date => nutritionStore.getFoodDiaryEntries.some(foodEntry => new Date(foodEntry.createdAt).getDay() === date.getDay()))
+    date => nutritionStore.getFoodDiaryEntries.some(foodEntry => new Date(foodEntry.created_at).getDay() === date.getDay()))
 
   const attributes = ref([{
     key: 'today',
@@ -48,7 +48,7 @@
 
   nutritionStore.$subscribe((mutation, state) => {
     nutritionEventDates = getCurrentWeekDates().filter(
-      date => nutritionStore.getFoodDiaryEntries.some(foodEntry => new Date(foodEntry.createdAt).getDay() === date.getDay()))
+      date => nutritionStore.getFoodDiaryEntries.some(foodEntry => new Date(foodEntry.created_at).getDay() === date.getDay()))
   });
 </script>
 

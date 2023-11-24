@@ -16,11 +16,11 @@
 
   let workoutEventDates = reactive<Date[]>([])
   workoutEventDates = getCurrentWeekDates().filter(
-    date => workoutPlanStore.getFullWorkoutPlans.some(workout => workout.dayOfWeekId === date.getDay()))
+    date => workoutPlanStore.getFullWorkoutPlans.some(workout => workout.day_of_week_id === date.getDay()))
 
   workoutPlanStore.$subscribe((mutation, state) => {
     workoutEventDates = getCurrentWeekDates().filter(
-      date => workoutPlanStore.getFullWorkoutPlans.some(workout => workout.dayOfWeekId === date.getDay()));
+      date => workoutPlanStore.getFullWorkoutPlans.some(workout => workout.day_of_week_id === date.getDay()));
   });
 </script>
 

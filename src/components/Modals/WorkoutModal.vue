@@ -49,6 +49,7 @@ const save = async () => {
     }
     const workoutSessionId = workoutSessionStore.getNewWorkoutSessionId();
     const userId = await userStore.getUserId();
+    console.log(workoutSessionSets)
     // TODO: Track not fully completed workouts
     workoutSessionStore.addWorkoutSession({
       id: workoutSessionId,
@@ -70,10 +71,10 @@ const save = async () => {
         workout_session_id: workoutSessionId,
         exercise_id: set.exerciseId,
         set: index,
-        planned_reps: set.plannedReps,
-        performed_reps: set.reps,
-        planned_weight: set.plannedWeight,
-        performed_weight: set.weight,
+        planned_reps: parseInt(set.plannedReps),
+        performed_reps: parseInt(set.reps),
+        planned_weight: parseFloat(set.plannedWeight),
+        performed_weight: parseFloat(set.weight),
         resttime: 0,
         created_at: new Date(),
         updated_at: new Date(),
@@ -118,7 +119,6 @@ watch(currentSet, (newValue) => {
 onMounted(() => {
   currentSet.value = 0;
   startedAt.value = new Date();
-  console.log(workoutSessionSets)
 });
 </script>
 
@@ -163,6 +163,8 @@ onMounted(() => {
               :value="set.plannedReps"
               :clear-on-edit="true"
               v-model="set.reps"
+              type="number"
+              inputmode="numeric"
             >
             </ion-input>
             <ion-label slot="end">{{ $t('workouts.reps') }}</ion-label>
@@ -173,6 +175,8 @@ onMounted(() => {
               :value="set.plannedWeight"
               :clear-on-edit="true"
               v-model="set.weight"
+              type="number"
+              inputmode="numeric"
             >
             </ion-input>
             <ion-label slot="end">{{ $t('weightUnitBig') }}</ion-label>
