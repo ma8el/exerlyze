@@ -42,7 +42,7 @@
     if (!workoutSession) {
       return 0;
     }
-    return workoutSession.workoutPerformance.reduce((acc: number, set: WorkoutSessionPerformance) => acc + set.performed_weight, 0);
+    return workoutSession.workoutPerformance.reduce((acc: number, set: WorkoutSessionPerformance) => acc + set.performed_reps * set.performed_weight, 0);
   });
 
   const workoutDuration = computed(() => {
