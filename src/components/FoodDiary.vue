@@ -8,7 +8,7 @@
   import FoodItem from './FoodItem.vue';
   import { inject } from 'vue';
   import { selectedDateKey } from '@/keys';
-import { chevronDownOutline } from 'ionicons/icons';
+  import { chevronDownOutline } from 'ionicons/icons';
 
   const selectedDate = inject(selectedDateKey)
   const foodDiaryStore = useFoodDiaryStore();
@@ -33,6 +33,7 @@ import { chevronDownOutline } from 'ionicons/icons';
         :foodName="foodItem.food_name"
         :calories="foodItem.calories"
         :quantity="foodItem.quantity"
+        :foodImage="foodItem.image_front_thumb_url"
       />
       </template>
     </ion-item-group>
@@ -53,6 +54,7 @@ import { chevronDownOutline } from 'ionicons/icons';
         :foodName="foodItem.food_name"
         :calories="foodItem.calories"
         :quantity="foodItem.quantity"
+        :foodImage="foodItem.image_front_thumb_url"
       />
       </template>
     </ion-item-group>
@@ -73,6 +75,7 @@ import { chevronDownOutline } from 'ionicons/icons';
         :foodName="foodItem.food_name"
         :calories="foodItem.calories"
         :quantity="foodItem.quantity"
+        :foodImage="foodItem.image_front_thumb_url"
       />
       </template>
     </ion-item-group>

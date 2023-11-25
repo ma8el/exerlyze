@@ -58,5 +58,6 @@ export interface FoodDiaryEntry {
     sugar: number,
     salt: number,
     sodium: number,
+    image_front_thumb_url: string,
     deleted: boolean,
 }

@@ -37,6 +37,7 @@
             sugar: parseInt(sugar.value),
             salt: parseInt(salt.value),
             sodium: parseInt(sodium.value),
+            image_front_thumb_url: props.product.image_front_thumb_url,
             deleted: false
         })
         modalController.dismiss()

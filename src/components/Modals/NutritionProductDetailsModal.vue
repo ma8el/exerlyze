@@ -11,11 +11,9 @@
            modalController } from '@ionic/vue';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import AddNutrimentModal from './AddNutrimentModal.vue';
-  import NutrimentRow from '../NutrimentRow.vue';
   import BaseCard from '../Cards/BaseCard.vue';
   import { FilteredNutritionApiProduct } from '@/types/nutrition';
   import { PropType } from 'vue';
-  import { addCircleOutline } from 'ionicons/icons';
   import { nutritionDetails } from '@/helpers/nutrition';
 
   const props = defineProps({
