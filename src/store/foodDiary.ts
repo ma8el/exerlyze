@@ -81,7 +81,7 @@ export const useFoodDiaryStore = defineStore({
         },
         getMissingProteinsOfToday(): number {
             const proteins = this.getProteinOfDate(new Date());
-            const missingProteins = this.dailyProtein - proteins;
+            const missingProteins = Math.max(this.dailyProtein - proteins, 0);
             return missingProteins;
         },
         getBreakfastEntriesOfDate(date: Date): FoodDiaryEntry[] {
