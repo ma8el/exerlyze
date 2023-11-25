@@ -40,13 +40,6 @@ const getOptions = () => {
       color: 'white',
     },
   },
-  legend: {
-    data: [t('home.workoutVolume')],
-    textStyle: {
-      color: 'white',
-    },
-    right: 10,
-  },
   xAxis: {
     type: 'category',
     boundaryGap: false,

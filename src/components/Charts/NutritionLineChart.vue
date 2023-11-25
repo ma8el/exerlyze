@@ -39,13 +39,6 @@ const getOptions = () => {
         color: 'white',
       },
     },
-    legend: {
-      data: [t('home.consumedCalories')],
-      textStyle: {
-        color: 'white',
-      },
-      right: 10,
-    },
     xAxis: {
       type: 'category',
       boundaryGap: false,
