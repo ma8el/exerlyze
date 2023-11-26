@@ -76,8 +76,11 @@ ion-item {
 ion-item-sliding {
   border-radius: 10px;
   ion-item-options {
-    padding-bottom: 10px;
-    border-radius: 10px;
+    margin-top: 10px;
   }
+}
+
+ion-item-option {
+  border-radius: 0 10px 0 0;
 }
 </style>
