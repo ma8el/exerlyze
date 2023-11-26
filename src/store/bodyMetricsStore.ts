@@ -12,10 +12,7 @@ export const useWeightStore = defineStore({
         weights: useStorage('weights', [] as Weight[]),
     }),
     getters: {
-        getNewId(): string {
-            return uuidv4();
-        },
-        getWeights(): Weight[] {
+       getWeights(): Weight[] {
             return this.weights;
         },
         getCurrentWeight(): Weight {
@@ -35,12 +32,17 @@ export const useWeightStore = defineStore({
         async syncWeights(): Promise<void> {
             const session = await supabase.auth.getSession()
             if (session.data.session !== null) {
-                const { error } = await supabase.from('weights')
-                .upsert(this.weights)
+                for (const weight of this.weights) {
+                  const { error } = await supabase.from('weights')
+                  .upsert(weight)
+                }
             }
         }
     },
     actions: {
+        getNewId(): string {
+            return uuidv4();
+        },
         addWeight(weight: Weight) {
             this.weights.push(weight);
         }

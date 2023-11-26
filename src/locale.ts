@@ -106,6 +106,7 @@ export const messages = {
         insights: "Insights",
         noData: "No data",
         workoutSettings: "Workout Settings",
+        date: "Date",
     },
     de: {
         language: "Sprache",
@@ -212,5 +213,6 @@ export const messages = {
         insights: "Insights",
         noData: "Keine Daten",
         workoutSettings: "Trainingseinstellungen",
+        date: "Datum",
     },
 }
