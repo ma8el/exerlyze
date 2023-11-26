@@ -9,8 +9,14 @@
     
     const props = defineProps({
         title: String,
-        subTitle: String,
-        content: Boolean,
+        subTitle: {
+          type: Boolean,
+          default: false
+        },
+        content: {
+          type: Boolean,
+          default: false
+        },
         img_src: String,
         img_height: String,
         titleSize: String
@@ -32,7 +38,9 @@
         </ion-col>
         <slot name="titleEnd"></slot>
       </ion-row>
-      <ion-card-subtitle v-if="subTitle">{{ subTitle }}</ion-card-subtitle>
+      <ion-card-subtitle v-if="subTitle">
+        <slot name="subtitle"></slot>
+      </ion-card-subtitle>
     </ion-card-header>
     <ion-card-content v-if="content">
       <slot></slot>

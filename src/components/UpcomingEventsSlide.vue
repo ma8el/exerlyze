@@ -48,7 +48,9 @@
         :title="slotProps.item.workout.name"
         :content="true"
       >
-        {{ $t('scheduledOn') }} {{ slotProps.item.dayOfWeek }}
+        <template #subtitle>
+          {{ $t('scheduledOn') }} {{ slotProps.item.dayOfWeek }}
+        </template>
         <StartWorkoutButton :workoutId="slotProps.item.workout_id" />
       </BaseCard>
     </template>

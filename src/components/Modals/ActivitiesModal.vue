@@ -54,10 +54,14 @@
           <BaseCard
             :img_src="defaultImage"
             :title="workoutSession.workout.name"
-            :subTitle="workoutSession.workout.exercises.length + ' exercises'"
+            :subTitle="true"
             :button="true"
             @click="openModal(workoutSession.id)"
-          />
+          >
+            <template #subtitle>
+              {{  workoutSession.workout.exercises.length + ' exercises'  }}
+            </template>
+          </BaseCard>
         </div>
       </ion-list>
     </template>

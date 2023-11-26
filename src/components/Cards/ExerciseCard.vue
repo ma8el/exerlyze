@@ -29,9 +29,12 @@
     class="exercise-card"
     :img_src="url ? url : defaultImage"
     :title="name"
-    :sub-title="`Sets: ${sets} Reps: ${reps} Weight: ${weight}`"
+    :sub-title="true"
     :img_height="'100px'"
   >
+    <template #subtitle>
+      Sets: {{sets}} Reps: {{reps}} Weight: {{weight}}
+    </template>
   </BaseCard>
   <ion-spinner v-else/>
 </template>

@@ -26,6 +26,10 @@
   <BaseCard
     v-if="workoutStore.getWorkouts.length == 0"
     :title="$t('workouts.noWorkoutsYet')"
-    :subTitle="$t('workouts.noWorkoutsYetSubtitle')"
-  ></BaseCard>
+    :subTitle="true"
+  >
+    <template #subtitle>
+      {{ $t('workouts.noWorkoutsYetSubtitle') }}
+    </template>
+  </BaseCard>
 </template>
