@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { IonSpinner } from '@ionic/vue';
+  import { IonSpinner, IonIcon, IonRow, IonCol, IonGrid } from '@ionic/vue';
   import { onMounted, ref } from 'vue';
   import BaseCard from './BaseCard.vue';
   import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
@@ -33,8 +33,48 @@
     :img_height="'100px'"
   >
     <template #subtitle>
-      Sets: {{sets}} Reps: {{reps}} Weight: {{weight}}
+      <ion-grid>
+      <ion-row>
+        <ion-col class="no-margin" size="3">
+          <div class="icon-description">
+            <ion-icon class="small-margin" src="../../../assets/icons/set.svg"/>
+            {{sets}}
+          </div>
+        </ion-col>
+        <ion-col class="no-margin" size="3">
+
+          <div class="icon-description">
+          <ion-icon class="small-margin" src="../../../assets/icons/reps.svg"/>
+          {{reps}}
+          </div>
+        </ion-col>
+        <ion-col class="no-margin" size="6">
+          <div class="icon-description">
+          <ion-icon class="small-margin" src="../../../assets/icons/weight.svg"/>
+          {{weight}} {{ $t('weightUnitBig')  }}
+          </div>
+        </ion-col>
+      </ion-row>
+      </ion-grid>
     </template>
   </BaseCard>
   <ion-spinner v-else/>
 </template>
+
+<style>
+
+.no-margin {
+  margin: 0;
+  padding: 0;
+}
+
+.small-margin {
+  margin-right: 0.2rem;
+}
+
+.icon-description {
+  display: flex;
+  align-items: center;
+}
+
+</style>
