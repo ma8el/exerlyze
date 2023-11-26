@@ -45,7 +45,7 @@
   <AppLayout 
    :title="$t('insights')"
    :back-button="true"
-   :settings-button="false"
+   :action-button="false"
   >
   <BaseSegments
     class="ion-padding-top"

@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { supabase } from '@/supabase';
-import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
-import { useWorkoutStore, useWorkoutPlanStore, usePlannedWorkoutStore, useWorkoutSessionStore } from '@/store/workoutStore';
-import { useFoodDiaryStore } from '@/store/foodDiary';
 import AppLayout from '@/layouts/AppLayout.vue';
 import UserMetricsInput from '@/components/UserMetricsInput.vue';
 import { IonButton, useIonRouter } from '@ionic/vue';
@@ -14,23 +11,6 @@ const loading = ref(true);
 
 const redirect = () => {
   router.push('/login');
-};
-
-const sync = async () => {
-  const userStore = useUserStore();
-  const weightStore = useWeightStore();
-  const workoutStore = useWorkoutStore();
-  const workoutPlanStore = useWorkoutPlanStore();
-  const plannedWorkoutStore = usePlannedWorkoutStore();
-  const workoutSessionStore = useWorkoutSessionStore();
-  const foodDiaryStore = useFoodDiaryStore();
-  userStore.syncUser();
-  weightStore.syncWeights;
-  workoutStore.syncWorkouts();
-  workoutPlanStore.syncWorkoutPlans();
-  plannedWorkoutStore.syncPlannedWorkouts();
-  workoutSessionStore.syncWorkoutSessions();
-  foodDiaryStore.syncFoodDiary();
 };
 
 onMounted(async () => {
@@ -69,14 +49,6 @@ onMounted(async () => {
           @click="() => redirect()"
         >
           Login
-        </IonButton>
-        <IonButton
-          expand="block"
-          color="primary"
-          :style="`margin-top: 20px;`"
-          @click="() => sync()"
-        >
-          Sync Data
         </IonButton>
       </div>
     </div>

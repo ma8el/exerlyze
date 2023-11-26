@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { supabase } from '@/supabase';
   import { IonHeader,
            IonPage,
            IonContent,
@@ -8,20 +9,24 @@
            IonFabButton,
            IonButtons, 
            IonIcon,
-           modalController, 
+           loadingController, 
   } from '@ionic/vue';
   import { arrowBackOutline } from 'ionicons/icons';
-  import Settings from '@/components/Settings.vue';
   import { useRouter } from 'vue-router';
+  import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
+  import { useWorkoutStore, useWorkoutPlanStore, usePlannedWorkoutStore, useWorkoutSessionStore } from '@/store/workoutStore';
+  import { useFoodDiaryStore } from '@/store/foodDiary';
+  import { ref, onMounted } from 'vue';
 
   const router = useRouter();
+  const session = ref();
 
   const props = defineProps({
       title: {
         type: String,
         required: true
       },
-      settingsButton: {
+      actionButton: {
         type: Boolean,
         default: true 
       },
@@ -39,24 +44,31 @@
     router.back();
   };
 
-  const openModal = async () => {
-    const modal = await modalController.create({
-      component: Settings,
-      cssClass: 'full-screen-modal',
-      componentProps: {
-        setting1: true,
-        setting2: false
-      }
+  const sync = async () => {
+    const loading = await loadingController.create({
+      message: 'Syncing...',
     });
-    modal.present();
+    loading.present()
+    const userStore = useUserStore();
+    const weightStore = useWeightStore();
+    const workoutStore = useWorkoutStore();
+    const workoutPlanStore = useWorkoutPlanStore();
+    const plannedWorkoutStore = usePlannedWorkoutStore();
+    const workoutSessionStore = useWorkoutSessionStore();
+    const foodDiaryStore = useFoodDiaryStore();
+    userStore.syncUser();
+    weightStore.syncWeights;
+    workoutStore.syncWorkouts();
+    workoutPlanStore.syncWorkoutPlans();
+    plannedWorkoutStore.syncPlannedWorkouts();
+    workoutSessionStore.syncWorkoutSessions();
+    foodDiaryStore.syncFoodDiary();
+    loading.dismiss();
+  };
 
-    const { data, role } = await modal.onWillDismiss();
-    if (role == 'save') {
-      console.log('Save', data);
-    } else {
-      console.log('Close', data);
-    };
-  }
+  onMounted(async () => {
+    session.value = await supabase.auth.getSession();
+  });
 </script>
 
 <template>
@@ -74,11 +86,11 @@
         </slot>
         <ion-buttons 
           slot="end"
-          v-if="settingsButton"
+          v-if="actionButton"
         >
-          <ion-fab horizontal="end">
-            <ion-fab-button color="dark" size="small" @click="openModal">
-              <ion-icon src="../../assets/icons/setting.svg"></ion-icon>
+          <ion-fab v-if="session !== null" horizontal="end">
+            <ion-fab-button color="dark" size="small" @click="sync">
+              <ion-icon src="../../assets/icons/update_black.svg"></ion-icon>
             </ion-fab-button>
           </ion-fab>
         </ion-buttons>
