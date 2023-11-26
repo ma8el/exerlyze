@@ -6,6 +6,7 @@ import CompleteProfile from '@/views/CompleteProfile.vue';
 import ProfileSettings from '@/views/ProfileSettings.vue';
 import ActivityHistory from '@/views/ActivityHistory.vue';
 import Insights from '@/views/Insights.vue';
+import WorkoutSettings from '@/views/WorkoutSettings.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -58,6 +59,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/insights',
     component: Insights
+  },
+  {
+    path: '/workout-settings',
+    component: WorkoutSettings
   }
 ]
 

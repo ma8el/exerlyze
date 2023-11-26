@@ -7,34 +7,51 @@
     IonCard,
     IonToggle,
     IonIcon,
-    modalController,
+    IonSelect,
+    IonSelectOption,
   } from '@ionic/vue';
   import AppLayout from '@/layouts/AppLayout.vue';
-  import Settings from '@/components/Settings.vue';
   import { useRouter } from 'vue-router';
   import { 
+    languageOutline,
     personOutline,
     documentTextOutline,
     barChartOutline,
     notificationsOutline,
     mailOutline,
     checkboxOutline,
-    settingsOutline,
     listOutline,
   } from 'ionicons/icons';
   import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
+  import { useUserSettingsStore } from '@/store/userSettingsStore';
+  import { useI18n } from 'vue-i18n';
+  import { onMounted } from 'vue';
 
   const router = useRouter();
   const userStore = useUserStore();
   const userWeightStore = useWeightStore();
+  const userSettingsStore = useUserSettingsStore();
+
+  const i18n = useI18n();
 
   const userName = userStore.getUserName();
   const userAge = userStore.getAge();
   const userHeight = userStore.getHeight();
   const userWeight = userWeightStore.getCurrentWeight;
 
+  const selectedLang = userSettingsStore.getLocale()
+
+  const changeLocale = (lang: string) => {
+    userSettingsStore.setLocale(lang)
+    i18n.locale.value = lang;
+  };
+
   const openProfileSettings = () => {
     router.push('/profile-settings');
+  };
+
+  const openWorkoutSettings = () => {
+    router.push('/workout-settings');
   };
 
   const openActivityHistory = () => {
@@ -44,26 +61,6 @@
   const openInsights = () => {
     router.push('/insights');
   };
-
-  const openSettingsModal = async () => {
-    const modal = await modalController.create({
-      component: Settings,
-      cssClass: 'full-screen-modal',
-      componentProps: {
-        setting1: true,
-        setting2: false
-      }
-    });
-    modal.present();
- 
-    const { data, role } = await modal.onWillDismiss();
-    if (role == 'save') {
-      console.log('Save', data);
-    } else {
-      console.log('Close', data);
-    };
-  };
-
 </script>
 
 <template>
@@ -103,11 +100,11 @@
     <div class="account">
       <ion-label class="head_lbl">Account</ion-label>
       <div class="info">
-        <ion-item lines="none" :button="true" @click="openProfileSettings">
+        <ion-item lines="none" :button="true" @click="openProfileSettings()">
           <ion-icon :icon="personOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>Personal Data</ion-label>
         </ion-item>
-        <ion-item lines="none">
+        <ion-item lines="none" :button="true" @click="openWorkoutSettings()">
           <ion-icon :icon="documentTextOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>Workout Settings</ion-label>
         </ion-item>
@@ -134,6 +131,19 @@
     <div class="other">
       <ion-label class="head_lbl">Other</ion-label>
       <ion-item lines="none">
+        <ion-icon :icon="languageOutline" color="primary" style="margin-right: 10px"></ion-icon>
+        <ion-select 
+          :label="$t('language')"
+          :placeholder="$t('language')"
+          v-model="selectedLang"
+          @ionChange="changeLocale($event.detail.value)"
+        >
+          <ion-select-option value="en">🇬🇧 English</ion-select-option>
+          <ion-select-option value="de">🇩🇪 Deutsch</ion-select-option>
+        </ion-select>
+      </ion-item>
+ 
+      <ion-item lines="none">
         <ion-icon :icon="mailOutline" color="primary" style="margin-right: 10px;"></ion-icon>
         <ion-label>Contact Us</ion-label>
       </ion-item>
@@ -141,11 +151,7 @@
         <ion-icon :icon="checkboxOutline" color="primary" style="margin-right: 10px;"></ion-icon>
         <ion-label>Privacy Policy</ion-label>
       </ion-item>
-      <ion-item lines="none" :button="true" @click="openSettingsModal()">
-        <ion-icon :icon="settingsOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-        <ion-label>Settings</ion-label>
-      </ion-item>
-    </div>
+   </div>
   </AppLayout>
 </template>
 
