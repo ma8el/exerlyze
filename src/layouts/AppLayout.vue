@@ -117,27 +117,27 @@
 <style scoped lang="scss">
 * { 
   box-sizing: unset;
-ion-header {
-  ion-toolbar {
+  ion-header {
+    ion-toolbar {
+      --background: none;
+      background-image: url('../../assets/header_background.jpg');
+      background-position: center center;
+      background-size: cover;
+      padding: 10px 0 10px 0;
+    }
+    ion-buttons {
+      padding-top: 5px;
+    }
+    ion-title {
+      align-items: center;
+    }
+  }
+  ion-content {
+    border-radius: 20px 20px 0 0;
+  	overflow: hidden;
     --background: none;
-    background-image: url('../../assets/header_background.jpg');
-    background-position: center center;
+    background-image: url('../../assets/app_background.jpg');
     background-size: cover;
-    padding: 10px 0 10px 0;
   }
-  ion-buttons {
-    padding-top: 5px;
-  }
-  ion-title {
-    align-items: center;
-  }
-}
-ion-content {
-  border-radius: 20px 20px 0 0;
-	overflow: hidden;
-  --background: none;
-  background-image: url('../../assets/app_background.jpg');
-  background-size: cover;
-}
 }
 </style>
