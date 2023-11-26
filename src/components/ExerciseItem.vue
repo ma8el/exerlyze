@@ -34,7 +34,7 @@
   const openExerciseDetailModal = async () => {
     const modal = await modalController.create({
       component: ExerciseDetailModal,
-      componentProps: { exerciseId: props.id, exerciseUrl: url.value },
+      componentProps: { exerciseId: props.exercise_id, exerciseUrl: url.value },
     });
     modal.present();
   }
