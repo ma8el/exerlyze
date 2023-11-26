@@ -65,7 +65,7 @@
 }
 ion-item {
   border-radius: 10px;
-  margin-bottom: 10px;
+  margin-top: 10px;
   p {
     color: white;
   };

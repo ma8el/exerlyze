@@ -90,4 +90,11 @@ ion-list {
 ion-item-group {
   border-radius: 50px;
 }
+ion-item-divider {
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  border-radius: 10px;
+}
 </style>
