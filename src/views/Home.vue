@@ -86,7 +86,7 @@
         <NutritionLineChart />
       </div>
     </ion-card>
-    <ion-card class="last-component">
+    <ion-card>
       <div 
         class="chart-container ion-padding"
       >
@@ -97,9 +97,6 @@
 </template>
 
 <style scoped>
-.last-component {
-    margin-bottom: 100px;
-}
 .chart-container {
   width: 100%;
   height: 300px;
