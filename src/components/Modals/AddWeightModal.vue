@@ -1,12 +1,11 @@
 <script setup lang="ts">
   import { IonButton,
-           IonModal,
            IonInput,
            IonCardHeader,
            IonCardTitle,
            IonCard,
            modalController } from '@ionic/vue';
-  import { useWeightStore } from '@/store/bodyMetricsStore';
+  import { useWeightStore, useUserStore } from '@/store/bodyMetricsStore';
   import { ref } from 'vue';
 
   const weight = ref<number>();
@@ -15,16 +14,19 @@
       return modalController.dismiss(null, 'close');
   };
 
-  const saveWeight = () => {
+  const saveWeight = async () => {
     if (!weight.value) {
       return
     }
     const weightStore = useWeightStore();
+    const userStore = useUserStore();
     weightStore.addWeight({
       'id': weightStore.getNewId,
       'weight': weight.value,
-      'createdAt': new Date(),
-      'unit': 'kg'
+      'created_at': new Date(),
+      'updated_at': new Date(),
+      'unit': 'kg',
+      'user_id': await userStore.getUserId(),
     });
     closeModal();
     weight.value = undefined;
