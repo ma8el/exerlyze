@@ -33,12 +33,5 @@
       :workout-event-dates="workoutEventDates"
     />
     <slot></slot>
-    <div class="bottom-margin"></div>
   </AppLayout>
 </template>
-
-<style scoped>
-  .bottom-margin {
-    margin-bottom: 5rem;
-  }
-</style>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import {
+    IonContent,
     IonItem,
     IonLabel,
     IonRow,
@@ -9,9 +10,11 @@
     IonIcon,
     IonSelect,
     IonSelectOption,
+onIonViewWillEnter,
   } from '@ionic/vue';
   import AppLayout from '@/layouts/AppLayout.vue';
   import { useRouter } from 'vue-router';
+  import { ref, onMounted } from 'vue';
   import { 
     languageOutline,
     personOutline,
@@ -25,7 +28,6 @@
   import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
   import { useUserSettingsStore } from '@/store/userSettingsStore';
   import { useI18n } from 'vue-i18n';
-  import { onMounted } from 'vue';
 
   const router = useRouter();
   const userStore = useUserStore();
@@ -33,6 +35,8 @@
   const userSettingsStore = useUserSettingsStore();
 
   const i18n = useI18n();
+
+  const showAvatar = ref(true);
 
   const userName = userStore.getUserName();
   const userAge = userStore.getAge();
@@ -61,97 +65,117 @@
   const openInsights = () => {
     router.push('/insights');
   };
+
+  const handleScroll = (event: any) => {
+    if (event.detail.scrollTop > 5) {
+      showAvatar.value = false;
+    } else {
+      showAvatar.value = true;
+    }
+  };
+
+  onMounted(() => {
+    showAvatar.value = true;
+  });
+
+  onIonViewWillEnter(() => {
+    showAvatar.value = true;
+  });
 </script>
 
 <template>
   <AppLayout :title="$t('profile.title')">
     <template #avatar>
-      <div class="avatar-wrapper">
-        <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-      </div>
+      <Transition name="fade" class="avatar-wrapper">
+        <div class="avatar-wrapper" v-if="showAvatar">
+          <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+        </div>
+      </Transition>
+    </template>
+
+    <ion-content :scroll-events="true" @ionScroll="handleScroll($event)" class="scrollable-content">
       <div class="name">
         <ion-label class="name_lbl">{{ userName }}</ion-label>
       </div>
-    </template>
- 
-    <ion-row>
-      <ion-col size="4">
-        <ion-card class="data">
-          <ion-label class="frst_lbl">{{ userHeight }} cm</ion-label>
-          <ion-label class="scnd_lbl">Height</ion-label>
-        </ion-card>
-      </ion-col>
+      <ion-row>
+        <ion-col size="4">
+          <ion-card class="data">
+            <ion-label class="frst_lbl">{{ userHeight }} cm</ion-label>
+            <ion-label class="scnd_lbl">Height</ion-label>
+          </ion-card>
+        </ion-col>
   
-      <ion-col size="4">
-        <ion-card class="data">
-          <ion-label class="frst_lbl">{{ userWeight.weight }} kg</ion-label>
-          <ion-label class="scnd_lbl">Weight</ion-label>
-        </ion-card>
-      </ion-col>
+        <ion-col size="4">
+          <ion-card class="data">
+            <ion-label class="frst_lbl">{{ userWeight.weight }} kg</ion-label>
+            <ion-label class="scnd_lbl">Weight</ion-label>
+          </ion-card>
+        </ion-col>
   
-      <ion-col size="4">
-        <ion-card class="data">
-          <ion-label class="frst_lbl">{{ userAge }}</ion-label>
-          <ion-label class="scnd_lbl">Age</ion-label>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+        <ion-col size="4">
+          <ion-card class="data">
+            <ion-label class="frst_lbl">{{ userAge }}</ion-label>
+            <ion-label class="scnd_lbl">Age</ion-label>
+          </ion-card>
+        </ion-col>
+      </ion-row>
   
-    <div class="account">
-      <ion-label class="head_lbl">Account</ion-label>
-      <div class="info">
-        <ion-item lines="none" :button="true" @click="openProfileSettings()">
-          <ion-icon :icon="personOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-          <ion-label>Personal Data</ion-label>
-        </ion-item>
-        <ion-item lines="none" :button="true" @click="openWorkoutSettings()">
-          <ion-icon :icon="documentTextOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-          <ion-label>Workout Settings</ion-label>
-        </ion-item>
-        <ion-item lines="none" :button="true" @click="openActivityHistory()">
-          <ion-icon :icon="listOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-          <ion-label>Activity Histrory</ion-label>
-        </ion-item>
-        <ion-item lines="none" :button="true" @click="openInsights()">
-          <ion-icon :icon="barChartOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-          <ion-label>Insights</ion-label>
+      <div class="account">
+        <ion-label class="head_lbl">Account</ion-label>
+        <div class="info">
+          <ion-item lines="none" :button="true" @click="openProfileSettings()">
+            <ion-icon :icon="personOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+            <ion-label>Personal Data</ion-label>
+          </ion-item>
+          <ion-item lines="none" :button="true" @click="openWorkoutSettings()">
+            <ion-icon :icon="documentTextOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+            <ion-label>Workout Settings</ion-label>
+          </ion-item>
+          <ion-item lines="none" :button="true" @click="openActivityHistory()">
+            <ion-icon :icon="listOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+            <ion-label>Activity Histrory</ion-label>
+          </ion-item>
+          <ion-item lines="none" :button="true" @click="openInsights()">
+            <ion-icon :icon="barChartOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+            <ion-label>Insights</ion-label>
+          </ion-item>
+        </div>
+      </div>
+  
+      <div class="notification">
+        <ion-label class="head_lbl">Notification</ion-label>
+        <ion-item lines="none">
+          <ion-icon :icon="notificationsOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>Pop-out Notificatioon</ion-label>
+          <ion-toggle mode="ios" color="primary" checked></ion-toggle>
         </ion-item>
       </div>
-    </div>
   
-    <div class="notification">
-      <ion-label class="head_lbl">Notification</ion-label>
-      <ion-item lines="none">
-        <ion-icon :icon="notificationsOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-        <ion-label>Pop-out Notificatioon</ion-label>
-        <ion-toggle mode="ios" color="primary" checked></ion-toggle>
-      </ion-item>
-    </div>
-  
-    <div class="other">
-      <ion-label class="head_lbl">Other</ion-label>
-      <ion-item lines="none">
-        <ion-icon :icon="languageOutline" color="primary" style="margin-right: 10px"></ion-icon>
-        <ion-select 
-          :label="$t('language')"
-          :placeholder="$t('language')"
-          v-model="selectedLang"
-          @ionChange="changeLocale($event.detail.value)"
-        >
-          <ion-select-option value="en">🇬🇧 English</ion-select-option>
-          <ion-select-option value="de">🇩🇪 Deutsch</ion-select-option>
-        </ion-select>
-      </ion-item>
+      <div class="other">
+        <ion-label class="head_lbl">Other</ion-label>
+        <ion-item lines="none">
+          <ion-icon :icon="languageOutline" color="primary" style="margin-right: 10px"></ion-icon>
+          <ion-select 
+            :label="$t('language')"
+            :placeholder="$t('language')"
+            v-model="selectedLang"
+            @ionChange="changeLocale($event.detail.value)"
+          >
+            <ion-select-option value="en">🇬🇧 English</ion-select-option>
+            <ion-select-option value="de">🇩🇪 Deutsch</ion-select-option>
+          </ion-select>
+        </ion-item>
  
-      <ion-item lines="none">
-        <ion-icon :icon="mailOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-        <ion-label>Contact Us</ion-label>
-      </ion-item>
-      <ion-item lines="none">
-        <ion-icon :icon="checkboxOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-        <ion-label>Privacy Policy</ion-label>
-      </ion-item>
-   </div>
+        <ion-item lines="none">
+          <ion-icon :icon="mailOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>Contact Us</ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-icon :icon="checkboxOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>Privacy Policy</ion-label>
+        </ion-item>
+      </div>
+    </ion-content>
   </AppLayout>
 </template>
 
@@ -173,6 +197,14 @@
     border-radius: 50%;
   }
 }
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+  z-index: 10;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  z-index: 10;
+}
 .name {
   display: flex;
   font-size: 1.5rem;
@@ -180,10 +212,15 @@
   flex-direction: column;
   align-items: center;
   .name_lbl {
-    margin: 50px 0 5px 0;
+    margin: 50px 0 0 0;
   }
 }
+.scrollable-content{
+  height: 100%;
+  overflow-y: auto;
+}
 ion-content {
+  --background: none;
   ion-item {
     margin-top: 10px;
     border-radius: 10px;
@@ -243,7 +280,7 @@ ion-content {
   .other {
     padding: 10px;
     margin-top: 1rem;
-    margin-bottom: 100px;
+    margin-bottom: 150px;
     .head_lbl {
       font-size: 18px;
     }
