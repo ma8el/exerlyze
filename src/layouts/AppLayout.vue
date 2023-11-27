@@ -78,7 +78,7 @@
         <slot name="toolbarContent">
          <ion-title 
             size="large"
-            :class="{'ion-text-center': backButton}"
+            :class="{'ion-justify-content-center': backButton}"
             :style="`font-size: ${titleSize};`"
           >
             {{ title }}

@@ -13,6 +13,7 @@
    :title="$t('workoutSettings')"
    :back-button="true"
    :action-button="false"
+   :title-size="'1.5rem'"
   >
     <ion-list>
       <ion-list-header>{{ $t('settings.general') }}</ion-list-header>

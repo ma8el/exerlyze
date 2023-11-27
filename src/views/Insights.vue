@@ -46,6 +46,7 @@
    :title="$t('insights')"
    :back-button="true"
    :action-button="false"
+   :title-size="'1.5rem'"
   >
   <BaseSegments
     class="ion-padding-top"

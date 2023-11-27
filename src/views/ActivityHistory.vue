@@ -7,6 +7,7 @@
   <AppLayout 
    :title="$t('activityHistory')"
    :back-button="true"
+   :title-size="'1.5rem'"
    :action-button="false"
   >
     <WorkoutTimeline />

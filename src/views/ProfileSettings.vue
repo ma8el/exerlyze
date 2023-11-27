@@ -25,6 +25,7 @@ onMounted(async () => {
     :saveButton="false"
     :backButton="true"
     :settingsButton="false"
+    :title-size="'1.5rem'"
   >
     <div class="ion-padding">
       <div v-if="!loading">
