@@ -46,7 +46,7 @@
     <template #modalContent>
       <BaseCard
         :title="product.product_name"
-        title-size="2rem"
+        title-size="1.5rem"
         :content="true"
         class="nutrition-overview-card ion-no-margin"
       >
@@ -93,11 +93,11 @@
               <ion-item>
                 <ion-thumbnail>
                   <div class="nutrition-thumb">
-                    <img src="../../../assets/icons/fat.svg" />
+                    <img src="../../../assets/icons/protein.svg" />
                   </div>
                 </ion-thumbnail>
                 <ion-label>
-                  <p>{{ $t('nutrition.fat') }}</p>
+                  <p>{{ $t('nutrition.protein') }}</p>
                   <p class="nutrition-value">{{ product.nutriments.proteins_100g }} g</p>
                 </ion-label>
               </ion-item>
@@ -106,11 +106,11 @@
               <ion-item>
                 <ion-thumbnail>
                   <div class="nutrition-thumb">
-                    <img src="../../../assets/icons/protein.svg" />
+                    <img src="../../../assets/icons/fat.svg" />
                   </div>
                 </ion-thumbnail>
                 <ion-label>
-                  <p>{{ $t('nutrition.protein') }}</p>
+                  <p>{{ $t('nutrition.fat') }}</p>
                   <p class="nutrition-value">{{ product.nutriments.fat_100g }} g</p>
                 </ion-label>
               </ion-item>
