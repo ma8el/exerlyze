@@ -409,6 +409,14 @@ export const useWorkoutSessionStore = defineStore({
             const performedWorkouts = this.workoutSessions.filter(w => new Date(w.finished_at) >= firstDayOfWeek && new Date(w.finished_at) <= lastDayOfWeek);
             return performedWorkouts.length;
         },
+        getPerformedWorkoutVolumeOfDate(date: Date): number {
+            const workoutSessions = this.workoutSessions.filter(w => new Date(w.finished_at).toDateString() === date.toDateString());
+            const sessionIds = workoutSessions.map((s: WorkoutSession) => s.id)
+            const sessionPerformance = this.workoutSessionPerformances.filter((w: any) => sessionIds.includes(w.workout_session_id))
+            const volume = sessionPerformance.reduce(
+                   (acc, curr) => acc + curr.performed_reps * curr.performed_weight, 0)
+            return volume;
+        },
         getPerformedWorkoutVolumeThisWeek(): number {
             const today = new Date();
             const firstDayOfWeek = new Date(new Date(today.setDate(today.getDate() - today.getDay())).setHours(0,0,0,0));

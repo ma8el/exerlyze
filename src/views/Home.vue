@@ -3,19 +3,13 @@
   import UpcomingEventsSlide from '@/components/UpcomingEventsSlide.vue';
   import PageWithCalendar from '@/layouts/PageWithCalendar.vue';
   import WorkoutVolumeBarChart from '@/components/Charts/WorkoutVolumeBarChart.vue';
-  import NutritionLineChart from '@/components/Charts/NutritionLineChart.vue';
   import NutritionParallelChart from '@/components/Charts/NutritionParallelChart.vue';
   import NutritionBarChart from '@/components/Charts/NutritionBarChart.vue';
-  import BaseInfoCard from '@/components/Cards/BaseInfoCard.vue';
+  import OverviewCard from '@/components/Cards/OverviewCard.vue';
   import { useUserStore } from '@/store/bodyMetricsStore';
-  import { useFoodDiaryStore } from '@/store/foodDiary';
-  import { useWorkoutSessionStore } from '@/store/workoutStore'
-  import { barChartOutline, barbellOutline, fishOutline } from 'ionicons/icons';
 
   const userStore = useUserStore();
   const userName = userStore.getUserName() ? userStore.getUserName() : 'Anonymous';
-  const foodDiaryStore = useFoodDiaryStore();
-  const workoutSessionStore = useWorkoutSessionStore();
 </script>
 
 <template>
@@ -35,44 +29,12 @@
         </ion-title>
       </ion-item>
     </template> 
-    <UpcomingEventsSlide />
+
     <h2 class="ion-margin">Your day</h2>
-    <ion-row class="ion-margin">
-      <ion-col size="6">
-      <BaseInfoCard
-        class="info-card"
-        :title="$t('nutrition.calories')"
-        :subTitle="foodDiaryStore.getCaloriesOfDate(new Date()) + ' kcal'"
-        iconSource="../../assets/icons/burn.svg"
-      />
-      </ion-col>
-      <ion-col size="6">
-      <BaseInfoCard
-        :title="$t('home.missingProtein')"
-        :subTitle="foodDiaryStore.getMissingProteinsOfToday() + ' g'"
-        :icon="fishOutline"
-      />
-      </ion-col>
-    </ion-row>
+    <OverviewCard />
+    <UpcomingEventsSlide />
  
     <h2 class="ion-margin">Your week</h2>
-    <ion-row class="ion-margin">
-      <ion-col size="6">
-      <BaseInfoCard
-        class="info-card"
-        :title="$t('home.performedWorkouts')"
-        :subTitle="workoutSessionStore.getPerformedWorkoutsThisWeek()"
-        :icon="barbellOutline"
-      />
-      </ion-col>
-      <ion-col size="6">
-      <BaseInfoCard
-        :title="$t('home.performedVolume')"
-        :subTitle="workoutSessionStore.getPerformedWorkoutVolumeThisWeek() + ' kg'"
-        :icon="barChartOutline"
-      />
-      </ion-col>
-    </ion-row>
     <ion-card>
       <div 
         class="chart-container ion-padding"
