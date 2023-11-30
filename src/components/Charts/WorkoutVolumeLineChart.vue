@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { use } from 'echarts/core'
-import { BarChart } from 'echarts/charts'
+import { LineChart } from 'echarts/charts'
 import { TitleComponent, LegendComponent, GridComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import VChart from 'vue-echarts';
@@ -11,7 +11,7 @@ import { getCurrentWeekDates } from '@/helpers/time';
 import BaseChartContainer from './BaseChartContainer.vue';
 import { computed, reactive, onMounted } from 'vue';
 
-use([TitleComponent, LegendComponent, GridComponent, BarChart, CanvasRenderer])
+use([TitleComponent, LegendComponent, GridComponent, LineChart, CanvasRenderer])
 
 const { t } = useI18n();
 
@@ -42,6 +42,7 @@ const getOptions = () => {
   },
   xAxis: {
     type: 'category',
+    boundaryGap: false,
     data: dayOfWeekStore.daysOfWeek.map(d => d.name.slice(0, 3)),
   },
   yAxis: {
@@ -65,7 +66,9 @@ const getOptions = () => {
     {
       name: t('home.workoutVolume'),
       data: weeklyWorkoutVolume.value,
-      type: 'bar',
+      type: 'line',
+      areaStyle: {},
+      smooth: true,
       color: '#3F63C8',
     }
   ]

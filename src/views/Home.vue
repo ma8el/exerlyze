@@ -5,6 +5,7 @@
   import WorkoutVolumeBarChart from '@/components/Charts/WorkoutVolumeBarChart.vue';
   import NutritionLineChart from '@/components/Charts/NutritionLineChart.vue';
   import NutritionParallelChart from '@/components/Charts/NutritionParallelChart.vue';
+  import NutritionBarChart from '@/components/Charts/NutritionBarChart.vue';
   import BaseInfoCard from '@/components/Cards/BaseInfoCard.vue';
   import { useUserStore } from '@/store/bodyMetricsStore';
   import { useFoodDiaryStore } from '@/store/foodDiary';
@@ -83,7 +84,7 @@
       <div 
         class="chart-container ion-padding"
       >
-        <NutritionLineChart />
+        <NutritionBarChart />
       </div>
     </ion-card>
     <ion-card>
