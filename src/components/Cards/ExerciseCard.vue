@@ -61,7 +61,7 @@
   <ion-spinner v-else/>
 </template>
 
-<style>
+<style scoped>
 
 .no-margin {
   margin: 0;
