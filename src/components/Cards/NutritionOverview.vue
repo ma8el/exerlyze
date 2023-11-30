@@ -7,10 +7,10 @@
 
   const selectedDate = inject(selectedDateKey);
 
-  const dailyCalories = 3000;
-  const dailyCarbs = 150;
-  const dailyFat = 50;
-  const dailyProtein = 100;
+  const dailyCalories = useFoodDiaryStore().dailyCalories;
+  const dailyCarbs = useFoodDiaryStore().dailyCarbs;
+  const dailyFat = useFoodDiaryStore().dailyFat;
+  const dailyProtein = useFoodDiaryStore().dailyProtein;
 
   const intake = computed(() => {
     if (!selectedDate) {

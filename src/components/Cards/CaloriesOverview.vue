@@ -1,20 +1,21 @@
 <script setup lang="ts">
-  import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonGrid, IonRow, IonCol, IonText, IonLabel } from '@ionic/vue';
-  import NutritionKPIDoughnut from '@/components/Charts/NutritionKPIDoughnut.vue';
+  import { IonCard, IonCardContent, IonRow, IonCol } from '@ionic/vue';
   import { computed, ref, inject } from 'vue';
   import { useFoodDiaryStore } from '@/store/foodDiary';
   import { selectedDateKey } from '@/keys';
+  import NutritionKPIDoughnut from '@/components/Charts/NutritionKPIDoughnut.vue';
 
   const selectedDate = inject(selectedDateKey)
+  const foodDiaryStore = useFoodDiaryStore();
 
-  const calories = ref(3000);
+  const calories = ref(foodDiaryStore.dailyCalories);
   const activity = ref(0);
 
   const intake = computed(() => {
     if (!selectedDate) {
       return 0;
     }
-    return useFoodDiaryStore().getCaloriesOfDate(selectedDate.value);
+    return foodDiaryStore.getCaloriesOfDate(selectedDate.value);
   })
 
   const result = computed(() => {
