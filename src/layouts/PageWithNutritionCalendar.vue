@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { IonGrid, IonRow } from '@ionic/vue';
   import AppLayout from '@/layouts/AppLayout.vue';
-  import { ref, provide, readonly, reactive } from 'vue';
+  import { ref, provide, readonly, reactive, onMounted } from 'vue';
   import { useDark } from '@vueuse/core'
   import { selectedDateKey } from '@/keys';
   import { useFoodDiaryStore } from '@/store/foodDiary';
@@ -25,7 +25,9 @@
 
   let nutritionEventDates = reactive<Date[]>([])
   nutritionEventDates = getCurrentWeekDates().filter(
-    date => nutritionStore.getFoodDiaryEntries.some(foodEntry => new Date(foodEntry.created_at).getDay() === date.getDay()))
+    date => nutritionStore.getFoodDiaryEntries.some(foodEntry => new Date(foodEntry.created_at).getDay() === date.getDay() && 
+                                                                 new Date(foodEntry.created_at).getMonth() === date.getMonth() &&
+                                                                 new Date(foodEntry.created_at).getFullYear() === date.getFullYear()));
 
   const attributes = ref([{
     key: 'today',
@@ -48,7 +50,9 @@
 
   nutritionStore.$subscribe((mutation, state) => {
     nutritionEventDates = getCurrentWeekDates().filter(
-      date => nutritionStore.getFoodDiaryEntries.some(foodEntry => new Date(foodEntry.created_at).getDay() === date.getDay()))
+      date => nutritionStore.getFoodDiaryEntries.some(foodEntry => new Date(foodEntry.created_at).getDay() === date.getDay() && 
+                                                                   new Date(foodEntry.created_at).getMonth() === date.getMonth() &&
+                                                                   new Date(foodEntry.created_at).getFullYear() === date.getFullYear()));
   });
 </script>
 
