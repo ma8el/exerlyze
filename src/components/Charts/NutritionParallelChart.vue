@@ -18,18 +18,20 @@ const { t } = useI18n();
 const weekDays = getCurrentWeekDates();
 const foodDiaryStore = useFoodDiaryStore();
 
-const weeklyConsumedNutrition = weekDays.map(day => {
+const weeklyConsumedNutrition = computed(() => {
+  return weekDays.map(day => {
   const consumedCarbs = foodDiaryStore.getCarbohydratesOfDate(day)
   const consumedProtein = foodDiaryStore.getProteinOfDate(day)
   const consumedFat = foodDiaryStore.getFatOfDate(day)
   return Array.of(consumedCarbs, consumedProtein, consumedFat)
+  })
 });
 
 const hasData = computed(() => {
-  return weeklyConsumedNutrition.some(day => day.some(nutrition => nutrition > 0));
+  return weeklyConsumedNutrition.value.some(day => day.some(nutrition => nutrition > 0));
 });
 
-const maxValue = Math.max(...weeklyConsumedNutrition.flat());
+const maxValue = Math.max(...weeklyConsumedNutrition.value.flat());
 
 var schema = [
   { name: 'carbs', index: 1, text: t('nutrition.carbs') },
@@ -37,7 +39,8 @@ var schema = [
   { name: 'fat', index: 3, text: t('nutrition.fat') },
 ];
 
-const option = {
+const option = computed(() => {
+  return {
   title: {
     text: t('home.macroDistribution'),
     textStyle: {
@@ -66,11 +69,11 @@ const option = {
     {
       name: 'Nutrition Details',
       type: 'parallel',
-      data: weeklyConsumedNutrition,
+      data: weeklyConsumedNutrition.value,
       color: '#3F63C8',
     },
-  ]
-};
+  ]}
+  })
 </script>
 
 <template>
