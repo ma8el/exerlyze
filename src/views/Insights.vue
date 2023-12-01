@@ -12,8 +12,13 @@
   import { ref } from 'vue';
   import { filter } from 'ionicons/icons';
 
+  const today = new Date();
+
   const isWorkoutSelected = ref(true);
   const isDietSelected = ref(false);
+
+  const startDate = ref<Date>(new Date(today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1)));
+  const endDate = ref<Date>(new Date(today.getDate() - today.getDay() + (today.getDay() === 0 ? 0 : 7)));
 
   const workoutSelected = () => {
     isWorkoutSelected.value = true;
@@ -29,16 +34,15 @@
     const modal = await modalController.create({
       component: FilterModal,
       cssClass: 'full-screen-modal',
-      initialBreakpoint: 0.3,
+      initialBreakpoint: 0.35,
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
     if (role == 'save') {
-      console.log('Save', data);
-    } else {
-      console.log('Close', data);
-  };
-}
+      startDate.value = data.startDate;
+      endDate.value = data.endDate;
+    }
+  }
 </script>
 
 <template>
@@ -66,8 +70,16 @@
       </ion-fab>
     </ion-buttons>
   </template>
-  <WorkoutInsightContent v-if="isWorkoutSelected"/>
-  <DietInsightContent v-if="isDietSelected"/>
+  <WorkoutInsightContent 
+    v-if="isWorkoutSelected"
+    :start-date="startDate"
+    :end-date="endDate"
+  />
+  <DietInsightContent 
+    v-if="isDietSelected"
+    :start-date="startDate"
+    :end-date="endDate"
+  />
   </AppLayout>
 </template>
 
