@@ -6,6 +6,7 @@
   import NutritionParallelChart from '@/components/Charts/NutritionParallelChart.vue';
   import NutritionBarChart from '@/components/Charts/NutritionBarChart.vue';
   import OverviewCard from '@/components/Cards/OverviewCard.vue';
+  import ChartContainerCard from '@/components/Cards/ChartContainerCard.vue';
   import { useUserStore } from '@/store/bodyMetricsStore';
 
   const userStore = useUserStore();
@@ -35,35 +36,21 @@
     <UpcomingEventsSlide />
  
     <h2 class="ion-margin">Your week</h2>
-    <ion-card>
-      <div 
-        class="chart-container ion-padding"
-      >
-        <WorkoutVolumeBarChart />
-      </div>
-    </ion-card>
-    <ion-card>
-      <div 
-        class="chart-container ion-padding"
-      >
-        <NutritionBarChart />
-      </div>
-    </ion-card>
-    <ion-card>
-      <div 
-        class="chart-container ion-padding"
-      >
-        <NutritionParallelChart />
-      </div>
-    </ion-card>
+    <ChartContainerCard>
+      <WorkoutVolumeBarChart />
+    </ChartContainerCard>
+
+    <ChartContainerCard>
+      <NutritionBarChart />
+    </ChartContainerCard>
+
+    <ChartContainerCard>
+      <NutritionParallelChart />
+    </ChartContainerCard>
   </PageWithCalendar>
 </template>
 
 <style scoped>
-.chart-container {
-  width: 100%;
-  height: 300px;
-}
 ion-item {
   --background: none;
 }
@@ -77,10 +64,5 @@ ion-thumbnail {
   border: 1px solid white !important;
   width: 40px;
   height: 40px;
-}
-.info-card {
-  --background: none;
-  background-color: none;
-  color: none
 }
 </style>
