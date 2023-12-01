@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { IonGrid, IonRow } from '@ionic/vue';
+  import { IonCard } from '@ionic/vue';
   import AppLayout from '@/layouts/AppLayout.vue';
-  import { ref, provide, readonly, reactive, onMounted } from 'vue';
+  import { ref, provide, readonly, reactive } from 'vue';
   import { useDark } from '@vueuse/core'
   import { selectedDateKey } from '@/keys';
   import { useFoodDiaryStore } from '@/store/foodDiary';
@@ -58,30 +58,26 @@
 
 <template>
   <AppLayout :title=title>
-    <ion-grid>
-      <ion-row class="ion-justify-content-center">
-        <ion-card class="ion-margin">
-          <VDatePicker 
-            class="vc-arrow-icon"
-            :locale=setLocale
-            title-position="left"
-            expanded 
-            transparent 
-            borderless 
-            :is-dark="isDark" 
-            view="weekly"
-            v-model="selectedDate"
-            :attributes="attributes"
-          />
-        </ion-card>
-      </ion-row>
-    </ion-grid>
+    <ion-card>
+      <VDatePicker 
+        class="vc-arrow-icon"
+        :locale=setLocale
+        title-position="left"
+        expanded 
+        transparent 
+        borderless 
+        :is-dark="isDark" 
+        view="weekly"
+        v-model="selectedDate"
+        :attributes="attributes"
+      />
+    </ion-card>
     <slot></slot>
   </AppLayout>
 </template>
 
 <style scoped lang="scss">
   ion-card {
-    width: 100%;
+    width: 93%;
   }
 </style>

@@ -69,29 +69,25 @@
 </script>
 
 <template>
-  <ion-grid>
-    <ion-row class="ion-justify-content-center">
-      <ion-card class="ion-margin">
-        <VDatePicker 
-          class="vc-arrow-icon"
-          :locale=setLocale
-          title-position="left"
-          expanded 
-          transparent 
-          borderless 
-          :is-dark="isDark" 
-          view="weekly"
-          v-model="selectedDate"
-          @click="openModal"
-          :attributes="attributes"
-        />
-      </ion-card>
-    </ion-row>
-  </ion-grid>
+  <ion-card>
+    <VDatePicker 
+      class="vc-arrow-icon"
+      :locale=setLocale
+      title-position="left"
+      expanded 
+      transparent 
+      borderless 
+      :is-dark="isDark" 
+      view="weekly"
+      v-model="selectedDate"
+      @click="openModal"
+      :attributes="attributes"
+    />
+  </ion-card>
 </template>
 
 <style scoped lang="scss">
   ion-card {
-    width: 100%;
+    width: 92%;
   }
 </style>
