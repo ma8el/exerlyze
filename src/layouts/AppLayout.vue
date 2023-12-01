@@ -76,13 +76,13 @@
     <ion-header>
       <ion-toolbar>
         <slot name="toolbarContent">
-         <ion-title 
+        <ion-title 
             size="large"
             :class="{'ion-justify-content-center': backButton}"
             :style="`font-size: ${titleSize};`"
-          >
+        >
             {{ title }}
-          </ion-title>
+        </ion-title>
         </slot>
         <ion-buttons 
           slot="end"
