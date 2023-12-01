@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import { IonCard, IonLabel, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/vue';
   import { useFoodDiaryStore } from '@/store/foodDiary';
+  import { useWorkoutSessionStore } from '@/store/workoutStore';
   import { useI18n } from 'vue-i18n';
   import { computed } from 'vue';
 
   const { t } = useI18n();
 
   const foodDiaryStore = useFoodDiaryStore();
+  const workoutSessionStore = useWorkoutSessionStore();
 
   const date = new Date();
 
@@ -39,11 +41,12 @@
 });
 
 const workoutOverviewData = computed(() => {
+  const workoutVolume = workoutSessionStore.getPerformedWorkoutVolumeOfDate(date);
   return [
    {
       icon: 'weight.svg',
       name: `${t('home.workoutVolume')}`,
-      value: `0 ${t('weightUnitBig')}`,
+      value: `${workoutVolume} ${t('weightUnitBig')}`,
     }
   ]
 });
