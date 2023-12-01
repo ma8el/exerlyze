@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { IonLabel } from '@ionic/vue';
+import { IonLabel, IonSpinner } from '@ionic/vue';
 
 const props = defineProps({
- hasData: {
+  hasData: {
     type: Boolean,
     required: true
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
@@ -15,6 +19,9 @@ const props = defineProps({
   </div>
   <div v-if="!hasData" class="ion-item-container">
     <ion-label class="blurry-background">{{ $t('noData') }}</ion-label>
+  </div>
+  <div v-if="loading" class="ion-item-container">
+    <ion-spinner/>
   </div>
 </template>
 

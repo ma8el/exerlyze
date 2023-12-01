@@ -17,6 +17,14 @@
     },
   });
 
+  const startDate = computed(() => {
+      return props.startDate;
+  });
+  
+  const endDate = computed(() => {
+      return props.endDate;
+  });
+
   const authenticated = computed((): Boolean => {
     return supabase.auth.getSession() != null;
   });
@@ -38,6 +46,10 @@
     </ChartContainerCard>
 
     <ChartContainerCard>
+      <NutritionParallelInsightChart
+        :startDate="startDate"
+        :endDate="endDate"
+      />
     </ChartContainerCard>
   </div>
 </template>

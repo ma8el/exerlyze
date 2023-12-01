@@ -17,8 +17,8 @@
   const isWorkoutSelected = ref(true);
   const isDietSelected = ref(false);
 
-  const startDate = ref<Date>(new Date(today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1)));
-  const endDate = ref<Date>(new Date(today.getDate() - today.getDay() + (today.getDay() === 0 ? 0 : 7)));
+  const startDate = ref<Date>(new Date(new Date(new Date().setDate(today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1))).setHours(0, 0, 0, 0)));
+  const endDate = ref<Date>(new Date(new Date(new Date().setDate(today.getDate() - today.getDay() + (today.getDay() === 0 ? 0 : 7))).setHours(23, 59, 59, 999)));
 
   const workoutSelected = () => {
     isWorkoutSelected.value = true;

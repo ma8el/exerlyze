@@ -52,6 +52,10 @@ const save = () => {
     const startOfYear = new Date(today.getFullYear(), 0, 1);
     const endOfYear = new Date(new Date(today.getFullYear(), 11, 31).setHours(23, 59, 59, 999));
     return modalController.dismiss({'selected': radio.value, 'startDate': startOfYear, 'endDate': endOfYear}, 'save');
+  } else if (radio.value === 'all') {
+    const startOfAll = new Date(0);
+    const endOfAll = new Date(new Date().setHours(23, 59, 59, 999));
+    return modalController.dismiss({'selected': radio.value, 'startDate': startOfAll, 'endDate': endOfAll}, 'save');
   } else {
     const startOfWeek = new Date(new Date().setDate(today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1))).setHours(0, 0, 0, 0);
     const endOfWeek = new Date(new Date().setDate(today.getDate() - today.getDay() + (today.getDay() === 0 ? 0 : 7))).setHours(23, 59, 59, 999);

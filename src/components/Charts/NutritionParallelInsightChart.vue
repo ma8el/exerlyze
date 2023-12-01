@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { supabase } from '@/supabase'
+
 import { use } from 'echarts/core'
 import { ParallelChart } from 'echarts/charts'
 import { VisualMapComponent, ParallelComponent } from 'echarts/components'
@@ -6,10 +8,9 @@ import { CanvasRenderer } from 'echarts/renderers'
 import VChart from 'vue-echarts';
 
 import { useI18n } from 'vue-i18n';
-import { useFoodDiaryStore } from '@/store/foodDiary';
-import { getCurrentWeekDates } from '@/helpers/time';
 import BaseChartContainer from './BaseChartContainer.vue';
-import { computed } from 'vue';
+import { onMounted, computed, ref, watch } from 'vue';
+import { onIonViewDidEnter } from '@ionic/vue'
 
 use([VisualMapComponent, ParallelComponent, ParallelChart, CanvasRenderer])
 
@@ -24,31 +25,43 @@ const props = defineProps({
   },
 });
 
+const startDate = computed(() => {
+  return props.startDate;
+});
+
+const endDate = computed(() => {
+  return props.endDate;
+});
+
 const { t } = useI18n();
+const loading = ref(true);
+const consumedNutrition = ref();
 
-const weekDays = getCurrentWeekDates();
-const foodDiaryStore = useFoodDiaryStore();
-
-const weeklyConsumedNutrition = computed(() => {
-  return weekDays.map(day => {
-  const consumedCarbs = foodDiaryStore.getCarbohydratesOfDate(day)
-  const consumedProtein = foodDiaryStore.getProteinOfDate(day)
-  const consumedFat = foodDiaryStore.getFatOfDate(day)
-  return Array.of(consumedCarbs, consumedProtein, consumedFat)
-  })
-});
-
-const hasData = computed(() => {
-  return weeklyConsumedNutrition.value.some(day => day.some(nutrition => nutrition > 0));
-});
-
-const maxValue = Math.max(...weeklyConsumedNutrition.value.flat());
+const maxValue = 500;
 
 var schema = [
   { name: 'carbs', index: 1, text: t('nutrition.carbs') },
   { name: 'protein', index: 2, text: t('nutrition.protein') },
   { name: 'fat', index: 3, text: t('nutrition.fat') },
 ];
+
+const getConsumedNutrition = async () => {
+  loading.value = true;
+  const { data, error } = await supabase
+    .from('v_daily_aggregated_food_diary_entries')
+    .select()
+    .gte('date', startDate.value.toDateString())
+    .lt('date', endDate.value.toISOString())
+  const plotData = data?.map((entry: any) => {
+    return [
+      entry.carbohydrates,
+      entry.proteins,
+      entry.fat,
+    ]
+  });
+  loading.value = false;
+  return plotData;
+};
 
 const option = computed(() => {
   return {
@@ -80,15 +93,29 @@ const option = computed(() => {
     {
       name: 'Nutrition Details',
       type: 'parallel',
-      data: weeklyConsumedNutrition.value,
+      data: consumedNutrition.value,
       color: '#3F63C8',
     },
   ]}
-  })
+})
+
+watch([startDate, endDate], async () => {
+  consumedNutrition.value = await getConsumedNutrition();
+})
+
+onMounted(async () => {
+  loading.value = true;
+  consumedNutrition.value = await getConsumedNutrition();
+})
+
+onIonViewDidEnter(async () => {
+  loading.value = true;
+  consumedNutrition.value = await getConsumedNutrition();
+})
 </script>
 
 <template>
-  <BaseChartContainer :hasData="hasData">
+  <BaseChartContainer :loading="loading" :hasData="true">
     <v-chart :option="option" autoresize />
   </BaseChartContainer>
 </template>
