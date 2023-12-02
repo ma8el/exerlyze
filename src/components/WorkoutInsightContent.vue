@@ -3,6 +3,7 @@
   import ChartContainerCard from '@/components/Cards/ChartContainerCard.vue';
   import WorkoutVolumeBarChart from '@/components/Charts/WorkoutVolumeBarChart.vue';
   import WorkoutVolumeBarInsightChart from './Charts/WorkoutVolumeBarInsightChart.vue';
+  import WeightLineInsightChart from './Charts/WeightLineInsightChart.vue';
   import { computed } from 'vue';
 
   const props = defineProps({
@@ -44,6 +45,10 @@
     </ChartContainerCard>
 
     <ChartContainerCard>
+      <WeightLineInsightChart
+        :startDate="startDate"
+        :endDate="endDate"
+      />
     </ChartContainerCard>
   </div>
 </template>
