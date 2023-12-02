@@ -2,6 +2,7 @@
   import { supabase } from '@/supabase';
   import ChartContainerCard from '@/components/Cards/ChartContainerCard.vue';
   import WorkoutVolumeBarChart from '@/components/Charts/WorkoutVolumeBarChart.vue';
+  import WorkoutVolumeBarInsightChart from './Charts/WorkoutVolumeBarInsightChart.vue';
   import { computed } from 'vue';
 
   const props = defineProps({
@@ -13,6 +14,14 @@
       type: Date,
       required: true,
     },
+ });
+
+ const startDate = computed(() => {
+   return props.startDate;
+ });
+
+ const endDate = computed(() => {
+   return props.endDate;
  });
 
  const authenticated = computed((): Boolean => {
@@ -27,6 +36,13 @@
     </ChartContainerCard>
   </div>
   <div v-else>
+    <ChartContainerCard>
+      <WorkoutVolumeBarInsightChart
+        :startDate="startDate"
+        :endDate="endDate"
+      />
+    </ChartContainerCard>
+
     <ChartContainerCard>
     </ChartContainerCard>
   </div>

@@ -27,7 +27,7 @@ const props = defineProps({
 
 <style scoped>
 .blurry {
-  filter: blur(5px)
+  filter: blur(1px)
 }
 .echarts {
   width: 100%;
@@ -37,6 +37,7 @@ const props = defineProps({
   display: flex;
   justify-content: center;
   position: absolute;
+  right: 0%;
   bottom: 40%;
   width: 100%;
 }
