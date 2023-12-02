@@ -4,7 +4,8 @@
   import NutritionBarChart from '@/components/Charts/NutritionBarChart.vue';
   import NutritionParallelChart from '@/components/Charts/NutritionParallelChart.vue';
   import NutritionParallelInsightChart from './Charts/NutritionParallelInsightChart.vue';
-  import { computed, watch } from 'vue';
+  import NutritionBarInsightChart from './Charts/NutritionBarInsightChart.vue';
+  import { computed } from 'vue';
 
   const props = defineProps({
     startDate: {
@@ -43,6 +44,10 @@
 
   <div v-else>
     <ChartContainerCard>
+      <NutritionBarInsightChart
+        :startDate="startDate"
+        :endDate="endDate"
+      />
     </ChartContainerCard>
 
     <ChartContainerCard>
