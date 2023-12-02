@@ -28,6 +28,7 @@ const props = defineProps({
 const { t } = useI18n();
 const loading = ref(true);
 const option = ref({});
+const hasData = ref(true);
 const foodDiaryStore = useFoodDiaryStore();
 
 const startDate = computed(() => {
@@ -125,18 +126,29 @@ const getOptions = async () => {
   }
 };
 
-watch([startDate, endDate], async () => {
+const reloadData = async () => {
+  loading.value = true;
   option.value = await getOptions();
+  const data = await consumedCalories.value;
+  if (!data) {
+    return false;
+  }
+  hasData.value = data.length > 0;
+  loading.value = false;
+  return true;
+}
+
+watch([startDate, endDate], async () => {
+  await reloadData();
 })
 
 onMounted(async () => {
-  option.value = await getOptions();
-  loading.value = false;
+  await reloadData();
 });
 </script>
 
 <template>
-  <BaseChartContainer :loading="loading" :hasData="true">
+  <BaseChartContainer :loading="loading" :hasData="hasData">
     <v-chart :option="option" autoresize />
   </BaseChartContainer>
 </template>
