@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { IonRow,
          IonCol,
-         IonIcon } from '@ionic/vue';
+         IonIcon,
+         IonSpinner } from '@ionic/vue';
 import { arrowUpOutline, arrowForwardOutline, arrowDownOutline } from 'ionicons/icons';
 import BaseCard from '@/components/Cards/BaseCard.vue';
   
@@ -24,6 +25,14 @@ const props = defineProps({
     type: String,
     default: '%',
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+  isLeft: {
+    type: Boolean,
+    default: false,
+  }
 })
 </script>
 
@@ -32,9 +41,11 @@ const props = defineProps({
     :title="title"
     :content="true"
     titleSize="1rem"
+    :class="isLeft ? 'info-card margin-right': 'info-card margin-left'"
   >
     <ion-row
       class="ion-justify-content-between ion-align-items-center"
+      v-if="!loading"
     >
       <ion-col size="4">
         <div v-if="percentage">
@@ -51,6 +62,10 @@ const props = defineProps({
         <p :class="average ? 'average-value': 'percentage-value'">{{ value }} {{ unit }}</p>
       </ion-col>
     </ion-row>
+    <ion-spinner
+      class="ion-justify-content-center"
+      v-if="loading"
+    />
   </BaseCard>
 </template>
 
@@ -67,5 +82,14 @@ const props = defineProps({
     margin-top: 5px;
     font-size: 1.3rem;
     font-weight: bold;
+  }
+  .info-card {
+    margin: 0;
+  }
+  .margin-left {
+    margin-left: 8px;
+  }
+  .margin-right {
+    margin-right: 8px;
   }
 </style>

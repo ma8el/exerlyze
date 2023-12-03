@@ -108,6 +108,8 @@ export const messages = {
         noData: "No data",
         workoutSettings: "Workout Settings",
         date: "Date",
+        weightChange: "Weight Change",
+        performanceIncrease: "Performance Increase",
     },
     de: {
         language: "Sprache",
@@ -216,5 +218,7 @@ export const messages = {
         noData: "Keine Daten",
         workoutSettings: "Trainingseinstellungen",
         date: "Datum",
+        weightChange: "Gewichtsänderung",
+        performanceIncrease: "Leistungssteigerung",
     },
 }
