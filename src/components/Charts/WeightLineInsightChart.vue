@@ -42,7 +42,7 @@ const weeklyWeightChange = computed(async () => {
     .from('v_daily_weights')
     .select()
     .gte('date', startDate.value.toDateString())
-    .lt('date', endDate.value.toISOString())
+    .lte('date', endDate.value.toISOString())
   const plotData = data?.map((entry: any) => {
     return [
       entry.date,
