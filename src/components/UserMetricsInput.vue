@@ -58,7 +58,7 @@ const save = async () => {
         return;
     }
     weightStore.addWeight({
-        id: weightStore.getNewId,
+        id: weightStore.getNewId(),
         user_id: await userStore.getUserId(),
         created_at: new Date(),
         updated_at: new Date(),
@@ -74,11 +74,15 @@ const save = async () => {
 };
 
 onMounted(() => {
-    userName.value = userStore.getUserName()
-    gender.value = userStore.getGender()
+  userName.value = userStore.getUserName()
+  gender.value = userStore.getGender()
+  if (userStore.getDateOfBirth() !== undefined) {
     dateOfBirth.value = dateToIsoString(userStore.getDateOfBirth())
+  }
+  if (weightStore.weights.length > 0) {
     weight.value = weightStore.getCurrentWeight.weight
-    height.value = userStore.getHeight()
+  }
+  height.value = userStore.getHeight()
 });
 </script>
 
