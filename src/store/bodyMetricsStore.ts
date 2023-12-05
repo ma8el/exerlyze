@@ -53,13 +53,15 @@ export const useUserStore = defineStore('userStore', () => {
     const userId = useStorage('userId', ref<string>());
     const userName = useStorage('userName', ref<string | undefined>());
     const gender = useStorage('gender', ref<string | undefined>());
-    const dateOfBirth = useStorage('dateOfBirth', ref<Date>());
+    const dateOfBirth = useStorage('dateOfBirth', ref<Date>(new Date()));
     const height = useStorage('height', ref<number | undefined>());
     const isComplete = computed(() => {
-        if (userName.value === "undefined") {
+        if (userName.value === "undefined"
+            || userName.value === undefined) {
             return false
         }
-        if (gender.value === "undefined") {
+        if (gender.value === "undefined"
+            || gender.value === undefined) {
             return false
         }
         if (dateOfBirth.value === undefined) {
@@ -80,7 +82,8 @@ export const useUserStore = defineStore('userStore', () => {
         }
     }
     const getUserName = (): string => {
-        if (userName.value === undefined) {
+        if (userName.value === undefined
+            || userName.value === "undefined") {
             return 'Anonymous'
         }
         return userName.value
@@ -89,9 +92,6 @@ export const useUserStore = defineStore('userStore', () => {
         return gender.value
     }
     const getDateOfBirth = (): Date => {
-        if (dateOfBirth.value === undefined) {
-            return new Date()
-        }
         return new Date(dateOfBirth.value)
     }
     const getAge = (): number | undefined => {
