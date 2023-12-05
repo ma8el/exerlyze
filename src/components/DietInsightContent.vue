@@ -39,6 +39,8 @@
       return props.endDate;
   });
 
+  const authenticated = ref(false);
+
   const averageCalories = ref(0);
   const averageCarbs = ref(0);
   const averageProtein = ref(0);
@@ -61,10 +63,6 @@
     return data;
   })
 
-  const authenticated = computed((): Boolean => {
-    return supabase.auth.getSession() != null;
-  });
-
   const value = computed(() => {
     return 0;
   })
@@ -86,6 +84,8 @@
 
   onMounted(async () => {
     await refreshData();
+    const { data } = await supabase.auth.getSession();
+    authenticated.value = data.session != null;
   })
 </script>
 

@@ -67,7 +67,8 @@
   };
 
   onMounted(async () => {
-    session.value = await supabase.auth.getSession();
+    const { data } = await supabase.auth.getSession();
+    session.value = data.session
   });
 </script>
 
