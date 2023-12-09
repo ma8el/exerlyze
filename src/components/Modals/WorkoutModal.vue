@@ -15,6 +15,12 @@ import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
 import { useUserStore } from '@/store/bodyMetricsStore';
 import { ref, reactive, onMounted, computed, watch } from 'vue';
 
+interface ListRef {
+  $el: {
+    scrollIntoView: (options?: boolean | ScrollIntoViewOptions) => void;
+  };
+}
+
 const props = defineProps({
   workoutId: {
     type: String,
@@ -26,7 +32,7 @@ const workoutStore = useWorkoutStore();
 const workoutSessionStore = useWorkoutSessionStore();
 const userStore = useUserStore();
 
-const setRefs = ref<HTMLElement[]>([]);
+const setRefs = ref<InstanceType<typeof IonList>[]>([]);
 
 const startedAt = ref<Date>(new Date());
 const currentSet = ref<number>(0);
