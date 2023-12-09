@@ -10,11 +10,15 @@
            IonFabButton,
            IonRouterOutlet,
            modalController} from '@ionic/vue';
-  import { scale, clipboard, addOutline } from 'ionicons/icons';
+  import { scaleOutline, clipboardOutline, addOutline } from 'ionicons/icons';
   import AddWorkoutModal from '@/components/Modals/AddWorkoutModal.vue';
   import AddWorkoutPlanModal from '@/components/Modals/AddWorkoutPlanModal.vue';
   import AddNutritionModal from '@/components/Modals/AddNutritionModal.vue';
   import AddWeightModal from '@/components/Modals/AddWeightModal.vue';
+  import HomeIcon from '@/icons/home.svg';
+  import NutritionIcon from '@/icons/nutrition.svg';
+  import ProfileIcon from '@/icons/profile.svg';
+  import WorkoutIcon from '@/icons/workout.svg';
   
   const openWorkoutModal = async () => {
     const modal = await modalController.create({
@@ -83,12 +87,12 @@
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom" class="custom-tab-bar">
         <ion-tab-button tab="home" href="/tabs/home">
-          <ion-icon aria-hidden="true" src="../assets/icons/home_1.svg" />
+          <ion-icon aria-hidden="true" :icon="HomeIcon" />
           <ion-label>{{ $t('home.title') }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="workouts" href="/tabs/workouts">
-          <ion-icon aria-hidden="true" src="../../assets/icons/workout_1.svg" />
+          <ion-icon aria-hidden="true" :icon="WorkoutIcon" />
           <ion-label>{{ $t('workouts.title') }}</ion-label>
         </ion-tab-button>
 
@@ -97,12 +101,12 @@
         </svg>
 
         <ion-tab-button tab="nutrition" href="/tabs/nutrition">
-          <ion-icon aria-hidden="true" src="../../assets/icons/nutrition_1.svg" />
+          <ion-icon aria-hidden="true" :icon="NutritionIcon" />
           <ion-label>{{ $t('nutrition.title') }}</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="profile" href="/tabs/profile">
-          <ion-icon aria-hidden="true" src="../../assets/icons/profile_1.svg" />
+          <ion-icon aria-hidden="true" :icon="ProfileIcon" />
           <ion-label>{{ $t('profile.title') }}</ion-label>
         </ion-tab-button>
 
@@ -114,16 +118,16 @@
       </ion-fab-button>
       <ion-fab-list side="top">
         <ion-fab-button color="primary" @click="openWeightModal">
-          <ion-icon :icon="scale"></ion-icon>
+          <ion-icon :icon="scaleOutline"></ion-icon>
         </ion-fab-button>
         <ion-fab-button color="primary" @click="openNutritionModal">
-          <ion-icon src="../../assets/icons/nutrition_white.svg"></ion-icon>
+          <ion-icon :icon="NutritionIcon"></ion-icon>
         </ion-fab-button>
         <ion-fab-button color="primary" @click="openWorkoutPlanModal">
-          <ion-icon :icon="clipboard"></ion-icon>
+          <ion-icon :icon="clipboardOutline"></ion-icon>
         </ion-fab-button>
         <ion-fab-button color="primary" @click="openWorkoutModal">
-          <ion-icon src="../../assets/icons/workout_white.svg"></ion-icon>
+          <ion-icon :icon="WorkoutIcon"></ion-icon>
         </ion-fab-button>
       </ion-fab-list>
     </ion-fab>
@@ -160,7 +164,7 @@ ion-tabs{
 			margin-right: 0px;
 			border-top-right-radius: 18px;
 		}
-		ion-tab-button.notifs {
+	  ion-tab-button.notifs {
 			margin-left: 0px;
 			border-top-left-radius: 18px;
 		}
