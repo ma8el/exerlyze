@@ -3,6 +3,7 @@
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import { IonItem,
            IonCheckbox,
+           IonSearchbar,
            modalController } from '@ionic/vue';
   import { ref, onMounted, onUnmounted } from 'vue';
   import { ExerciseSelection } from '@/types';
@@ -18,6 +19,40 @@
     supabase
       .from('exercises')
       .select(`id, name_${setLocale}`)
+      .then((response) => {
+        if (response.error) {
+          console.log(response.error)
+        } else {
+          exercises.value = response.data.map((exercise) => {
+            return {
+              // @ts-ignore
+              id: uuidv4(),
+              // @ts-ignore
+              exercise_id: exercise.id,
+              // @ts-ignore
+              name: exercise[`name_${setLocale}`],
+              sets: 0,
+              reps: 0,
+              weight: 0,
+              isSelected: false,
+            }
+          })
+        }
+      })
+  }
+
+  const removeExercises = () => {
+    exercises.value = []
+  }
+
+  const queryExercises = (e: any) => {
+    const searchedExercise: string = e.target.value;
+    exercises.value = [];
+    const setLocale = userSettingsStore.getLocale()
+    supabase
+      .from('exercises')
+      .select(`id, name_${setLocale}`)
+      .ilike(`name_${setLocale}`, `%${searchedExercise}%`)
       .then((response) => {
         if (response.error) {
           console.log(response.error)
@@ -78,6 +113,16 @@
       <p class="header-title">{{ $t('workouts.addExercises') }}</p>
     </template>
     <template #modalContent>
+      <ion-item>
+        <ion-searchbar 
+          :placeholder="$t('exercise')"
+          @ionChange="queryExercises"
+          @ionInput="queryExercises"
+          @ionClear="removeExercises"
+        >
+        </ion-searchbar>
+      </ion-item>
+ 
       <ion-item v-for="exercise in exercises">
         <ion-checkbox slot="start" label-placement="end" :checked="exercise.isSelected" @ionChange="toggleExercise(exercise)">
           {{ exercise.name }}
