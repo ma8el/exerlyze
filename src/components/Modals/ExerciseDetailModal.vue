@@ -8,12 +8,13 @@
            IonCol,
            IonList,
            IonSkeletonText } from '@ionic/vue';
-  import BaseFullPageModal from './BaseFullPageModal.vue';
   import { supabase } from '@/supabase';
-  import { ref, onMounted, watch } from 'vue';
   import { useUserSettingsStore } from '@/store/userSettingsStore';
   import { bodyOutline } from 'ionicons/icons';
   import BaseInfoCard from '../Cards/BaseInfoCard.vue';
+  import BaseFullPageModal from './BaseFullPageModal.vue';
+  import LevelIcon from '@/icons/level.svg';
+  import { ref, onMounted, watch } from 'vue';
 
   const props = defineProps({
     exerciseId: {
@@ -110,7 +111,7 @@
           <BaseInfoCard
             :title="$t('workouts.type')"
             :subTitle="`Compound`"
-            iconSource="../../../assets/icons/level.svg"
+            :icon="LevelIcon"
           />
         </ion-col>
         <ion-col size="6" class="ion-padding">

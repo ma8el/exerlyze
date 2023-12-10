@@ -11,6 +11,9 @@ import { IonItem,
 import { bookmarkOutline, playForwardOutline, checkmarkDoneOutline } from 'ionicons/icons';
 import BaseFullPageModal from './BaseFullPageModal.vue';
 import ActiveExerciseCard from '../Cards/ActiveExerciseCard.vue';
+import WeightIcon from '@/icons/weight.svg';
+import RepsIcon from '@/icons/reps.svg';
+import SetIcon from '@/icons/set.svg';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
 import { useUserStore } from '@/store/bodyMetricsStore';
 import { ref, reactive, onMounted, computed, watch } from 'vue';
@@ -188,12 +191,12 @@ onMounted(() => {
         >
           <ion-item lines="none" slot="start">
             <ion-label>
-              <ion-icon src="../../../assets/icons/set.svg"></ion-icon>
+              <ion-icon :icon="SetIcon"></ion-icon>
               {{ set.currentSet }}
             </ion-label>
           </ion-item>
           <ion-item lines="none">
-            <ion-icon slot="start" src="../../../assets/icons/reps.svg"></ion-icon>
+            <ion-icon slot="start" :icon="RepsIcon" class="icons"></ion-icon>
             <ion-input 
               :value="set.plannedReps"
               :clear-on-edit="true"
@@ -205,7 +208,7 @@ onMounted(() => {
             <ion-label slot="end">{{ $t('workouts.reps') }}</ion-label>
           </ion-item>
           <ion-item lines="none">
-            <ion-icon slot="start" src="../../../assets/icons/weight.svg"></ion-icon>
+            <ion-icon slot="start" :icon="WeightIcon"></ion-icon>
             <ion-input 
               :value="set.plannedWeight"
               :clear-on-edit="true"

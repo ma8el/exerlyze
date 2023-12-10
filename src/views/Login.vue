@@ -13,6 +13,7 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useDark } from '@vueuse/core'
 import { supabase } from '@/supabase';
+import EmailIcon from '@/icons/email.svg';
 import { useUserStore } from '@/store/bodyMetricsStore';
 
 const userStore = useUserStore();
@@ -89,7 +90,7 @@ onMounted(async () => {
             </div>
             <form @submit.prevent="onLogin">
               <ion-item lines="none">
-                <ion-icon src="../../assets/icons/email.svg" slot="end"></ion-icon>
+                <ion-icon :icon="EmailIcon" slot="end"></ion-icon>
                 <ion-input 
                   label="Email"
                   type="email"

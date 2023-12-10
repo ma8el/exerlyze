@@ -13,6 +13,7 @@
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import { Exercise, ExerciseSelection } from '@/types';
   import { bookmarkOutline } from 'ionicons/icons';
+  import UpdateIcon from '@/icons/update.svg';
 
   const props = defineProps({
     workoutId: {
@@ -115,7 +116,7 @@
   <BaseFullPageModal>
     <template #saveButton>
       <ion-icon v-if="!workoutId" :icon="bookmarkOutline" @click="save"/>
-      <ion-icon v-else src="../../../assets/icons/update.svg" @click="update"/>
+      <ion-icon v-else :icon="UpdateIcon" @click="update"/>
     </template>
     <template #modalHeader>
       <p v-if="!workoutId" class="header-title">{{ $t('workouts.addWorkout') }}</p>

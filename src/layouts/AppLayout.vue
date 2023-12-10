@@ -12,6 +12,7 @@
            loadingController, 
   } from '@ionic/vue';
   import { arrowBackOutline } from 'ionicons/icons';
+  import UpdateIcon from '@/icons/update.svg';
   import { useRouter } from 'vue-router';
   import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
   import { useWorkoutStore, useWorkoutPlanStore, usePlannedWorkoutStore, useWorkoutSessionStore } from '@/store/workoutStore';
@@ -91,7 +92,7 @@
         >
           <ion-fab v-if="session !== null" horizontal="end">
             <ion-fab-button color="dark" size="small" @click="sync">
-              <ion-icon src="../../assets/icons/update_black.svg"></ion-icon>
+              <ion-icon :icon="UpdateIcon"></ion-icon>
             </ion-fab-button>
           </ion-fab>
         </ion-buttons>

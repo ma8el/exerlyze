@@ -2,6 +2,9 @@
   import { IonSpinner, IonIcon, IonRow, IonCol, IonGrid } from '@ionic/vue';
   import { onMounted, ref } from 'vue';
   import BaseCard from './BaseCard.vue';
+  import WeightIcon from '@/icons/weight.svg';
+  import RepsIcon from '@/icons/reps.svg';
+  import SetIcon from '@/icons/set.svg';
   import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
   import { Exercise } from '@/types';
 
@@ -37,20 +40,20 @@
       <ion-row>
         <ion-col class="no-margin" size="3">
           <div class="icon-description">
-            <ion-icon class="small-margin" src="../../../assets/icons/set.svg"/>
+            <ion-icon class="small-margin" :icon="SetIcon"/>
             {{sets}}
           </div>
         </ion-col>
         <ion-col class="no-margin" size="3">
 
           <div class="icon-description">
-          <ion-icon class="small-margin" src="../../../assets/icons/reps.svg"/>
+          <ion-icon class="small-margin" :icon="RepsIcon"/>
           {{reps}}
           </div>
         </ion-col>
         <ion-col class="no-margin" size="6">
           <div class="icon-description">
-          <ion-icon class="small-margin" src="../../../assets/icons/weight.svg"/>
+          <ion-icon class="small-margin" :icon="WeightIcon"/>
           {{weight}} {{ $t('weightUnitBig')  }}
           </div>
         </ion-col>

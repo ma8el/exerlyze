@@ -10,6 +10,9 @@
      IonIcon,
      modalController } from '@ionic/vue';
   import ExerciseDetailModal from './Modals/ExerciseDetailModal.vue';
+  import SetIcon from '@/icons/set.svg';
+  import RepsIcon from '@/icons/reps.svg';
+  import WeightIcon from '@/icons/weight.svg';
   import { Exercise } from '@/types'
   import { ref, watch, onMounted } from 'vue';
   import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
@@ -61,7 +64,7 @@
           <ion-row>
             <ion-col size="6">
               <ion-item>
-                <ion-icon slot="start" src="../../assets/icons/set.svg"></ion-icon>
+                <ion-icon slot="start" :icon="SetIcon"></ion-icon>
                 <ion-input
                   :value="props.sets"
                   @input="emit('update:sets', $event.target.value)"
@@ -72,7 +75,7 @@
             </ion-col>
             <ion-col size="6">
               <ion-item>
-                <ion-icon slot="start" src="../../assets/icons/reps.svg"></ion-icon>
+                <ion-icon slot="start" :icon="RepsIcon"></ion-icon>
                 <ion-input
                   :value="props.reps"
                   @input="emit('update:reps', $event.target.value)"
@@ -85,7 +88,7 @@
           <ion-row>
             <ion-col>
               <ion-item>
-                <ion-icon slot="start" src="../../assets/icons/weight.svg"></ion-icon>
+                <ion-icon slot="start" :icon="WeightIcon"></ion-icon>
                 <ion-input
                   :value="props.weight"
                   @input="emit('update:weight', $event.target.value)"

@@ -4,7 +4,8 @@
            IonInput,
            IonAlert,
            modalController} from '@ionic/vue';
-  import { bookmarkOutline, create } from 'ionicons/icons';
+  import { bookmarkOutline } from 'ionicons/icons';
+  import UpdateIcon from '@/icons/update.svg';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import AddPlannedWorkoutButton from '../Buttons/AddPlannedWorkoutButton.vue';
   import PlannedWorkoutItem from '../PlannedWorkoutItem.vue';
@@ -161,7 +162,7 @@
   <BaseFullPageModal>
     <template #saveButton>
       <ion-icon v-if="!workoutPlanId" :icon="bookmarkOutline" @click="save"/>
-      <ion-icon v-else src="../../../assets/icons/update.svg" @click="update"/>
+      <ion-icon v-else :icon="UpdateIcon" @click="update"/>
     </template>
     <template #modalHeader>
       <p v-if="!workoutPlanId" class="header-title">{{ $t('workouts.addWorkoutPlan') }}</p>

@@ -1,5 +1,10 @@
 <script setup lang="ts">
   import { IonCard, IonLabel, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/vue';
+  import BurnIcon from '@/icons/burn.svg';
+  import CarbsIcon from '@/icons/carbs.svg';
+  import ProteinIcon from '@/icons/protein.svg';
+  import FatIcon from '@/icons/fat.svg';
+  import WeightIcon from '@/icons/weight.svg';
   import { useFoodDiaryStore } from '@/store/foodDiary';
   import { useWorkoutSessionStore } from '@/store/workoutStore';
   import { useI18n } from 'vue-i18n';
@@ -23,17 +28,17 @@
   const nutritionOverviewData = computed(() =>{
     return [
       {
-        icon: 'carbs.svg',
+        icon: CarbsIcon,
         value: foodDiaryStore.getCarbohydratesOfDate(date),
         target: foodDiaryStore.dailyCarbs
       },
       {
-        icon: 'protein.svg',
+        icon: ProteinIcon,
         value: foodDiaryStore.getProteinOfDate(date),
         target: foodDiaryStore.dailyProtein
       },
       {
-        icon: 'fat.svg',
+        icon: FatIcon,
         value: foodDiaryStore.getFatOfDate(date),
         target: foodDiaryStore.dailyFat
       }
@@ -44,7 +49,7 @@ const workoutOverviewData = computed(() => {
   const workoutVolume = workoutSessionStore.getPerformedWorkoutVolumeOfDate(date);
   return [
    {
-      icon: 'weight.svg',
+      icon: WeightIcon,
       name: `${t('home.workoutVolume')}`,
       value: `${workoutVolume} ${t('weightUnitBig')}`,
     }
@@ -64,7 +69,7 @@ const workoutOverviewData = computed(() => {
           class="fitness-row"
         >
           <ion-col size="8">
-            <ion-icon class="icon-margin" :src="`../../../assets/icons/${item.icon}`"/>
+            <ion-icon class="icon-margin" :icon="item.icon"/>
             <ion-label>{{ item.name }}</ion-label>
           </ion-col>
           <ion-col size="4">
@@ -78,7 +83,7 @@ const workoutOverviewData = computed(() => {
         <ion-row>
           <ion-col size="6">
             <div class="icon-description">
-              <ion-icon class="small-margin" src="../../../assets/icons/burn_white.svg"/>
+              <ion-icon class="small-margin" :icon="BurnIcon"/>
               <p>{{ caloriesOfToday }} {{ $t('calUnit') }} / {{ caloriesTarget }} {{ $t('calUnit') }}</p>
             </div>
           </ion-col>
@@ -90,7 +95,7 @@ const workoutOverviewData = computed(() => {
             :key="index"
           >
             <div class="icon-description">
-              <ion-icon class="small-margin" :src="`../../../assets/icons/${item.icon}`"/>
+              <ion-icon class="small-margin" :icon="item.icon"/>
               <p>{{ item.value }} {{ $t('weightUnitSmall') }} / {{ item.target }} {{ $t('weightUnitSmall') }}</p>
             </div>
           </ion-col>

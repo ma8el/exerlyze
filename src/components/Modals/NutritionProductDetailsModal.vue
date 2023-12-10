@@ -12,6 +12,10 @@
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import AddNutrimentModal from './AddNutrimentModal.vue';
   import BaseCard from '../Cards/BaseCard.vue';
+  import BurnIcon from '@/icons/burn.vue';
+  import CarbsIcon from '@/icons/carbs.vue';
+  import ProteinIcon from '@/icons/protein.vue';
+  import FatIcon from '@/icons/fat.vue';
   import { FilteredNutritionApiProduct } from '@/types/nutrition';
   import { PropType } from 'vue';
   import { nutritionDetails } from '@/helpers/nutrition';
@@ -64,7 +68,7 @@
               <ion-item>
                 <ion-thumbnail>
                   <div class="nutrition-thumb">
-                    <img src="../../../assets/icons/burn_white.svg" />
+                    <BurnIcon color="white" class="iconComponent"/>
                   </div>
                 </ion-thumbnail>
                 <ion-label>
@@ -78,7 +82,7 @@
               <ion-item>
                 <ion-thumbnail>
                   <div class="nutrition-thumb">
-                    <img src="../../../assets/icons/carbs.svg" />
+                    <CarbsIcon color="white" class="iconComponent"/>
                   </div>
                 </ion-thumbnail>
                 <ion-label>
@@ -93,7 +97,7 @@
               <ion-item>
                 <ion-thumbnail>
                   <div class="nutrition-thumb">
-                    <img src="../../../assets/icons/protein.svg" />
+                    <ProteinIcon color="white" class="iconComponent"/>
                   </div>
                 </ion-thumbnail>
                 <ion-label>
@@ -106,7 +110,7 @@
               <ion-item>
                 <ion-thumbnail>
                   <div class="nutrition-thumb">
-                    <img src="../../../assets/icons/fat.svg" />
+                    <FatIcon color="white" class="iconComponent"/>
                   </div>
                 </ion-thumbnail>
                 <ion-label>
@@ -200,10 +204,12 @@
       }
     }
  }
-
  .nutrition-value {
    font-size: 1rem;
    font-weight: bold;
  }
- 
+ .iconComponent {
+   width: 70%;
+   height: 70%;
+ }
 </style>

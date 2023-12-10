@@ -10,6 +10,11 @@
            modalController } from '@ionic/vue';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import BaseInfoCard from '../Cards/BaseInfoCard.vue';
+  import UpdateIcon from '@/icons/update.svg';
+  import SetIcon from '@/icons/set.svg';
+  import RepsIcon from '@/icons/reps.svg';
+  import WeightIcon from '@/icons/weight.svg';
+  import TimeIcon from '@/icons/time.svg';
   import { useWorkoutSessionStore } from '@/store/workoutStore';
   import { computed } from 'vue';
   import { WorkoutSessionPerformance } from '@/types';
@@ -75,7 +80,7 @@
 <template>
   <BaseFullPageModal title="Activities">
     <template #saveButton>
-      <ion-icon src="../../../assets/icons/update.svg" @click="update"/>
+      <ion-icon :icon="UpdateIcon" @click="update"/>
     </template>
     <template #modalHeader>
       <p class="header-title">{{ workoutSession?.workout.name }}</p>
@@ -86,14 +91,14 @@
           <BaseInfoCard
             :title="$t('workouts.set', 2)"
             :subTitle="totalSets"
-            icon-source="../../../assets/icons/set.svg"
+            :icon="SetIcon"
           ></BaseInfoCard>
         </ion-col>
         <ion-col size="6">
           <BaseInfoCard
             :title="$t('workouts.reps')"
             :subTitle="totalReps"
-            icon-source="../../../assets/icons/reps.svg"
+            :icon="RepsIcon"
           />
         </ion-col>
       </ion-row>
@@ -102,14 +107,14 @@
           <BaseInfoCard
             :title="$t('workouts.volume')"
             :subTitle="totalWeight + ` ` + $t('weightUnitBig')"
-            icon-source="../../../assets/icons/weight.svg"
+            :icon="WeightIcon"
           />
         </ion-col>
         <ion-col size="6">
           <BaseInfoCard
             :title="$t('duration')"
             :subTitle="workoutDuration"
-            icon-source="../../../assets/icons/time.svg"
+            :icon="TimeIcon"
           />
         </ion-col>
       </ion-row>
@@ -139,12 +144,12 @@
             >
               <ion-item lines="none" slot="start">
                 <ion-label>
-                  <ion-icon src="../../../assets/icons/set.svg"></ion-icon>
+                  <ion-icon :icon="SetIcon"></ion-icon>
                   {{ index + 1 }}
                 </ion-label>
               </ion-item>
               <ion-item lines="none">
-                <ion-icon slot="start" src="../../../assets/icons/reps.svg"></ion-icon>
+                <ion-icon slot="start" :icon="RepsIcon"></ion-icon>
                 <ion-input 
                   :value="set.performed_reps"
                   :clear-on-edit="true"
@@ -156,7 +161,7 @@
                 <ion-label slot="end">{{ $t('workouts.reps') }}</ion-label>
               </ion-item>
               <ion-item lines="none">
-                <ion-icon slot="start" src="../../../assets/icons/weight.svg"></ion-icon>
+                <ion-icon slot="start" :icon="WeightIcon"></ion-icon>
                 <ion-input 
                   :value="set.performed_weight"
                   :clear-on-edit="true"

@@ -1,6 +1,10 @@
 <script setup lang="ts">
   import { IonList, IonItem, IonLabel, IonNote, IonThumbnail } from '@ionic/vue';
   import BaseCard from './BaseCard.vue';
+  import BurnIcon from '@/icons/burn.vue';
+  import CarbsIcon from '@/icons/carbs.vue';
+  import ProteinIcon from '@/icons/protein.vue';
+  import FatIcon from '@/icons/fat.vue';
   import { computed, inject } from 'vue';
   import { useFoodDiaryStore } from '@/store/foodDiary';
   import { selectedDateKey }  from '@/keys';
@@ -51,7 +55,8 @@
       <ion-item>
         <ion-thumbnail slot="start">
           <div class="nutrition-thumb">
-            <img src="../../../assets/icons/burn_white.svg" />
+            <!--<img :src="BurnIcon" /> -->
+            <BurnIcon color="white" class="iconComponent"/>
           </div>
         </ion-thumbnail>
         <ion-label>{{ $t('nutrition.calories') }}</ion-label>
@@ -60,7 +65,7 @@
       <ion-item>
         <ion-thumbnail slot="start">
           <div class="nutrition-thumb">
-            <img src="../../../assets/icons/carbs.svg" />
+            <CarbsIcon color="white" class="iconComponent"/>
           </div>
         </ion-thumbnail>
         <ion-label>{{ $t('nutrition.carbs') }}</ion-label>
@@ -69,7 +74,7 @@
       <ion-item>
         <ion-thumbnail slot="start">
           <div class="nutrition-thumb">
-            <img src="../../../assets/icons/fat.svg" />
+            <FatIcon color="white" class="iconComponent"/>
           </div>
         </ion-thumbnail>
         <ion-label>{{ $t('nutrition.fat') }}</ion-label>
@@ -78,7 +83,7 @@
       <ion-item>
          <ion-thumbnail slot="start">
           <div class="nutrition-thumb">
-            <img src="../../../assets/icons/protein.svg" />
+            <ProteinIcon color="white" class="iconComponent" />
           </div>
         </ion-thumbnail>
         <ion-label>{{ $t('nutrition.protein') }}</ion-label>
@@ -98,10 +103,6 @@
     justify-content: center;
     align-items: center;
     margin-top: 5px;
-    img {
-      width: 70%;
-      height: 70%;
-    }
   }
   .nutrition-overview-card {
     --background: none;
@@ -115,4 +116,9 @@
     border-radius: 10px;
     margin-top: 10px;
   }
+
+.iconComponent {
+  width: 70%;
+  height: 70%;
+}
 </style>
