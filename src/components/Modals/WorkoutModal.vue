@@ -4,6 +4,8 @@ import { IonItem,
          IonListHeader,
          IonLabel,
          IonInput,
+         IonRow,
+         IonCol,
          IonFab,
          IonFabButton,
          IonIcon,
@@ -184,36 +186,40 @@ onMounted(() => {
           :class="{ 'highlighted': currentSet === index  }"
           ref="setRefs"
         >
-          <ion-item lines="none" slot="start">
+          <ion-col size="2">
             <ion-label>
               <ion-icon :icon="SetIcon"></ion-icon>
               {{ set.currentSet }}
             </ion-label>
-          </ion-item>
-          <ion-item lines="none">
-            <ion-icon slot="start" :icon="RepsIcon" class="icons"></ion-icon>
-            <ion-input 
-              :value="set.plannedReps"
-              :clear-on-edit="true"
-              @ion-input="value => updatePerformedReps(index, value)"
-              type="number"
-              inputmode="numeric"
-            >
-            </ion-input>
-            <ion-label slot="end">{{ $t('workouts.reps') }}</ion-label>
-          </ion-item>
-          <ion-item lines="none">
-            <ion-icon slot="start" :icon="WeightIcon"></ion-icon>
-            <ion-input 
-              :value="set.plannedWeight"
-              :clear-on-edit="true"
-              @ion-input="value => updatePerformedWeight(index, value)"
-              type="number"
-              inputmode="numeric"
-            >
-            </ion-input>
-            <ion-label slot="end">{{ $t('weightUnitBig') }}</ion-label>
-          </ion-item>
+          </ion-col>
+          <ion-col size="5">
+            <ion-row class="ion-align-items-center">
+              <ion-icon :icon="RepsIcon" class="icons"></ion-icon>
+              <ion-input 
+                :value="set.plannedReps"
+                :clear-on-edit="true"
+                @ion-input="value => updatePerformedReps(index, value)"
+                type="number"
+                inputmode="numeric"
+              >
+              </ion-input>
+              <ion-label>x</ion-label>
+            </ion-row>
+          </ion-col>
+          <ion-col size="5">
+            <ion-row class="ion-align-items-center">
+              <ion-icon :icon="WeightIcon"></ion-icon>
+              <ion-input 
+                :value="set.plannedWeight"
+                :clear-on-edit="true"
+                @ion-input="value => updatePerformedWeight(index, value)"
+                type="number"
+                inputmode="numeric"
+              >
+              </ion-input>
+              <ion-label>{{ $t('weightUnitBig') }}</ion-label>
+            </ion-row>
+          </ion-col>
         </ion-item>
         </div>
       </ion-list>

@@ -142,36 +142,40 @@
               lines="none"
               ref="setRefs"
             >
-              <ion-item lines="none" slot="start">
+              <ion-col size="2">
                 <ion-label>
                   <ion-icon :icon="SetIcon"></ion-icon>
                   {{ index + 1 }}
                 </ion-label>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-icon slot="start" :icon="RepsIcon"></ion-icon>
-                <ion-input 
-                  :value="set.performed_reps"
-                  :clear-on-edit="true"
-                  @ion-input="value => updatePerformedReps(index, value)"
-                  type="number"
-                  inputmode="numeric"
-                >
-                </ion-input>
-                <ion-label slot="end">{{ $t('workouts.reps') }}</ion-label>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-icon slot="start" :icon="WeightIcon"></ion-icon>
-                <ion-input 
-                  :value="set.performed_weight"
-                  :clear-on-edit="true"
-                  @ion-input="value => updatePerformedWeight(index, value)"
-                  type="number"
-                  inputmode="numeric"
-                >
-                </ion-input>
-                <ion-label slot="end">{{ $t('weightUnitBig') }}</ion-label>
-              </ion-item>
+              </ion-col>
+              <ion-col size="5">
+                <ion-row class="ion-align-items-center">
+                  <ion-icon :icon="RepsIcon"></ion-icon>
+                  <ion-input 
+                    :value="set.performed_reps"
+                    :clear-on-edit="true"
+                    @ion-input="value => updatePerformedReps(index, value)"
+                    type="number"
+                    inputmode="numeric"
+                  >
+                  </ion-input>
+                  <ion-label>x</ion-label>
+                </ion-row>
+              </ion-col>
+              <ion-col size="5">
+                <ion-row class="ion-align-items-center">
+                  <ion-icon :icon="WeightIcon"></ion-icon>
+                  <ion-input 
+                    :value="set.performed_weight"
+                    :clear-on-edit="true"
+                    @ion-input="value => updatePerformedWeight(index, value)"
+                    type="number"
+                    inputmode="numeric"
+                  >
+                  </ion-input>
+                  <ion-label>{{ $t('weightUnitBig') }}</ion-label>
+                </ion-row>
+              </ion-col>
             </ion-item>
           </div>
         </div>
@@ -202,7 +206,7 @@
     ion-input {
       --background: var(--ion-color-step-100);
       border-radius: 10px;
-      margin: 0 2px 0 2px;
+      margin: 0 5px 0 2px;
       padding: 0;
     }
     ion-item {
@@ -213,5 +217,10 @@
 }
 .exercise-list-item {
   margin: 10px;
+}
+
+.exercise-list-item-input {
+  margin: 1000px;
+  padding: 100px;
 }
 </style>
