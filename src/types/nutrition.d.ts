@@ -35,11 +35,6 @@ export interface NutritionApiSearchResponse {
     skip: number,
 }
 
-export interface FoodDiary {
-    id: string,
-    created_at: Date,
-}
-
 export interface FoodDiaryEntry {
     id: string,
     food_diary_id: string,

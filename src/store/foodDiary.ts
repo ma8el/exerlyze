@@ -2,13 +2,11 @@ import { v4 as uuidv4 } from "uuid";
 import { supabase } from "@/supabase";
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
-import { FoodDiary, FoodDiaryEntry } from "@/types/nutrition";
+import { FoodDiaryEntry } from "@/types/nutrition";
 
 export const useFoodDiaryStore = defineStore({
     id: "nutriment",
     state: () => ({
-        // TODO: Maybe remove foodDiary
-        foodDiary: useStorage('foodDiary', {} as FoodDiary),
         foodDiaryEntries: useStorage('foodDiaryEntries', [] as FoodDiaryEntry[]),
         dailyCalories: useStorage('dailyCalories', 2500),
         dailyCarbs: useStorage('daylyCarbs', 300),
@@ -16,23 +14,13 @@ export const useFoodDiaryStore = defineStore({
         dailyFat: useStorage('dailyFat', 100),
     }),
     getters: {
-       getFoodDiary(): FoodDiary {
-           return this.foodDiary;
-       },
-       getFoodDiaryEntries(): FoodDiaryEntry[] {
+      getFoodDiaryEntries(): FoodDiaryEntry[] {
            return this.foodDiaryEntries;
        },
     },
     actions: {
         getUniqueId(): string {
             return uuidv4();
-        },
-        async createFoodDiary() {
-            const foodDiary: FoodDiary = {
-                id: this.getUniqueId(),
-                created_at: new Date(),
-            };
-            this.foodDiary = foodDiary;
         },
         addFoodDiaryEntry(foodDiaryEntry: FoodDiaryEntry) {
             this.foodDiaryEntries.push(foodDiaryEntry);
@@ -108,8 +96,6 @@ export const useFoodDiaryStore = defineStore({
         async syncFoodDiary(): Promise<void> {
             const session = await supabase.auth.getSession()
             if (session.data.session !== null) {
-                const { error } = await supabase.from('food_diaries')
-                .upsert(this.foodDiary)
                 for (const foodDiaryEntry of this.foodDiaryEntries) {
                     const { error } = await supabase.from('food_diary_entries')
                     .upsert(foodDiaryEntry)
