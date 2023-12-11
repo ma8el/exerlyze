@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import { IonSelect,
            IonSelectOption,
-           IonItem,
+           IonRow,
+           IonCol,
            IonLabel,
            IonDatetimeButton,
            IonDatetime,
@@ -28,15 +29,19 @@
 </script>
 
 <template>
-    <ion-item v-if="workoutId">
-        <ion-label slot="start">{{ workoutName }}</ion-label>
-       <ion-select 
-         :label="$t('weekday')"
-         label-placement="floating"
-         fill="solid"
-         :value="props.dayOfWeekId"
-         @ion-change="emit('update:dayOfWeekId', $event.target.value)"
-       >
+  <div class="ion-margin">
+    <ion-row v-if="workoutId" class="ion-align-items-center planned-workout-item">
+      <ion-col>
+        <ion-label>{{ workoutName }}</ion-label>
+      </ion-col>
+      <ion-col>
+        <ion-select 
+          :label="$t('weekday')"
+          label-placement="floating"
+          fill="solid"
+          :value="props.dayOfWeekId"
+          @ion-change="emit('update:dayOfWeekId', $event.target.value)"
+        >
             <ion-select-option
               v-for="(dayOfWeek, index) in dayOfWeekStore.getDaysOfWeek"
               :key="index"
@@ -45,7 +50,10 @@
               {{ dayOfWeek.name }}
             </ion-select-option>
         </ion-select>
-        <ion-datetime-button slot="end" datetime="time"></ion-datetime-button>
+      </ion-col>
+      <ion-col>
+        <ion-datetime-button datetime="time"></ion-datetime-button>
+      </ion-col>
         <ion-modal :keep-contents-mounted="true">
             <ion-datetime
               id="time"
@@ -54,12 +62,13 @@
               @ion-change="emit('update:timeOfDay', $event.target.value)"
             ></ion-datetime>
         </ion-modal>
- 
-    </ion-item>
+    </ion-row>
+  </div>
 </template>
 
 <style scoped>
-ion-item {
+.planned-workout-item {
+  background-color: var(--ion-card-background);
   border-radius: 10px;
 }
 </style>

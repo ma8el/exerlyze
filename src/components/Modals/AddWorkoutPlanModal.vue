@@ -2,6 +2,7 @@
   import { v4 as uuidv4 } from 'uuid';
   import { IonIcon,
            IonInput,
+           IonButton,
            IonAlert,
            modalController} from '@ionic/vue';
   import { bookmarkOutline } from 'ionicons/icons';
