@@ -37,7 +37,6 @@ export interface NutritionApiSearchResponse {
 
 export interface FoodDiaryEntry {
     id: string,
-    food_diary_id: string,
     created_at: Date,
     food_id: string,
     food_name: string,

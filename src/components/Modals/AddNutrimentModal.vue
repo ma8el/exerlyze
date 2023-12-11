@@ -20,7 +20,6 @@
     const addNutriment = async () => {
         foodDiaryStore.addFoodDiaryEntry({
             id: foodDiaryStore.getUniqueId(),
-            food_diary_id: foodDiaryStore.getFoodDiary.id,
             created_at: new Date(),
             food_id: props.product._id,
             food_name: props.product.product_name,
