@@ -10,15 +10,12 @@
            IonItem,
            modalController } from '@ionic/vue';
   import { bookmarkOutline } from 'ionicons/icons';
-  import { useWeightStore, useUserStore } from '@/store/bodyMetricsStore';
+  import { useWeightStore } from '@/store/bodyMetricsStore';
   import { useUserSettingsStore } from '@/store/userSettingsStore';
   import BaseFullPageModal from './BaseFullPageModal.vue';
-  import { ref } from 'vue';
-  import { onMounted } from 'vue';
-import { watch } from 'vue';
+  import { ref, onMounted, watch } from 'vue';
 
   const weightStore = useWeightStore();
-  const userStore = useUserStore();
   const userSettingsStore = useUserSettingsStore();
   const locale = userSettingsStore.getLocale();
   const inputDate = ref<string>(new Date().toISOString());
@@ -39,7 +36,6 @@ import { watch } from 'vue';
       'created_at': new Date(inputDate.value),
       'updated_at': new Date(inputDate.value),
       'unit': 'kg',
-      'user_id': await userStore.getUserId(),
     });
     closeModal();
     weight.value = undefined;

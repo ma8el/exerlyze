@@ -37,7 +37,6 @@
           :id="slotProps.item.id"
           :created_at="slotProps.item.created_at"
           :updated_at="slotProps.item.updated_at"
-          :user_id="slotProps.item.user_id"
           :workout_id="slotProps.item.workout_id"
           :exercise_id="slotProps.item.exercise_id"
           :name="slotProps.item.name"

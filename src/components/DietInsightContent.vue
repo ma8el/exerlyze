@@ -11,7 +11,6 @@
   import { ref, computed, watch, onMounted } from 'vue';
 
   interface NutritionIntake {
-    user_id: string;
     calories: number;
     carbohydrates: number;
     proteins: number;

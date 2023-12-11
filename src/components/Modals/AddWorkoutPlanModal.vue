@@ -11,7 +11,6 @@
   import PlannedWorkoutItem from '../PlannedWorkoutItem.vue';
   import { PlannedWorkout, Workout } from '@/types';
   import { useWorkoutPlanStore, usePlannedWorkoutStore } from '@/store/workoutStore';
-  import { useUserStore } from '@/store/bodyMetricsStore';
   import { ref, onMounted } from 'vue'
 
   const props = defineProps({
@@ -28,7 +27,6 @@
 
   const workoutPlanStore = useWorkoutPlanStore()
   const plannedWorkoutStore = usePlannedWorkoutStore()
-  const userStore = useUserStore()
 
   const isOpen = ref<boolean>(false)
   const alertButtons = [
@@ -64,7 +62,6 @@
           'day_of_week_id': 1,
           'time_of_day': '12:00',
           'deleted': false,
-          'user_id': await userStore.getUserId()
         })
     })
   }
@@ -75,7 +72,6 @@
         'id': generatedWorkoutPlanId.value,
         'created_at': new Date(),
         'updated_at': new Date(),
-        'user_id': await userStore.getUserId(),
         'name': workoutPlanName.value,
         'description': description.value,
         'deleted': false
@@ -90,7 +86,6 @@
           'day_of_week_id': plannedWorkout.day_of_week_id,
           'time_of_day': plannedWorkout.time_of_day,
           'deleted': false,
-          'user_id': await userStore.getUserId()
         }
       )
     });
@@ -107,7 +102,6 @@
         'id': props.workoutPlanId,
         'created_at': createdAt.value,
         'updated_at': new Date(),
-        'user_id': await userStore.getUserId(),
         'name': workoutPlanName.value,
         'description': description.value,
         'deleted': false
@@ -122,7 +116,6 @@
           'day_of_week_id': plannedWorkout.day_of_week_id,
           'time_of_day': plannedWorkout.time_of_day,
           'deleted': false,
-          'user_id': await userStore.getUserId()
         }
       )
     });

@@ -6,7 +6,6 @@
     import NutrimentRow from '../NutrimentRow.vue';
     import { calcNuritionPer100g } from '@/helpers/nutrition';
     import { useFoodDiaryStore } from '@/store/foodDiary';
-    import { useUserStore } from '@/store/bodyMetricsStore';
 
     const props = defineProps({
         product: {
@@ -17,12 +16,10 @@
 
     const amount = ref(0)
     const foodDiaryStore = useFoodDiaryStore()
-    const userStore = useUserStore()
 
     const addNutriment = async () => {
         foodDiaryStore.addFoodDiaryEntry({
             id: foodDiaryStore.getUniqueId(),
-            user_id: await userStore.getUserId(),
             food_diary_id: foodDiaryStore.getFoodDiary.id,
             created_at: new Date(),
             food_id: props.product._id,

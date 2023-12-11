@@ -72,15 +72,6 @@ export const useUserStore = defineStore('userStore', () => {
         }
         return true
     })
-    const getUserId = async (): Promise<string> => {
-        const session = await supabase.auth.getSession()
-        if (session.data.session === null) {
-            return ''
-        }
-        else {
-            return userId.value = session.data.session.user?.id
-        }
-    }
     const getUserName = (): string => {
         if (userName.value === undefined
             || userName.value === "undefined") {
@@ -133,7 +124,6 @@ export const useUserStore = defineStore('userStore', () => {
         if (session.data.session !== null) {
             const { error } = await supabase.from('profiles')
             .upsert({
-                id: session.data.session.user?.id,
                 username: getUserName(),
                 height: getHeight(),
                 gender: getGender(),
@@ -142,7 +132,6 @@ export const useUserStore = defineStore('userStore', () => {
         }
     }
     return {
-        getUserId,
         userName,
         gender,
         dateOfBirth,

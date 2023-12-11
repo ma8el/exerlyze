@@ -62,7 +62,6 @@ export const useWorkoutStore = defineStore({
                         id: workout.id,
                         created_at: workout.created_at,
                         updated_at: workout.updated_at,
-                        user_id: workout.user_id,
                         name: workout.name,
                         description: workout.description,
                         deleted: workout.deleted
@@ -79,7 +78,6 @@ export const useWorkoutStore = defineStore({
                           reps: exercise.reps,
                           weight: exercise.weight,
                           valid: true,
-                          user_id: workout.user_id,
                       })
                     }
                 }

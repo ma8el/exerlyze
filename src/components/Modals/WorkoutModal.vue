@@ -15,7 +15,6 @@ import WeightIcon from '@/icons/weight.svg';
 import RepsIcon from '@/icons/reps.svg';
 import SetIcon from '@/icons/set.svg';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
-import { useUserStore } from '@/store/bodyMetricsStore';
 import { ref, reactive, onMounted, computed, watch } from 'vue';
 
 interface ListRef {
@@ -33,7 +32,6 @@ const props = defineProps({
 
 const workoutStore = useWorkoutStore();
 const workoutSessionStore = useWorkoutSessionStore();
-const userStore = useUserStore();
 
 const setRefs = ref<InstanceType<typeof IonList>[]>([]);
 
@@ -57,11 +55,9 @@ const save = async () => {
       return;
     }
     const workoutSessionId = workoutSessionStore.getNewWorkoutSessionId();
-    const userId = await userStore.getUserId();
     // TODO: Track not fully completed workouts
     workoutSessionStore.addWorkoutSession({
       id: workoutSessionId,
-      user_id: userId,
       workout_id: props.workoutId,
       created_at: new Date(),
       updated_at: new Date(),
@@ -75,7 +71,6 @@ const save = async () => {
     workoutSessionStore.addWorkoutSessionPerformances(
       workoutSessionSets.map((set: any, index: number) => ({
         id: set.id,
-        user_id: userId,
         workout_session_id: workoutSessionId,
         exercise_id: set.exerciseId,
         set: index,

@@ -3,7 +3,6 @@ import { supabase } from "@/supabase";
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 import { FoodDiary, FoodDiaryEntry } from "@/types/nutrition";
-import { useUserStore } from "@/store/bodyMetricsStore";
 
 export const useFoodDiaryStore = defineStore({
     id: "nutriment",
@@ -29,10 +28,8 @@ export const useFoodDiaryStore = defineStore({
             return uuidv4();
         },
         async createFoodDiary() {
-            const userStore = useUserStore();
             const foodDiary: FoodDiary = {
                 id: this.getUniqueId(),
-                user_id: await userStore.getUserId(),
                 created_at: new Date(),
             };
             this.foodDiary = foodDiary;

@@ -18,7 +18,6 @@
       :description="workout.description"
       :exercises="workout.exercises"
       :deleted="workout.deleted"
-      :user_id="workout.user_id"
       :created_at="workout.created_at"
       :updated_at="workout.updated_at"
     />

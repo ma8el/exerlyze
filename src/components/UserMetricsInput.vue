@@ -59,7 +59,6 @@ const save = async () => {
     }
     weightStore.addWeight({
         id: weightStore.getNewId(),
-        user_id: await userStore.getUserId(),
         created_at: new Date(),
         updated_at: new Date(),
         weight: weight.value,

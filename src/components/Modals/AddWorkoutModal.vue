@@ -7,7 +7,6 @@
            modalController } from '@ionic/vue';
   import { ref, onMounted } from 'vue'
   import { useWorkoutStore } from '../../store/workoutStore';
-  import { useUserStore } from '@/store/bodyMetricsStore';
   import AddExerciseButton from '../Buttons/AddExerciseButton.vue'
   import ExerciseItem from '../ExerciseItem.vue';
   import BaseFullPageModal from './BaseFullPageModal.vue';
@@ -22,7 +21,6 @@
   })
 
   const workoutStore = useWorkoutStore()
-  const userStore = useUserStore()
   
   const generatedWorkoutId = ref<string>(uuidv4())
   const workoutName = ref<string>('Workout')
@@ -38,7 +36,6 @@
       id: generatedWorkoutId.value,
       created_at: new Date(),
       updated_at: new Date(),
-      user_id: await userStore.getUserId(),
       name: workoutName.value,
       description: description.value,
       exercises: exercises.value,
@@ -53,7 +50,6 @@
       id: props.workoutId,
       created_at: createdAt.value,
       updated_at: new Date(),
-      user_id: await userStore.getUserId(),
       name: workoutName.value,
       description: description.value,
       exercises: exercises.value,
@@ -78,7 +74,6 @@
         id: exercise.id,
         created_at: new Date(),
         updated_at: new Date(),
-        user_id: await userStore.getUserId(),
         workout_id: generatedWorkoutId.value,
         exercise_id: exercise.exercise_id,
         name: exercise.name,
@@ -134,7 +129,6 @@
         :id="exercise.id"
         :created_at="exercise.created_at"
         :updated_at="exercise.updated_at"
-        :user_id="exercise.user_id"
         :workout_id="exercise.workout_id"
         :exercise_id="exercise.exercise_id"
         :name="exercise.name"

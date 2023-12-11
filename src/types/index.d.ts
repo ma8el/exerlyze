@@ -8,7 +8,6 @@ export interface Exercise {
     sets: number,
     reps: number,
     weight: number,
-    user_id: string,
 };
 
 export interface ExerciseSelection {
@@ -31,7 +30,6 @@ export interface Workout {
     id: string,
     created_at: Date,
     updated_at: Date,
-    user_id: string,
     name: string,
     description: string,
     exercises: Exercise[],
@@ -49,14 +47,12 @@ export interface PlannedWorkout {
     day_of_week_id: number,
     time_of_day: time,
     deleted: boolean,
-    user_id: string
 }
 
 export interface WorkoutPlan {
     id: string,
     created_at: Date,
     updated_at: Date,
-    user_id: string,
     name: string,
     description: string,
     deleted: boolean
@@ -82,7 +78,6 @@ export interface WorkoutSchedule {
 
 export interface Weight {
     id: string,
-    user_id: string,
     weight: number,
     created_at: Date,
     updated_at: Date,
@@ -91,7 +86,6 @@ export interface Weight {
 
 export interface WorkoutSession {
     id: string,
-    user_id: string,
     workout_id: string,
     created_at: Date,
     updated_at: Date,
@@ -103,7 +97,6 @@ export interface WorkoutSession {
 
 export interface WorkoutSessionPerformance {
     id: string,
-    user_id: string,
     workout_session_id: string,
     exercise_id: number,
     set: number,

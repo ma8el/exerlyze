@@ -57,13 +57,13 @@
     const plannedWorkoutStore = usePlannedWorkoutStore();
     const workoutSessionStore = useWorkoutSessionStore();
     const foodDiaryStore = useFoodDiaryStore();
-    userStore.syncUser();
-    weightStore.syncWeights;
-    workoutStore.syncWorkouts();
-    workoutPlanStore.syncWorkoutPlans();
-    plannedWorkoutStore.syncPlannedWorkouts();
-    workoutSessionStore.syncWorkoutSessions();
-    foodDiaryStore.syncFoodDiary();
+    await userStore.syncUser();
+    await weightStore.syncWeights;
+    await workoutStore.syncWorkouts();
+    await workoutPlanStore.syncWorkoutPlans();
+    await workoutSessionStore.syncWorkoutSessions();
+    await plannedWorkoutStore.syncPlannedWorkouts();
+    await foodDiaryStore.syncFoodDiary();
     loading.dismiss();
   };
 
