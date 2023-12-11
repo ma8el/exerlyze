@@ -106,7 +106,7 @@ group by user_id
 $function$
 ;
 
-create or replace view "public"."v_daily_aggregated_food_diary_entries" as  WITH date_series AS (
+create or replace view "public"."v_daily_aggregated_food_diary_entries" WITH (security_invoker) as  WITH date_series AS (
          SELECT generate_series(((min(food_diary_entries.created_at))::date)::timestamp with time zone, ((max(food_diary_entries.created_at))::date)::timestamp with time zone, '1 day'::interval) AS date
            FROM food_diary_entries
         ), user_ids AS (
@@ -138,7 +138,7 @@ create or replace view "public"."v_daily_aggregated_food_diary_entries" as  WITH
   ORDER BY cj.date, cj.user_id;
 
 
-create or replace view "public"."v_daily_aggregated_workout_volume" as  WITH date_series AS (
+create or replace view "public"."v_daily_aggregated_workout_volume" WITH (security_invoker) as  WITH date_series AS (
          SELECT generate_series(((min(food_diary_entries.created_at))::date)::timestamp with time zone, ((max(food_diary_entries.created_at))::date)::timestamp with time zone, '1 day'::interval) AS date
            FROM food_diary_entries
         ), user_ids AS (
@@ -164,7 +164,7 @@ create or replace view "public"."v_daily_aggregated_workout_volume" as  WITH dat
   ORDER BY cj.date, cj.user_id;
 
 
-create or replace view "public"."v_daily_weights" as  WITH date_series AS (
+create or replace view "public"."v_daily_weights" WITH (security_invoker) as  WITH date_series AS (
          SELECT wt.user_id,
             generate_series((( SELECT min((weights.created_at)::date) AS min
                    FROM weights
