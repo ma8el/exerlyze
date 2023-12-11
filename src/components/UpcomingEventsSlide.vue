@@ -1,18 +1,18 @@
 <script setup lang="ts">
   import { addCircleOutline } from 'ionicons/icons';
-  import { IonButton, IonIcon } from '@ionic/vue';
+  import { IonButton, IonIcon, onIonViewDidEnter } from '@ionic/vue';
   import { useRouter } from 'vue-router';
   import { useWorkoutPlanStore } from '../store/workoutStore';
   import StartWorkoutButton from './Buttons/StartWorkoutButton.vue';
   import BaseCard from './Cards/BaseCard.vue';
   import Slider from './Slider.vue';
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, watch } from 'vue';
 
   const router = useRouter()
 
   const workoutPlanStore = useWorkoutPlanStore();
-  const plannedWorkouts = workoutPlanStore.getFullWorkoutPlans
-  const sortedPlannedWorkouts = plannedWorkouts.sort((a, b) => a.day_of_week_id - b.day_of_week_id);
+  const plannedWorkouts = ref(workoutPlanStore.getFullWorkoutPlans)
+  const sortedPlannedWorkouts = ref(plannedWorkouts.value.sort((a, b) => a.day_of_week_id - b.day_of_week_id));
   const nextWorkout = ref();
 
   const getNextEventIndex = (currentDay: number, events: number[]) => {
@@ -26,7 +26,7 @@
 
   const setNextWorkout = () => {
     const today = new Date().getDay();
-    const workoutDays = sortedPlannedWorkouts.map((workoutPlan) => workoutPlan.day_of_week_id);
+    const workoutDays = sortedPlannedWorkouts.value.map((workoutPlan) => workoutPlan.day_of_week_id);
     nextWorkout.value = getNextEventIndex(today, workoutDays);
   }
 
@@ -34,7 +34,21 @@
     router.push('/tabs/workouts');
   }
 
-  onMounted(() => {
+  workoutPlanStore.$subscribe((mutation, state) => {
+    plannedWorkouts.value = workoutPlanStore.getFullWorkoutPlans;
+    sortedPlannedWorkouts.value = plannedWorkouts.value.sort((a, b) => a.day_of_week_id - b.day_of_week_id);
+    setNextWorkout();
+  });
+
+  watch(sortedPlannedWorkouts, () => {
+    setNextWorkout();
+  })
+ 
+  onIonViewDidEnter(() => {
+    setNextWorkout();
+  })
+
+ onMounted(() => {
     setNextWorkout();
   })
 </script>
