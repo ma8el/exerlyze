@@ -76,10 +76,10 @@
           </ion-col>
         </ion-item>
         <ion-item lines="none">
-          <ion-col size="4">
+          <ion-col size="2">
             <ion-label>{{ $t('date') }}</ion-label>
           </ion-col>
-          <ion-col size="8">
+          <ion-col size="10">
             <ion-datetime-button 
               datetime="datetime"
             />
