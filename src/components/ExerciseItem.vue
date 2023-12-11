@@ -64,24 +64,38 @@
           <ion-row>
             <ion-col size="6">
               <ion-item>
-                <ion-icon slot="start" :icon="SetIcon"></ion-icon>
-                <ion-input
-                  :value="props.sets"
-                  @input="emit('update:sets', $event.target.value)"
-                >
+                <ion-col size="3">
+                 <ion-icon :icon="SetIcon"></ion-icon>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-input
+                    :value="props.sets"
+                    @input="emit('update:sets', $event.target.value)"
+                    :clear-on-edit="true"
+                  >
                 </ion-input>
-                <ion-label slot="end">{{ $t('workouts.set') }}</ion-label>
+                </ion-col>
+                <ion-col size="3">
+                 <ion-label>{{ $t('workouts.set') }}</ion-label>
+                </ion-col>
               </ion-item>
             </ion-col>
             <ion-col size="6">
               <ion-item>
-                <ion-icon slot="start" :icon="RepsIcon"></ion-icon>
-                <ion-input
-                  :value="props.reps"
-                  @input="emit('update:reps', $event.target.value)"
-                >
-                </ion-input>
-                <ion-label slot="end">{{ $t('workouts.reps') }}</ion-label>
+                <ion-col size="3">
+                  <ion-icon :icon="RepsIcon"></ion-icon>
+                </ion-col>
+                <ion-col size="5">
+                  <ion-input
+                    :value="props.reps"
+                    @input="emit('update:reps', $event.target.value)"
+                    :clear-on-edit="true"
+                  >
+                  </ion-input>
+                </ion-col>
+                <ion-col size="4">
+                  <ion-label>{{ $t('workouts.reps') }}</ion-label>
+                </ion-col>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -92,9 +106,10 @@
                 <ion-input
                   :value="props.weight"
                   @input="emit('update:weight', $event.target.value)"
+                  :clear-on-edit="true"
                 >
                 </ion-input>
-                <ion-label slot="end">{{ $t('weight') }}</ion-label>
+                <ion-label slot="end">{{ $t('weightUnitBig') }}</ion-label>
               </ion-item>
             </ion-col>
           </ion-row>
