@@ -68,7 +68,7 @@
   }
 
   const save = async () => {
-    workoutPlanStore.addWorkoutPlan(
+    await workoutPlanStore.addWorkoutPlan(
       {
         'id': generatedWorkoutPlanId.value,
         'created_at': new Date(),
@@ -79,7 +79,7 @@
       }
     );
     plannedWorkouts.value.forEach(async (plannedWorkout: PlannedWorkout) => {
-      plannedWorkoutStore.addPlannedWorkout(
+      await plannedWorkoutStore.addPlannedWorkout(
         {
           'id': plannedWorkout.id,
           'workout_plan_id': plannedWorkout.workout_plan_id,

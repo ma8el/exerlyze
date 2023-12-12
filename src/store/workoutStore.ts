@@ -98,7 +98,7 @@ export const useWorkoutStore = defineStore('workout', () => {
         const plannedWorkoutStore = usePlannedWorkoutStore()
 
         const plannedWorkouts = plannedWorkoutStore.getPlannedWorkouts
-        const isPlanned = plannedWorkouts.some(w => w.workout_id === id)
+        const isPlanned = plannedWorkouts.some((w: PlannedWorkout) => w.workout_id === id)
         if (isPlanned) {
             return false
         }
@@ -198,7 +198,7 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
         const workoutStore = useWorkoutStore()
         const plannedWorkoutStore = usePlannedWorkoutStore()
 
-        return plannedWorkoutStore.getPlannedWorkouts.map(w => {
+        return plannedWorkoutStore.getPlannedWorkouts.map((w: PlannedWorkout) => {
             const dayOfWeek = dayOfWeekStore.getDayOfWeekById(w.day_of_week_id)
             const workout = workoutStore.getWorkoutById(w.workout_id)
             const workoutPlan = workoutPlans.value.find(wp => wp.id === w.workout_plan_id)
@@ -213,7 +213,7 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
                 } as FullWorkoutPlan
             }
             return undefined
-        }).filter(w => w !== undefined) as FullWorkoutPlan[]
+        }).filter((w: FullWorkoutPlan | undefined) => w !== undefined) as FullWorkoutPlan[]
     })
 
     function getNewId() {
@@ -224,13 +224,23 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
         return workoutPlans.value.find(w => w.id === id)
     }
 
-    function addWorkoutPlan(workoutPlan: WorkoutPlan) {
+    async function addWorkoutPlan(workoutPlan: WorkoutPlan) {
         workoutPlans.value.push(workoutPlan)
+        const session = supabase.auth.getSession()
+        if (session !== null) {
+            await pushWorkoutPlan(workoutPlan)
+        }
     }
 
-    function updateWorkoutPlan(workoutPlan: WorkoutPlan) {
+    async function updateWorkoutPlan(workoutPlan: WorkoutPlan) {
         const index = workoutPlans.value.findIndex(w => w.id === workoutPlan.id)
         workoutPlans.value[index] = workoutPlan
+        workoutPlans.value[index].updated_at = new Date()
+
+        const session = supabase.auth.getSession()
+        if (session !== null) {
+            await pushWorkoutPlan(workoutPlan)
+        }
     }
 
     function deleteWorkoutPlan(id: string) {
@@ -239,15 +249,52 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
         const plannedWorkouts = plannedWorkoutStore.getPlannedWorkoutsByWorkoutPlanId(id)
 
         workoutPlans.value[index].deleted = true
-        plannedWorkouts.forEach(w => {
+        workoutPlans.value[index].updated_at = new Date()
+        plannedWorkouts.forEach((w: PlannedWorkout) => {
             plannedWorkoutStore.deletePlannedWorkout(w.id)
         })
+
+        const session = supabase.auth.getSession()
+        if (session !== null) {
+            pushWorkoutPlan(workoutPlans.value[index])
+        }
+    }
+
+    async function pushWorkoutPlan(workoutPlan: WorkoutPlan) {
+        await supabase.from('workout_plans').upsert(workoutPlan)
+    }
+
+    async function fetchWorkoutPlans() {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            const { data, error } = await supabase.from('workout_plans').select('*')
+            if (error) {
+                console.error(error)
+            } else {
+                const mergedWorkoutPlans = workoutPlans.value
+                for(const workoutPlan of data) {
+                    const existingWorkoutPlanIndex = mergedWorkoutPlans.findIndex((w) => w.id === workoutPlan.id)
+                    if (existingWorkoutPlanIndex !== -1) {
+                        const existingWorkoutPlan = mergedWorkoutPlans[existingWorkoutPlanIndex]
+                        if (existingWorkoutPlan.updated_at < workoutPlan.updated_at) {
+                            mergedWorkoutPlans[existingWorkoutPlanIndex] = workoutPlan
+                        }
+                    } else {
+                        mergedWorkoutPlans.push(workoutPlan)
+                    }
+                }
+                workoutPlans.value = mergedWorkoutPlans
+            }
+        }
     }
 
     async function syncWorkoutPlans() {
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
-            await supabase.from('workout_plans').upsert(workoutPlans.value)
+            await fetchWorkoutPlans()
+            for (const workoutPlan of workoutPlans.value){
+              await pushWorkoutPlan(workoutPlan)
+            }
             // TODO: Add error handling as needed
         }
     }
@@ -278,42 +325,74 @@ export const usePlannedWorkoutStore = defineStore('plannedWorkouts', () => {
         return plannedWorkouts.value.find(w => w.id === id)
     }
 
-    function addPlannedWorkout(plannedWorkout: PlannedWorkout) {
+    async function addPlannedWorkout(plannedWorkout: PlannedWorkout) {
         plannedWorkouts.value.push(plannedWorkout)
+        const session = supabase.auth.getSession()
+        if (session !== null) {
+            await pushPlannedWorkout(plannedWorkout)
+        }
     }
 
     function getPlannedWorkoutsByWorkoutPlanId(workoutPlanId: string): PlannedWorkout[] {
         return plannedWorkouts.value.filter(w => w.workout_plan_id === workoutPlanId)
     }
 
-    function updatePlannedWorkout(plannedWorkout: PlannedWorkout) {
+    async function updatePlannedWorkout(plannedWorkout: PlannedWorkout) {
         const index = plannedWorkouts.value.findIndex(w => w.id === plannedWorkout.id)
         plannedWorkouts.value[index] = plannedWorkout
-    }
-
-    function updatePlannedWorkoutsOfWorkoutPlan(workoutPlanId: string, newPlannedWorkouts: PlannedWorkout[]) {
-        const indexes = plannedWorkouts.value
-            .map((w, i) => w.workout_plan_id === workoutPlanId ? i : -1)
-            .filter(i => i !== -1)
-        if (indexes.length > 0) {
-            plannedWorkouts.value.splice(indexes[0], indexes.length, ...newPlannedWorkouts)
-        } else {
-            plannedWorkouts.value.push(...newPlannedWorkouts)
+        const session = supabase.auth.getSession()
+        if (session !== null) {
+            await pushPlannedWorkout(plannedWorkout)
         }
     }
 
-    function deletePlannedWorkout(id: string) {
+    async function deletePlannedWorkout(id: string) {
         const index = plannedWorkouts.value.findIndex(w => w.id === id)
         if (index !== -1) {
             plannedWorkouts.value[index].deleted = true
         }
+
+        const session = supabase.auth.getSession()
+        if (session !== null) {
+            await pushPlannedWorkout(plannedWorkouts.value[index])
+        }
+    }
+
+    async function fetchPlannedWorkouts() {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            const { data, error } = await supabase.from('planned_workouts').select('*')
+            if (error) {
+                console.error(error)
+            } else {
+                const mergedPlannedWorkouts = plannedWorkouts.value
+                for(const plannedWorkout of data) {
+                    const existingPlannedWorkoutIndex = mergedPlannedWorkouts.findIndex((w) => w.id === plannedWorkout.id)
+                    if (existingPlannedWorkoutIndex !== -1) {
+                        const existingPlannedWorkout = mergedPlannedWorkouts[existingPlannedWorkoutIndex]
+                        // TODO: Add logic to merge planned workouts
+//                        if (existingPlannedWorkout.updated_at < plannedWorkout.updated_at) {
+//                            mergedPlannedWorkouts[existingPlannedWorkoutIndex] = plannedWorkout
+//                        }
+                    } else {
+                        mergedPlannedWorkouts.push(plannedWorkout)
+                    }
+                }
+            plannedWorkouts.value = mergedPlannedWorkouts
+            }
+        }
+    }
+
+    async function pushPlannedWorkout(plannedWorkout: PlannedWorkout) {
+        await supabase.from('planned_workouts').upsert(plannedWorkout)
     }
 
     async function syncPlannedWorkouts() {
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
+            await fetchPlannedWorkouts()
             for (const plannedWorkout of plannedWorkouts.value) {
-                await supabase.from('planned_workouts').upsert(plannedWorkout)
+                await pushPlannedWorkout(plannedWorkout)
                 // Add error handling as needed
             }
         }
@@ -327,7 +406,6 @@ export const usePlannedWorkoutStore = defineStore('plannedWorkouts', () => {
         addPlannedWorkout,
         getPlannedWorkoutsByWorkoutPlanId,
         updatePlannedWorkout,
-        updatePlannedWorkoutsOfWorkoutPlan,
         deletePlannedWorkout,
         syncPlannedWorkouts
     }
