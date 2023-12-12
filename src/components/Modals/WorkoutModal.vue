@@ -58,7 +58,7 @@ const save = async () => {
     }
     const workoutSessionId = workoutSessionStore.getNewWorkoutSessionId();
     // TODO: Track not fully completed workouts
-    workoutSessionStore.addWorkoutSession({
+    await workoutSessionStore.addWorkoutSession({
       id: workoutSessionId,
       workout_id: props.workoutId,
       created_at: new Date(),
@@ -70,7 +70,7 @@ const save = async () => {
       // TODO: Add note text field
       notes: '',
     })
-    workoutSessionStore.addWorkoutSessionPerformances(
+    await workoutSessionStore.addWorkoutSessionPerformances(
       workoutSessionSets.map((set: any, index: number) => ({
         id: set.id,
         workout_session_id: workoutSessionId,

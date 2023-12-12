@@ -19,6 +19,10 @@
   import { computed } from 'vue';
   import { WorkoutSessionPerformance } from '@/types';
 
+  interface ChangedWorkoutSessionPerformance extends WorkoutSessionPerformance {
+    changed: boolean;
+  }
+
   const props = defineProps({
     workoutSessionId: {
       type: String,
@@ -63,15 +67,19 @@
 
   const updatePerformedWeight = (index: number, value: any) => {
     workoutSession.workoutPerformance[index].performed_weight = parseFloat(value.detail.value)
+    workoutSession.workoutPerformance[index].changed = true;
   };
 
   const updatePerformedReps = (index: number, value: any) => {
     workoutSession.workoutPerformance[index].performed_reps = parseInt(value.detail.value)
+    workoutSession.workoutPerformance[index].changed = true;
   };
 
-  const update = () => {
+  const update = async () => {
     if (workoutSession) {
-      workoutSessionStore.updateWorkoutSessionById(props.workoutSessionId, workoutSession.workoutPerformance);
+      const changedSets = workoutSession.workoutPerformance.filter((set: ChangedWorkoutSessionPerformance) => set.changed)
+                          .map(({ changed, ...rest }: ChangedWorkoutSessionPerformance) => rest);
+      await workoutSessionStore.updateWorkoutSessionById(props.workoutSessionId, changedSets);
       return modalController.dismiss(null, 'save');
     }
   };

@@ -445,19 +445,45 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
         return workoutSessions.value.find(w => w.id === id)
     }
 
-    function addWorkoutSession(workoutSession: WorkoutSession) {
+    async function addWorkoutSession(workoutSession: WorkoutSession) {
         workoutSessions.value.push(workoutSession)
+
+        const session = supabase.auth.getSession()
+        if (session !== null) {
+            await pushWorkoutSession(workoutSession)
+        }
     }
 
-    function addWorkoutSessionPerformances(workoutSessionPerformancesToAdd: WorkoutSessionPerformance[]) {
+    async function addWorkoutSessionPerformances(workoutSessionPerformancesToAdd: WorkoutSessionPerformance[]) {
         workoutSessionPerformances.value.push(...workoutSessionPerformancesToAdd)
+        
+        const session = supabase.auth.getSession()
+        if (session !== null) {
+            for (const workoutSessionPerformance of workoutSessionPerformancesToAdd) {
+                await pushWorkoutSessionPerformance(workoutSessionPerformance)
+            }
+        }
     }
 
-    function updateWorkoutSessionById(id: string, workoutSessionPerformances: WorkoutSessionPerformance[]) {
+    async function updateWorkoutSessionById(id: string, changedWorkoutSessionPerformances: WorkoutSessionPerformance[]) {
         const index = workoutSessions.value.findIndex(w => w.id === id);
         workoutSessions.value[index].updated_at = new Date();
-        workoutSessionPerformances = workoutSessionPerformances.filter(w => w.workout_session_id !== id);
-        workoutSessionPerformances.push(...workoutSessionPerformances);
+        for (const changedWorkoutSessionPerformance of changedWorkoutSessionPerformances) {
+            changedWorkoutSessionPerformance.updated_at = new Date();
+            const index = workoutSessionPerformances.value.findIndex(w => w.id === changedWorkoutSessionPerformance.id)
+            if (index !== -1) {
+                workoutSessionPerformances.value[index] = changedWorkoutSessionPerformance
+            }
+        }
+
+        const session = supabase.auth.getSession()
+        if (session !== null) {
+            await pushWorkoutSession(workoutSessions.value[index])
+            for (const workoutSessionPerformance of changedWorkoutSessionPerformances) {
+                workoutSessionPerformance.updated_at = new Date();
+                await pushWorkoutSessionPerformance(workoutSessionPerformance)
+            }
+        }
     }
 
     function getFullWorkoutSessionById(id: string): FullWorkoutSession | undefined {
@@ -543,12 +569,72 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
         return volumeOfWeek;
     }
 
+    async function pushWorkoutSession(workoutSession: WorkoutSession) {
+        await supabase.from('workout_sessions').upsert(workoutSession)
+    }
+
+    async function pushWorkoutSessionPerformance(workoutSessionPerformance: WorkoutSessionPerformance) {
+        await supabase.from('workout_session_performances').upsert(workoutSessionPerformance)
+    }
+
+    async function fetchWorkoutSessions() {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            const { data, error } = await supabase.from('workout_sessions').select('*')
+            if (error) {
+                console.error(error)
+            } else {
+                const mergedWorkoutSessions = workoutSessions.value
+                for(const workoutSession of data) {
+                    const existingWorkoutSessionIndex = mergedWorkoutSessions.findIndex((w) => w.id === workoutSession.id)
+                    if (existingWorkoutSessionIndex !== -1) {
+                        const existingWorkoutSession = mergedWorkoutSessions[existingWorkoutSessionIndex]
+                        if (existingWorkoutSession.updated_at < workoutSession.updated_at) {
+                            mergedWorkoutSessions[existingWorkoutSessionIndex] = workoutSession
+                        }
+                    } else {
+                        mergedWorkoutSessions.push(workoutSession)
+                    }
+                }
+                workoutSessions.value = mergedWorkoutSessions
+            }
+        }
+    }
+
+    async function fetchWorkoutSessionPerformances() {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            const { data, error } = await supabase.from('workout_session_performances').select('*')
+            if (error) {
+                console.error(error)
+            } else {
+                const mergedWorkoutSessionPerformances = workoutSessionPerformances.value
+                for(const workoutSessionPerformance of data) {
+                    const existingWorkoutSessionPerformanceIndex = mergedWorkoutSessionPerformances.findIndex((w) => w.id === workoutSessionPerformance.id)
+                    if (existingWorkoutSessionPerformanceIndex !== -1) {
+                        const existingWorkoutSessionPerformance = mergedWorkoutSessionPerformances[existingWorkoutSessionPerformanceIndex]
+                        if (existingWorkoutSessionPerformance.updated_at < workoutSessionPerformance.updated_at) {
+                            mergedWorkoutSessionPerformances[existingWorkoutSessionPerformanceIndex] = workoutSessionPerformance
+                        }
+                    } else {
+                        mergedWorkoutSessionPerformances.push(workoutSessionPerformance)
+                    }
+                }
+                workoutSessionPerformances.value = mergedWorkoutSessionPerformances
+            }
+        }
+    }
+
     async function syncWorkoutSessions() {
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
-            await supabase.from('workout_sessions').upsert(workoutSessions.value)
+            await fetchWorkoutSessions()
+            await fetchWorkoutSessionPerformances()
+            for (const workoutSession of workoutSessions.value) {
+                await pushWorkoutSession(workoutSession)
+            }
             for (const workoutSessionPerformance of workoutSessionPerformances.value) {
-                await supabase.from('workout_session_performances').upsert(workoutSessionPerformance)
+                await pushWorkoutSessionPerformance(workoutSessionPerformance)
             }
         }
     }
@@ -564,6 +650,7 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
         getWorkoutSessionById,
         addWorkoutSession,
         addWorkoutSessionPerformances,
+        updateWorkoutSessionById,
         getWorkoutSessionsByDate,
         getFullWorkoutSessionById,
         getFullWorkoutSessionsByDate,
