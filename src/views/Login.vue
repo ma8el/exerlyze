@@ -8,13 +8,14 @@ import { IonPage,
          IonItem,
          IonInput,
          IonButton,
-         IonAlert } from '@ionic/vue';
+         IonAlert} from '@ionic/vue';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useDark } from '@vueuse/core'
 import { supabase } from '@/supabase';
 import EmailIcon from '@/icons/email.svg';
 import { useUserStore } from '@/store/bodyMetricsStore';
+import { syncWithBackend } from '@/composables/supabase';
 
 const userStore = useUserStore();
 
@@ -55,7 +56,8 @@ const onLogin = async () => {
   }
 }
 
-const redirect = () => {
+const redirect = async () => {
+  await syncWithBackend();
   if (userStore.isComplete) {
     router.push('/tabs/home');
   } else {

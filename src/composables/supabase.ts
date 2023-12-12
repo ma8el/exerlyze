@@ -1,4 +1,8 @@
 import { supabase } from '@/supabase';
+import { loadingController } from '@ionic/vue';
+import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
+import { useFoodDiaryStore } from '@/store/foodDiary';
+import { useWorkoutStore, usePlannedWorkoutStore, useWorkoutPlanStore, useWorkoutSessionStore } from '@/store/workoutStore';
 
 export const defaultImage = 'https://ionicframework.com/docs/img/demos/card-media.png';
 
@@ -21,3 +25,26 @@ export const getBucketUrlFromTable = async (table: string, id: number) => {
       .eq('id', id)
       .single()
 }
+
+export const syncWithBackend = async () => {
+  const loading = await loadingController.create({
+    message: 'Syncing...',
+  });
+  loading.present()
+  const userStore = useUserStore();
+  const weightStore = useWeightStore();
+  const workoutStore = useWorkoutStore();
+  const workoutPlanStore = useWorkoutPlanStore();
+  const plannedWorkoutStore = usePlannedWorkoutStore();
+  const workoutSessionStore = useWorkoutSessionStore();
+  const foodDiaryStore = useFoodDiaryStore();
+  await userStore.fetchUser();
+  await weightStore.syncWeights();
+  await workoutStore.syncWorkouts();
+  await workoutPlanStore.syncWorkoutPlans();
+  await workoutSessionStore.syncWorkoutSessions();
+  await plannedWorkoutStore.syncPlannedWorkouts();
+  await foodDiaryStore.syncFoodDiary();
+  loading.dismiss();
+};
+

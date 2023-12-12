@@ -8,16 +8,12 @@
            IonFab,
            IonFabButton,
            IonButtons, 
-           IonIcon,
-           loadingController, 
-  } from '@ionic/vue';
+           IonIcon} from '@ionic/vue';
   import { arrowBackOutline } from 'ionicons/icons';
   import UpdateIcon from '@/icons/update.svg';
   import { useRouter } from 'vue-router';
-  import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
-  import { useWorkoutStore, useWorkoutPlanStore, usePlannedWorkoutStore, useWorkoutSessionStore } from '@/store/workoutStore';
-  import { useFoodDiaryStore } from '@/store/foodDiary';
   import { ref, onMounted } from 'vue';
+  import { syncWithBackend } from '@/composables/supabase';
 
   const router = useRouter();
   const session = ref();
@@ -46,25 +42,7 @@
   };
 
   const sync = async () => {
-    const loading = await loadingController.create({
-      message: 'Syncing...',
-    });
-    loading.present()
-    const userStore = useUserStore();
-    const weightStore = useWeightStore();
-    const workoutStore = useWorkoutStore();
-    const workoutPlanStore = useWorkoutPlanStore();
-    const plannedWorkoutStore = usePlannedWorkoutStore();
-    const workoutSessionStore = useWorkoutSessionStore();
-    const foodDiaryStore = useFoodDiaryStore();
-    await userStore.syncUser();
-    await weightStore.syncWeights;
-    await workoutStore.syncWorkouts();
-    await workoutPlanStore.syncWorkoutPlans();
-    await workoutSessionStore.syncWorkoutSessions();
-    await plannedWorkoutStore.syncPlannedWorkouts();
-    await foodDiaryStore.syncFoodDiary();
-    loading.dismiss();
+    await syncWithBackend();
   };
 
   onMounted(async () => {
