@@ -18,8 +18,15 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         return uuidv4()
     }
 
-    function addFoodDiaryEntry(foodDiaryEntry: FoodDiaryEntry) {
+    async function addFoodDiaryEntry(foodDiaryEntry: FoodDiaryEntry) {
         foodDiaryEntries.value.push(foodDiaryEntry)
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+          const { error } = await supabase.from('food_diary_entries').upsert(foodDiaryEntry)
+          if (error) {
+              console.error(error)
+          }
+        }
     }
 
     function deleteFoodDiaryEntry(foodDiaryEntryId: string) {
@@ -63,6 +70,31 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         })
     }
 
+    async function fetchFoodDiaryEntries() {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            const { data, error } = await supabase.from('food_diary_entries').select('*')
+            if (error) {
+                console.error(error)
+            } else {
+                const mergedFoodDiaryEntries = [...foodDiaryEntries.value]
+                for (const foodDiaryEntry of data) {
+                    const existingFoodDiaryEntryIndex = mergedFoodDiaryEntries.findIndex((w) => w.id === foodDiaryEntry.id);
+                    if (existingFoodDiaryEntryIndex !== -1) {
+                        const existingFoodDiaryEntry = mergedFoodDiaryEntries[existingFoodDiaryEntryIndex];
+                        // TODO: Uncomment when nutrition update is implemented
+                        //if (existingFoodDiaryEntry.updated_at < foodDiaryEntry.updated_at) {
+                        //    mergedFoodDiaryEntries[existingFoodDiaryEntryIndex] = foodDiaryEntry;
+                        //}
+                    } else {
+                        mergedFoodDiaryEntries.push(foodDiaryEntry);
+                    }
+                }
+                foodDiaryEntries.value = mergedFoodDiaryEntries;
+            }
+        }
+    }
+
     async function syncFoodDiary() {
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
@@ -90,6 +122,7 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         getFatOfDate,
         getMissingProteinsOfToday,
         getMealEntriesOfDate,
+        fetchFoodDiaryEntries,
         syncFoodDiary
     }
 })
