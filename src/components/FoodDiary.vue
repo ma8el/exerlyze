@@ -27,7 +27,7 @@
         v-if="selectedDate"
       >
       <FoodItem 
-        v-for="(foodItem, index) in foodDiaryStore.getBreakfastEntriesOfDate(selectedDate)"
+        v-for="(foodItem, index) in foodDiaryStore.getMealEntriesOfDate(selectedDate, 'breakfast')"
         :key="foodItem.id"
         :id="foodItem.id"
         :foodName="foodItem.food_name"
@@ -48,7 +48,7 @@
         v-if="selectedDate"
       >
       <FoodItem 
-        v-for="(foodItem, index) in foodDiaryStore.getLunchEntriesOfDate(selectedDate)"
+        v-for="(foodItem, index) in foodDiaryStore.getMealEntriesOfDate(selectedDate, 'lunch')"
         :key="foodItem.id"
         :id="foodItem.id"
         :foodName="foodItem.food_name"
@@ -69,7 +69,7 @@
         v-if="selectedDate"
       >
       <FoodItem 
-        v-for="(foodItem, index) in foodDiaryStore.getDinnerEntriesOfDate(selectedDate)"
+        v-for="(foodItem, index) in foodDiaryStore.getMealEntriesOfDate(selectedDate, 'dinner')"
         :key="foodItem.id"
         :id="foodItem.id"
         :foodName="foodItem.food_name"

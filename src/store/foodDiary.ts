@@ -3,104 +3,93 @@ import { supabase } from "@/supabase";
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 import { FoodDiaryEntry } from "@/types/nutrition";
+import { ref, computed } from "vue";
 
-export const useFoodDiaryStore = defineStore({
-    id: "nutriment",
-    state: () => ({
-        foodDiaryEntries: useStorage('foodDiaryEntries', [] as FoodDiaryEntry[]),
-        dailyCalories: useStorage('dailyCalories', 2500),
-        dailyCarbs: useStorage('daylyCarbs', 300),
-        dailyProtein: useStorage('dailyProtein', 100),
-        dailyFat: useStorage('dailyFat', 100),
-    }),
-    getters: {
-      getFoodDiaryEntries(): FoodDiaryEntry[] {
-           return this.foodDiaryEntries;
-       },
-    },
-    actions: {
-        getUniqueId(): string {
-            return uuidv4();
-        },
-        addFoodDiaryEntry(foodDiaryEntry: FoodDiaryEntry) {
-            this.foodDiaryEntries.push(foodDiaryEntry);
-        },
-        deleteFoodDiaryEntry(foodDiaryEntryId: string) {
-            this.foodDiaryEntries = this.foodDiaryEntries.filter((foodDiaryEntry) => {
-                return foodDiaryEntry.id !== foodDiaryEntryId;
-            });
-        },
-        getFoodDiaryEntriesOfDate(date: Date): FoodDiaryEntry[] {
-            const foodDiaryEntries = this.foodDiaryEntries.filter((foodDiaryEntry) => {
-                return new Date(foodDiaryEntry.created_at).getDate() === date.getDate();
-            });
-            return foodDiaryEntries;
-        },
-        getCaloriesOfDate(date: Date): number {
-            const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
-            const calories = foodDiaryEntries.reduce((prev, current) => {
-                return prev + current.calories;
-            }, 0);
-            return calories;
-        },
-        getCarbohydratesOfDate(date: Date): number {
-            const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
-            const carbohydrates = foodDiaryEntries.reduce((prev, current) => {
-                return prev + current.carbohydrates;
-            }, 0);
-            return carbohydrates;
-        },
-        getProteinOfDate(date: Date): number {
-            const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
-            const proteins = foodDiaryEntries.reduce((prev, current) => {
-                return prev + current.protein;
-            }, 0);
-            return proteins;
-        },
-        getFatOfDate(date: Date): number {
-            const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
-            const fats = foodDiaryEntries.reduce((prev, current) => {
-                return prev + current.fat;
-            }, 0);
-            return fats;
-        },
-        getMissingProteinsOfToday(): number {
-            const proteins = this.getProteinOfDate(new Date());
-            const missingProteins = Math.max(this.dailyProtein - proteins, 0);
-            return missingProteins;
-        },
-        getBreakfastEntriesOfDate(date: Date): FoodDiaryEntry[] {
-            const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
-            const breakfastEntries = foodDiaryEntries.filter((foodDiaryEntry) => {
-                const createdAt = new Date(foodDiaryEntry.created_at);
-                return createdAt.getHours() < 12;
-            });
-            return breakfastEntries;
-        },
-        getLunchEntriesOfDate(date: Date): FoodDiaryEntry[] {
-            const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
-            const lunchEntries = foodDiaryEntries.filter((foodDiaryEntry) => {
-                const createdAt = new Date(foodDiaryEntry.created_at);
-                return createdAt.getHours() >= 12 && createdAt.getHours() < 18;
-            });
-            return lunchEntries;
-        },
-        getDinnerEntriesOfDate(date: Date): FoodDiaryEntry[] {
-            const foodDiaryEntries = this.getFoodDiaryEntriesOfDate(date);
-            const dinnerEntries = foodDiaryEntries.filter((foodDiaryEntry) => {
-                const createdAt = new Date(foodDiaryEntry.created_at);
-                return createdAt.getHours() >= 18;
-            });
-            return dinnerEntries;
-        },
-        async syncFoodDiary(): Promise<void> {
-            const session = await supabase.auth.getSession()
-            if (session.data.session !== null) {
-                for (const foodDiaryEntry of this.foodDiaryEntries) {
-                    const { error } = await supabase.from('food_diary_entries')
-                    .upsert(foodDiaryEntry)
-                }
+export const useFoodDiaryStore = defineStore('nutriment', () => {
+    const foodDiaryEntries = ref(useStorage('foodDiaryEntries', [] as FoodDiaryEntry[]))
+    const dailyCalories = ref(useStorage('dailyCalories', 2500))
+    const dailyCarbs = ref(useStorage('daylyCarbs', 300))
+    const dailyProtein = ref(useStorage('dailyProtein', 100))
+    const dailyFat = ref(useStorage('dailyFat', 100))
+
+    const getFoodDiaryEntries = computed(() => foodDiaryEntries.value)
+
+    function getUniqueId() {
+        return uuidv4()
+    }
+
+    function addFoodDiaryEntry(foodDiaryEntry: FoodDiaryEntry) {
+        foodDiaryEntries.value.push(foodDiaryEntry)
+    }
+
+    function deleteFoodDiaryEntry(foodDiaryEntryId: string) {
+        foodDiaryEntries.value = foodDiaryEntries.value.filter(entry => entry.id !== foodDiaryEntryId)
+    }
+
+    function getFoodDiaryEntriesOfDate(date: Date): FoodDiaryEntry[] {
+        return foodDiaryEntries.value.filter(entry => {
+            const entryDate = new Date(entry.created_at)
+            return entryDate.toDateString() === date.toDateString()
+        })
+    }
+
+    function getCaloriesOfDate(date: Date): number {
+        return getFoodDiaryEntriesOfDate(date).reduce((total, entry) => total + entry.calories, 0)
+    }
+
+    function getCarbohydratesOfDate(date: Date): number {
+        return getFoodDiaryEntriesOfDate(date).reduce((total, entry) => total + entry.carbohydrates, 0)
+    }
+
+    function getProteinOfDate(date: Date): number {
+        return getFoodDiaryEntriesOfDate(date).reduce((total, entry) => total + entry.protein, 0)
+    }
+
+    function getFatOfDate(date: Date): number {
+        return getFoodDiaryEntriesOfDate(date).reduce((total, entry) => total + entry.fat, 0)
+    }
+
+    function getMissingProteinsOfToday(): number {
+        const proteinsToday = getProteinOfDate(new Date())
+        return Math.max(dailyProtein.value - proteinsToday, 0)
+    }
+
+    function getMealEntriesOfDate(date: Date, mealTime: 'breakfast' | 'lunch' | 'dinner'): FoodDiaryEntry[] {
+        return getFoodDiaryEntriesOfDate(date).filter(entry => {
+            const createdAtHours = new Date(entry.created_at).getHours()
+            if (mealTime === 'breakfast') return createdAtHours < 12
+            if (mealTime === 'lunch') return createdAtHours >= 12 && createdAtHours < 18
+            return createdAtHours >= 18
+        })
+    }
+
+    async function syncFoodDiary() {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            for (const foodDiaryEntry of foodDiaryEntries.value) {
+                await supabase.from('food_diary_entries').upsert(foodDiaryEntry)
+                // Add error handling as needed
             }
-        },
+        }
+    }
+
+    return {
+        foodDiaryEntries,
+        dailyCalories,
+        dailyCarbs,
+        dailyProtein,
+        dailyFat,
+        getFoodDiaryEntries,
+        getUniqueId,
+        addFoodDiaryEntry,
+        deleteFoodDiaryEntry,
+        getFoodDiaryEntriesOfDate,
+        getCaloriesOfDate,
+        getCarbohydratesOfDate,
+        getProteinOfDate,
+        getFatOfDate,
+        getMissingProteinsOfToday,
+        getMealEntriesOfDate,
+        syncFoodDiary
     }
 })
