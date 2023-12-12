@@ -32,7 +32,7 @@
   const alertButtons = ['OK'];
 
   const save = async () => {
-    workoutStore.addWorkout({
+    await workoutStore.addWorkout({
       id: generatedWorkoutId.value,
       created_at: new Date(),
       updated_at: new Date(),
@@ -46,7 +46,7 @@
 
   const update = async () => {
     if (!props.workoutId) return
-    workoutStore.updateWorkout({
+    await workoutStore.updateWorkout({
       id: props.workoutId,
       created_at: createdAt.value,
       updated_at: new Date(),
@@ -58,9 +58,9 @@
     modalController.dismiss(null, 'save');
   }
 
-  const deleteWorkout = () => {
+  const deleteWorkout = async () => {
     if (!props.workoutId) return
-    const hasDeleted = workoutStore.deleteWorkout(props.workoutId)
+    const hasDeleted = await workoutStore.deleteWorkout(props.workoutId)
     if (hasDeleted) {
       modalController.dismiss(null, 'save');
     } else {
