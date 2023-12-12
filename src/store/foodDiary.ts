@@ -98,6 +98,7 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
     async function syncFoodDiary() {
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
+            await fetchFoodDiaryEntries()
             for (const foodDiaryEntry of foodDiaryEntries.value) {
                 await supabase.from('food_diary_entries').upsert(foodDiaryEntry)
                 // Add error handling as needed
