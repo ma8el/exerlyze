@@ -5,76 +5,82 @@ import { Weight } from "@/types";
 import { computed, ref } from "vue";
 import { v4 as uuidv4 } from 'uuid';
 
-export const useWeightStore = defineStore({
-    id: "weight",
-    state: () => ({
-        currentWeight: useStorage('currentWeight', {} as Weight),
-        weights: useStorage('weights', [] as Weight[]),
-    }),
-    getters: {
-       getWeights(): Weight[] {
-            return this.weights;
-        },
-        getCurrentWeight(): Weight {
-            const currentWeight = this.weights.reduce((prev, current) => {
-                return prev.created_at > current.created_at ? prev : current;
-            });
-            return currentWeight;
-        },
-        getWeightsOfWeek(): Weight[] {
-            const today = new Date();
-            const weekAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
-            const weightsOfWeek = this.weights.filter((weight) => {
-                return new Date(weight.created_at) >= weekAgo;
-            });
-            return weightsOfWeek;
-        },
-        async fetchWeights(): Promise<void> {
-            const session = await supabase.auth.getSession()
-            if (session.data.session !== null) {
-                const { data, error } = await supabase.from('weights').select()
-                if (error) {
-                    throw error
-                }
-                // Merge data and this.weights
-                const mergedWeights = [...this.weights];
-                for (const weight of data) {
-                    const existingWeightIndex = mergedWeights.findIndex((w) => w.id === weight.id);
-                    if (existingWeightIndex !== -1) {
-                        const existingWeight = mergedWeights[existingWeightIndex];
-                        if (existingWeight.updated_at < weight.updated_at) {
-                            mergedWeights[existingWeightIndex] = weight;
-                        }
-                    } else {
-                        mergedWeights.push(weight);
-                    }
-                }
+export const useWeightStore = defineStore('weight', () => {
+    const currentWeight = ref(useStorage('currentWeight', {} as Weight))
+    const weights = ref(useStorage('weights', [] as Weight[]))
 
-                // Update this.weights with mergedWeights
-                this.weights = mergedWeights;
+    const getWeights = computed(() => weights.value)
+
+    const getCurrentWeight = computed(() => {
+        return weights.value.reduce((prev, current) => {
+            return prev.created_at > current.created_at ? prev : current
+        }, {} as Weight) // TODO: Provide an initial value for reduce
+    })
+
+    const getWeightsOfWeek = computed(() => {
+        const today = new Date()
+        const weekAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7)
+        return weights.value.filter(weight => new Date(weight.created_at) >= weekAgo)
+    })
+
+    async function fetchWeights() {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            const { data, error } = await supabase.from('weights').select()
+            if (error) {
+                throw error
             }
-        },
-        async syncWeights(): Promise<void> {
-            const session = await supabase.auth.getSession()
-            if (session.data.session !== null) {
-                for (const weight of this.weights) {
-                  const { error } = await supabase.from('weights')
-                  .upsert(weight)
+            // Merge data and this.weights
+            const mergedWeights = [...weights.value];
+            for (const weight of data) {
+                const existingWeightIndex = mergedWeights.findIndex((w) => w.id === weight.id);
+                if (existingWeightIndex !== -1) {
+                    const existingWeight = mergedWeights[existingWeightIndex];
+                    if (existingWeight.updated_at < weight.updated_at) {
+                        mergedWeights[existingWeightIndex] = weight;
+                    }
+                } else {
+                    mergedWeights.push(weight);
                 }
             }
+            // Update this.weights with mergedWeights
+            weights.value = mergedWeights;
         }
-    },
-    actions: {
-        getNewId(): string {
-            return uuidv4();
-        },
-        async addWeight (weight: Weight) {
-            this.weights.push(weight);
-            const session = await supabase.auth.getSession()
-            if (session.data.session !== null) {
+    }
+
+    async function syncWeights() {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            for (const weight of weights.value) {
                 const { error } = await supabase.from('weights').upsert(weight)
+                // TODO: Handle the error if needed
             }
         }
+    }
+
+    function getNewId() {
+        return uuidv4()
+    }
+
+    async function addWeight(weight: Weight) {
+        weights.value.push(weight)
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            const { error } = await supabase.from('weights').upsert(weight)
+            // TODO: Handle the error if needed
+        }
+    }
+
+    return {
+        currentWeight,
+        weights,
+        getWeights,
+        getCurrentWeight,
+        getWeightsOfWeek,
+        fetchWeights,
+        syncWeights,
+        getNewId,
+        addWeight
     }
 })
 
