@@ -69,6 +69,7 @@ const save = async () => {
         return;
     }
     userStore.setHeight(height.value);
+    await userStore.syncUser();
     router.push(props.saveRedirectPath);
 };
 
