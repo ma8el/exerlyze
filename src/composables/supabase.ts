@@ -1,5 +1,6 @@
 import { supabase } from '@/supabase';
-import { loadingController } from '@ionic/vue';
+import { modalController } from '@ionic/vue';
+import LoadingModal from '@/components/Modals/LoadingModal.vue';
 import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
 import { useFoodDiaryStore } from '@/store/foodDiary';
 import { useWorkoutStore, usePlannedWorkoutStore, useWorkoutPlanStore, useWorkoutSessionStore } from '@/store/workoutStore';
@@ -27,10 +28,11 @@ export const getBucketUrlFromTable = async (table: string, id: number) => {
 }
 
 export const syncWithBackend = async () => {
-  const loading = await loadingController.create({
-    message: 'Syncing...',
+  const modal = await modalController.create({
+    component: LoadingModal,
   });
-  loading.present()
+  await modal.present();
+
   const userStore = useUserStore();
   const weightStore = useWeightStore();
   const workoutStore = useWorkoutStore();
@@ -45,6 +47,6 @@ export const syncWithBackend = async () => {
   await workoutSessionStore.syncWorkoutSessions();
   await plannedWorkoutStore.syncPlannedWorkouts();
   await foodDiaryStore.syncFoodDiary();
-  loading.dismiss();
+  await modal.dismiss();
 };
 
