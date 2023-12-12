@@ -13,6 +13,11 @@ const redirect = () => {
   router.push('/login');
 };
 
+const signOut = async () => {
+  await supabase.auth.signOut();
+  router.push('/login');
+};
+
 onMounted(async () => {
   session.value = await supabase.auth.getSession();
   loading.value = false;
@@ -38,7 +43,7 @@ onMounted(async () => {
           expand="block"
           color="danger"
           :style="`margin-top: 20px;`"
-          @click="() => supabase.auth.signOut()"
+          @click="() => signOut()"
         >
           Sign Out
         </IonButton>
