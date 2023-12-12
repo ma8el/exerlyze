@@ -88,6 +88,83 @@ export const useWorkoutStore = defineStore('workout', () => {
         syncWorkouts
     }
 })
+
+export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
+    const workoutPlans = ref(useStorage('workoutPlans', [] as WorkoutPlan[]))
+
+    const getWorkoutPlans = computed(() => workoutPlans.value.filter(w => !w.deleted))
+
+    const getFullWorkoutPlans = computed(() => {
+        const dayOfWeekStore = useDayOfWeekStore()
+        const workoutStore = useWorkoutStore()
+        const plannedWorkoutStore = usePlannedWorkoutStore()
+
+        return plannedWorkoutStore.getPlannedWorkouts.map(w => {
+            const dayOfWeek = dayOfWeekStore.getDayOfWeekById(w.day_of_week_id)
+            const workout = workoutStore.getWorkoutById(w.workout_id)
+            const workoutPlan = workoutPlans.value.find(wp => wp.id === w.workout_plan_id)
+
+            if (dayOfWeek && workout && workoutPlan) {
+                return {
+                    name: workoutPlan.name,
+                    description: workoutPlan.description,
+                    ...w,
+                    dayOfWeek: dayOfWeek.name,
+                    workout: workout
+                } as FullWorkoutPlan
+            }
+            return undefined
+        }).filter(w => w !== undefined) as FullWorkoutPlan[]
+    })
+
+    function getNewId() {
+        return uuidv4()
+    }
+
+    function getWorkoutPlanById(id: string): WorkoutPlan | undefined {
+        return workoutPlans.value.find(w => w.id === id)
+    }
+
+    function addWorkoutPlan(workoutPlan: WorkoutPlan) {
+        workoutPlans.value.push(workoutPlan)
+    }
+
+    function updateWorkoutPlan(workoutPlan: WorkoutPlan) {
+        const index = workoutPlans.value.findIndex(w => w.id === workoutPlan.id)
+        workoutPlans.value[index] = workoutPlan
+    }
+
+    function deleteWorkoutPlan(id: string) {
+        const plannedWorkoutStore = usePlannedWorkoutStore()
+        const index = workoutPlans.value.findIndex(w => w.id === id)
+        const plannedWorkouts = plannedWorkoutStore.getPlannedWorkoutsByWorkoutPlanId(id)
+
+        workoutPlans.value[index].deleted = true
+        plannedWorkouts.forEach(w => {
+            plannedWorkoutStore.deletePlannedWorkout(w.id)
+        })
+    }
+
+    async function syncWorkoutPlans() {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            await supabase.from('workout_plans').upsert(workoutPlans.value)
+            // TODO: Add error handling as needed
+        }
+    }
+
+    return {
+        workoutPlans,
+        getWorkoutPlans,
+        getFullWorkoutPlans,
+        getNewId,
+        getWorkoutPlanById,
+        addWorkoutPlan,
+        updateWorkoutPlan,
+        deleteWorkoutPlan,
+        syncWorkoutPlans
+    }
+})
 //export const useWorkoutStore = defineStore({
 //    id: 'workout',
 //    state: () => ({
@@ -162,74 +239,74 @@ export const useWorkoutStore = defineStore('workout', () => {
 //    }
 //});
 
-export const useWorkoutPlanStore = defineStore({
-    id: 'workoutPlan',
-    state: () => ({
-        workoutPlans: useStorage('workoutPlans', [] as WorkoutPlan[]),
-    }),
-    getters: {
-        getWorkoutPlans(): WorkoutPlan[] {
-            return this.workoutPlans.filter(w => !w.deleted);
-        },
-        getFullWorkoutPlans(): FullWorkoutPlan[] {
-            const dayOfWeekStore = useDayOfWeekStore();
-            const workoutStore = useWorkoutStore();
-            const plannedWorkoutStore = usePlannedWorkoutStore();
-            const fullWorkoutPlan = plannedWorkoutStore.getPlannedWorkouts.map(w => {
-                const dayOfWeek = dayOfWeekStore.getDayOfWeekById(w.day_of_week_id);
-                const workout = workoutStore.getWorkoutById(w.workout_id);
-                const workoutPlanName = this.workoutPlans.find(wp => wp.id === w.workout_plan_id)?.name;
-                const workoutPlanDescription = this.workoutPlans.find(wp => wp.id === w.workout_plan_id)?.description;
-                if (dayOfWeek && workout) {
-                    return {
-                        name: workoutPlanName,
-                        description: workoutPlanDescription,
-                        ...w,
-                        dayOfWeek: dayOfWeek.name,
-                        workout: workout
-                    } as FullWorkoutPlan;
-                }
-                return undefined;
-            }).filter(w => w !== undefined) as FullWorkoutPlan[];
-            return fullWorkoutPlan;
-        }
-    },
-    actions: {
-        getNewId(): string {
-            return uuidv4();
-        },
-        getWorkoutPlanById(id: string): WorkoutPlan | undefined {
-            const workoutPlan = this.workoutPlans.find(w => w.id === id);
-            if (workoutPlan) {
-                return workoutPlan;
-            }
-            return undefined;
-        },
-        addWorkoutPlan(workoutPlan: WorkoutPlan) {
-            this.workoutPlans.push(workoutPlan);
-        },
-        updateWorkoutPlan(workoutPlan: WorkoutPlan) {
-            const index = this.workoutPlans.findIndex(w => w.id === workoutPlan.id);
-            this.workoutPlans[index] = workoutPlan;
-        },
-        deleteWorkoutPlan(id: string) {
-            const plannedWorkoutStore = usePlannedWorkoutStore();
-            const index = this.workoutPlans.findIndex(w => w.id === id);
-            const plannedWorkouts = plannedWorkoutStore.getPlannedWorkoutsByWorkoutPlanId(id);
-            this.workoutPlans[index].deleted = true
-            plannedWorkouts.forEach(w => {
-                plannedWorkoutStore.deletePlannedWorkout(w.id);
-            })
-        },
-        async syncWorkoutPlans(): Promise<void> {
-            const session = await supabase.auth.getSession()
-            if (session.data.session !== null) {
-                    const { error } = await supabase.from('workout_plans')
-                    .upsert(this.workoutPlans)
-            }
-        }
-    }
-});
+//export const useWorkoutPlanStore = defineStore({
+//    id: 'workoutPlan',
+//    state: () => ({
+//        workoutPlans: useStorage('workoutPlans', [] as WorkoutPlan[]),
+//    }),
+//    getters: {
+//        getWorkoutPlans(): WorkoutPlan[] {
+//            return this.workoutPlans.filter(w => !w.deleted);
+//        },
+//        getFullWorkoutPlans(): FullWorkoutPlan[] {
+//            const dayOfWeekStore = useDayOfWeekStore();
+//            const workoutStore = useWorkoutStore();
+//            const plannedWorkoutStore = usePlannedWorkoutStore();
+//            const fullWorkoutPlan = plannedWorkoutStore.getPlannedWorkouts.map(w => {
+//                const dayOfWeek = dayOfWeekStore.getDayOfWeekById(w.day_of_week_id);
+//                const workout = workoutStore.getWorkoutById(w.workout_id);
+//                const workoutPlanName = this.workoutPlans.find(wp => wp.id === w.workout_plan_id)?.name;
+//                const workoutPlanDescription = this.workoutPlans.find(wp => wp.id === w.workout_plan_id)?.description;
+//                if (dayOfWeek && workout) {
+//                    return {
+//                        name: workoutPlanName,
+//                        description: workoutPlanDescription,
+//                        ...w,
+//                        dayOfWeek: dayOfWeek.name,
+//                        workout: workout
+//                    } as FullWorkoutPlan;
+//                }
+//                return undefined;
+//            }).filter(w => w !== undefined) as FullWorkoutPlan[];
+//            return fullWorkoutPlan;
+//        }
+//    },
+//    actions: {
+//        getNewId(): string {
+//            return uuidv4();
+//        },
+//        getWorkoutPlanById(id: string): WorkoutPlan | undefined {
+//            const workoutPlan = this.workoutPlans.find(w => w.id === id);
+//            if (workoutPlan) {
+//                return workoutPlan;
+//            }
+//            return undefined;
+//        },
+//        addWorkoutPlan(workoutPlan: WorkoutPlan) {
+//            this.workoutPlans.push(workoutPlan);
+//        },
+//        updateWorkoutPlan(workoutPlan: WorkoutPlan) {
+//            const index = this.workoutPlans.findIndex(w => w.id === workoutPlan.id);
+//            this.workoutPlans[index] = workoutPlan;
+//        },
+//        deleteWorkoutPlan(id: string) {
+//            const plannedWorkoutStore = usePlannedWorkoutStore();
+//            const index = this.workoutPlans.findIndex(w => w.id === id);
+//            const plannedWorkouts = plannedWorkoutStore.getPlannedWorkoutsByWorkoutPlanId(id);
+//            this.workoutPlans[index].deleted = true
+//            plannedWorkouts.forEach(w => {
+//                plannedWorkoutStore.deletePlannedWorkout(w.id);
+//            })
+//        },
+//        async syncWorkoutPlans(): Promise<void> {
+//            const session = await supabase.auth.getSession()
+//            if (session.data.session !== null) {
+//                    const { error } = await supabase.from('workout_plans')
+//                    .upsert(this.workoutPlans)
+//            }
+//        }
+//    }
+//});
 
 export const usePlannedWorkoutStore = defineStore({
     id: 'plannedWorkouts',
