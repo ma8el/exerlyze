@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { IonIcon, IonRow } from '@ionic/vue';
   import { use } from 'echarts/core'
   import { BarChart } from 'echarts/charts'
   import { PolarComponent, LegendComponent, TitleComponent } from 'echarts/components'
@@ -29,6 +30,19 @@
       type: String,
       required: true
     },
+    icon: {
+      type: String,
+      required: false
+    },
+    unit: {
+      type: String,
+      required: false
+    },
+    showMaxValue: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
   })
 
   const option = computed(() => {
@@ -49,7 +63,7 @@
           data: [props.name]
       },
       title: {
-        text: `${props.name}\n${props.data}`,
+//        text: `${props.name}\n${props.data}`,
         textStyle: {
           fontSize: 15,
           fontWeight: 'bold',
@@ -90,7 +104,7 @@
             // Background series
             {
                 type: 'bar',
-                data: [props.maxValue],  // Assuming 8 is the max value
+                data: [props.maxValue],
                 coordinateSystem: 'polar',
                 name: 'Background',
                 itemStyle: {
@@ -122,12 +136,51 @@
 </script>
 
 <template>
-  <v-chart class="echarts" :option="option" autoresize />
+  <div class="echarts-container">
+    <v-chart class="echarts" :option="option" autoresize />
+    <div class="chart-center-label">
+      <ion-row class="ion-justify-content-center">
+        <ion-icon v-if="icon" class="chart-icon" :icon="icon"/>
+      </ion-row>
+      <ion-row class="ion-justify-content-center">
+      <span>{{ name }}</span>
+      </ion-row>
+        <ion-row class="ion-justify-content-center">
+          <span>{{ data }}</span>
+          <span v-if="showMaxValue">/{{ maxValue }}</span>
+      </ion-row>
+      <ion-row v-if="unit" class="ion-justify-content-center">
+        <span>{{ unit }}</span>
+      </ion-row>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
   .echarts {
     width: 100%;
     height: 100%;
+  }
+.echarts-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .echarts {
+    width: 100%;
+    height: 100%;
+  }
+
+  .chart-center-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .chart-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
   }
 </style>

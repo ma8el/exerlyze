@@ -110,6 +110,7 @@ export const messages = {
         date: "Date",
         weightChange: "Weight Change",
         performanceIncrease: "Performance Increase",
+        fitness: "Fitness",
     },
     de: {
         language: "Sprache",
@@ -220,5 +221,6 @@ export const messages = {
         date: "Datum",
         weightChange: "Gewichtsänderung",
         performanceIncrease: "Leistungssteigerung",
+        fitness: "Fitness",
     },
 }

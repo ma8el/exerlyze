@@ -5,6 +5,8 @@
   import ProteinIcon from '@/icons/protein.svg';
   import FatIcon from '@/icons/fat.svg';
   import WeightIcon from '@/icons/weight.svg';
+  import NutritionKPIDoughnut from '@/components/Charts/NutritionKPIDoughnut.vue';
+  import BaseHorizontalBarChart from '@/components/Charts/BaseHorizontalBarChart.vue';
   import { useFoodDiaryStore } from '@/store/foodDiary';
   import { useWorkoutSessionStore } from '@/store/workoutStore';
   import { useI18n } from 'vue-i18n';
@@ -14,6 +16,9 @@
 
   const foodDiaryStore = useFoodDiaryStore();
   const workoutSessionStore = useWorkoutSessionStore();
+
+  const workoutBarColors = ['#3F63C8'];
+  const nutritionBarColors = ['#3F63C8', '#86A0E7', '#FFFFFF'];
 
   const date = new Date();
 
@@ -47,13 +52,14 @@
 
 const workoutOverviewData = computed(() => {
   const workoutVolume = workoutSessionStore.getPerformedWorkoutVolumeOfDate(date);
-  return [
-   {
+  const plannedWorkoutVolume = workoutSessionStore.getPlannedWorkoutVolumeOfDate(date);
+  return {
       icon: WeightIcon,
       name: `${t('home.workoutVolume')}`,
-      value: `${workoutVolume} ${t('weightUnitBig')}`,
+      value: workoutVolume,
+      maxValue: plannedWorkoutVolume,
+      unit: t('weightUnitBig')
     }
-  ]
 });
 </script>
 
@@ -61,41 +67,65 @@ const workoutOverviewData = computed(() => {
   <ion-card>
     <ion-grid>
         <ion-row>
-          <h4>Fitness</h4>
+          <h4>{{ $t('fitness') }}</h4>
         </ion-row>
-        <ion-row
-          v-for="(item, index) in workoutOverviewData"
-          :key="index"
-          class="fitness-row"
-        >
-          <ion-col size="8">
-            <ion-icon class="icon-margin" :icon="item.icon"/>
-            <ion-label>{{ item.name }}</ion-label>
+        <ion-row>
+          <ion-col>
+          <BaseHorizontalBarChart
+            :data="workoutOverviewData.value"
+            :max-value="workoutOverviewData.maxValue"
+            :color="workoutBarColors[0]"
+          />
           </ion-col>
-          <ion-col size="4">
-            <p>{{ item.value }}</p>
+        </ion-row>
+        <ion-row class="volume-kpi-row">
+          <ion-col size="6">
+            <ion-icon class="icon-margin" :icon="workoutOverviewData.icon"/>
+            <ion-label>{{ workoutOverviewData.name }}</ion-label>
+          </ion-col >
+          <ion-col size="6" v-if="workoutOverviewData.value > 0">
+            <p style="text-align: right;">{{ workoutOverviewData.value }} / {{ workoutOverviewData.maxValue }} {{ workoutOverviewData.unit }}</p>
           </ion-col>
         </ion-row>
 
         <ion-row>
-            <h4>Nutrition</h4>
+            <h4>{{ $t('nutrition.title') }}</h4>
         </ion-row>
         <ion-row>
-          <ion-col size="6">
-            <div class="icon-description">
-              <ion-icon class="small-margin" :icon="BurnIcon"/>
-              <p>{{ caloriesOfToday }} {{ $t('calUnit') }} / {{ caloriesTarget }} {{ $t('calUnit') }}</p>
-            </div>
+          <div class="calories-polarchart-container">
+            <NutritionKPIDoughnut
+              :data="caloriesOfToday"
+              :max-value="caloriesTarget"
+              :radius="120"
+              :name="$t('nutrition.calories')"
+              color="#3F63C8"
+              :icon="BurnIcon"
+              unit="kcal"
+              :show-max-value="true"
+            />
+          </div>
+        </ion-row>
+
+        <ion-row>
+          <ion-col
+            v-for="(item, index) in nutritionOverviewData"
+            :key="index"
+          >
+            <BaseHorizontalBarChart
+              :data="item.value"
+              :max-value="item.target"
+              :color="nutritionBarColors[index]"
+            />
           </ion-col>
         </ion-row>
- 
+
         <ion-row>
           <ion-col
             v-for="(item, index) in nutritionOverviewData"
             :key="index"
           >
             <div class="icon-description">
-              <ion-icon class="small-margin" :icon="item.icon"/>
+              <ion-icon :icon="item.icon"/>
               <p>{{ item.value }} {{ $t('weightUnitSmall') }} / {{ item.target }} {{ $t('weightUnitSmall') }}</p>
             </div>
           </ion-col>
@@ -108,11 +138,9 @@ const workoutOverviewData = computed(() => {
 ion-item{
     --background: none;
 }
-.fitness-row {
-  display: flex;
-  align-items: center;
+.volume-kpi-row {
   p {
-    margin: 0;
+    margin: 0 0 0 16px;
     padding: 0;
   }
 }
@@ -131,5 +159,10 @@ ion-item{
     font-size: 0.8rem;
 
   }
+}
+.calories-polarchart-container {
+  width: 100%;
+  height: 150px;
+  margin: 0;
 }
 </style>

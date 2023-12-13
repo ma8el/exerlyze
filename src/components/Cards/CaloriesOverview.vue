@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { IonCard, IonCardContent, IonRow, IonCol } from '@ionic/vue';
+  import BurnIcon from '@/icons/burn.svg';
   import { computed, ref, inject } from 'vue';
   import { useFoodDiaryStore } from '@/store/foodDiary';
   import { selectedDateKey } from '@/keys';
@@ -36,6 +37,7 @@
               :max-value="calories"
               :radius="120"
               color="#3F63C8"
+              :icon="BurnIcon"
             />
           </div>
         </ion-col>
