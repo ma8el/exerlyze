@@ -94,7 +94,7 @@ onMounted(async () => {
               <ion-item lines="none">
                 <ion-icon :icon="EmailIcon" slot="end"></ion-icon>
                 <ion-input 
-                  label="Email"
+                  :label="$t('email')"
                   type="email"
                   label-placement="floating"
                   v-model="email"
@@ -102,7 +102,7 @@ onMounted(async () => {
                 </ion-input>
               </ion-item>
               <ion-button id="magic-link-button" expand="block" type="submit" class="ion-margin-top" :disabled="loading">
-                Send magic link
+                {{ $t('sendMagicLink') }}
               </ion-button>
 
               <div class="line">
@@ -127,14 +127,14 @@ onMounted(async () => {
 
               <div class="end">
                 <ion-label class="end_lbl">
-                  Want to try the app first? <span @click="setOpen(true)">Skip</span>
+                  {{ $t('tryFirst') }} <span @click="setOpen(true)">{{ $t('skip') }}</span>
                 </ion-label>
               </div>
              <ion-alert
                :is-open="isOpen"
-               header="Alert"
-               sub-header="You are proceeding without login"
-               message="Your data can get lost at any time"
+               :header="$t('alert')"
+               :sub-header="$t('withoutLoginWarning')"
+               :message="$t('withoutLoginWarningMessage')"
                :buttons="alertButtons"
                @didDismiss="setOpen(false)"
               >
