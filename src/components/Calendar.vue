@@ -88,6 +88,11 @@
 
 <style scoped lang="scss">
   ion-card {
-    width: 92%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    margin: 0 0 16px 0;
+    border-radius: 0;
   }
 </style>

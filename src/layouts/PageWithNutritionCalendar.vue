@@ -58,26 +58,31 @@
 
 <template>
   <AppLayout :title=title>
-    <ion-card>
-      <VDatePicker 
-        class="vc-arrow-icon"
-        :locale=setLocale
-        title-position="left"
-        expanded 
-        transparent 
-        borderless 
-        :is-dark="isDark" 
-        view="weekly"
-        v-model="selectedDate"
-        :attributes="attributes"
-      />
-    </ion-card>
+      <ion-card>
+        <VDatePicker 
+          class="vc-arrow-icon"
+          :locale=setLocale
+          title-position="left"
+          expanded 
+          transparent 
+          borderless 
+          :is-dark="isDark" 
+          view="weekly"
+          v-model="selectedDate"
+          :attributes="attributes"
+        />
+      </ion-card>
     <slot></slot>
   </AppLayout>
 </template>
 
 <style scoped lang="scss">
   ion-card {
-    width: 93%;
+    position: sticky;
+    top: 0;
+    margin: 0 0 16px 0;
+    z-index: 100;
+    width: 100%;
+    border-radius: 0;
   }
 </style>
