@@ -1,5 +1,15 @@
+import { useUserSettingsStore } from "@/store/userSettingsStore";
+
+export const dateToLocaleString = (date: Date | undefined): string => {
+    const options: Intl.DateTimeFormatOptions = { weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit' };
+    const userSettingsStore = useUserSettingsStore();
+    const locale = userSettingsStore.locale;
+    if (date === undefined) return new Date().toLocaleDateString(locale, options);
+    return new Date(date).toLocaleDateString(locale, options);
+}
+
 export const dateToIsoString = (date: Date | undefined): string => {
-    if (date === undefined) return '1900-01-01'
+    if (date === undefined) return new Date().toISOString().split('T')[0];
     return new Date(date).toISOString().split('T')[0];
 }
 

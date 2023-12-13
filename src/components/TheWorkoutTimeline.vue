@@ -1,45 +1,23 @@
 <script setup lang="ts">
-import { modalController } from '@ionic/vue';
-import BaseCard from './Cards/BaseCard.vue';
-import ActivityDetailModal from './Modals/ActivityDetailModal.vue';
-import { dateToIsoString } from '@/helpers/time';
-import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
-import { defaultImage } from '@/composables/supabase';
-import { ref } from 'vue';
+import ActivityWorkoutList from './ActivityWorkoutList.vue';
+import { dateToIsoString, dateToLocaleString } from '@/helpers/time';
+import { useWorkoutSessionStore } from '@/store/workoutStore';
+import { ref, onMounted } from 'vue';
 
 const workoutSessionStore = useWorkoutSessionStore();
-const workoutStore = useWorkoutStore();
-const workoutSessions = ref(workoutSessionStore.getWorkoutSessions);
-const uniqueWorkoutSessionDates = ref(workoutSessions.value.map(workoutSession => dateToIsoString(workoutSession.finished_at))
-                                                                .filter((value, index, self) => self.indexOf(value) === index)
-                                                                .sort((a, b) => new Date(b).getTime() - new Date(a).getTime()));
+const uniqueWorkoutSessionDates = ref<string[]>([]);
 
-const getWorkoutName = (workoutId: string) => {
-  const workout = workoutStore.getWorkoutById(workoutId);
-  if (!workout) {
-    return 'Workout';
-  }
-    return workout.name;
+const getUniqueWorkoutSessionDates = () => {
+  return workoutSessionStore.getWorkoutSessions.map(workoutSession => dateToIsoString(workoutSession.finished_at))
+                                               .filter((value, index, self) => self.indexOf(value) === index)
+                                               .sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
 }
-
-const openModal = async (workoutSessionId: string) => {
-  if ( !workoutSessionId ) {
-    return
-  }
-  const modal = await modalController.create({
-    component: ActivityDetailModal,
-    componentProps: {
-      workoutSessionId: workoutSessionId
-    },
-  });
-  await modal.present();
-}
-
 workoutSessionStore.$subscribe((mutation, state) => {
-  workoutSessions.value = workoutSessionStore.getWorkoutSessions;
-  uniqueWorkoutSessionDates.value = workoutSessions.value.map(workoutSession => dateToIsoString(workoutSession.finished_at))
-                                                         .filter((value, index, self) => self.indexOf(value) === index)
-                                                         .sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+  uniqueWorkoutSessionDates.value = getUniqueWorkoutSessionDates();
+});
+
+onMounted(() => {
+  uniqueWorkoutSessionDates.value = getUniqueWorkoutSessionDates();
 });
 </script>
 
@@ -49,18 +27,10 @@ workoutSessionStore.$subscribe((mutation, state) => {
       v-for="date in uniqueWorkoutSessionDates"
       :key="date"
     >
-      <div class="timeline-title">{{ dateToIsoString(new Date(date)) }}</div>
-      <div
-        v-for="workoutSession in workoutSessions.filter(workoutSession => dateToIsoString(workoutSession.finished_at) === date)"
-        :key="workoutSession.id"
-      >
-        <BaseCard
-          :img_src="defaultImage"
-          :title="getWorkoutName(workoutSession.workout_id)"
-          :button="true"
-          @click="openModal(workoutSession.id)"
-        />
-      </div>
+      <div class="timeline-title">{{ dateToLocaleString(new Date(date)) }}</div>
+      <ActivityWorkoutList
+        :selectedDate="new Date(date)"
+      />
     </div>
   </div>
 </template>
