@@ -12,6 +12,13 @@
   import { useI18n } from 'vue-i18n';
   import { computed } from 'vue';
 
+  const props = defineProps({
+    date: {
+      type: Date,
+      required: true
+    },
+  });
+
   const { t } = useI18n();
 
   const foodDiaryStore = useFoodDiaryStore();
@@ -20,10 +27,8 @@
   const workoutBarColors = ['#3F63C8'];
   const nutritionBarColors = ['#3F63C8', '#86A0E7', '#FFFFFF'];
 
-  const date = new Date();
-
   const caloriesOfToday = computed(() => {
-    return foodDiaryStore.getCaloriesOfDate(date);
+    return foodDiaryStore.getCaloriesOfDate(props.date);
   });
 
   const caloriesTarget = computed(() => {
@@ -34,25 +39,25 @@
     return [
       {
         icon: CarbsIcon,
-        value: foodDiaryStore.getCarbohydratesOfDate(date),
+        value: foodDiaryStore.getCarbohydratesOfDate(props.date),
         target: foodDiaryStore.dailyCarbs
       },
       {
         icon: ProteinIcon,
-        value: foodDiaryStore.getProteinOfDate(date),
+        value: foodDiaryStore.getProteinOfDate(props.date),
         target: foodDiaryStore.dailyProtein
       },
       {
         icon: FatIcon,
-        value: foodDiaryStore.getFatOfDate(date),
+        value: foodDiaryStore.getFatOfDate(props.date),
         target: foodDiaryStore.dailyFat
       }
     ]
 });
 
 const workoutOverviewData = computed(() => {
-  const workoutVolume = workoutSessionStore.getPerformedWorkoutVolumeOfDate(date);
-  const plannedWorkoutVolume = workoutSessionStore.getPlannedWorkoutVolumeOfDate(date);
+  const workoutVolume = workoutSessionStore.getPerformedWorkoutVolumeOfDate(props.date);
+  const plannedWorkoutVolume = workoutSessionStore.getPlannedWorkoutVolumeOfDate(props.date);
   return {
       icon: WeightIcon,
       name: `${t('home.workoutVolume')}`,

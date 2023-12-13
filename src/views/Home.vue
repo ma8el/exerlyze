@@ -32,7 +32,7 @@
     </template> 
 
     <h2 class="ion-margin">Your day</h2>
-    <OverviewCard />
+    <OverviewCard :date="new Date()" />
     <UpcomingEventsSlide />
  
     <h2 class="ion-margin">Your week</h2>
