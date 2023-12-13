@@ -1,12 +1,15 @@
 import { defineStore } from "pinia";
-import { useStorage } from "@vueuse/core";
+import { set, useStorage } from "@vueuse/core";
 import { ref } from 'vue'
 
 export const useUserSettingsStore = defineStore('userSettings', () => {
-    const locale = useStorage('selectedLocale', ref<string | undefined>())
+    const locale = useStorage('selectedLocale', ref<string | undefined>(navigator.language === 'en' || navigator.language ==='de' || navigator.language === 'fr' ? navigator.language : 'en'))
     const getLocale = (): string | undefined => {
         if (locale.value === undefined) {
-            setLocale('en')
+            const lang = navigator.language
+            if (lang !== 'en' && lang !== 'de' && lang !== 'fr') {
+                setLocale('en')
+            }
         }
         return locale.value
     }

@@ -1,14 +1,15 @@
 import { createI18n } from 'vue-i18n';
 import { messages } from '@/locale'
-import { useUserSettingsStore } from '@/store/userSettingsStore';
-
-//const userSettingsStore = useUserSettingsStore();
 
 export function installI18n(app: any) {
+    let lang = navigator.language
+    if (lang !== 'en' && lang !== 'de' && lang !== 'fr') {
+       lang = 'en' 
+    }
+    console.log('lang', lang)
     const i18n = createI18n({
-//      locale: userSettingsStore.locale,
-      locale: 'en',
-      fallbackLocale: 'en',
+      locale: lang,
+      fallbackLocale: lang,
       legacy: false,
       messages,
     });
