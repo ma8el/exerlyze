@@ -14,7 +14,7 @@ import UserMetricsInput from '@/components/UserMetricsInput.vue';
     </div>
   
     <UserMetricsInput
-      buttonLabel="Next"
+      :buttonLabel="$t('next')"
     />
   </ion-content>
 </template>

@@ -31,11 +31,11 @@
       </ion-item>
     </template> 
 
-    <h2 class="ion-margin">Your day</h2>
+    <h2 class="ion-margin">{{ $t('yourDay') }}</h2>
     <OverviewCard :date="new Date()" />
     <UpcomingEventsSlide />
  
-    <h2 class="ion-margin">Your week</h2>
+    <h2 class="ion-margin">{{ $t('yourWeek') }}</h2>
     <ChartContainerCard>
       <WorkoutVolumeBarChart />
     </ChartContainerCard>

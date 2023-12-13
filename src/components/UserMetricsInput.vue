@@ -103,10 +103,10 @@ onMounted(() => {
     <ion-select 
       v-model="gender"
       :multiple="false" 
-      placeholder="Choose Gender"
+      :placeholder="$t('chooseGender')"
     >
-      <ion-select-option value="male">Male</ion-select-option>
-      <ion-select-option value="female">Female</ion-select-option>
+      <ion-select-option value="male">{{ $t('male') }}</ion-select-option>
+      <ion-select-option value="female">{{ $t('female') }}</ion-select-option>
     </ion-select>
   </ion-item>
 
@@ -114,7 +114,7 @@ onMounted(() => {
     <ion-input 
       v-model="dateOfBirth"
       type="date"
-      placeholder="Date of birth"
+      :placeholder="$t('dateOfBirth')"
     >
   </ion-input>
   </ion-item>
@@ -124,11 +124,11 @@ onMounted(() => {
     <ion-input 
       v-model="weight"
       type="number"
-      placeholder="Your Weight"
+      :placeholder="$t('yourWeight')"
     >
     </ion-input>
     <ion-button expand="block" slot="end" shape="round" color="primary">
-      KG
+      {{ $t('weightUnitBig') }} 
     </ion-button>
   </ion-item>
 
@@ -137,11 +137,11 @@ onMounted(() => {
     <ion-input
       v-model="height"
       type="number"
-      placeholder="Your Height"
+      :placeholder="$t('yourHeight')"
     >
     </ion-input>
     <ion-button expand="block" slot="end" shape="round" color="primary">
-      CM
+      {{ $t('lengthUnit') }}
     </ion-button>
   </ion-item>
 

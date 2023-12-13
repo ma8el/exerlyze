@@ -23,7 +23,7 @@
 <template>
   <PageWithNutritionCalendar :title="$t('nutrition.title')">
     <BaseSegments
-      :leftSegmentLabel="$t('nutrition.yourDay')"
+      :leftSegmentLabel="$t('yourDay')"
       :rightSegmentLabel="$t('nutrition.foodDiary')"
       @leftSegmentSelected="selectYourDay"
       @rightSegmentSelected="selectDiary"
