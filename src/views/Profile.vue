@@ -155,6 +155,7 @@
         >
           <ion-select-option value="en">🇬🇧 English</ion-select-option>
           <ion-select-option value="de">🇩🇪 Deutsch</ion-select-option>
+          <ion-select-option value="fr">🇫🇷 Français</ion-select-option>
         </ion-select>
       </ion-item>
 
