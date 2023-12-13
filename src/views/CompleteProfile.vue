@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import { IonContent, IonLabel } from '@ionic/vue'
 import UserMetricsInput from '@/components/UserMetricsInput.vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter()
-
-const onWelcome = () => {
-  router.push('tabs/home')
-}
 </script>
 
 <template>
@@ -16,8 +9,8 @@ const onWelcome = () => {
       <img src="../../assets/illustrations/fill_form.svg" alt="">
     </div>
     <div class="name">
-      <ion-label class="bold_lbl">Let's complete your profile</ion-label>
-      <ion-label class="smpl_lbl">It will help us to know more about you</ion-label>
+      <ion-label class="bold_lbl">{{ $t('completeProfile') }}</ion-label>
+      <ion-label class="smpl_lbl">{{ $t('completeProfileMessage') }}</ion-label>
     </div>
   
     <UserMetricsInput
