@@ -64,7 +64,16 @@ export const messages = {
             diet: "Diet",
         },
         profile: {
-            title: "Profile"
+            title: "Profile",
+            height: "Height",
+            weight: "Weight",
+            age: "Age",
+            personalData: "Personal Data",
+            account: "Account",
+            notification: "Notification",
+            other: "Other",
+            contactUs: "Contact us",
+            privacyPolicy: "Privacy Policy",
         },
         settings: {
             title: "Settings",
@@ -177,6 +186,16 @@ export const messages = {
         },
         profile: {
             title: "Profil",
+            height: "Größe",
+            weight: "Gewicht",
+            age: "Alter",
+            personalData: "Benutzerdaten",
+            account: "Account",
+            notification: "Benachrichtigungen",
+            other: "Sonstiges",
+            contactUs: "Kontaktiere uns",
+            privacyPolicy: "Datenschutzvereinbarung",
+ 
         },
         settings: {
             title: "Einstellungen",

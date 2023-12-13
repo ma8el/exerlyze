@@ -10,11 +10,10 @@
     IonIcon,
     IonSelect,
     IonSelectOption,
-onIonViewWillEnter,
   } from '@ionic/vue';
   import AppLayout from '@/layouts/AppLayout.vue';
   import { useRouter } from 'vue-router';
-  import { ref, onMounted } from 'vue';
+  import { ref } from 'vue';
   import { 
     languageOutline,
     personOutline,
@@ -36,14 +35,12 @@ onIonViewWillEnter,
 
   const i18n = useI18n();
 
-  const showAvatar = ref(true);
+  const userName = ref(userStore.getUserName());
+  const userAge = ref(userStore.getAge());
+  const userHeight = ref(userStore.getHeight());
+  const userWeight = ref(userWeightStore.getCurrentWeight);
 
-  const userName = userStore.getUserName();
-  const userAge = userStore.getAge();
-  const userHeight = userStore.getHeight();
-  const userWeight = userWeightStore.getCurrentWeight;
-
-  const selectedLang = userSettingsStore.getLocale()
+  const selectedLang = ref(userSettingsStore.getLocale())
 
   const changeLocale = (lang: string) => {
     userSettingsStore.setLocale(lang)
@@ -66,20 +63,14 @@ onIonViewWillEnter,
     router.push('/insights');
   };
 
-  const handleScroll = (event: any) => {
-    if (event.detail.scrollTop > 5) {
-      showAvatar.value = false;
-    } else {
-      showAvatar.value = true;
-    }
-  };
-
-  onMounted(() => {
-    showAvatar.value = true;
+  userWeightStore.$subscribe(() => {
+    userWeight.value = userWeightStore.getCurrentWeight;
   });
 
-  onIonViewWillEnter(() => {
-    showAvatar.value = true;
+  userStore.$subscribe(() => {
+    userName.value = userStore.getUserName();
+    userAge.value = userStore.getAge();
+    userHeight.value = userStore.getHeight();
   });
 </script>
 
@@ -87,99 +78,106 @@ onIonViewWillEnter,
   <AppLayout :title="$t('profile.title')">
     <template #avatar>
       <Transition name="fade" class="avatar-wrapper">
-        <div class="avatar-wrapper" v-if="showAvatar">
+        <div class="avatar-wrapper">
           <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
         </div>
       </Transition>
     </template>
 
-    <ion-content :scroll-events="true" @ionScroll="handleScroll($event)" class="scrollable-content">
+    <div class="sticky-header">
       <div class="name">
         <ion-label class="name_lbl">{{ userName }}</ion-label>
       </div>
-      <ion-row>
+      <ion-row class="ion-margin">
         <ion-col size="4">
           <ion-card class="data">
             <ion-label class="frst_lbl">{{ userHeight }} cm</ion-label>
-            <ion-label class="scnd_lbl">Height</ion-label>
+            <ion-label class="scnd_lbl">{{ $t('profile.height') }}</ion-label>
           </ion-card>
         </ion-col>
-  
+
         <ion-col size="4">
           <ion-card class="data">
             <ion-label class="frst_lbl">{{ userWeight.weight }} kg</ion-label>
-            <ion-label class="scnd_lbl">Weight</ion-label>
+            <ion-label class="scnd_lbl">{{ $t('profile.weight') }}</ion-label>
           </ion-card>
         </ion-col>
-  
+
         <ion-col size="4">
           <ion-card class="data">
             <ion-label class="frst_lbl">{{ userAge }}</ion-label>
-            <ion-label class="scnd_lbl">Age</ion-label>
+            <ion-label class="scnd_lbl">{{ $t('profile.age') }}</ion-label>
           </ion-card>
         </ion-col>
       </ion-row>
-  
-      <div class="account">
-        <ion-label class="head_lbl">Account</ion-label>
-        <div class="info">
-          <ion-item lines="none" :button="true" @click="openProfileSettings()">
-            <ion-icon :icon="personOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-            <ion-label>Personal Data</ion-label>
-          </ion-item>
-          <ion-item lines="none" :button="true" @click="openWorkoutSettings()">
-            <ion-icon :icon="documentTextOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-            <ion-label>Workout Settings</ion-label>
-          </ion-item>
-          <ion-item lines="none" :button="true" @click="openActivityHistory()">
-            <ion-icon :icon="listOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-            <ion-label>Activity Histrory</ion-label>
-          </ion-item>
-          <ion-item lines="none" :button="true" @click="openInsights()">
-            <ion-icon :icon="barChartOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-            <ion-label>Insights</ion-label>
-          </ion-item>
-        </div>
-      </div>
-  
-      <div class="notification">
-        <ion-label class="head_lbl">Notification</ion-label>
-        <ion-item lines="none">
-          <ion-icon :icon="notificationsOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-          <ion-label>Pop-out Notificatioon</ion-label>
-          <ion-toggle mode="ios" color="primary" checked></ion-toggle>
+    </div>
+
+    <div class="account">
+      <ion-label class="head_lbl">{{ $t('profile.account') }}</ion-label>
+      <div class="info">
+        <ion-item lines="none" :button="true" @click="openProfileSettings()">
+          <ion-icon :icon="personOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>{{ $t('profile.personalData') }}</ion-label>
+        </ion-item>
+        <ion-item lines="none" :button="true" @click="openWorkoutSettings()">
+          <ion-icon :icon="documentTextOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>{{ $t('settings.workout') }}</ion-label>
+        </ion-item>
+        <ion-item lines="none" :button="true" @click="openActivityHistory()">
+          <ion-icon :icon="listOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>{{ $t('activityHistory') }}</ion-label>
+        </ion-item>
+        <ion-item lines="none" :button="true" @click="openInsights()">
+          <ion-icon :icon="barChartOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>{{ $t('insights') }}</ion-label>
         </ion-item>
       </div>
-  
-      <div class="other">
-        <ion-label class="head_lbl">Other</ion-label>
-        <ion-item lines="none">
-          <ion-icon :icon="languageOutline" color="primary" style="margin-right: 10px"></ion-icon>
-          <ion-select 
-            :label="$t('language')"
-            :placeholder="$t('language')"
-            v-model="selectedLang"
-            @ionChange="changeLocale($event.detail.value)"
-          >
-            <ion-select-option value="en">🇬🇧 English</ion-select-option>
-            <ion-select-option value="de">🇩🇪 Deutsch</ion-select-option>
-          </ion-select>
-        </ion-item>
- 
-        <ion-item lines="none">
-          <ion-icon :icon="mailOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-          <ion-label>Contact Us</ion-label>
-        </ion-item>
-        <ion-item lines="none">
-          <ion-icon :icon="checkboxOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-          <ion-label>Privacy Policy</ion-label>
-        </ion-item>
-      </div>
-    </ion-content>
+    </div>
+
+    <div class="notification">
+      <ion-label class="head_lbl">{{ $t('profile.notification') }}</ion-label>
+      <ion-item lines="none">
+        <ion-icon :icon="notificationsOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+        <ion-label>Pop-out Notificatioon</ion-label>
+        <ion-toggle mode="ios" color="primary" checked></ion-toggle>
+      </ion-item>
+    </div>
+
+    <div class="other">
+      <ion-label class="head_lbl">{{ $t('profile.other') }}</ion-label>
+      <ion-item lines="none">
+        <ion-icon :icon="languageOutline" color="primary" style="margin-right: 10px"></ion-icon>
+        <ion-select 
+          :label="$t('language')"
+          :placeholder="$t('language')"
+          v-model="selectedLang"
+          @ionChange="changeLocale($event.detail.value)"
+        >
+          <ion-select-option value="en">🇬🇧 English</ion-select-option>
+          <ion-select-option value="de">🇩🇪 Deutsch</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-icon :icon="mailOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+        <ion-label>{{ $t('profile.contactUs') }}</ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-icon :icon="checkboxOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+        <ion-label>{{ $t('profile.privacyPolicy') }}</ion-label>
+      </ion-item>
+    </div>
   </AppLayout>
 </template>
 
 <style scoped lang="scss">
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: var(--ion-background-color);
+  z-index: 100;
+}
+
 .avatar-wrapper {
   width: 80px;
   height: 80px;
@@ -197,14 +195,6 @@ onIonViewWillEnter,
     border-radius: 50%;
   }
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-  z-index: 10;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-  z-index: 10;
-}
 .name {
   display: flex;
   font-size: 1.5rem;
@@ -215,10 +205,6 @@ onIonViewWillEnter,
     margin: 50px 0 0 0;
   }
 }
-.scrollable-content{
-  height: 100%;
-  overflow-y: auto;
-}
 ion-content {
   --background: none;
   ion-item {
@@ -226,10 +212,10 @@ ion-content {
     border-radius: 10px;
   }
   ion-row {
-    margin: 0 1rem 0 0;
     ion-col {
       border-radius: 10px;
       .data {
+        margin: 0rem;
         display: flex;
         flex-direction: column;
         text-align: center;
