@@ -1,12 +1,15 @@
 <script setup lang="ts">
   import { IonList,
+           IonListHeader,
+           IonLabel,
            modalController } from '@ionic/vue';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import BaseCard from '../Cards/BaseCard.vue';
+  import OverviewCard from '../Cards/OverviewCard.vue';
   import ActivityDetailModal from './ActivityDetailModal.vue';
-  import { dateToIsoString, extractTimeFromTS } from '@/helpers/time';
   import { useWorkoutSessionStore } from '@/store/workoutStore';
   import { defaultImage } from '@/composables/supabase';
+  import { useUserSettingsStore } from '@/store/userSettingsStore';
 
   const props = defineProps({
     selectedDate: {
@@ -15,8 +18,13 @@
     }
   })
 
+  const userSettingsStore = useUserSettingsStore();
   const workoutSessionStore = useWorkoutSessionStore();
   const workoutSessions = workoutSessionStore.getFullWorkoutSessionsByDate(props.selectedDate);
+  console.log(workoutSessions);
+
+  const locale = userSettingsStore.locale;
+  const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit' };
 
   const openModal = async (workoutSessionId: String) => {
     if ( !workoutSessionId ) {
@@ -40,13 +48,21 @@
       <p class="header-title">{{ $t('activities') }}</p>
     </template>
     <template #modalContent>
+      <ion-label class="ion-margin">
+        {{ selectedDate.toLocaleDateString(locale, dateOptions) }}
+      </ion-label>
+      <OverviewCard
+        :date="selectedDate"
+      />
+      <div v-if="workoutSessions">
+        <ion-list-header v-if="workoutSessions.length > 0">
+          {{ $t('home.performedWorkouts') }}
+        </ion-list-header>
+      </div>
       <ion-list 
         v-if="workoutSessions"
         class="exercise-list"
       >
-        <ion-list-header>
-          {{ dateToIsoString(selectedDate) }}
-        </ion-list-header>
         <div
           v-for="(workoutSession, index) in workoutSessions"
           :key="index"
