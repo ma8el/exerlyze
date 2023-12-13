@@ -140,7 +140,7 @@
           class="nutrition-list"
         >
           <ion-item class="nutrition-list-item">
-            <ion-label>{{ detail.name }}</ion-label>
+            <ion-label>{{ $t(`nutrition.${detail.name.toLowerCase()}`) }}</ion-label>
             <ion-label slot="end">{{ product.nutriments[detail.value] }} {{ product.nutriments[detail.unit] }}</ion-label>
           </ion-item>
         </ion-list>
