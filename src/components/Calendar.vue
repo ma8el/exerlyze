@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { IonGrid,
-           IonCard,
-           IonRow,
+  import { IonCard,
            modalController } from '@ionic/vue';
   import { useDark } from '@vueuse/core'
   import { ref, watch, onMounted, PropType } from 'vue'
@@ -63,7 +61,7 @@
     setLocale.value = userSettingsStore.getLocale()
   })
 
-  watch(() => userSettingsStore.setLocale, () => {
+  userSettingsStore.$subscribe(() => {
     setLocale.value = userSettingsStore.getLocale()
   })
 </script>

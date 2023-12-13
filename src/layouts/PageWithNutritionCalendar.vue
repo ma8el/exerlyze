@@ -54,6 +54,10 @@
                                                                    new Date(foodEntry.created_at).getMonth() === date.getMonth() &&
                                                                    new Date(foodEntry.created_at).getFullYear() === date.getFullYear()));
   });
+
+  userSettingsStore.$subscribe((mutation, state) => {
+    setLocale.value = userSettingsStore.getLocale()
+  });
 </script>
 
 <template>
