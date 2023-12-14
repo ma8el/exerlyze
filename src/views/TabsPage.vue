@@ -9,8 +9,11 @@
            IonFabList,
            IonFabButton,
            IonRouterOutlet,
-           modalController} from '@ionic/vue';
+           modalController,
+           onIonViewDidEnter,
+           onIonViewDidLeave} from '@ionic/vue';
   import { scaleOutline, clipboardOutline, addOutline } from 'ionicons/icons';
+  import OfflineToast from '@/components/Toasts/OfflineToast.vue';
   import AddWorkoutModal from '@/components/Modals/AddWorkoutModal.vue';
   import AddWorkoutPlanModal from '@/components/Modals/AddWorkoutPlanModal.vue';
   import AddNutritionModal from '@/components/Modals/AddNutritionModal.vue';
@@ -19,6 +22,9 @@
   import NutritionIcon from '@/icons/nutrition.svg';
   import ProfileIcon from '@/icons/profile.svg';
   import WorkoutIcon from '@/icons/workout.svg';
+  import { ref } from 'vue'
+
+  const tabsInView = ref<Boolean>(false)
   
   const openWorkoutModal = async () => {
     const modal = await modalController.create({
@@ -79,13 +85,26 @@
       console.log('Close', data);
     };
   }
+
+onIonViewDidEnter(() => {
+  tabsInView.value = true
+}
+)
+
+onIonViewDidLeave(() =>{
+  tabsInView.value = false
+})
 </script>
 
 <template>
   <ion-page>
-    <ion-tabs>
+   <OfflineToast
+     v-if="tabsInView"
+     anchor-id="tab-fab-button"
+   />
+   <ion-tabs >
       <ion-router-outlet></ion-router-outlet>
-      <ion-tab-bar slot="bottom" class="custom-tab-bar">
+      <ion-tab-bar id="tabs" slot="bottom" class="custom-tab-bar">
         <ion-tab-button tab="home" href="/tabs/home">
           <ion-icon aria-hidden="true" :icon="HomeIcon" />
           <ion-label>{{ $t('home.title') }}</ion-label>
@@ -112,7 +131,7 @@
 
      </ion-tab-bar>
     </ion-tabs>
-    <ion-fab vertical="bottom" horizontal="center" translucent="true">
+    <ion-fab id="tab-fab-button" vertical="bottom" horizontal="center" translucent="true">
       <ion-fab-button>
         <ion-icon :icon="addOutline"/>
       </ion-fab-button>

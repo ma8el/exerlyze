@@ -145,6 +145,8 @@ export const messages = {
         weightChange: "Weight Change",
         performanceIncrease: "Performance Increase",
         fitness: "Fitness",
+        offlineMessage: "You are offline!",
+        onlineMessage: "You are online!",
     },
     de: {
         language: "Sprache",
@@ -292,6 +294,8 @@ export const messages = {
         weightChange: "Gewichtsänderung",
         performanceIncrease: "Leistungssteigerung",
         fitness: "Fitness",
+        offlineMessage: "Du bist offline!",
+        onlineMessage: "Du bist online!",
     },
     fr: {
         language: "Langue",
@@ -439,5 +443,7 @@ export const messages = {
         weightChange: "Changement de poids",
         performanceIncrease: "Augmentation de performance",
         fitness: "Forme physique",
+        offlineMessage: "Vous êtes hors ligne!",
+        onlineMessage: "Vous êtes en ligne!",
     },
 }
