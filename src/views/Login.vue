@@ -14,6 +14,7 @@ import { useRouter } from 'vue-router';
 import { useDark } from '@vueuse/core'
 import { supabase } from '@/supabase';
 import EmailIcon from '@/icons/email.svg';
+import Line from '@/components/Line.vue';
 import { useUserStore } from '@/store/bodyMetricsStore';
 import { syncWithBackend } from '@/composables/supabase';
 
@@ -105,11 +106,7 @@ onMounted(async () => {
                 {{ $t('sendMagicLink') }}
               </ion-button>
 
-              <div class="line">
-                <hr>
-                <ion-label class="or_lbl">or</ion-label>
-                <hr>
-              </div>
+              <Line label="or" />
 
               <div class="social-button">
                 <ion-buttons slot="start">
@@ -169,23 +166,6 @@ ion-content {
 .logo-container img {
   max-width: 80%;
   max-height: 50%;
-}
-
-
-.line {
-  display: flex;
-  align-items: center;
-  margin-top: 1rem;
-  :is(hr) {
-      width: 100%;
-      height: 1px;
-      border-bottom: 1px solid lightgrey;
-      margin-bottom: 10px;
-      margin-top: 10px;
-  }
-  .or_lbl {
-      margin: 10px;
-  }
 }
 
 .social-button {
