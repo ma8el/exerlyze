@@ -7,6 +7,7 @@ import VChart from 'vue-echarts';
 
 import { useI18n } from 'vue-i18n';
 import { useDayOfWeekStore, useWorkoutSessionStore } from '@/store/workoutStore';
+import { useUserSettingsStore } from '@/store/userSettingsStore';
 import { getCurrentWeekDates } from '@/helpers/time';
 import BaseChartContainer from './BaseChartContainer.vue';
 import { computed, reactive, onMounted } from 'vue';
@@ -18,6 +19,8 @@ const { t } = useI18n();
 const dayOfWeekStore = useDayOfWeekStore();
 const weekDays = getCurrentWeekDates();
 const workoutSessionStore = useWorkoutSessionStore();
+const userSettingsStore = useUserSettingsStore();
+
 const weeklyWorkoutVolume = computed(() => {
   return weekDays.map(day => {
   const workoutSessions = workoutSessionStore.getWorkoutSessionPerformanceByDate(day)
@@ -42,7 +45,7 @@ const getOptions = () => {
   },
   xAxis: {
     type: 'category',
-    data: dayOfWeekStore.daysOfWeek.map(d => d.name.slice(0, 3)),
+    data: dayOfWeekStore.getDaysOfWeek.map(d => d.name.slice(0, 3)),
   },
   yAxis: {
     type: 'value',
@@ -75,6 +78,10 @@ const getOptions = () => {
 let option = reactive(getOptions());
 
 workoutSessionStore.$subscribe((mutation, state) => {
+  Object.assign(option, getOptions());
+});
+
+userSettingsStore.$subscribe((mutation, state) => {
   Object.assign(option, getOptions());
 });
 

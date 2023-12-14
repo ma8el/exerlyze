@@ -3,6 +3,7 @@
   import { IonButton, IonIcon, onIonViewDidEnter } from '@ionic/vue';
   import { useRouter } from 'vue-router';
   import { useWorkoutPlanStore } from '../store/workoutStore';
+  import { useUserSettingsStore } from '@/store/userSettingsStore';
   import StartWorkoutButton from './Buttons/StartWorkoutButton.vue';
   import BaseCard from './Cards/BaseCard.vue';
   import Slider from './Slider.vue';
@@ -11,6 +12,8 @@
   const router = useRouter()
 
   const workoutPlanStore = useWorkoutPlanStore();
+  const userSettingsStore = useUserSettingsStore();
+
   const plannedWorkouts = ref(workoutPlanStore.getFullWorkoutPlans)
   const sortedPlannedWorkouts = ref(plannedWorkouts.value.sort((a, b) => a.day_of_week_id - b.day_of_week_id));
   const nextWorkout = ref();
@@ -35,6 +38,12 @@
   }
 
   workoutPlanStore.$subscribe((mutation, state) => {
+    plannedWorkouts.value = workoutPlanStore.getFullWorkoutPlans;
+    sortedPlannedWorkouts.value = plannedWorkouts.value.sort((a, b) => a.day_of_week_id - b.day_of_week_id);
+    setNextWorkout();
+  });
+
+  userSettingsStore.$subscribe((mutation, state) => {
     plannedWorkouts.value = workoutPlanStore.getFullWorkoutPlans;
     sortedPlannedWorkouts.value = plannedWorkouts.value.sort((a, b) => a.day_of_week_id - b.day_of_week_id);
     setNextWorkout();

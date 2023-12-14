@@ -60,7 +60,10 @@ export interface WorkoutPlan {
 
 export interface DayOfWeek {
     id: number,
-    name: string
+    name: string,
+    name_en: string,
+    name_de: string,
+    name_fr: string,
 }
 
 export interface FullWorkoutPlan extends WorkoutPlan, PlannedWorkout {

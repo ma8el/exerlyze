@@ -11,6 +11,7 @@ import { useFoodDiaryStore } from '@/store/foodDiary';
 import { getCurrentWeekDates } from '@/helpers/time';
 import BaseChartContainer from './BaseChartContainer.vue';
 import { computed, onMounted, reactive } from 'vue';
+import { useUserSettingsStore } from '@/store/userSettingsStore';
 
 use([TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, MarkLineComponent, LineChart, CanvasRenderer])
 
@@ -19,6 +20,7 @@ const { t } = useI18n();
 const dayOfWeekStore = useDayOfWeekStore();
 const weekDays = getCurrentWeekDates();
 const foodDiaryStore = useFoodDiaryStore();
+const userSettingsStore = useUserSettingsStore();
 
 const weeklyConsumedCalories = computed(() => { 
   return weekDays.map(day => {
@@ -42,7 +44,7 @@ const getOptions = () => {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: dayOfWeekStore.daysOfWeek.map(d => d.name.slice(0, 3)),
+      data: dayOfWeekStore.getDaysOfWeek.map(d => d.name.slice(0, 3)),
     },
     yAxis: {
       type: 'value',
@@ -108,6 +110,10 @@ const getOptions = () => {
 let option = reactive(getOptions());
 
 foodDiaryStore.$subscribe((mutation, state) => {
+  Object.assign(option, getOptions());
+});
+
+userSettingsStore.$subscribe((mutation, state) => {
   Object.assign(option, getOptions());
 });
 

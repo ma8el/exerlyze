@@ -1,11 +1,11 @@
 INSERT INTO public.days_of_week (id, name_en, name_de, name_fr) VALUES 
-(1, 'Sunday', 'Sonntag', 'Dimanche'),
-(2, 'Monday', 'Montag', 'Lundi'),
-(3, 'Tuesday', 'Dienstag', 'Mardi'),
-(4, 'Wednesday', 'Mittwoch', 'Mercredi'),
-(5, 'Thursday', 'Donnerstag', 'Jeudi'),
-(6, 'Friday', 'Freitag', 'Vendredi'),
-(7, 'Saturday', 'Samstag', 'Samedi');
+(0, 'Monday', 'Montag', 'Lundi'),
+(1, 'Tuesday', 'Dienstag', 'Mardi'),
+(2, 'Wednesday', 'Mittwoch', 'Mercredi'),
+(3, 'Thursday', 'Donnerstag', 'Jeudi'),
+(4, 'Friday', 'Freitag', 'Vendredi'),
+(5, 'Saturday', 'Samstag', 'Samedi'),
+(6, 'Sunday', 'Sonntag', 'Dimanche');
 
 INSERT INTO public.muscles (id, name_en, name_de, name_fr, description_en, description_de, description_fr) VALUES
 (1, 'Abdominals', 'Bauchmuskeln', 'Abdominaux', 'The abdominal muscles are located between the ribs and the pelvis on the front of the body. They support the trunk, allow movement and hold organs in place by regulating internal abdominal pressure.', 'Die Bauchmuskeln befinden sich zwischen den Rippen und dem Becken auf der Vorderseite des Körpers. Sie stützen den Rumpf, ermöglichen Bewegungen und halten Organe an Ort und Stelle, indem sie den internen Bauchdruck regulieren.', 'Les muscles abdominaux sont situés entre les côtes et le bassin à l''avant du corps. Ils soutiennent le tronc, permettent le mouvement et maintiennent les organes en place en régulant la pression abdominale interne.'),

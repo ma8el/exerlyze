@@ -11,49 +11,91 @@ import { Workout,
          FullWorkoutSession } from '@/types';
 import { ref, computed } from 'vue';
 import { useStorage } from '@vueuse/core';
-import { push } from 'ionicons/icons';
+import { useUserSettingsStore } from './userSettingsStore';
 
 export const useDayOfWeekStore = defineStore({
     id: 'dayOfWeek',
     state: () => ({
         daysOfWeek: [{
             id: 0,
-            name: 'Monday'
+            name: 'Monday',
+            name_en: 'Monday',
+            name_de: 'Montag',
+            name_fr: 'Lundi',
         },
         {
             id: 1,
-            name: 'Tuesday'
+            name: 'Tuesday',
+            name_en: 'Tuesday',
+            name_de: 'Dienstag',
+            name_fr: 'Mardi',
         },
         {
             id: 2,
-            name: 'Wednesday'
+            name: 'Wednesday',
+            name_en: 'Wednesday',
+            name_de: 'Mittwoch',
+            name_fr: 'Mercredi',
         },
         {
             id: 3,
-            name: 'Thursday'
+            name: 'Thursday',
+            name_en: 'Thursday',
+            name_de: 'Donnerstag',
+            name_fr: 'Jeudi',
         },
         {
             id: 4,
-            name: 'Friday'
+            name: 'Friday',
+            name_en: 'Friday',
+            name_de: 'Freitag',
+            name_fr: 'Vendredi',
         },
         {
             id: 5,
-            name: 'Saturday'
+            name: 'Saturday',
+            name_en: 'Saturday',
+            name_de: 'Samstag',
+            name_fr: 'Samdi',
         },
         {
             id: 6,
-            name: 'Sunday'
+            name: 'Sunday',
+            name_en: 'Sunday',
+            name_de: 'Sonntag',
+            name_fr: 'Dimanche',
         },
     ] as DayOfWeek[]
     }),
     getters: {
         getDaysOfWeek(): DayOfWeek[] {
-            return this.daysOfWeek;
+            const userSettingsStore = useUserSettingsStore()
+            const locale = userSettingsStore.getLocale()
+            const daysOfWeek = this.daysOfWeek.map((dayOfWeek: DayOfWeek) => {
+                switch (locale) {
+                    case 'de':
+                        return {
+                            ...dayOfWeek,
+                            name: dayOfWeek.name_de
+                        }
+                    case 'fr':
+                        return {
+                            ...dayOfWeek,
+                            name: dayOfWeek.name_fr
+                        }
+                    default:
+                        return {
+                            ...dayOfWeek,
+                            name: dayOfWeek.name_en
+                        }
+                }
+            })
+            return daysOfWeek;
         },
     },
     actions: {
         getDayOfWeekById(id: number): DayOfWeek | undefined {
-            const dayOfWeek = this.daysOfWeek.find(w => w.id === id);
+            const dayOfWeek = this.getDaysOfWeek.find(w => w.id === id);
             if (dayOfWeek) {
                 return dayOfWeek;
             }
