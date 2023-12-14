@@ -160,6 +160,13 @@ ion-tabs{
 		ion-tab-button {
 			--background: var(--ion-color-light);
 		}
+		ion-tab-button.md {
+			--background: var(--ion-color-light);
+      font-size: 0.5rem;
+      ion-icon {
+        font-size: 2rem;
+      }
+		}
 		ion-tab-button.comments {
 			margin-right: 0px;
 			border-top-right-radius: 18px;
