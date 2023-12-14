@@ -39,11 +39,11 @@ const consumedNutrition = ref();
 
 const maxValue = 500;
 
-var schema = [
+const schema = ref([
   { name: 'carbs', index: 1, text: t('nutrition.carbs') },
   { name: 'protein', index: 2, text: t('nutrition.protein') },
   { name: 'fat', index: 3, text: t('nutrition.fat') },
-];
+]);
 
 const getConsumedNutrition = async () => {
   loading.value = true;
@@ -73,9 +73,9 @@ const option = computed(() => {
   },
   backgroundColor: '#1E1F24',
   parallelAxis: [
-    { dim: 0, name: schema[0].text, min: 0, max: maxValue},
-    { dim: 1, name: schema[1].text, min: 0, max: maxValue},
-    { dim: 2, name: schema[2].text, min: 0, max: maxValue},
+    { dim: 0, name: schema.value[0].text, min: 0, max: maxValue},
+    { dim: 1, name: schema.value[1].text, min: 0, max: maxValue},
+    { dim: 2, name: schema.value[2].text, min: 0, max: maxValue},
   ],
   parallel: {
     left: '10%',

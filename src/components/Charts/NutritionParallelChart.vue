@@ -7,9 +7,12 @@ import VChart from 'vue-echarts';
 
 import { useI18n } from 'vue-i18n';
 import { useFoodDiaryStore } from '@/store/foodDiary';
+import { useUserSettingsStore } from '@/store/userSettingsStore';
 import { getCurrentWeekDates } from '@/helpers/time';
 import BaseChartContainer from './BaseChartContainer.vue';
-import { computed } from 'vue';
+import { ref, computed, reactive, onMounted } from 'vue';
+import { onIonViewDidEnter } from '@ionic/vue';
+
 
 use([VisualMapComponent, ParallelComponent, ParallelChart, CanvasRenderer])
 
@@ -17,6 +20,7 @@ const { t } = useI18n();
 
 const weekDays = getCurrentWeekDates();
 const foodDiaryStore = useFoodDiaryStore();
+const userSettingsStore = useUserSettingsStore();
 
 const weeklyConsumedNutrition = computed(() => {
   return weekDays.map(day => {
@@ -33,13 +37,18 @@ const hasData = computed(() => {
 
 const maxValue = Math.max(...weeklyConsumedNutrition.value.flat());
 
-var schema = [
+var schema = ref([
   { name: 'carbs', index: 1, text: t('nutrition.carbs') },
   { name: 'protein', index: 2, text: t('nutrition.protein') },
   { name: 'fat', index: 3, text: t('nutrition.fat') },
-];
+]);
 
-const option = computed(() => {
+const getOptions = () => {
+  const schema = [
+    { name: 'carbs', index: 1, text: t('nutrition.carbs') },
+    { name: 'protein', index: 2, text: t('nutrition.protein') },
+    { name: 'fat', index: 3, text: t('nutrition.fat') },
+  ];
   return {
   title: {
     text: t('home.macroDistribution'),
@@ -73,7 +82,25 @@ const option = computed(() => {
       color: '#3F63C8',
     },
   ]}
-  })
+  }
+
+let option = reactive(getOptions());
+
+foodDiaryStore.$subscribe((mutation, state) => {
+  Object.assign(option, getOptions());
+});
+
+userSettingsStore.$subscribe((mutation, state) => {
+  Object.assign(option, getOptions());
+});
+
+onMounted(() => {
+  Object.assign(option, getOptions());
+});
+
+onIonViewDidEnter(async () => {
+  Object.assign(option, getOptions());
+})
 </script>
 
 <template>
