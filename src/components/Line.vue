@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { IonLabel } from '@ionic/vue'
 const props = defineProps({
   label: {
     type: String,
