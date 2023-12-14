@@ -125,6 +125,8 @@ onMounted(() => {
       v-model="weight"
       type="number"
       :placeholder="$t('yourWeight')"
+      :clear-on-edit="true"
+      input-mode="numeric"
     >
     </ion-input>
     <ion-button expand="block" slot="end" shape="round" color="primary">
@@ -138,6 +140,8 @@ onMounted(() => {
       v-model="height"
       type="number"
       :placeholder="$t('yourHeight')"
+      :clear-on-edit="true"
+      input-mode="numeric"
     >
     </ion-input>
     <ion-button expand="block" slot="end" shape="round" color="primary">

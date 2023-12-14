@@ -83,6 +83,7 @@
         v-model="amount"
         :label="$t('nutrition.amount') + ' (' + $t('weightUnitSmall') + '):'"
         fill="solid"
+        input-mode="numeric"
       >
       </ion-input>
       <NutrimentRow

@@ -72,6 +72,8 @@
                     :value="props.sets"
                     @input="emit('update:sets', $event.target.value)"
                     :clear-on-edit="true"
+                    type="number"
+                    input-mode="numeric"
                   >
                 </ion-input>
                 </ion-col>
@@ -90,6 +92,8 @@
                     :value="props.reps"
                     @input="emit('update:reps', $event.target.value)"
                     :clear-on-edit="true"
+                    type="number"
+                    input-mode="numeric"
                   >
                   </ion-input>
                 </ion-col>
@@ -107,6 +111,8 @@
                   :value="props.weight"
                   @input="emit('update:weight', $event.target.value)"
                   :clear-on-edit="true"
+                  type="number"
+                  input-mode="numeric"
                 >
                 </ion-input>
                 <ion-label slot="end">{{ $t('weightUnitBig') }}</ion-label>

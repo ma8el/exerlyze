@@ -69,6 +69,7 @@
             class="ion-padding"
             :placeholder="$t('enterWeight')"
             v-model="weight"
+            :clear-on-edit="true"
             type="number"
             input-mode="numeric"
           />
