@@ -13,11 +13,11 @@ const complete = userStore.isComplete;
       :title="$t('completeProfile')"
       :subtitle="$t('completeProfileMessage')"
       :settingComplete="complete"
-      redirectPath="/complete-workout-profile"
+      redirectPath="/complete-fitness-level"
     >
       <UserMetricsInput
         :buttonLabel="$t('next')"
-        :saveRedirectPath="'/complete-workout-profile'"
+        :saveRedirectPath="'/complete-fitness-level'"
       />
     </WelcomeSettingsLayout>
 </template>
