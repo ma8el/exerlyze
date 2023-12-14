@@ -262,26 +262,26 @@ onMounted(() => {
 
 .exercise-list {
   background: none;
-  ion-list-header {
+  :is(ion-list-header) {
     margin-bottom: 15px;
   }
-  ion-item {
+  :is(ion-item) {
     border-radius: 10px;
     transition: opacity 0.5s ease, transform 0.5s ease;
     opacity: 0.5;
     transform: scale(1);
-    ion-icon {
+    :is(ion-icon) {
       margin-right: 5px;
       width: 15px;
       height: 15px;
     }
-    ion-input {
+    :is(ion-input) {
       --background: var(--ion-color-step-100);
       border-radius: 10px;
       margin: 0 2px 0 2px;
       padding: 0;
     }
-    ion-item {
+    :is(ion-item) {
       margin: 10px 0 10px 0;
       padding: 0;
     }
@@ -291,13 +291,13 @@ onMounted(() => {
 ion-item.highlighted {
   opacity: 1 !important;
   transform: scale(1.05) !important;
-  ion-icon {
+  :is(ion-icon) {
     opacity: 1 !important;
   }
-  ion-input {
+  :is(ion-input) {
     opacity: 1 !important;
   }
-  ion-item {
+  :is(ion-item) {
     opacity: 1 !important;
   }
 }

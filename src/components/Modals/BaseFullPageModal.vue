@@ -62,7 +62,7 @@
 ion-content {
 	overflow: hidden;
   --background: none;
-  background-image: url('../../assets/app_background.jpg');
+  background-image: url('../../../assets/app_background.jpg');
   background-size: cover;
 }
 </style>

@@ -162,10 +162,10 @@ ion-item {
     border: 1px solid #92949c2a;
     border-radius: 10px;
     margin-top: 16px;
-    ion-input {
+    :is(ion-input) {
         --padding-start: 10px;
     }
-    ion-button {
+    :is(ion-button) {
         margin: 0 0 0 10px;
         --padding-start: 10px;
         --padding-end: 10px;
@@ -173,7 +173,7 @@ ion-item {
 }
 .button{
     margin-top: 1.5rem;
-    ion-button{
+    :is(ion-button) {
         height: 50px;
     }
 }

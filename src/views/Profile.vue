@@ -190,7 +190,7 @@
   border: 3px solid white;
   z-index: 10;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-  img {
+  :is(img) {
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -199,7 +199,6 @@
 .name {
   display: flex;
   font-size: 1.5rem;
-  margin-left: 10px;
   flex-direction: column;
   align-items: center;
   .name_lbl {
@@ -208,12 +207,8 @@
 }
 ion-content {
   --background: none;
-  ion-item {
-    margin-top: 10px;
-    border-radius: 10px;
-  }
-  ion-row {
-    ion-col {
+  :is(ion-row) {
+    :is(ion-col) {
       border-radius: 10px;
       .data {
         margin: 0rem;
@@ -236,14 +231,18 @@ ion-content {
     padding: 10px;
     margin-top: 1rem;
     border-radius: 10px;
+    :is(ion-item) {
+      margin-top: 10px;
+      border-radius: 10px;
+    }
     .head_lbl {
       font-size: 18px;
     }
     .info {
-      ion-icon {
+      :is(ion-icon) {
         font-size: 20px;
       }
-      ion-label {
+      :is(ion-label) {
         font-size: 14px;
       }
     }
@@ -252,14 +251,18 @@ ion-content {
     padding: 10px;
     margin-top: 1rem;
     border-radius: 10px;
+    :is(ion-item) {
+      margin-top: 10px;
+      border-radius: 10px;
+    }
     .head_lbl {
       font-size: 18px;
     }
-    ion-item {
-      ion-icon {
+    :is(ion-item) {
+      :is(ion-icon) {
         font-size: 20px;
       }
-      ion-label {
+      :is(ion-label) {
         font-size: 14px;
       }
     }
@@ -268,16 +271,23 @@ ion-content {
     padding: 10px;
     margin-top: 1rem;
     margin-bottom: 150px;
+    :is(ion-item) {
+      margin-top: 10px;
+      border-radius: 10px;
+    }
     .head_lbl {
       font-size: 18px;
     }
-    ion-item {
-      ion-icon {
+    :is(ion-item) {
+      :is(ion-icon) {
         font-size: 20px;
       }
-     ion-label {
+     :is(ion-label) {
         font-size: 14px;
       }
+    }
+    :is(ion-select) {
+      font-size: 14px;
     }
   }
 }

@@ -147,10 +147,10 @@ ion-col {
 ion-item {
   padding: 0;
   margin: 0;
-  ion-label {
+  :is(ion-label) {
     font-size: 0.7rem;
   }
-  ion-icon {
+  :is(ion-icon) {
     width: 15px;
     height: 15px;
   }

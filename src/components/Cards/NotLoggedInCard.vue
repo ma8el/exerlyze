@@ -25,7 +25,7 @@ const props = defineProps({
 
 <style scoped>
   ion-col {
-    p {
+    :is(p) {
       margin: 0;
     }
   }
@@ -37,11 +37,11 @@ const props = defineProps({
     background-color: var(--ion-color-primary);
     border-radius: 10px;
     padding: 5px;
-    ion-icon {
+    :is(ion-icon) {
       color: white;
       margin-right: 10px;
     }
-    p {
+    :is(p) {
       color: white;
       font-weight: bold;
       margin-top: 3px;

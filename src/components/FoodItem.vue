@@ -66,16 +66,16 @@
 ion-item {
   border-radius: 10px;
   margin-top: 10px;
-  p {
+  :is(p) {
     color: white;
   };
-  ion-note {
+  :is(ion-note) {
     color: white;
   }
 }
 ion-item-sliding {
   border-radius: 10px;
-  ion-item-options {
+  :is(ion-item-options) {
     margin-top: 10px;
   }
 }

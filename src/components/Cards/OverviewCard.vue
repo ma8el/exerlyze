@@ -144,7 +144,7 @@ ion-item{
     --background: none;
 }
 .volume-kpi-row {
-  p {
+  :is(p) {
     margin: 0 0 0 16px;
     padding: 0;
   }
@@ -155,10 +155,10 @@ ion-item{
 .icon-description {
   display: flex;
   align-items: center;
-  ion-icon {
+  :is(ion-icon) {
     margin-right: 0.3rem;
   }
-  p {
+  :is(p) {
     margin: 0;
     padding: 0;
     font-size: 0.8rem;

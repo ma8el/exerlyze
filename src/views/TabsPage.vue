@@ -163,7 +163,7 @@ ion-tabs{
 		ion-tab-button.md {
 			--background: var(--ion-color-light);
       font-size: 0.5rem;
-      ion-icon {
+      :is(ion-icon) {
         font-size: 2rem;
       }
 		}

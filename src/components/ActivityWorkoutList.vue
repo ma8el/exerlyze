@@ -57,23 +57,23 @@
 <style scoped>
 .workout-list {
   background: none;
-  ion-list-header {
+  :is(ion-list-header) {
     margin-bottom: 15px;
   }
-  ion-item {
+  :is(ion-item) {
     border-radius: 10px;
-    ion-icon {
+    :is(ion-icon) {
       margin-right: 5px;
       width: 15px;
       height: 15px;
     }
-    ion-input {
+    :is(ion-input) {
       --background: var(--ion-color-step-100);
       border-radius: 10px;
       margin: 0 2px 0 2px;
       padding: 0;
     }
-    ion-item {
+    :is(ion-item) {
       margin: 5px 0 5px 0;
       padding: 0;
     }

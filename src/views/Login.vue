@@ -176,7 +176,7 @@ ion-content {
   display: flex;
   align-items: center;
   margin-top: 1rem;
-  hr {
+  :is(hr) {
       width: 100%;
       height: 1px;
       border-bottom: 1px solid lightgrey;
@@ -192,14 +192,14 @@ ion-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  ion-buttons {
+  :is(ion-buttons) {
       margin: 20px;
-      ion-button {
+      :is(ion-button) {
           height: 50px;
           width: 50px;
           border: 1px solid lightgray;
           border-radius: 10px;
-          img {
+          :is(img) {
               height: 22px;
               width: 22px;
               margin: 10px;
@@ -214,7 +214,7 @@ ion-content {
   .end_lbl {
       font-size: 16px;
       margin-top: 10px;
-      span {
+      :is(span) {
           color: #c58bf2;
       }
   }

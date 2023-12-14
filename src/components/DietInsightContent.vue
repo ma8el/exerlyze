@@ -196,7 +196,7 @@
 ion-row {
     margin: 0;
     padding: 0;
-  ion-col {
+  :is(ion-col) {
     margin: 0;
     padding: 0;
   }

@@ -49,17 +49,17 @@ ion-content{
             margin-bottom: 16px;
         }
     }
-    ion-item {
+    :is(ion-item) {
         border: 1px solid #92949c2a;
         border-radius: 10px;
         margin-top: 16px;
-        ion-input {
+        :is(ion-input) {
             --padding-start: 10px;
         }
     }
     .button{
         margin-top: 1.5rem;
-        ion-button{
+        :is(ion-button){
             height: 50px;
         }
     }

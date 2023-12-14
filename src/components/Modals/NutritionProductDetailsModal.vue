@@ -170,6 +170,10 @@
     margin: 10px 0 0 0;
   }
 
+  .nutrition-list-item.md {
+    border-radius: 10px;
+    margin: 0;
+  }
   .nutrition-list-title-end {
     color: var(--ion-color-primary);
   }
@@ -183,7 +187,7 @@
     align-items: center;
     margin: 5px 0 0 0;
     padding: 0;
-    img {
+    :is(img) {
       width: 70%;
       height: 70%;
     }
@@ -194,10 +198,10 @@
     border-radius: 10px;
     margin: 0;
     padding: 0;
-    ion-label {
+    :is(ion-label) {
       margin: 0;
       padding: 0;
-      p {
+      :is(p) {
         margin: 0;
         padding: 0;
         color: white;
