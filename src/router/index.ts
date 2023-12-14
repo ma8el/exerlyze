@@ -3,6 +3,8 @@ import { RouteRecordRaw } from 'vue-router';
 import TabsPage from '../views/TabsPage.vue'
 import Login from '../views/Login.vue'
 import CompleteProfile from '@/views/CompleteProfile.vue';
+import SetWorkoutGoals from '@/views/SetWorkoutGoals.vue';
+import SetDietGoals from '@/views/SetDietGoals.vue';
 import ProfileSettings from '@/views/ProfileSettings.vue';
 import ActivityHistory from '@/views/ActivityHistory.vue';
 import Insights from '@/views/Insights.vue';
@@ -45,13 +47,20 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/complete-profile',
-    component: CompleteProfile
+    component: CompleteProfile,
+  },
+  {
+    path: '/complete-workout-profile',
+    component: SetWorkoutGoals,
+  },
+  {
+    path: '/complete-diet-profile',
+    component: SetDietGoals,
   },
   {
     path: '/profile-settings',
     component: ProfileSettings
   },
- 
   {
     path: '/activity-history',
     component: ActivityHistory
