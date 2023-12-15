@@ -157,14 +157,26 @@ export const useWorkoutStore = defineStore('workout', () => {
     }
 
     async function fetchWorkouts() {
+        const locale = useUserSettingsStore().getLocale()
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
-            const { data, error } = await supabase.from('workouts').select('*, exercises:workout_exercises(*)')
+            const { data, error } = await supabase.from('workouts').select(`*, exercises:workout_exercises(*, name:exercises(name_${locale}))`).returns<Workout[]>()
             if (error) {
                 console.error(error)
             } else {
+                const cleanedData = data.map((w: Workout) => {
+                    return {
+                        ...w,
+                        exercises: w.exercises.map((e: any) => {
+                            return {
+                                ...e,
+                                name: e.name[`name_${locale}`]
+                            }
+                        })
+                    }
+                })
                 const mergedWorkouts = workouts.value
-                for(const workout of data) {
+                for(const workout of cleanedData) {
                     const existingWorkoutIndex = mergedWorkouts.findIndex((w) => w.id === workout.id)
                     if (existingWorkoutIndex !== -1) {
                         const existingWorkout = mergedWorkouts[existingWorkoutIndex]
