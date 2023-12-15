@@ -6,17 +6,14 @@ import { computed, ref } from "vue";
 import { v4 as uuidv4 } from 'uuid';
 
 export const useWeightStore = defineStore('weight', () => {
-    const currentWeight = ref(useStorage('currentWeight', {} as Weight))
     const weights = ref(useStorage('weights', [] as Weight[]))
-
     const getWeights = computed(() => weights.value)
-
-    const getCurrentWeight = computed(() => {
+    const currentWeight = computed(() => {
+        console.log(weights.value)
         return weights.value.reduce((prev, current) => {
             return prev.created_at > current.created_at ? prev : current
         }, {} as Weight) // TODO: Provide an initial value for reduce
     })
-
     const getWeightsOfWeek = computed(() => {
         const today = new Date()
         const weekAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7)
@@ -51,6 +48,7 @@ export const useWeightStore = defineStore('weight', () => {
     async function syncWeights() {
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
+            await fetchWeights()
             for (const weight of weights.value) {
                 const { error } = await supabase.from('weights').upsert(weight)
                 // TODO: Handle the error if needed
@@ -75,7 +73,6 @@ export const useWeightStore = defineStore('weight', () => {
         currentWeight,
         weights,
         getWeights,
-        getCurrentWeight,
         getWeightsOfWeek,
         fetchWeights,
         syncWeights,

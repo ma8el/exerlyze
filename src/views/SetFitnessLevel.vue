@@ -21,7 +21,7 @@ const router = useRouter();
 
 const userFitnessLevelStore = useUserFitnessLevelStore();
 const weightStore = useWeightStore();
-const userWeight = Number(weightStore.getCurrentWeight.weight);
+const userWeight = Number(weightStore.currentWeight.weight);
 
 const deadlift = ref<number>(0)
 const squat = ref<number>(0)

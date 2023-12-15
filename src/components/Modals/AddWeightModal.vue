@@ -46,7 +46,7 @@
   });
 
   onMounted(() => {
-    weight.value = weightStore.getCurrentWeight.weight;
+    weight.value = weightStore.currentWeight.weight;
   });
 </script>
 

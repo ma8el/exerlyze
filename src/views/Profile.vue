@@ -38,7 +38,7 @@
   const userName = ref(userStore.getUserName());
   const userAge = ref(userStore.getAge());
   const userHeight = ref(userStore.getHeight());
-  const userWeight = ref(userWeightStore.getCurrentWeight);
+  const userWeight = ref(userWeightStore.currentWeight);
 
   const selectedLang = ref(userSettingsStore.getLocale())
 
@@ -64,7 +64,7 @@
   };
 
   userWeightStore.$subscribe(() => {
-    userWeight.value = userWeightStore.getCurrentWeight;
+    userWeight.value = userWeightStore.currentWeight;
   });
 
   userStore.$subscribe(() => {

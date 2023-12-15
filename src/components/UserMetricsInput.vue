@@ -80,7 +80,7 @@ onMounted(() => {
     dateOfBirth.value = dateToIsoString(userStore.getDateOfBirth())
   }
   if (weightStore.weights.length > 0) {
-    weight.value = weightStore.getCurrentWeight.weight
+    weight.value = weightStore.currentWeight.weight
   }
   height.value = userStore.getHeight()
 });

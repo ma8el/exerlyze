@@ -58,7 +58,8 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
       const userHeight = userStore.getHeight()
       const userGender = userStore.getGender()
       const userAge = userStore.getAge()
-      const userWeight = weightStore.getCurrentWeight.weight
+      const userWeight = weightStore.currentWeight.weight
+      console.log(userWeight)
       const activityModifier = 1.2
       if (userHeight === undefined || userGender === undefined || userAge === undefined || userWeight === undefined) {
         return 2000
