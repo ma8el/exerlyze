@@ -54,6 +54,7 @@ export const syncWithBackend = async () => {
   await workoutSessionStore.syncWorkoutSessions();
   await plannedWorkoutStore.syncPlannedWorkouts();
   await foodDiaryStore.syncFoodDiary();
+  await foodDiaryStore.syncDailyNutritionGoals();
   await userFitnessLevelStore.syncUserFitnessLevel();
   await modal.dismiss();
 };

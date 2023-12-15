@@ -16,6 +16,11 @@ const props = defineProps({
     type: Number,
     required: false,
     default: 0,
+  },
+  maxValue: {
+    type: Number,
+    required: false,
+    default: 1000,
   }
 });
 
@@ -55,7 +60,7 @@ const validate = (ev: any) => {
 
   if (numberValue < props.minValue) {
     setInvalid();
-  } else if (numberValue > 1000) {
+  } else if (numberValue > props.maxValue) {
     setInvalid();
   } else {
     setValid();

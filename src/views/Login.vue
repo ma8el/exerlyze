@@ -17,10 +17,12 @@ import EmailIcon from '@/icons/email.svg';
 import Line from '@/components/Line.vue';
 import { useUserStore } from '@/store/bodyMetricsStore';
 import { useUserFitnessLevelStore } from '@/store/userSettingsStore';
+import { useFoodDiaryStore } from '@/store/foodDiary';
 import { syncWithBackend } from '@/composables/supabase';
 
 const userStore = useUserStore();
 const userFitnessLevelStore = useUserFitnessLevelStore();
+const foodDiaryStore = useFoodDiaryStore();
 
 const isDark = useDark();
 
@@ -61,13 +63,19 @@ const onLogin = async () => {
 
 const redirect = async () => {
   await syncWithBackend();
-  if (userStore.isComplete && userFitnessLevelStore.hasExistingFitnessLevel()) {
+  if (userStore.isComplete &&
+      userFitnessLevelStore.hasExistingFitnessLevel() &&
+      foodDiaryStore.dailyNutritionGoalComplete) {
     router.push('/tabs/home');
   } else {
     if(!userStore.isComplete) {
       router.push('/complete-profile');
     } else if (!userFitnessLevelStore.hasExistingFitnessLevel()) {
       router.push('/complete-fitness-level');
+    } else if (!foodDiaryStore.dailyNutritionGoalComplete) {
+      router.push('/complete-diet-profile');
+    } else {
+      router.push('/complete-profile');
     }
   }
 };

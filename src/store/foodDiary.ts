@@ -4,18 +4,93 @@ import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 import { FoodDiaryEntry } from "@/types/nutrition";
 import { ref, computed } from "vue";
+import { useUserStore, useWeightStore } from "@/store/bodyMetricsStore";
+import { NutritionGoal } from '@/types/nutrition.enums';
+
+interface DailyNutritionGoal {
+    id: string;
+    created_at: Date;
+    nutrition_goal: NutritionGoal;
+    daily_calories: number;
+    daily_carbs: number;
+    daily_protein: number;
+    daily_fat: number;
+}
 
 export const useFoodDiaryStore = defineStore('nutriment', () => {
     const foodDiaryEntries = ref(useStorage('foodDiaryEntries', [] as FoodDiaryEntry[]))
-    const dailyCalories = ref(useStorage('dailyCalories', 2500))
-    const dailyCarbs = ref(useStorage('daylyCarbs', 300))
-    const dailyProtein = ref(useStorage('dailyProtein', 100))
-    const dailyFat = ref(useStorage('dailyFat', 100))
-
+    const dailyNutritionGoals = ref(useStorage('dailyNutritionGoals', [] as DailyNutritionGoal[]))
+    const latestDailyNutritionGoal = computed(() => {
+        const defaultCalories = calculateBaseCalories()
+        const defaultMacros = calculateBaseMacros(defaultCalories)
+        return dailyNutritionGoals.value.reduce((prev, current) => {
+            return prev.created_at > current.created_at ? prev : current
+        }, {
+            id: getUniqueId(),
+            created_at: new Date("1900-01-01"),
+            nutrition_goal: NutritionGoal.StayFit,
+            daily_calories: defaultCalories,
+            daily_carbs: defaultMacros.carbs,
+            daily_protein: defaultMacros.protein,
+            daily_fat: defaultMacros.fat
+        } as DailyNutritionGoal)
+    })
+    const dailyCalories = computed(() => latestDailyNutritionGoal.value.daily_calories)
+    const dailyCarbs = computed(() => latestDailyNutritionGoal.value.daily_carbs)
+    const dailyProtein = computed(() => latestDailyNutritionGoal.value.daily_protein)
+    const dailyFat = computed(() => latestDailyNutritionGoal.value.daily_fat)
     const getFoodDiaryEntries = computed(() => foodDiaryEntries.value)
+
+    const dailyNutritionGoalComplete = computed(() => {
+        return new Date(latestDailyNutritionGoal.value.created_at).toDateString() !== new Date("1900-01-01").toDateString()
+    })
 
     function getUniqueId() {
         return uuidv4()
+    }
+
+    function calculateBaseCalories() {
+      const userStore = useUserStore() 
+      const weightStore = useWeightStore()
+      if (!userStore.isComplete) {
+        return 2000
+      }
+      const userHeight = userStore.getHeight()
+      const userGender = userStore.getGender()
+      const userAge = userStore.getAge()
+      const userWeight = weightStore.getCurrentWeight.weight
+      const activityModifier = 1.2
+      if (userHeight === undefined || userGender === undefined || userAge === undefined || userWeight === undefined) {
+        return 2000
+      }
+      if (userGender === 'male') {
+        return Math.round(activityModifier * (88.363 + (13.397 * userWeight) + (4.799 * userHeight) - (5.677 * userAge)))
+      } else {
+        return Math.round(activityModifier * (447.593 + (9.247 * userWeight) + (3.098 * userHeight) - (4.330 * userAge)))
+      }
+    }
+
+    function calculateCalories(carbs: number, protein: number, fat: number): number {
+        return carbs * 4 + protein * 4 + fat * 9
+    }
+
+    function calculateBaseMacros(calories: number) {
+        return {
+            carbs: Math.round(calories * 0.5 / 4),
+            protein: Math.round(calories * 0.3 / 4),
+            fat: Math.round(calories * 0.2 / 9)
+        }
+    }
+
+    async function addDailyNutritionGoal(dailyNutritionGoal: DailyNutritionGoal) {
+        dailyNutritionGoals.value.push(dailyNutritionGoal)
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+          const { error } = await supabase.from('daily_nutrition_goals').upsert(dailyNutritionGoal)
+          if (error) {
+              console.error(error)
+          }
+        }
     }
 
     async function addFoodDiaryEntry(foodDiaryEntry: FoodDiaryEntry) {
@@ -70,6 +145,30 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         })
     }
 
+    async function fetchDailyNutritionGoals() {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            const { data, error } = await supabase.from('daily_nutrition_goals').select('*').returns<DailyNutritionGoal[]>()
+            if (error) {
+                console.error(error)
+            } else {
+                const mergedDailyNutritionGoals = [...dailyNutritionGoals.value]
+                for (const dailyNutritionGoal of data) {
+                    const existingDailyNutritionGoalIndex = mergedDailyNutritionGoals.findIndex((w) => w.id === dailyNutritionGoal.id);
+                    if (existingDailyNutritionGoalIndex !== -1) {
+                        const existingDailyNutritionGoal = mergedDailyNutritionGoals[existingDailyNutritionGoalIndex];
+                        if (existingDailyNutritionGoal.created_at < dailyNutritionGoal.created_at) {
+                            mergedDailyNutritionGoals[existingDailyNutritionGoalIndex] = dailyNutritionGoal;
+                        }
+                    } else {
+                        mergedDailyNutritionGoals.push(dailyNutritionGoal);
+                    }
+                }
+                dailyNutritionGoals.value = mergedDailyNutritionGoals;
+            }
+        }
+    }
+
     async function fetchFoodDiaryEntries() {
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
@@ -95,6 +194,17 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         }
     }
 
+    async function syncDailyNutritionGoals() {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            await fetchDailyNutritionGoals()
+            for (const dailyNutritionGoal of dailyNutritionGoals.value) {
+                await supabase.from('daily_nutrition_goals').upsert(dailyNutritionGoal)
+                // Add error handling as needed
+            }
+        }
+    }
+
     async function syncFoodDiary() {
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
@@ -113,6 +223,12 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         dailyProtein,
         dailyFat,
         getFoodDiaryEntries,
+        latestDailyNutritionGoal,
+        dailyNutritionGoalComplete,
+        addDailyNutritionGoal,
+        calculateBaseCalories,
+        calculateBaseMacros,
+        calculateCalories,
         getUniqueId,
         addFoodDiaryEntry,
         deleteFoodDiaryEntry,
@@ -124,6 +240,7 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         getMissingProteinsOfToday,
         getMealEntriesOfDate,
         fetchFoodDiaryEntries,
+        syncDailyNutritionGoals,
         syncFoodDiary
     }
 })
