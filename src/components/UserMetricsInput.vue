@@ -12,7 +12,8 @@ import { peopleOutline,
          scaleOutline,
          swapVerticalOutline,
          chevronForward } from 'ionicons/icons';
-import { ref, onMounted } from 'vue';
+import NumericInput from './NumericInput.vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
 import { dateToIsoString } from '@/helpers/time';
@@ -21,6 +22,9 @@ const router = useRouter();
 const userStore = useUserStore();
 const weightStore = useWeightStore();
 
+const weightValid = ref(true);
+const heightValid = ref(true);
+
 const userNameInputRef = ref<HTMLElement | undefined>(undefined);
 
 const userName = ref<string | undefined>(undefined);
@@ -28,6 +32,10 @@ const gender = ref<string | undefined>(undefined);
 const dateOfBirth = ref<string | undefined>(undefined);
 const weight = ref<number | undefined>(undefined);
 const height = ref<number | undefined>(undefined);
+
+const disabled = computed(() => {
+  return !weightValid.value || !heightValid.value;
+});
 
 const props = defineProps({
     buttonLabel: {
@@ -94,8 +102,7 @@ onMounted(() => {
       v-model="userName"
       type="text"
       placeholder="Username"
-    >
-    </ion-input>
+    />
   </ion-item>
 
   <ion-item lines="none">
@@ -115,20 +122,19 @@ onMounted(() => {
       v-model="dateOfBirth"
       type="date"
       :placeholder="$t('dateOfBirth')"
-    >
-  </ion-input>
+    />
   </ion-item>
 
   <ion-item lines="none">
     <ion-icon :src="scaleOutline" color="medium" style="margin-right: 10px;"></ion-icon>
-    <ion-input 
-      v-model="weight"
-      type="number"
-      :placeholder="$t('yourWeight')"
-      :clear-on-edit="true"
-      input-mode="numeric"
-    >
-    </ion-input>
+    <NumericInput
+      :label="$t('yourWeight')"
+      :minValue="1"
+      :maxValue="500"
+      :inputValue="weight === undefined ? 75: weight"
+      @update:inputValue="weight = $event"
+      @update:valid="weightValid = $event"
+    />
     <ion-button expand="block" slot="end" shape="round" color="primary">
       {{ $t('weightUnitBig') }} 
     </ion-button>
@@ -136,21 +142,21 @@ onMounted(() => {
 
   <ion-item lines="none">
     <ion-icon :src="swapVerticalOutline" color="medium" style="margin-right: 10px;"></ion-icon>
-    <ion-input
-      v-model="height"
-      type="number"
-      :placeholder="$t('yourHeight')"
-      :clear-on-edit="true"
-      input-mode="numeric"
-    >
-    </ion-input>
+    <NumericInput
+      :label="$t('yourHeight')"
+      :minValue="1"
+      :maxValue="300"
+      :inputValue="height === undefined ? 175: height"
+      @update:inputValue="height = $event"
+      @update:valid="heightValid = $event"
+    />
     <ion-button expand="block" slot="end" shape="round" color="primary">
       {{ $t('lengthUnit') }}
     </ion-button>
   </ion-item>
 
   <div class="button">
-    <ion-button expand="block" @click="save()">
+    <ion-button expand="block" @click="save()" :disabled="disabled">
       {{  buttonLabel }}
       <ion-icon :src="chevronForward" style="margin-left: 10px;"></ion-icon>
     </ion-button>

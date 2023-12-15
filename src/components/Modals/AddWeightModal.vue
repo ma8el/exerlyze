@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { IonInput,
-           IonModal,
+  import { IonModal,
            IonDatetime,
            IonDatetimeButton,
            IonCol,
@@ -8,11 +7,13 @@
            IonIcon,
            IonList,
            IonItem,
+           IonButton,
            modalController } from '@ionic/vue';
-  import { bookmarkOutline } from 'ionicons/icons';
+  import { bookmarkOutline, scaleOutline } from 'ionicons/icons';
   import { useWeightStore } from '@/store/bodyMetricsStore';
   import { useUserSettingsStore } from '@/store/userSettingsStore';
   import BaseFullPageModal from './BaseFullPageModal.vue';
+  import NumericInput from '../NumericInput.vue';
   import { ref, onMounted, watch } from 'vue';
 
   const weightStore = useWeightStore();
@@ -21,6 +22,7 @@
   const inputDate = ref<string>(new Date().toISOString());
 
   const weight = ref<number>();
+  const weightValid = ref<boolean>(true);
 
   const closeModal = () => {
       return modalController.dismiss(null, 'close');
@@ -51,7 +53,9 @@
 </script>
 
 <template>
-  <BaseFullPageModal>
+  <BaseFullPageModal
+    :disable-button="!weightValid"
+  >
     <template #saveButton>
       <ion-icon :icon="bookmarkOutline" @click="saveWeight()"/>
     </template>
@@ -61,20 +65,21 @@
     <template #modalContent>
       <ion-list>
         <ion-item lines="none">
-            <ion-col size="7">
-              <ion-label>{{ $t('weight') }}</ion-label>
-            </ion-col>
-          <ion-col size="5">
-          <ion-input
+          <ion-icon :src="scaleOutline" color="medium" style="margin-right: 10px;"></ion-icon>
+          <NumericInput
             class="ion-padding"
-            :placeholder="$t('enterWeight')"
-            v-model="weight"
-            :clear-on-edit="true"
-            type="number"
-            input-mode="numeric"
+            :label="$t('enterWeight')"
+            :placeholder="$t('weight')"
+            :minValue="0"
+            :maxValue="500"
+            :inputValue="weight === undefined ? 0 : weight"
+            @update:inputValue="weight = $event"
+            @update:valid="weightValid = $event"
           />
-          <span class="unit">{{ $t('weightUnitBig') }}</span>
-          </ion-col>
+          <ion-button expand="block" slot="end" shape="round" color="primary">
+            {{ $t('weightUnitBig') }} 
+          </ion-button>
+ 
         </ion-item>
         <ion-item lines="none">
           <ion-col size="2">
@@ -99,21 +104,20 @@
 </template>
 
 <style scoped>
-.unit {
-  position: absolute;
-  right: 50px;
-  top: 50%;
-  transform: translateY(-50%);
-}
 ion-list {
   margin-top: 1rem;
   --ion-item-background: transparent;
 }
 ion-item {
   --padding-start: 2rem;
-}
-ion-chip {
-  --background: var(--ion-color-primary);
+  :is(ion-input) {
+      --padding-start: 10px;
+  }
+  :is(ion-button) {
+      margin: 0 0 0 16px;
+      --padding-start: 10px;
+      --padding-end: 10px;
+  }
 }
 .header-title {
   font-size: 1.1rem;

@@ -17,6 +17,10 @@
     saveButton: {
       type: Boolean,
       default: true
+    },
+    disableButton: {
+      type: Boolean,
+      default: false
     }
  })
 
@@ -36,7 +40,7 @@
             </ion-fab-button>
           </ion-fab>
           <ion-fab v-if="saveButton" vertical="top" horizontal="end">
-            <ion-fab-button :color="backColor" size="small">
+            <ion-fab-button :color="backColor" size="small" :disabled="disableButton">
               <slot name="saveButton"></slot>
             </ion-fab-button>
           </ion-fab>

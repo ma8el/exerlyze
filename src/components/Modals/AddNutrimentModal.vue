@@ -4,6 +4,7 @@
     import { FilteredNutritionApiProduct } from '@/types/nutrition';
     import { PropType, ref, computed } from 'vue';
     import NutrimentRow from '../NutrimentRow.vue';
+    import NumericInput from '../NumericInput.vue';
     import { calcNuritionPer100g } from '@/helpers/nutrition';
     import { useFoodDiaryStore } from '@/store/foodDiary';
 
@@ -14,8 +15,10 @@
         }
     })
 
-    const amount = ref(0)
+    const amount = ref<number>(0)
     const foodDiaryStore = useFoodDiaryStore()
+
+    const amountValid = ref<boolean>(true)
 
     const addNutriment = async () => {
         foodDiaryStore.addFoodDiaryEntry({
@@ -76,23 +79,22 @@
 <template>
   <ion-content>
     <ion-card>
-      <ion-input
-        type="number"
-        :placeholder="$t('nutrition.amount')"
-        :clear-on-edit="true"
-        v-model="amount"
+     <NumericInput
         :label="$t('nutrition.amount') + ' (' + $t('weightUnitSmall') + '):'"
-        fill="solid"
-        input-mode="numeric"
-      >
-      </ion-input>
+        :placeholder="$t('nutrition.amount')"
+        :inputValue="amount"
+        :minValue="0"
+        :maxValue="1000"
+        @update:input-value="amount = $event"
+        @update:valid="amountValid = $event"
+      />
       <NutrimentRow
         :calories="calories"
         :carbs="carbs"
         :protein="protein"
         :fat="fat"
       />
-      <ion-button @click="addNutriment">
+      <ion-button @click="addNutriment" :disabled="!amountValid">
         <ion-icon :icon="addOutline"></ion-icon>
         {{ $t('add') }}
       </ion-button>
