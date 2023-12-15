@@ -218,7 +218,7 @@ export const messages = {
             lunch: "Mittagessen",
             dinner: "Abendessen",
             calories: "Kalorien",
-            carbs: "Karbs",
+            carbs: "Carbs",
             carbohydrates: "Kohlenhydrate",
             protein: "Protein",
             fat: "Fett",

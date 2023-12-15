@@ -68,7 +68,7 @@
             <CarbsIcon color="white" class="iconComponent"/>
           </div>
         </ion-thumbnail>
-        <ion-label>{{ $t('nutrition.carbs') }}</ion-label>
+        <ion-label>{{ $t('nutrition.carbohydrates') }}</ion-label>
         <ion-note slot="end">{{ intakeCarbs }} g / {{ dailyCarbs }} g</ion-note>
       </ion-item>
       <ion-item>
