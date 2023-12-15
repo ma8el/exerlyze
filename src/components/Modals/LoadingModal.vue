@@ -1,5 +1,16 @@
 <script setup lang="ts">
 import { IonContent, IonGrid, IonRow, IonCol, IonSpinner } from '@ionic/vue';
+const props = defineProps({
+  showLoadingMessage: {
+    type: Boolean,
+    required: true,
+  },
+  loadingMessage: {
+    type: String,
+    required: false,
+    default: 'Loading...',
+  },
+});
 </script>
 
 <template>
@@ -13,15 +24,15 @@ import { IonContent, IonGrid, IonRow, IonCol, IonSpinner } from '@ionic/vue';
         </ion-col>
       </ion-row>
       <ion-row class="ion-justify-content-center ion-align-items-center">
-       <ion-col size="6">
+       <ion-col size="6" v-if="showLoadingMessage">
           <div class="header-title">
-            <h2>Syncing...</h2>
+            <h2>{{ $t(loadingMessage) }}</h2>
           </div>
         </ion-col>
 
       </ion-row>
       <ion-row class="ion-justify-content-center ion-align-items-center">
-        <ion-col size="2">
+        <ion-col size="1">
           <ion-spinner name="crescent" />
         </ion-col>
       </ion-row>

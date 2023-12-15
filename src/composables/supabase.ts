@@ -31,6 +31,10 @@ export const getBucketUrlFromTable = async (table: string, id: number) => {
 export const syncWithBackend = async () => {
   const modal = await modalController.create({
     component: LoadingModal,
+    componentProps: {
+      showLoadingMessage: true,
+      loadingMessage: 'sync',
+    },
   });
   await modal.present();
 

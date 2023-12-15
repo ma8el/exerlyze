@@ -1,6 +1,7 @@
 export const messages = {
     en: {
         language: "Language",
+        sync: "Syncing",
         home: { 
             title: "Home",
             hello: "Hello",
@@ -162,6 +163,7 @@ export const messages = {
     },
     de: {
         language: "Sprache",
+        sync: "Synchronisiere",
         home: {
             title: "Startseite",
             hello: "Hallo",
@@ -323,6 +325,7 @@ export const messages = {
     },
     fr: {
         language: "Langue",
+        sync: "Synchronisation",
         home: {
             title: "Accueil",
             hello: "Bonjour",
