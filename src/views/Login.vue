@@ -106,7 +106,7 @@ onMounted(async () => {
                 {{ $t('sendMagicLink') }}
               </ion-button>
 
-              <Line label="or" />
+              <Line :label="$t('or')" />
 
               <div class="social-button">
                 <ion-buttons slot="start">

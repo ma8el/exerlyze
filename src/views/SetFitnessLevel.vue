@@ -93,7 +93,7 @@ const next = () => {
       </ion-select>
     </ion-item>
     <Line
-      label="or"
+      :label="$t('or')"
     />
     <div class="strength-values">
       <ion-item>
