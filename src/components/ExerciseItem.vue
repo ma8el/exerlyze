@@ -13,15 +13,24 @@
   import SetIcon from '@/icons/set.svg';
   import RepsIcon from '@/icons/reps.svg';
   import WeightIcon from '@/icons/weight.svg';
+  import NumericInput from './NumericInput.vue';
   import { Exercise } from '@/types'
-  import { ref, watch, onMounted } from 'vue';
+  import { ref, watch, onMounted, computed } from 'vue';
   import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
 
   const props = defineProps<Exercise>()
-  const emit = defineEmits(['update:sets', 'update:reps', 'update:weight'])
+  const emit = defineEmits(['update:sets', 'update:reps', 'update:weight', 'update:valid'])
   const bucketUrl = ref<string>()
   const url = ref<string>()
   const loading = ref<boolean>(true)
+
+  const setsValid = ref<boolean>(true)
+  const repsValid = ref<boolean>(true)
+  const weightValid = ref<boolean>(true)
+
+  const valid = computed(() => {
+    return setsValid.value && repsValid.value && weightValid.value
+  })
 
   onMounted(async () => {
     loading.value = true
@@ -45,6 +54,10 @@
   watch(() => url.value, () => {
     loading.value = false
   })
+
+  watch(valid, (value) => {
+    emit('update:valid', value)
+  })
 </script>
 
 <template>
@@ -63,39 +76,42 @@
           <h3>{{ name }}</h3>
           <ion-row>
             <ion-col size="6">
-              <ion-item>
+              <ion-item lines="none">
                 <ion-col size="3">
-                 <ion-icon :icon="SetIcon"></ion-icon>
+                  <ion-icon :icon="SetIcon"></ion-icon>
                 </ion-col>
-                <ion-col size="6">
-                  <ion-input
-                    :value="props.sets"
-                    @input="emit('update:sets', $event.target.value)"
-                    :clear-on-edit="true"
-                    type="number"
-                    input-mode="numeric"
-                  >
-                </ion-input>
-                </ion-col>
-                <ion-col size="3">
-                 <ion-label>{{ $t('workouts.set') }}</ion-label>
+                <ion-col size="9">
+                  <NumericInput
+                    :label="$t('workouts.set')"
+                    :placeholder="$t('workouts.set')"
+                    :minValue="1"
+                    :maxValue="20"
+                    :inputValue="props.sets"
+                    error-text="Invalid"
+                    :clear-input="false"
+                    @update:inputValue="emit('update:sets', $event)"
+                    @update:valid="setsValid = $event"
+                  />
                 </ion-col>
               </ion-item>
             </ion-col>
             <ion-col size="6">
-              <ion-item>
+              <ion-item lines="none">
                 <ion-col size="3">
                   <ion-icon :icon="RepsIcon"></ion-icon>
                 </ion-col>
                 <ion-col size="5">
-                  <ion-input
-                    :value="props.reps"
-                    @input="emit('update:reps', $event.target.value)"
-                    :clear-on-edit="true"
-                    type="number"
-                    input-mode="numeric"
-                  >
-                  </ion-input>
+                 <NumericInput
+                    :label="$t('workouts.reps')"
+                    :placeholder="$t('workouts.reps')"
+                    :minValue="1"
+                    :maxValue="20"
+                    :inputValue="props.reps"
+                    error-text="Invalid"
+                    :clear-input="false"
+                    @update:inputValue="emit('update:reps', $event)"
+                    @update:valid="repsValid = $event"
+                  />
                 </ion-col>
                 <ion-col size="4">
                   <ion-label>{{ $t('workouts.reps') }}</ion-label>
@@ -105,16 +121,19 @@
           </ion-row>
           <ion-row>
             <ion-col>
-              <ion-item>
+              <ion-item lines="none">
                 <ion-icon slot="start" :icon="WeightIcon"></ion-icon>
-                <ion-input
-                  :value="props.weight"
-                  @input="emit('update:weight', $event.target.value)"
-                  :clear-on-edit="true"
-                  type="number"
-                  input-mode="numeric"
-                >
-                </ion-input>
+                <NumericInput
+                  :label="$t('weight')"
+                  :placeholder="$t('weight')"
+                  :minValue="1"
+                  :maxValue="500"
+                  :inputValue="props.weight"
+                  error-text="Invalid"
+                  :clear-input="false"
+                  @update:inputValue="emit('update:weight', $event)"
+                  @update:valid="weightValid = $event"
+                />
                 <ion-label slot="end">{{ $t('weightUnitBig') }}</ion-label>
               </ion-item>
             </ion-col>
@@ -153,6 +172,7 @@ ion-item {
   :is(ion-icon) {
     width: 15px;
     height: 15px;
+    margin-top: 20px;
   }
 }
 

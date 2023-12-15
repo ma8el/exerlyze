@@ -5,7 +5,7 @@
            IonButton,
            IonAlert,
            modalController } from '@ionic/vue';
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, computed } from 'vue'
   import { useWorkoutStore } from '../../store/workoutStore';
   import AddExerciseButton from '../Buttons/AddExerciseButton.vue'
   import ExerciseItem from '../ExerciseItem.vue';
@@ -30,6 +30,14 @@
 
   const isOpen = ref<boolean>(false)
   const alertButtons = ['OK'];
+
+  const exercisesSelected = computed(() => {
+    return exercises.value.length > 0
+  })
+
+  const isValid = computed(() => {
+    return workoutName.value.length > 0 && exercisesSelected.value && exercises.value.every((exercise) => exercise.valid)
+  })
 
   const save = async () => {
     await workoutStore.addWorkout({
@@ -108,7 +116,9 @@
 </script>
 
  <template>
-  <BaseFullPageModal>
+  <BaseFullPageModal
+    :disable-button="!isValid"
+  >
     <template #saveButton>
       <ion-icon v-if="!workoutId" :icon="bookmarkOutline" @click="save"/>
       <ion-icon v-else :icon="UpdateIcon" @click="update"/>
@@ -133,6 +143,7 @@
         :exercise_id="exercise.exercise_id"
         :name="exercise.name"
         class="exercise-item ion-margin"
+        @update:valid="exercises[index].valid = $event"
        />
       <AddExerciseButton class="ion-margin" @save-exercises="addExercise"/>
       <ion-button

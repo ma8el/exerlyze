@@ -21,7 +21,17 @@ const props = defineProps({
     type: Number,
     required: false,
     default: 1000,
-  }
+  },
+  errorText: {
+    type: String,
+    required: false,
+    default: 'Invalid number',
+  },
+  clearInput: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
 });
 
 const emit = defineEmits(['update:inputValue', 'update:valid']);
@@ -91,12 +101,12 @@ watch (valid, (newValue) => {
     :class="validityClass"
     label-placement="stacked"
     inputmode="numeric"
-    error-text="Invalid number"
+    :error-text="errorText"
     @ionInput="onInput($event)"
     @ionChange="onInput($event)"
     @ionBlur="markTouched()"
     :value="inputValue"
     :clear-on-edit="true"
-    :clear-input="true"
+    :clear-input="clearInput"
   />
 </template>

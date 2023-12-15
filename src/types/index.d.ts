@@ -20,6 +20,7 @@ export interface Exercise {
     sets: number,
     reps: number,
     weight: number,
+    valid?: boolean,
 };
 
 export interface ExerciseSelection {
