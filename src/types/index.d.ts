@@ -1,3 +1,15 @@
+import { FitnessLevel } from "@/types/workout.enums";
+export interface UserFitnessLevel {
+    id: string;
+    created_at: Date;
+    fitness_level: FitnessLevel;
+    deadlift_max: number;
+    squat_max: number;
+    bench_max: number;
+    overhead_press_max: number | undefined;
+    other: Object | undefined;
+}
+
 export interface Exercise {
     id: string,
     created_at: Date,

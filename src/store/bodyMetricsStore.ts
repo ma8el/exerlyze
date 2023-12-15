@@ -152,7 +152,8 @@ export const useUserStore = defineStore('userStore', () => {
         if (session.data.session !== null) {
           const { data, error } = await supabase.from('profiles').select().single()
           if (error) {
-            throw error
+            console.log(error)
+            return
           }
           userName.value = data.username
           gender.value = data.gender
@@ -163,6 +164,7 @@ export const useUserStore = defineStore('userStore', () => {
     const syncUser = async () => {
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
+            await fetchUser()
             const { error } = await supabase.from('profiles')
             .upsert({
                 username: getUserName(),

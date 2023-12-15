@@ -1,7 +1,8 @@
+import { supabase } from '@/supabase';
 import { defineStore } from 'pinia';
 import { useStorage } from '@vueuse/core';
 import { ref } from 'vue';
-import { FitnessLevel } from '@/types/workout.enums';
+import { UserFitnessLevel } from '@/types';
 
 export const useUserSettingsStore = defineStore('userSettings', () => {
     const locale = useStorage('selectedLocale', ref<string | undefined>())
@@ -25,43 +26,80 @@ export const useUserSettingsStore = defineStore('userSettings', () => {
 })
 
 export const useUserFitnessLevelStore = defineStore('userFitnessLevel', () => {
-    const fitnessLevel = useStorage('fitnessLevel', ref<FitnessLevel>(FitnessLevel.Beginner))
-    const deadliftMax = useStorage('deadliftMax', ref<number>(0))
-    const squatMax = useStorage('squatMax', ref<number>(0))
-    const benchMax = useStorage('benchMax', ref<number>(0))
-    const getFitnessLevel = (): string => {
-        return fitnessLevel.value
+    const userFitnessLevel = useStorage('userFitnessLevel', ref<UserFitnessLevel[]>([]))
+    const setUserFitnessLevel = (newUserFitnessLevel: UserFitnessLevel) => {
+        userFitnessLevel.value.push(newUserFitnessLevel)
+        pushUserFitnessLevels([newUserFitnessLevel])
     }
-    const setFitnessLevel = (newFitnessLevel: FitnessLevel) => {
-        fitnessLevel.value = newFitnessLevel
+    const hasExistingFitnessLevel = (): boolean => {
+        return userFitnessLevel.value.length > 0
     }
-    const getDeadliftMax = (): number => {
-        return deadliftMax.value
+    const getUserFitnessLevel = (): UserFitnessLevel[] => {
+        return userFitnessLevel.value
     }
-    const setDeadliftMax = (newDeadliftMax: number) => {
-        deadliftMax.value = newDeadliftMax
+    const getLatestFitnessLevel = (): UserFitnessLevel | undefined => {
+        if (userFitnessLevel.value.length > 0) {
+            return userFitnessLevel.value[userFitnessLevel.value.length - 1]
+        }
+        return undefined
     }
-    const getSquatMax = (): number => {
-        return squatMax.value
+    const fetchUserFitnessLevel = async () => {
+        const session = await supabase.auth.getSession()
+        if (session.data.session === null) {
+            return
+        }
+        const { data, error } = await supabase
+            .from('user_fitness_level')
+            .select('*')
+            .returns<UserFitnessLevel[]>()
+        if (error) {
+            console.error(error)
+        } else {
+
+            const mergedData: UserFitnessLevel[] = [...getUserFitnessLevel()];
+            for (const fitnessLevel of data) {
+                const existingIndex = mergedData.findIndex((item) => item.id === fitnessLevel.id);
+
+                if (existingIndex !== -1) {
+                    const existingItem = mergedData[existingIndex];
+
+                    if (fitnessLevel.created_at > existingItem.created_at) {
+                        mergedData[existingIndex] = fitnessLevel;
+                    }
+                } else {
+                    mergedData.push(fitnessLevel);
+                }
+            }
+            userFitnessLevel.value = mergedData;
+        }
+    };
+    const pushUserFitnessLevels = async (fitnessLevels: UserFitnessLevel[]) => {
+        const session = await supabase.auth.getSession()
+        if (session.data.session === null) {
+            return
+        }
+        const { data, error } = await supabase
+            .from('user_fitness_level')
+            .upsert(fitnessLevels)
+        if (error) {
+            console.error(error)
+        }
     }
-    const setSquatMax = (newSquatMax: number) => {
-        squatMax.value = newSquatMax
-    }
-    const getBenchMax = (): number => {
-        return benchMax.value
-    }
-    const setBenchMax = (newBenchMax: number) => {
-        benchMax.value = newBenchMax
+
+    const syncUserFitnessLevel = async () => {
+        const session = await supabase.auth.getSession()
+        if (session.data.session === null) {
+            return
+        }
+        await fetchUserFitnessLevel()
+        await pushUserFitnessLevels(userFitnessLevel.value)
     }
     return {
-        fitnessLevel,
-        getFitnessLevel,
-        setFitnessLevel,
-        getDeadliftMax,
-        setDeadliftMax,
-        getSquatMax,
-        setSquatMax,
-        getBenchMax,
-        setBenchMax,
+        getUserFitnessLevel,
+        hasExistingFitnessLevel,
+        setUserFitnessLevel,
+        getLatestFitnessLevel,
+        fetchUserFitnessLevel,
+        syncUserFitnessLevel
     }
 })

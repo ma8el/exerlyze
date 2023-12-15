@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { v4 as uuidv4 } from 'uuid';
 import { IonButton,
          IonIcon,
          IonSelect,
@@ -11,13 +12,16 @@ import WelcomeSettingsLayout from '@/layouts/WelcomeSettingsLayout.vue';
 import NumericInput from '@/components/NumericInput.vue';
 import { ref } from 'vue';
 import Line from '@/components/Line.vue';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useUserFitnessLevelStore } from '@/store/userSettingsStore';
+import { useWeightStore } from '@/store/bodyMetricsStore';
 import { FitnessLevel } from '@/types/workout.enums';
 
 const router = useRouter();
 
 const userFitnessLevelStore = useUserFitnessLevelStore();
+const weightStore = useWeightStore();
+const userWeight = Number(weightStore.getCurrentWeight.weight);
 
 const deadlift = ref<number>(0)
 const squat = ref<number>(0)
@@ -26,24 +30,42 @@ const benchPress = ref<number>(0)
 const selectedFitnessLevel = computed<FitnessLevel>({
   get: () => {
     const total = Number(deadlift.value) + Number(squat.value) + Number(benchPress.value)
-    if (total < 100) {
+    if (total < 3.5 * userWeight) {
       return FitnessLevel.Beginner
-    } else if (total >= 100 && total < 200) {
+    } else if (total >= 3.5 * userWeight && total < 4.75 * userWeight) {
       return FitnessLevel.Novice
-    } else if (total >= 200 && total < 300) {
+    } else if (total >= 4.75 * userWeight && total < 6.5 * userWeight) {
       return FitnessLevel.Intermediate
-    } else if (total >= 300 && total < 400) {
+    } else if (total >= 6.5 * userWeight && total < 7.75 * userWeight) {
       return FitnessLevel.Advanced
-    } else if (total >= 400) {
+    } else if (total >= 7.75 * userWeight) {
       return FitnessLevel.Elite
     } else {
       return FitnessLevel.Beginner
     }
   },
-  set: () => {
+  set: (value: FitnessLevel) => {
+    if (value === FitnessLevel.Beginner) {
       deadlift.value = 0
       squat.value = 0
       benchPress.value = 0
+    } else if (value === FitnessLevel.Novice) {
+      deadlift.value = 1.5 * userWeight
+      squat.value = 1.25 * userWeight
+      benchPress.value = 0.75 * userWeight
+    } else if (value === FitnessLevel.Intermediate) {
+      deadlift.value = 2 * userWeight
+      squat.value = 1.5 * userWeight
+      benchPress.value = 1.25 * userWeight
+    } else if (value === FitnessLevel.Advanced) {
+      deadlift.value = 2.5 * userWeight
+      squat.value = 2.25 * userWeight
+      benchPress.value = 1.75 * userWeight
+    } else if (value === FitnessLevel.Elite) {
+      deadlift.value = 3 * userWeight
+      squat.value = 2.75 * userWeight
+      benchPress.value = 2 * userWeight
+    }
   }
 })
 
@@ -60,12 +82,29 @@ const setFitnessLevel = (level: FitnessLevel) => {
 }
 
 const next = () => {
-  userFitnessLevelStore.setFitnessLevel(selectedFitnessLevel.value)
-  userFitnessLevelStore.setDeadliftMax(deadlift.value)
-  userFitnessLevelStore.setSquatMax(squat.value)
-  userFitnessLevelStore.setBenchMax(benchPress.value)
+  userFitnessLevelStore.setUserFitnessLevel({
+    id: uuidv4(),
+    created_at: new Date(),
+    fitness_level: selectedFitnessLevel.value,
+    deadlift_max: deadlift.value,
+    squat_max: squat.value,
+    bench_max: benchPress.value,
+    overhead_press_max: undefined,
+    other: undefined,
+  })
   router.push('/complete-diet-profile');
 }
+
+onMounted(() => {
+  const latestFitnessLevel = userFitnessLevelStore.getLatestFitnessLevel();
+  if (latestFitnessLevel) {
+    selectedFitnessLevel.value = latestFitnessLevel.fitness_level;
+    deadlift.value = latestFitnessLevel.deadlift_max;
+    squat.value = latestFitnessLevel.squat_max;
+    benchPress.value = latestFitnessLevel.bench_max;
+    router.push('/complete-diet-profile');
+  }
+})
 </script>
 
 <template>

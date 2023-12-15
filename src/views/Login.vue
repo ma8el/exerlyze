@@ -16,9 +16,11 @@ import { supabase } from '@/supabase';
 import EmailIcon from '@/icons/email.svg';
 import Line from '@/components/Line.vue';
 import { useUserStore } from '@/store/bodyMetricsStore';
+import { useUserFitnessLevelStore } from '@/store/userSettingsStore';
 import { syncWithBackend } from '@/composables/supabase';
 
 const userStore = useUserStore();
+const userFitnessLevelStore = useUserFitnessLevelStore();
 
 const isDark = useDark();
 
@@ -59,10 +61,14 @@ const onLogin = async () => {
 
 const redirect = async () => {
   await syncWithBackend();
-  if (userStore.isComplete) {
+  if (userStore.isComplete && userFitnessLevelStore.hasExistingFitnessLevel()) {
     router.push('/tabs/home');
   } else {
-    router.push('/complete-profile');
+    if(!userStore.isComplete) {
+      router.push('/complete-profile');
+    } else if (!userFitnessLevelStore.hasExistingFitnessLevel()) {
+      router.push('/complete-fitness-level');
+    }
   }
 };
 
