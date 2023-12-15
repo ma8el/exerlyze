@@ -72,15 +72,6 @@
         <ion-note slot="end">{{ intakeCarbs }} g / {{ dailyCarbs }} g</ion-note>
       </ion-item>
       <ion-item>
-        <ion-thumbnail slot="start">
-          <div class="nutrition-thumb">
-            <FatIcon color="white" class="iconComponent"/>
-          </div>
-        </ion-thumbnail>
-        <ion-label>{{ $t('nutrition.fat') }}</ion-label>
-        <ion-note slot="end">{{ intakeFat }} g / {{ dailyFat }} g</ion-note>
-      </ion-item>
-      <ion-item>
          <ion-thumbnail slot="start">
           <div class="nutrition-thumb">
             <ProteinIcon color="white" class="iconComponent" />
@@ -89,7 +80,16 @@
         <ion-label>{{ $t('nutrition.protein') }}</ion-label>
         <ion-note slot="end">{{ intakeProtein }} g / {{ dailyProtein }} g</ion-note>
       </ion-item>
-    </ion-list>
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <div class="nutrition-thumb">
+            <FatIcon color="white" class="iconComponent"/>
+          </div>
+        </ion-thumbnail>
+        <ion-label>{{ $t('nutrition.fat') }}</ion-label>
+        <ion-note slot="end">{{ intakeFat }} g / {{ dailyFat }} g</ion-note>
+      </ion-item>
+   </ion-list>
   </BaseCard>
 </template>
 
