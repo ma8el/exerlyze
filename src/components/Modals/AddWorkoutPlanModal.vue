@@ -12,7 +12,7 @@
   import PlannedWorkoutItem from '../PlannedWorkoutItem.vue';
   import { PlannedWorkout, Workout } from '@/types';
   import { useWorkoutPlanStore, usePlannedWorkoutStore } from '@/store/workoutStore';
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, computed } from 'vue'
 
   const props = defineProps({
       workoutPlanId: {
@@ -30,6 +30,11 @@
   const plannedWorkoutStore = usePlannedWorkoutStore()
 
   const isOpen = ref<boolean>(false)
+
+  const isValid = computed(() => {
+    return workoutPlanName.value.length > 0 && plannedWorkouts.value.length > 0
+  })
+
   const alertButtons = [
     {
       text: 'Cancel',
@@ -153,7 +158,9 @@
 </script>
 
 <template>
-  <BaseFullPageModal>
+  <BaseFullPageModal
+    :disable-button="!isValid"
+  >
     <template #saveButton>
       <ion-icon v-if="!workoutPlanId" :icon="bookmarkOutline" @click="save"/>
       <ion-icon v-else :icon="UpdateIcon" @click="update"/>
