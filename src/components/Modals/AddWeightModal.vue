@@ -43,10 +43,6 @@
     weight.value = undefined;
   };
 
-  watch(inputDate, (newValue, oldValue) => {
-    console.log(inputDate.value)
-  });
-
   onMounted(() => {
     weight.value = weightStore.currentWeight.weight;
   });
