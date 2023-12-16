@@ -15,6 +15,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useUserFitnessLevelStore } from '@/store/userSettingsStore';
 import { useWeightStore } from '@/store/bodyMetricsStore';
 import { FitnessLevel } from '@/types/workout.enums';
+import illustration from '../../assets/illustrations/fill_workout_goals.svg';
 
 const router = useRouter();
 
@@ -108,7 +109,7 @@ onMounted(() => {
 
 <template>
     <WelcomeSettingsLayout
-      image="../../assets/illustrations/fill_workout_goals.svg"
+      :image="illustration"
       :title="$t('settings.fitnessLevelTitle')"
       :subtitle="$t('settings.fitnessLevelDescription')"
       :settingComplete="false"

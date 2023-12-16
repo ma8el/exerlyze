@@ -9,6 +9,7 @@ import Line from '@/components/Line.vue';
 import { NutritionGoal } from '@/types/nutrition.enums';
 import { useFoodDiaryStore } from '@/store/foodDiary';
 import { ref, onMounted, computed } from 'vue';
+import illustration from '../../assets/illustrations/fill_diet_goals.svg';
 
 const router = useRouter();
 const foodDiaryStore = useFoodDiaryStore();
@@ -76,7 +77,7 @@ onMounted(() => {
 
 <template>
     <WelcomeSettingsLayout
-      image="../../assets/illustrations/fill_diet_goals.svg"
+      :image="illustration"
       :title="$t('settings.dietGoalsMessage')"
       :subtitle="$t('settings.dietGoalsSubtitle')"
       :settingComplete="isComplete"

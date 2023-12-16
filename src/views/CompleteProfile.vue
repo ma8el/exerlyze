@@ -2,6 +2,7 @@
 import WelcomeSettingsLayout from '@/layouts/WelcomeSettingsLayout.vue';
 import UserMetricsInput from '@/components/UserMetricsInput.vue';
 import { useUserStore } from '@/store/bodyMetricsStore';
+import illustration from '../../assets/illustrations/fill_form.svg';
 
 const userStore = useUserStore();
 const complete = userStore.isComplete;
@@ -9,7 +10,7 @@ const complete = userStore.isComplete;
 
 <template>
     <WelcomeSettingsLayout
-      image="../../assets/illustrations/fill_form.svg"
+      :image="illustration"
       :title="$t('completeProfile')"
       :subtitle="$t('completeProfileMessage')"
       :settingComplete="complete"
