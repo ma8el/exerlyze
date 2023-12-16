@@ -6,6 +6,7 @@ import {
   IonInput,
   IonButton,
   IonIcon,
+loadingController,
 } from '@ionic/vue';
 import { peopleOutline,
          personOutline,
@@ -13,7 +14,7 @@ import { peopleOutline,
          swapVerticalOutline,
          chevronForward } from 'ionicons/icons';
 import NumericInput from './NumericInput.vue';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
 import { dateToIsoString } from '@/helpers/time';
@@ -22,19 +23,19 @@ const router = useRouter();
 const userStore = useUserStore();
 const weightStore = useWeightStore();
 
-const weightValid = ref(true);
-const heightValid = ref(true);
+const weightValid = ref(false);
+const heightValid = ref(false);
 
 const userNameInputRef = ref<HTMLElement | undefined>(undefined);
 
 const userName = ref<string | undefined>(undefined);
 const gender = ref<string | undefined>(undefined);
 const dateOfBirth = ref<string | undefined>(undefined);
-const weight = ref<number | undefined>(undefined);
-const height = ref<number | undefined>(undefined);
+const weight = ref<number>(0);
+const height = ref<number>(0);
 
 const disabled = computed(() => {
-  return !weightValid.value || !heightValid.value;
+  return !weightValid.value || !heightValid.value || gender.value === undefined || userName.value === undefined || dateOfBirth.value === undefined;
 });
 
 const props = defineProps({
@@ -69,18 +70,19 @@ const save = async () => {
         id: weightStore.getNewId(),
         created_at: new Date(),
         updated_at: new Date(),
-        weight: weight.value,
+        weight: Number(weight.value),
         unit: 'kg'
     }
     );
     if (height.value === undefined) {
         return;
     }
-    userStore.setHeight(height.value);
+    userStore.setHeight(Number(height.value));
     await userStore.syncUser();
     router.push(props.saveRedirectPath);
 };
 
+const loading = ref<boolean>(true);
 onMounted(() => {
   userName.value = userStore.getUserName()
   gender.value = userStore.getGender()
@@ -91,6 +93,7 @@ onMounted(() => {
     weight.value = weightStore.currentWeight.weight
   }
   height.value = userStore.getHeight()
+  loading.value = false;
 });
 </script>
 
@@ -128,10 +131,11 @@ onMounted(() => {
   <ion-item lines="none">
     <ion-icon :src="scaleOutline" color="medium" style="margin-right: 10px;"></ion-icon>
     <NumericInput
+      v-if="!loading"
       :label="$t('yourWeight')"
-      :minValue="1"
+      :minValue="20"
       :maxValue="500"
-      :inputValue="weight === undefined ? 75: weight"
+      :inputValue="weight"
       @update:inputValue="weight = $event"
       @update:valid="weightValid = $event"
     />
@@ -143,10 +147,11 @@ onMounted(() => {
   <ion-item lines="none">
     <ion-icon :src="swapVerticalOutline" color="medium" style="margin-right: 10px;"></ion-icon>
     <NumericInput
+      v-if="!loading"
       :label="$t('yourHeight')"
-      :minValue="1"
+      :minValue="100"
       :maxValue="300"
-      :inputValue="height === undefined ? 175: height"
+      :inputValue="height"
       @update:inputValue="height = $event"
       @update:valid="heightValid = $event"
     />

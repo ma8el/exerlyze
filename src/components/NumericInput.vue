@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { IonInput,
-       } from '@ionic/vue'
+import { IonInput } from '@ionic/vue'
+import { onMounted } from 'vue';
 import { ref, computed, watch } from 'vue';
 
 const props = defineProps({
@@ -47,6 +47,7 @@ const setInvalid = () => {
     return;
   }
   valid.value = false;
+  emit('update:valid', false)
 }
 
 const setValid = () => {
@@ -54,6 +55,7 @@ const setValid = () => {
     return;
   }
   valid.value = true;
+  emit('update:valid', true)
 }
 
 const validate = (ev: any) => {
@@ -91,6 +93,31 @@ const markTouched = () => {
 
 watch (valid, (newValue) => {
   emit('update:valid', newValue)
+})
+
+watch(() => props.inputValue, (newValue) => {
+  validate({ target: { value: newValue } });
+});
+
+const updateValidity = async () => {
+  console.log(props.inputValue)
+  if (!inputRef.value) {
+    return;
+  }
+  inputRef.value.$el.classList.add('ion-untouched');
+  inputRef.value.$el.classList.add('ion-pristine');
+  if (props.inputValue) {
+    inputRef.value.$el.classList.add('ion-dirty');
+  }
+  if (props.inputValue < props.minValue || props.inputValue > props.maxValue) {
+    setInvalid();
+  } else {
+    setValid();
+  }
+}
+
+onMounted(async () => {
+  await updateValidity();
 })
 </script>
 

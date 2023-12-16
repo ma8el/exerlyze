@@ -10,9 +10,8 @@ import { chevronForward, trendingUp } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import WelcomeSettingsLayout from '@/layouts/WelcomeSettingsLayout.vue';
 import NumericInput from '@/components/NumericInput.vue';
-import { ref } from 'vue';
 import Line from '@/components/Line.vue';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useUserFitnessLevelStore } from '@/store/userSettingsStore';
 import { useWeightStore } from '@/store/bodyMetricsStore';
 import { FitnessLevel } from '@/types/workout.enums';
@@ -86,9 +85,9 @@ const next = () => {
     id: uuidv4(),
     created_at: new Date(),
     fitness_level: selectedFitnessLevel.value,
-    deadlift_max: deadlift.value,
-    squat_max: squat.value,
-    bench_max: benchPress.value,
+    deadlift_max: Number(deadlift.value),
+    squat_max: Number(squat.value),
+    bench_max: Number(benchPress.value),
     overhead_press_max: undefined,
     other: undefined,
   })

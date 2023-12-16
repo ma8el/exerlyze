@@ -9,7 +9,6 @@ export const useWeightStore = defineStore('weight', () => {
     const weights = ref(useStorage('weights', [] as Weight[]))
     const getWeights = computed(() => weights.value)
     const currentWeight = computed(() => {
-        console.log(weights.value)
         return weights.value.reduce((prev, current) => {
             return prev.created_at > current.created_at ? prev : current
         }, {} as Weight) // TODO: Provide an initial value for reduce
@@ -85,7 +84,7 @@ export const useUserStore = defineStore('userStore', () => {
     const userName = useStorage('userName', ref<string | undefined>());
     const gender = useStorage('gender', ref<string | undefined>());
     const dateOfBirth = useStorage('dateOfBirth', ref<Date>(new Date()));
-    const height = useStorage('height', ref<number | undefined>());
+    const height = useStorage('height', ref<number | string | undefined>());
     const isComplete = computed(() => {
         if (userName.value === "undefined"
             || userName.value === undefined) {
@@ -98,7 +97,8 @@ export const useUserStore = defineStore('userStore', () => {
         if (dateOfBirth.value === undefined) {
             return false
         }
-        if (height.value === undefined) {
+        if (height.value === undefined
+            || height.value === "undefined") {
             return false
         }
         return true
@@ -129,8 +129,12 @@ export const useUserStore = defineStore('userStore', () => {
         }
         return age
     }
-    const getHeight = (): number | undefined => {
-        return height.value
+    const getHeight = (): number => {
+        if (height.value === undefined
+            || height.value === "undefined") {
+            return 0
+        }
+        return Number(height.value)
     }
     const setUserName = (name: string) => {
         userName.value = name

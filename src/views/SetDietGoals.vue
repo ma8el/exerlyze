@@ -25,6 +25,8 @@ const carbsValid = ref<boolean>(true)
 const proteinValid = ref<boolean>(true)
 const fatValid = ref<boolean>(true)
 
+const isComplete = foodDiaryStore.dailyNutritionGoalComplete
+
 const deactivateButton = computed<boolean>(() => {
   return !caloriesValid.value || !carbsValid.value || !proteinValid.value || !fatValid.value
 })
@@ -77,7 +79,7 @@ onMounted(() => {
       image="../../assets/illustrations/fill_diet_goals.svg"
       :title="$t('settings.dietGoalsMessage')"
       :subtitle="$t('settings.dietGoalsSubtitle')"
-      :settingComplete="false"
+      :settingComplete="isComplete"
       redirectPath="/tabs/home"
       :backButton="true"
     >
