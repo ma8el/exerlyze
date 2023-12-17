@@ -5,7 +5,7 @@ import { useUserSettingsStore } from './store/userSettingsStore';
 export function installI18n(app: any) {
     const userSettingsStore = useUserSettingsStore()
     const setLocale = userSettingsStore.locale
-    let lang = navigator.language
+    let lang = navigator.language.slice(0, 2)
     if (setLocale === undefined || setLocale === "undefined") {
       if (lang !== 'en' && lang !== 'de' && lang !== 'fr') {
          lang = 'en' 
