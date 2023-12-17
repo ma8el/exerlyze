@@ -100,7 +100,6 @@ watch(() => props.inputValue, (newValue) => {
 });
 
 const updateValidity = async () => {
-  console.log(props.inputValue)
   if (!inputRef.value) {
     return;
   }
