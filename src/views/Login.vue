@@ -7,6 +7,8 @@ import { IonPage,
          IonCol,
          IonItem,
          IonInput,
+         IonButtons,
+         IonLabel,
          IonButton,
          IonAlert} from '@ionic/vue';
 import { onMounted, ref } from 'vue';
@@ -24,7 +26,8 @@ const userStore = useUserStore();
 const userFitnessLevelStore = useUserFitnessLevelStore();
 const foodDiaryStore = useFoodDiaryStore();
 
-const isDark = useDark();
+//const isDark = useDark();
+const isDark = true;
 
 const email = ref('');
 const router = useRouter();
@@ -112,8 +115,7 @@ onMounted(async () => {
                   :label="$t('email')"
                   type="email"
                   label-placement="floating"
-                  v-model="email"
-                  fill="solid">
+                  v-model="email">
                 </ion-input>
               </ion-item>
               <ion-button id="magic-link-button" expand="block" type="submit" class="ion-margin-top" :disabled="loading">

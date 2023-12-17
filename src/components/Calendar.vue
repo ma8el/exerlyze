@@ -14,7 +14,8 @@
     },
  })
 
-  const isDark = useDark()
+//  const isDark = useDark()
+  const isDark = true
   const userSettingsStore = useUserSettingsStore()
   const setLocale = ref(userSettingsStore.getLocale())
 
@@ -80,6 +81,7 @@
       v-model="selectedDate"
       @click="openModal"
       :attributes="attributes"
+      :first-day-of-week="2"
     />
   </ion-card>
 </template>
@@ -92,5 +94,13 @@
     width: 100%;
     margin: 0 0 16px 0;
     border-radius: 0;
+  }
+
+  .vc-container, :deep(.vc-title) {
+    background: #2b2a33;
+    pointer-events: none;
+  }
+  .vc-container, :deep(.vc-arrow, .vc-prev, .vc-focus) {
+    background: #2b2a33;
   }
 </style>

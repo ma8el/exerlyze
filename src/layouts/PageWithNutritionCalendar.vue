@@ -14,10 +14,12 @@
       required: true
     }
   });
+  
+//  const isDark = useDark()
+  const isDark = true
 
   const userSettingsStore = useUserSettingsStore()
   const setLocale = ref(userSettingsStore.getLocale())
-  const isDark = useDark()
   const selectedDate = ref<Date>(new Date())
   provide(selectedDateKey, readonly(selectedDate))
 
@@ -74,6 +76,7 @@
           view="weekly"
           v-model="selectedDate"
           :attributes="attributes"
+          :first-day-of-week="2"
         />
       </ion-card>
     <slot></slot>
@@ -88,5 +91,13 @@
     z-index: 100;
     width: 100%;
     border-radius: 0;
+  }
+
+  .vc-container, :deep(.vc-title) {
+    background: #2b2a33;
+    pointer-events: none;
+  }
+  .vc-container, :deep(.vc-arrow, .vc-prev, .vc-focus) {
+    background: #2b2a33;
   }
 </style>
