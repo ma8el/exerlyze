@@ -58,7 +58,7 @@
         <slot name="toolbarContent">
         <ion-title 
             size="large"
-            :class="{'ion-justify-content-center': backButton}"
+            :class="{'ion-justify-content-center md-workaround': backButton}"
             :style="`font-size: ${titleSize};`"
         >
             {{ title }}
@@ -108,12 +108,6 @@
       background-size: cover;
       padding: 10px 0 20px 0;
     }
-    ion-buttons {
-      padding-top: 5px;
-    }
-    ion-title {
-      align-items: center;
-    }
   }
   ion-content {
     border-radius: 10px 10px 0 0;
@@ -127,5 +121,12 @@
 }
 .bottom-margin {
   margin-bottom: 10rem;
+}
+
+.md .md-workaround {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 0 50px;
 }
 </style>

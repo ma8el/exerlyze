@@ -63,7 +63,7 @@
     <ion-buttons 
       slot="end"
     >
-      <ion-fab horizontal="end">
+      <ion-fab horizontal="end" class="bottom-margin">
         <ion-fab-button color="dark" size="small" @click="openFilter">
           <ion-icon :icon="filter"></ion-icon>
         </ion-fab-button>
@@ -86,5 +86,8 @@
 <style scoped>
 ion-buttons {
   padding-top: 15px;
+}
+.bottom-margin {
+  margin-bottom: 15px;
 }
 </style>
