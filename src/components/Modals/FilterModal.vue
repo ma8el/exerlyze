@@ -70,7 +70,7 @@ const save = () => {
       <ion-toolbar>
         <ion-title>Filter</ion-title>
         <ion-buttons slot="end">
-          <ion-button @click="closeModal">Dismiss</ion-button>
+          <ion-button @click="closeModal">{{ $t('dismiss') }}</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -84,7 +84,7 @@ const save = () => {
                   label-placement="start"
                   value="week"
                 >
-                  Week
+                  {{ $t('week') }}
                 </ion-radio>
               </div>
             </ion-col>
@@ -99,7 +99,7 @@ const save = () => {
                     :icon="lockClosedOutline"
                     v-if="!authenticated"
                   />
-                  Month
+                  {{ $t('month') }}
                 </ion-radio>
               </div>
             </ion-col>
@@ -114,7 +114,7 @@ const save = () => {
                     :icon="lockClosedOutline"
                     v-if="!authenticated"
                   />
-                  Year
+                  {{ $t('year')  }}
                 </ion-radio>
               </div>
             </ion-col>
@@ -129,7 +129,7 @@ const save = () => {
                     :icon="lockClosedOutline"
                     v-if="!authenticated"
                   />
-                  All
+                  {{ $t('all') }}
                 </ion-radio>
               </div>
             </ion-col>
@@ -145,7 +145,7 @@ const save = () => {
                     :icon="lockClosedOutline"
                     v-if="!authenticated"
                   />
-                  Custom
+                  {{ $t('custom') }}
                 </ion-radio>
               </div>
             </ion-col>
@@ -161,7 +161,7 @@ const save = () => {
             />
           </ion-col>
           <ion-col size="2">
-            <p class="ion-text-center">to</p>
+            <p class="ion-text-center">{{ $t('to') }}</p>
           </ion-col>
           <ion-col size="5">
             <ion-datetime-button 
@@ -172,7 +172,7 @@ const save = () => {
         </ion-row>
 
         <ion-row class="ion-justify-content-center">
-          <ion-button class="save-button" @click="save()">Save</ion-button>
+          <ion-button class="save-button" @click="save()">{{ $t('save') }}</ion-button>
         </ion-row>
       </ion-grid>
 

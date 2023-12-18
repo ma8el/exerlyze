@@ -140,7 +140,7 @@ onMounted(async () => {
 
               <div class="end">
                 <ion-label class="end_lbl">
-                  {{ $t('tryFirst') }} <span @click="setOpen(true)">{{ $t('skip') }}</span>
+                  {{ $t('tryFirst') }} <span @click="setOpen(true)">{{ $t('yes') }}.</span>
                 </ion-label>
               </div>
              <ion-alert

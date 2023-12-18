@@ -34,7 +34,7 @@
     const modal = await modalController.create({
       component: FilterModal,
       cssClass: 'full-screen-modal',
-      initialBreakpoint: 0.35,
+      initialBreakpoint: 0.45,
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();

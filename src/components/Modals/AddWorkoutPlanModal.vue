@@ -170,7 +170,7 @@
       <p v-else class="header-title">{{ $t('workouts.updateWorkoutPlan') }}</p>
     </template>
    <template #modalContent>
-      <ion-input class="ion-padding" fill="outline" shape="round" label="Workout Plan Name" label-placement="stacked" v-model="workoutPlanName"></ion-input>
+      <ion-input class="ion-padding" fill="outline" shape="round" :label="$t('workouts.workoutPlanName')" label-placement="stacked" v-model="workoutPlanName"></ion-input>
       <ion-input class="ion-padding" fill="outline" shape="round" :label="$t('description')" label-placement="stacked" v-model="description"></ion-input>
       <PlannedWorkoutItem 
         class="ion-margin"
