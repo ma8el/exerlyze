@@ -80,7 +80,7 @@ const validate = (ev: any) => {
 }
 
 const onInput = (ev: any) => {
-    emit('update:inputValue', ev.target.value)
+    emit('update:inputValue', Number(ev.target.value))
     validate(ev)
 }
 
@@ -92,7 +92,7 @@ const markTouched = () => {
 }
 
 watch (valid, (newValue) => {
-  emit('update:valid', newValue)
+  emit('update:valid', Number(newValue))
 })
 
 watch(() => props.inputValue, (newValue) => {
@@ -121,18 +121,21 @@ onMounted(async () => {
 </script>
 
 <template>
-  <ion-input 
-    ref="inputRef"
-    :label="label"
-    :class="validityClass"
-    label-placement="stacked"
-    inputmode="numeric"
-    :error-text="errorText"
-    @ionInput="onInput($event)"
-    @ionChange="onInput($event)"
-    @ionBlur="markTouched()"
-    :value="inputValue"
-    :clear-on-edit="true"
-    :clear-input="clearInput"
-  />
+  <div class="numeric-input">
+    <ion-input 
+      ref="inputRef"
+      :label="label"
+      :class="validityClass"
+      label-placement="stacked"
+      inputmode="numeric"
+      :error-text="errorText"
+      @ionInput="onInput($event)"
+      @ionChange="onInput($event)"
+      @input="onInput($event)"
+      @ionBlur="markTouched()"
+      :value="inputValue"
+      :clear-on-edit="true"
+      :clear-input="clearInput"
+    />
+  </div>
 </template>
