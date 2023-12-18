@@ -633,11 +633,17 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
     }
 
     async function pushWorkoutSession(workoutSession: WorkoutSession) {
-        await supabase.from('workout_sessions').upsert(workoutSession)
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            await supabase.from('workout_sessions').upsert(workoutSession)
+        }
     }
 
     async function pushWorkoutSessionPerformance(workoutSessionPerformance: WorkoutSessionPerformance) {
-        await supabase.from('workout_session_performances').upsert(workoutSessionPerformance)
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+            await supabase.from('workout_session_performances').upsert(workoutSessionPerformance)
+        }
     }
 
     async function fetchWorkoutSessions() {
