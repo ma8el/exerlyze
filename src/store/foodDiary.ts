@@ -82,6 +82,10 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         }
     }
 
+    function getFoodDiaryEntryById(id: string): FoodDiaryEntry | undefined {
+        return foodDiaryEntries.value.find(entry => entry.id === id)
+    }
+
     async function addDailyNutritionGoal(dailyNutritionGoal: DailyNutritionGoal) {
         dailyNutritionGoals.value.push(dailyNutritionGoal)
         const session = await supabase.auth.getSession()
@@ -104,8 +108,29 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         }
     }
 
-    function deleteFoodDiaryEntry(foodDiaryEntryId: string) {
+    async function updateFoodDiaryEntry(foodDiaryEntry: FoodDiaryEntry) {
+        const foodDiaryEntryIndex = foodDiaryEntries.value.findIndex((w) => w.id === foodDiaryEntry.id);
+        if (foodDiaryEntryIndex !== -1) {
+            foodDiaryEntries.value[foodDiaryEntryIndex] = foodDiaryEntry;
+        } else {
+            foodDiaryEntries.value.push(foodDiaryEntry);
+        }
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
+          const { error } = await supabase.from('food_diary_entries').upsert(foodDiaryEntry)
+          if (error) {
+              console.error(error)
+          }
+        }
+    }
+
+    async function deleteFoodDiaryEntry(foodDiaryEntryId: string) {
         foodDiaryEntries.value = foodDiaryEntries.value.filter(entry => entry.id !== foodDiaryEntryId)
+        const session = await supabase.auth.getSession()
+        if (session !== null) {
+          const {data, error} = await supabase.from('food_diary_entries').update({ deleted: true }).eq('id', foodDiaryEntryId ).select()
+          console.log(data, error)
+        }
     }
 
     function getFoodDiaryEntriesOfDate(date: Date): FoodDiaryEntry[] {
@@ -172,7 +197,7 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
     async function fetchFoodDiaryEntries() {
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
-            const { data, error } = await supabase.from('food_diary_entries').select('*')
+            const { data, error } = await supabase.from('food_diary_entries').select('*').eq('deleted', false).returns<FoodDiaryEntry[]>()
             if (error) {
                 console.error(error)
             } else {
@@ -228,9 +253,11 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         addDailyNutritionGoal,
         calculateBaseCalories,
         calculateBaseMacros,
+        getFoodDiaryEntryById,
         calculateCalories,
         getUniqueId,
         addFoodDiaryEntry,
+        updateFoodDiaryEntry,
         deleteFoodDiaryEntry,
         getFoodDiaryEntriesOfDate,
         getCaloriesOfDate,

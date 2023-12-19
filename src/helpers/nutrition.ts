@@ -42,10 +42,23 @@ export const nutritionDetails = [
   ]
 
 export const fixedDigits = (value: number, digits: number) => {
-    return value.toFixed(digits)
+    return Number(value.toFixed(digits))
 }
 
-export const calcNuritionPer100g = (value: number, weight: number) => {
+export const stringToFixedDigits = (value: string, digits: number): number => {
+  const number = Number(value)
+  if (isNaN(number)) {
+    return 0
+  } else if (number % 1 === 0) {
+    return number
+  } else {
+    return parseFloat(Number(value).toFixed(digits))
+  }
+}
+
+export const calcNuritionPer100g = (value: string, weight: string): number => {
     const scalingFactor = 0.01
-    return fixedDigits(scalingFactor * weight * value, 1)
+    const weightToFixed = stringToFixedDigits(weight, 1)
+    const valueToFixed = stringToFixedDigits(value, 1)
+    return fixedDigits(scalingFactor * weightToFixed * valueToFixed, 1)
 }

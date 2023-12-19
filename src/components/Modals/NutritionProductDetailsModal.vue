@@ -18,31 +18,50 @@
   import FatIcon from '@/icons/fat.vue';
   import { FilteredNutritionApiProduct } from '@/types/nutrition';
   import { PropType } from 'vue';
-  import { nutritionDetails } from '@/helpers/nutrition';
+  import { nutritionDetails, stringToFixedDigits } from '@/helpers/nutrition';
+  import { defaultImage } from '@/composables/supabase';
+import { onMounted } from 'vue';
 
   const props = defineProps({
     product: {
         type: Object as PropType<FilteredNutritionApiProduct>,
         required: true
+    },
+    foodDiaryEntryId: {
+        type: String,
+        required: false,
+        default: undefined
     }
   })
 
-  const openAddNutrimentModal = async (product: FilteredNutritionApiProduct) => {
+  const createModal = async () => {
     const modal = await modalController.create({
       component: AddNutrimentModal,
-      componentProps: { product: product },
-      breakpoints: [0, 0.3],
-      initialBreakpoint: 0.3
+      componentProps: { product: props.product, foodDiaryEntryId: props.foodDiaryEntryId },
+      breakpoints: [0, 0.5],
+      initialBreakpoint: 0.5
     });
+    return modal;
+  }
+
+  const openAddNutrimentModal = async () => {
+    const modal = await createModal();
     modal.present();
   }
+
+  onMounted(async () => {
+    if (props.foodDiaryEntryId) {
+      const modal = await createModal();
+      modal.present();
+    }
+  })
 </script>
 
 <template>
   <BaseFullPageModal :saveButton="false" backColor="dark">
     <template #modalHeader>
       <ion-img
-        :src="product.image_front_url"
+        :src="product.image_front_url ? product.image_front_url : defaultImage"
         alt="product image"
       >
     </ion-img>
@@ -56,8 +75,9 @@
       >
         <template #titleEnd>
           <ion-col offset="4" offset-md="2" offset-lg="1" size="3">
-            <ion-button fill="clear" @click="openAddNutrimentModal(product)">
-              + {{ $t('add') }}
+            <ion-button fill="clear" @click="openAddNutrimentModal()">
+              <ion-label v-if="foodDiaryEntryId === undefined" class="nutrition-add-item">+ {{ $t('add') }}</ion-label>
+              <ion-label v-else class="nutrition-add-item">+ {{ $t('update') }}</ion-label>
             </ion-button>
           </ion-col>
         </template>
@@ -73,7 +93,7 @@
                 </ion-thumbnail>
                 <ion-label>
                 <p>{{ $t('nutrition.calories') }}</p>
-                <p class="nutrition-value">{{ product.nutriments['energy-kcal_100g'] }} kcal</p>
+                <p class="nutrition-value">{{ stringToFixedDigits(product.nutriments['energy-kcal_100g'], 2) }} kcal</p>
                 </ion-label>
               </ion-item>
             </ion-col>
@@ -87,7 +107,7 @@
                 </ion-thumbnail>
                 <ion-label>
                   <p>{{ $t('nutrition.carbs') }}</p>
-                  <p class="nutrition-value">{{ product.nutriments.carbohydrates_100g }} g</p>
+                  <p class="nutrition-value">{{ stringToFixedDigits(product.nutriments.carbohydrates_100g, 2) }} g</p>
                 </ion-label>
               </ion-item>
             </ion-col>
@@ -102,7 +122,7 @@
                 </ion-thumbnail>
                 <ion-label>
                   <p>{{ $t('nutrition.protein') }}</p>
-                  <p class="nutrition-value">{{ product.nutriments.proteins_100g }} g</p>
+                  <p class="nutrition-value">{{ stringToFixedDigits(product.nutriments.proteins_100g, 2) }} g</p>
                 </ion-label>
               </ion-item>
             </ion-col>
@@ -115,7 +135,7 @@
                 </ion-thumbnail>
                 <ion-label>
                   <p>{{ $t('nutrition.fat') }}</p>
-                  <p class="nutrition-value">{{ product.nutriments.fat_100g }} g</p>
+                  <p class="nutrition-value">{{ stringToFixedDigits(product.nutriments.fat_100g, 2) }} g</p>
                 </ion-label>
               </ion-item>
             </ion-col>
@@ -141,7 +161,7 @@
         >
           <ion-item class="nutrition-list-item">
             <ion-label>{{ $t(`nutrition.${detail.name.toLowerCase()}`) }}</ion-label>
-            <ion-label slot="end">{{ product.nutriments[detail.value] }} {{ product.nutriments[detail.unit] }}</ion-label>
+            <ion-label slot="end">{{ stringToFixedDigits(product.nutriments[detail.value], 2) }} {{ product.nutriments[detail.unit] ? product.nutriments[detail.unit]: 'g' }}</ion-label>
           </ion-item>
         </ion-list>
       </BaseCard>
@@ -176,6 +196,12 @@
   }
   .nutrition-list-title-end {
     color: var(--ion-color-primary);
+  }
+  .nutrition-add-item {
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .nutrition-thumb {
     background: var(--ion-color-primary-tint);

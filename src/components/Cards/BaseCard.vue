@@ -31,7 +31,7 @@
         <ion-col size="auto">
           <ion-card-title 
             v-if="title"
-            :style="{'font-size': titleSize}"
+            :style="{'font-size': titleSize, 'overflow': 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap'}"
           >
             {{ title }}
           </ion-card-title>
