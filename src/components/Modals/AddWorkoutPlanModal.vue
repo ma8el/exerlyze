@@ -11,7 +11,7 @@
   import AddPlannedWorkoutButton from '../Buttons/AddPlannedWorkoutButton.vue';
   import PlannedWorkoutItem from '../PlannedWorkoutItem.vue';
   import { PlannedWorkout, Workout } from '@/types';
-  import { useWorkoutPlanStore, usePlannedWorkoutStore } from '@/store/workoutStore';
+  import { useWorkoutPlanStore } from '@/store/workoutStore';
   import { ref, onMounted, computed } from 'vue'
 
   const props = defineProps({
@@ -27,7 +27,6 @@
   const plannedWorkouts = ref<PlannedWorkout[]>([])
 
   const workoutPlanStore = useWorkoutPlanStore()
-  const plannedWorkoutStore = usePlannedWorkoutStore()
 
   const isOpen = ref<boolean>(false)
 
@@ -62,7 +61,7 @@
     w.forEach(async (workout) => {
       plannedWorkouts.value.push(
         {
-          'id': plannedWorkoutStore.getNewId(),
+          'id': workoutPlanStore.getNewId(),
           'workout_plan_id': generatedWorkoutPlanId.value,
           'workout_id': workout.id,
           'day_of_week_id': 1,
@@ -84,7 +83,7 @@
       }
     );
     plannedWorkouts.value.forEach(async (plannedWorkout: PlannedWorkout) => {
-      await plannedWorkoutStore.addPlannedWorkout(
+      await workoutPlanStore.addPlannedWorkout(
         {
           'id': plannedWorkout.id,
           'workout_plan_id': plannedWorkout.workout_plan_id,
@@ -114,7 +113,7 @@
       }
     );
     plannedWorkouts.value.forEach(async (plannedWorkout: PlannedWorkout) => {
-      plannedWorkoutStore.updatePlannedWorkout(
+      workoutPlanStore.updatePlannedWorkout(
         {
           'id': plannedWorkout.id,
           'workout_plan_id': plannedWorkout.workout_plan_id,
@@ -150,7 +149,7 @@
       workoutPlanName.value = workoutPlan.name
       description.value = workoutPlan.description
       createdAt.value = workoutPlan.created_at
-      const plannedWorkoutsForWorkoutPlan = plannedWorkoutStore.getPlannedWorkoutsByWorkoutPlanId(props.workoutPlanId)
+      const plannedWorkoutsForWorkoutPlan = workoutPlanStore.getPlannedWorkoutsByWorkoutPlanId(props.workoutPlanId)
       plannedWorkouts.value = plannedWorkoutsForWorkoutPlan
     }
   }
