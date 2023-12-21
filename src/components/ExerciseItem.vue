@@ -122,19 +122,25 @@
           <ion-row>
             <ion-col>
               <ion-item lines="none">
-                <ion-icon slot="start" :icon="WeightIcon"></ion-icon>
-                <NumericInput
-                  :label="$t('weight')"
-                  :placeholder="$t('weight')"
-                  :minValue="1"
-                  :maxValue="500"
-                  :inputValue="props.weight"
-                  error-text="Invalid"
-                  :clear-input="false"
-                  @update:inputValue="emit('update:weight', $event)"
-                  @update:valid="weightValid = $event"
-                />
-                <ion-label slot="end">{{ $t('weightUnitBig') }}</ion-label>
+                <ion-col size="1">
+                  <ion-icon :icon="WeightIcon"></ion-icon>
+                </ion-col>
+                <ion-col size="8">
+                  <NumericInput
+                    :label="$t('weight')"
+                    :placeholder="$t('weight')"
+                    :minValue="1"
+                    :maxValue="500"
+                    :inputValue="props.weight"
+                    error-text="Invalid"
+                    :clear-input="false"
+                    @update:inputValue="emit('update:weight', $event)"
+                    @update:valid="weightValid = $event"
+                  />
+                </ion-col>
+                <ion-col size="2">
+                  <ion-label>{{ $t('weightUnitBig') }}</ion-label>
+                </ion-col>
               </ion-item>
             </ion-col>
           </ion-row>

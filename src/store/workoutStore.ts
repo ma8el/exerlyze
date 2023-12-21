@@ -216,6 +216,8 @@ export const useWorkoutStore = defineStore('workout', () => {
                     sets: exercise.sets,
                     reps: exercise.reps,
                     weight: exercise.weight,
+                    resttime: exercise.resttime,
+                    rir: exercise.rir,
                     valid: true,
                 })
             }
@@ -282,6 +284,10 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
         return workoutPlans.value.find(w => w.id === id)
     }
 
+    function getPlannedWorkoutsByWorkoutId(workoutId: string): PlannedWorkout[] {
+        return plannedWorkouts.value.filter(w => w.workout_id === workoutId)
+    }
+
     async function addWorkoutPlan(workoutPlan: WorkoutPlan) {
         workoutPlans.value.push(workoutPlan)
         const session = supabase.auth.getSession()
@@ -301,18 +307,18 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
         }
     }
 
-    function deleteWorkoutPlan(id: string) {
+    async function deleteWorkoutPlan(id: string) {
         const index = workoutPlans.value.findIndex(w => w.id === id)
 
         workoutPlans.value[index].deleted = true
         workoutPlans.value[index].updated_at = new Date()
-        plannedWorkouts.value.forEach((w: PlannedWorkout) => {
-            deletePlannedWorkout(w.id)
+        plannedWorkouts.value.forEach(async (w: PlannedWorkout) => {
+            await deletePlannedWorkout(w.id)
         })
 
         const session = supabase.auth.getSession()
         if (session !== null) {
-            pushWorkoutPlan(workoutPlans.value[index])
+            await pushWorkoutPlan(workoutPlans.value[index])
         }
     }
 
@@ -438,6 +444,7 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
         getFullWorkoutPlans,
         getNewId,
         getWorkoutPlanById,
+        getPlannedWorkoutsByWorkoutId,
         addWorkoutPlan,
         updateWorkoutPlan,
         deleteWorkoutPlan,

@@ -20,6 +20,8 @@ export interface Exercise {
     sets: number,
     reps: number,
     weight: number,
+    resttime?: number,
+    rir?: number,
     valid?: boolean,
 };
 
