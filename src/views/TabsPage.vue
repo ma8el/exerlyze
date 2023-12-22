@@ -15,7 +15,6 @@
   import { scaleOutline, clipboardOutline, addOutline } from 'ionicons/icons';
   import OfflineToast from '@/components/Toasts/OfflineToast.vue';
   import AddWorkoutModal from '@/components/Modals/AddWorkoutModal.vue';
-  import AddWorkoutPlanModal from '@/components/Modals/AddWorkoutPlanModal.vue';
   import AddNutritionModal from '@/components/Modals/AddNutritionModal.vue';
   import AddWeightModal from '@/components/Modals/AddWeightModal.vue';
   import HomeIcon from '@/icons/home.svg';
@@ -29,21 +28,6 @@
   const openWorkoutModal = async () => {
     const modal = await modalController.create({
       component: AddWorkoutModal,
-      cssClass: 'full-screen-modal',
-    });
-    modal.present();
-
-    const { data, role } = await modal.onWillDismiss();
-    if (role == 'save') {
-      console.log('Save', data);
-    } else {
-      console.log('Close', data);
-    };
-  }
-
-  const openWorkoutPlanModal = async () => {
-    const modal = await modalController.create({
-      component: AddWorkoutPlanModal,
       cssClass: 'full-screen-modal',
     });
     modal.present();
@@ -141,9 +125,6 @@ onIonViewDidLeave(() =>{
         </ion-fab-button>
         <ion-fab-button color="primary" @click="openNutritionModal">
           <ion-icon :icon="NutritionIcon"></ion-icon>
-        </ion-fab-button>
-        <ion-fab-button color="primary" @click="openWorkoutPlanModal">
-          <ion-icon :icon="clipboardOutline"></ion-icon>
         </ion-fab-button>
         <ion-fab-button color="primary" @click="openWorkoutModal">
           <ion-icon :icon="WorkoutIcon"></ion-icon>
