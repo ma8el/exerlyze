@@ -14,7 +14,9 @@
   import { useUserSettingsStore } from '@/store/userSettingsStore';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import NumericInput from '../NumericInput.vue';
-  import { ref, onMounted, watch } from 'vue';
+  import InputItem from '../InputItem.vue';
+  import DateTimeInput from '../DateTimeInput.vue';
+  import { ref, onMounted } from 'vue';
 
   const weightStore = useWeightStore();
   const userSettingsStore = useUserSettingsStore();
@@ -60,10 +62,13 @@
     </template>
     <template #modalContent>
       <ion-list>
-        <ion-item lines="none">
-          <ion-icon :src="scaleOutline" color="medium" style="margin-right: 10px;"></ion-icon>
+        <InputItem
+          :icon="scaleOutline"
+          icon-size="40px"
+          slotSize="8"
+          label-size="2"
+        >
           <NumericInput
-            class="ion-padding"
             :label="$t('enterWeight')"
             :placeholder="$t('weight')"
             :minValue="0"
@@ -72,47 +77,32 @@
             @update:inputValue="weight = $event"
             @update:valid="weightValid = $event"
           />
-          <ion-button expand="block" slot="end" shape="round" color="primary">
-            {{ $t('weightUnitBig') }} 
-          </ion-button>
- 
-        </ion-item>
-        <ion-item lines="none">
-          <ion-col size="2">
-            <ion-label>{{ $t('date') }}</ion-label>
-          </ion-col>
-          <ion-col size="10">
-            <ion-datetime-button 
-              datetime="datetime"
-            />
-            <ion-modal :keep-contents-mounted="true">
-              <ion-datetime
-                id="datetime"
-                v-model="inputDate"
-                :locale="locale"
-              />
-            </ion-modal>
-          </ion-col>
-        </ion-item>
-      </ion-list>
+          <template #label>
+            <ion-button expand="block" shape="round" color="primary">
+              {{ $t('weightUnitBig') }} 
+            </ion-button>
+          </template>
+        </InputItem>
+
+        <DateTimeInput
+          :input-date="inputDate"
+          @update:input-date="inputDate = $event"
+          icon-size="25px"
+          padding-start="8px"
+          class="ion-margin"
+        />
+     </ion-list>
     </template>
   </BaseFullPageModal>
 </template>
 
 <style scoped>
 ion-list {
-  margin-top: 1rem;
   --ion-item-background: transparent;
 }
 ion-item {
-  --padding-start: 2rem;
-  :is(ion-input) {
-      --padding-start: 10px;
-  }
   :is(ion-button) {
       margin: 0 0 0 16px;
-      --padding-start: 10px;
-      --padding-end: 10px;
   }
 }
 .header-title {

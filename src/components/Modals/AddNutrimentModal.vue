@@ -2,20 +2,16 @@
     import { IonButton, 
              IonContent,
              IonCard,
-             IonDatetimeButton,
-             IonDatetime,
-             IonModal,
              IonIcon,
-             IonItem,
              modalController } from '@ionic/vue';
-    import { addOutline, calendarOutline } from 'ionicons/icons';
+    import { addOutline } from 'ionicons/icons';
     import { FilteredNutritionApiProduct } from '@/types/nutrition';
     import { PropType, ref, computed, onMounted } from 'vue';
     import NutrimentRow from '../NutrimentRow.vue';
     import NumericInput from '../NumericInput.vue';
+    import DateTimeInput from '../DateTimeInput.vue';
     import { calcNuritionPer100g } from '@/helpers/nutrition';
     import { useFoodDiaryStore } from '@/store/foodDiary';
-    import { useUserSettingsStore } from '@/store/userSettingsStore';
 
     const props = defineProps({
         product: {
@@ -31,9 +27,6 @@
 
     const amount = ref<string>("0")
     const foodDiaryStore = useFoodDiaryStore()
-    const userSettingsStore = useUserSettingsStore()
-
-    const locale = userSettingsStore.getLocale()
 
     const inputDate = ref<string>(new Date().toISOString())
     const amountValid = ref<boolean>(true)
@@ -144,20 +137,11 @@
         @update:valid="amountValid = $event"
       />
 
-      <ion-item class="weight-item" lines="none">
-        <ion-icon :icon="calendarOutline" slot="start"></ion-icon>
-        <ion-datetime-button 
-          datetime="datetime"
-          slot="end"
-        />
-        <ion-modal :keep-contents-mounted="true">
-          <ion-datetime
-            id="datetime"
-            v-model="inputDate"
-            :locale="locale"
-          />
-        </ion-modal>
-      </ion-item>
+      <DateTimeInput
+        :input-date="inputDate"
+        @update:input-date="inputDate = $event"
+      />
+
       <NutrimentRow
         :calories="calories"
         :carbs="carbs"
@@ -187,11 +171,4 @@
     justify-content: center;
     align-items: center;
   }
-
-  .weight-item {
-    --padding-start: 0;
-    --padding-end: 0;
-    --background: none;
-  }
-
 </style>

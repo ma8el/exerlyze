@@ -6,7 +6,6 @@ import {
   IonInput,
   IonButton,
   IonIcon,
-loadingController,
 } from '@ionic/vue';
 import { peopleOutline,
          personOutline,
@@ -14,6 +13,8 @@ import { peopleOutline,
          swapVerticalOutline,
          chevronForward } from 'ionicons/icons';
 import NumericInput from './NumericInput.vue';
+import InputItem from './InputItem.vue';
+import DateTimeInput from './DateTimeInput.vue';
 import { ref, onMounted, computed, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
@@ -98,18 +99,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <ion-item lines="none">
-    <ion-icon :src="personOutline" color="medium" style="margin-right: 10px;"></ion-icon>
+  <InputItem
+    :icon="personOutline"
+  >
     <ion-input 
       ref="userNameInputRef"
       v-model="userName"
       type="text"
       placeholder="Username"
     />
-  </ion-item>
+  </InputItem>
 
-  <ion-item lines="none">
-    <ion-icon :src="peopleOutline" color="medium" style="margin-right: 10px;"></ion-icon>
+  <InputItem
+    :icon="peopleOutline"
+  >
     <ion-select 
       v-model="gender"
       :multiple="false" 
@@ -118,18 +121,21 @@ onMounted(() => {
       <ion-select-option value="male">{{ $t('male') }}</ion-select-option>
       <ion-select-option value="female">{{ $t('female') }}</ion-select-option>
     </ion-select>
-  </ion-item>
+  </InputItem>
 
   <ion-item lines="none">
     <ion-input 
       v-model="dateOfBirth"
       type="date"
       :placeholder="$t('dateOfBirth')"
+      :label="$t('dateOfBirth')"
+      label-placement="stacked"
     />
   </ion-item>
 
-  <ion-item lines="none">
-    <ion-icon :src="scaleOutline" color="medium" style="margin-right: 10px;"></ion-icon>
+  <InputItem
+    :icon="scaleOutline"
+  >
     <NumericInput
       v-if="!loading"
       :label="$t('yourWeight')"
@@ -139,13 +145,16 @@ onMounted(() => {
       @update:inputValue="weight = $event"
       @update:valid="weightValid = $event"
     />
-    <ion-button expand="block" slot="end" shape="round" color="primary">
-      {{ $t('weightUnitBig') }} 
-    </ion-button>
-  </ion-item>
+    <template #label>
+      <ion-button expand="block" shape="round" color="primary">
+        {{ $t('weightUnitBig') }} 
+      </ion-button>
+    </template>
+  </InputItem>
 
-  <ion-item lines="none">
-    <ion-icon :src="swapVerticalOutline" color="medium" style="margin-right: 10px;"></ion-icon>
+  <InputItem
+    :icon="swapVerticalOutline"
+  >
     <NumericInput
       v-if="!loading"
       :label="$t('yourHeight')"
@@ -155,10 +164,12 @@ onMounted(() => {
       @update:inputValue="height = $event"
       @update:valid="heightValid = $event"
     />
-    <ion-button expand="block" slot="end" shape="round" color="primary">
-      {{ $t('lengthUnit') }}
-    </ion-button>
-  </ion-item>
+    <template #label>
+      <ion-button expand="block" shape="round" color="primary">
+        {{ $t('lengthUnit') }}
+      </ion-button>
+    </template>
+  </InputItem>
 
   <div class="button">
     <ion-button expand="block" @click="save()" :disabled="disabled">

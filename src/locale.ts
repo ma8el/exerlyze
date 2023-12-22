@@ -318,7 +318,7 @@ export const messages = {
         female: "Weiblich",
         yourWeight: "@:your @:weight",
         yourHeight: "@:your @:profile.height",
-        dateOfBirth: "Gebrutsdatum",
+        dateOfBirth: "Geburtsdatum",
         next: "Weiter",
         track: "Tracken",
         add: "Hinzufügen",
