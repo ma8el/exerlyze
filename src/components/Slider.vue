@@ -1,51 +1,83 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import { ref } from 'vue';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Scrollbar } from 'swiper/modules';
+import { ref, onMounted, watch } from 'vue';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
+
+const modules = ref([Scrollbar]);
+const swiperRef = ref();
 
 const props = defineProps({
   items: {
     type: Object,
     required: true
   },
+  moveToSlide: {
+    type: Number,
+    required: false,
+    default: 0
+  },
+  slideWidth: {
+    type: String,
+    required: false,
+    default: '80%'
+  },
   minWidth: {
     type: String,
-    default: '100%'
+    required: false,
+    default: '200px'
   },
   maxWidth: {
     type: String,
-    default: '100%'
+    required: false,
+    default: '200px'
   }
 })
+
+const moveToSlide = (index: number) => {
+  swiperRef.value.$el.swiper.slideTo(index);
+}
+
+watch(() => props.moveToSlide, (index) => {
+  moveToSlide(index);
+})
+
+onMounted(() => {
+  moveToSlide(props.moveToSlide);
+})
+
 </script>
 
 <template>
-  <div class="main_content_div">
-    <div class="content_div">
-      <div class="service_slider">
-        <div class="single_slider" :style="{'min-width': minWidth, 'max-width': maxWidth}" v-for="item in items" :key="item.id">
-              <slot :item="item"></slot>
-        </div>
-      </div>
-    </div>
-  </div>
+  <Swiper
+    v-show="items.length > 0"
+    ref="swiperRef"
+    class="swiper"
+    :modules="modules"
+    :slides-per-view="'auto'"
+    :space-between="5"
+    :scrollbar="{ draggable: true }"
+  >
+    <SwiperSlide 
+      class="swiper-slide" 
+      v-for="(item, index) in items" :key="item.id"
+      :style="{'min-width': minWidth, 'max-width': maxWidth, 'width': slideWidth}"
+    >
+      <slot :item="item"></slot>
+    </SwiperSlide>
+    <SwiperSlide 
+      class="swiper-slide"
+      :style="{'min-width': minWidth, 'max-width': maxWidth, 'width': slideWidth}"
+    >
+      <slot name="lastSlide"></slot>
+    </SwiperSlide>
+  </Swiper>
 </template>
 
 <style scoped lang="scss">
-.main_content_div {
-  .content_div {
-    .service_slider {
-      display: flex;
-      overflow: scroll;
-
-      .single_slider {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        // box-shadow: 0px 3px 6px rgb(0 0 0 / 30%);
-        // border-radius: 10px;
-      }
-    }
-  }
+.swiper {
+  width: 100%;
 }
 </style>

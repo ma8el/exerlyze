@@ -9,15 +9,7 @@
   import AddWorkoutModal from './Modals/AddWorkoutModal.vue';
   import Slider from './Slider.vue';
   import { onMounted, ref, watch } from 'vue';
-  import { Swiper, SwiperSlide } from 'swiper/vue';
-  import { Scrollbar } from 'swiper/modules';
   import complete from '../../assets/illustrations/complete.svg';
-
-  import 'swiper/css';
-  import 'swiper/css/pagination';
-
-  const modules = ref([Scrollbar]);
-  const swiperRef = ref();
 
   const router = useRouter()
 
@@ -41,10 +33,6 @@
     } else {
       console.log('Close', data);
     };
-  }
-
-  const moveToSlide = (index: number) => {
-    swiperRef.value.$el.swiper.slideTo(index);
   }
 
   const getNextEventIndex = (currentDay: number, events: number[]) => {
@@ -80,46 +68,40 @@
 
   watch(sortedPlannedWorkouts, () => {
     setNextWorkout();
-    moveToSlide(nextWorkout.value);
   })
  
   onIonViewDidEnter(() => {
     setNextWorkout();
-    moveToSlide(nextWorkout.value);
   })
 
  onMounted(() => {
     setNextWorkout();
-    moveToSlide(nextWorkout.value);
   })
 </script>
 
 <template>
-  <Swiper
+  <Slider
     v-show="sortedPlannedWorkouts.length > 0"
-    ref="swiperRef"
-    class="swiper"
-    :modules="modules"
-    :slides-per-view="'auto'"
-    :space-between="5"
-    :scrollbar="{ draggable: true }"
+    :items="sortedPlannedWorkouts"
+    :move-to-slide="nextWorkout"
+    :slide-width="'80%'"
+    :min-width="'200px'"
+    :max-width="'300px'"
   >
-    <SwiperSlide class="swiper-slide" v-for="(item, index) in sortedPlannedWorkouts" :key="item.id">
+    <template v-slot:default="slotProps">
       <BaseCard
         img_src="https://ionicframework.com/docs/img/demos/card-media.png"
-        :title="item.workout.name"
+        :title="slotProps.item.workout.name"
         :content="true"
         :sub-title="true"
       >
         <template #subtitle>
-          {{ $t('scheduledOn') }} {{ item.dayOfWeek }}
+          {{ $t('scheduledOn') }} {{ slotProps.item.dayOfWeek }}
         </template>
-        <StartWorkoutButton :workoutId="item.workout_id" />
+        <StartWorkoutButton :workoutId="slotProps.item.workout_id" />
       </BaseCard>
-    </SwiperSlide>
-    <SwiperSlide 
-    class="swiper-slide"
-    >
+    </template>
+    <template #lastSlide>
       <BaseCard
         :title="$t('home.wellDone')"
         :img_src="complete"
@@ -137,8 +119,8 @@
         {{ $t('home.reviewYourPerformance') }}
       </ion-button>
       </BaseCard>
-    </SwiperSlide>
-  </Swiper>
+    </template>
+  </Slider>
 
   <BaseCard
     v-if="sortedPlannedWorkouts.length == 0"
