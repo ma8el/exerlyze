@@ -127,7 +127,7 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
     async function deleteFoodDiaryEntry(foodDiaryEntryId: string) {
         foodDiaryEntries.value = foodDiaryEntries.value.filter(entry => entry.id !== foodDiaryEntryId)
         const session = await supabase.auth.getSession()
-        if (session !== null) {
+        if (session.data.session !== null) {
           const {data, error} = await supabase.from('food_diary_entries').update({ deleted: true }).eq('id', foodDiaryEntryId ).select()
           console.log(data, error)
         }

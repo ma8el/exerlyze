@@ -120,7 +120,7 @@ export const useWorkoutStore = defineStore('workout', () => {
     async function addWorkout(workout: Workout) {
         workouts.value.push(workout)
         const session = await supabase.auth.getSession()
-        if (session !== null) {
+        if (session.data.session !== null) {
             await pushWorkout(workout)
         }
     }
@@ -130,8 +130,8 @@ export const useWorkoutStore = defineStore('workout', () => {
         workouts.value[index] = workout
         workouts.value[index].updated_at = new Date()
 
-        const session = supabase.auth.getSession()
-        if (session !== null) {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
             await pushWorkout(workout)
         }
     }
@@ -150,7 +150,7 @@ export const useWorkoutStore = defineStore('workout', () => {
         workouts.value[index].updated_at = new Date()
 
         const session = await supabase.auth.getSession()
-        if (session !== null) {
+        if (session.data.session !== null) {
             await pushWorkout(workouts.value[index])
         }
         return true
@@ -290,8 +290,8 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
 
     async function addWorkoutPlan(workoutPlan: WorkoutPlan) {
         workoutPlans.value.push(workoutPlan)
-        const session = supabase.auth.getSession()
-        if (session !== null) {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
             await pushWorkoutPlan(workoutPlan)
         }
     }
@@ -301,8 +301,8 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
         workoutPlans.value[index] = workoutPlan
         workoutPlans.value[index].updated_at = new Date()
 
-        const session = supabase.auth.getSession()
-        if (session !== null) {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
             await pushWorkoutPlan(workoutPlan)
         }
     }
@@ -316,8 +316,8 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
             await deletePlannedWorkout(w.id)
         })
 
-        const session = supabase.auth.getSession()
-        if (session !== null) {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
             await pushWorkoutPlan(workoutPlans.value[index])
         }
     }
@@ -328,8 +328,8 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
 
     async function addPlannedWorkout(plannedWorkout: PlannedWorkout) {
         plannedWorkouts.value.push(plannedWorkout)
-        const session = supabase.auth.getSession()
-        if (session !== null) {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
             await pushPlannedWorkout(plannedWorkout)
         }
     }
@@ -341,8 +341,8 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
     async function updatePlannedWorkout(plannedWorkout: PlannedWorkout) {
         const index = plannedWorkouts.value.findIndex(w => w.id === plannedWorkout.id)
         plannedWorkouts.value[index] = plannedWorkout
-        const session = supabase.auth.getSession()
-        if (session !== null) {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
             await pushPlannedWorkout(plannedWorkout)
         }
     }
@@ -353,8 +353,8 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
             plannedWorkouts.value[index].deleted = true
         }
 
-        const session = supabase.auth.getSession()
-        if (session !== null) {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
             await pushPlannedWorkout(plannedWorkouts.value[index])
         }
     }
@@ -498,8 +498,8 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
     async function addWorkoutSession(workoutSession: WorkoutSession) {
         workoutSessions.value.push(workoutSession)
 
-        const session = supabase.auth.getSession()
-        if (session !== null) {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
             await pushWorkoutSession(workoutSession)
         }
     }
@@ -507,8 +507,8 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
     async function addWorkoutSessionPerformances(workoutSessionPerformancesToAdd: WorkoutSessionPerformance[]) {
         workoutSessionPerformances.value.push(...workoutSessionPerformancesToAdd)
         
-        const session = supabase.auth.getSession()
-        if (session !== null) {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
             for (const workoutSessionPerformance of workoutSessionPerformancesToAdd) {
                 await pushWorkoutSessionPerformance(workoutSessionPerformance)
             }
@@ -526,8 +526,8 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
             }
         }
 
-        const session = supabase.auth.getSession()
-        if (session !== null) {
+        const session = await supabase.auth.getSession()
+        if (session.data.session !== null) {
             await pushWorkoutSession(workoutSessions.value[index])
             for (const workoutSessionPerformance of changedWorkoutSessionPerformances) {
                 workoutSessionPerformance.updated_at = new Date();
