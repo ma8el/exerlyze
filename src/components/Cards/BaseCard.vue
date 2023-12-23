@@ -51,13 +51,13 @@
 <style scoped>
   ion-card {
     --border-radius: 10px;
-    --background: var(--ion-color-light);
+    --background: var(--ion-card-background);
   }
   ion-card-header {
     --background: none
   }
   ion-card-content {
-    --background: var(--ion-color-light);
+    --background: var(--ion-card-background);
   }
   ion-card-title {
     font-size: 1.1rem;

@@ -280,6 +280,32 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
         }).filter((w: FullWorkoutPlan | undefined) => w !== undefined) as FullWorkoutPlan[]
     })
 
+    const getFullWorkoutPlansOfToday = computed(() => {
+        const dayOfWeekStore = useDayOfWeekStore()
+        const workoutStore = useWorkoutStore()
+
+        const today = (new Date().getDay() - 1) % 7
+        const dayOfWeek = dayOfWeekStore.getDaysOfWeek.find(w => w.id === today)
+        const plannedWorkoutsOfToday = getPlannedWorkouts.value.filter(w => w.day_of_week_id === today)
+        const fullWorkoutPlansOfToday = plannedWorkoutsOfToday.map((w: PlannedWorkout) => {
+            const workout = workoutStore.getWorkoutById(w.workout_id)
+            const workoutPlan = workoutPlans.value.find(wp => wp.id === w.workout_plan_id)
+
+            if (dayOfWeek && workout && workoutPlan) {
+                return {
+                    name: workoutPlan.name,
+                    description: workoutPlan.description,
+                    ...w,
+                    dayOfWeek: dayOfWeek.name,
+                    workout: workout
+                } as FullWorkoutPlan
+            }
+            return undefined
+        }).filter((w: FullWorkoutPlan | undefined) => w !== undefined) as FullWorkoutPlan[]
+
+        return fullWorkoutPlansOfToday
+    })
+
     function getWorkoutPlanById(id: string): WorkoutPlan | undefined {
         return getWorkoutPlans.value.find(w => w.id === id)
     }
@@ -441,6 +467,7 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
     return {
         workoutPlans,
         getWorkoutPlans,
+        getFullWorkoutPlansOfToday,
         getFullWorkoutPlans,
         getNewId,
         getWorkoutPlanById,
@@ -473,6 +500,22 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
         return workoutSessions.value.map(w => {
             const workout = workoutStore.getWorkoutById(w.workout_id)
             if (workout) {
+                return {
+                    ...w,
+                    workout: workout,
+                    workoutPerformance: workoutSessionPerformances.value.filter(p => p.workout_session_id === w.id)
+                } as FullWorkoutSession
+            }
+            return undefined
+        }).filter(w => w !== undefined) as FullWorkoutSession[]
+    })
+
+    const getFullWorkoutSessionsOfToday = computed(() => {
+        const workoutStore = useWorkoutStore()
+        const today = new Date().toDateString()
+        return workoutSessions.value.map(w => {
+            const workout = workoutStore.getWorkoutById(w.workout_id)
+            if (workout && new Date(w.finished_at).toDateString() === today) {
                 return {
                     ...w,
                     workout: workout,
@@ -710,6 +753,7 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
         getWorkoutSessions,
         getWorkoutSessionPerformances,
         getFullWorkoutSessions,
+        getFullWorkoutSessionsOfToday,
         getNewWorkoutSessionId,
         getNewWorkoutSessionPerformanceId,
         getWorkoutSessionById,

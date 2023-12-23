@@ -16,6 +16,11 @@ const props = defineProps({
     icon: {
       type: String,
       required: false
+    },
+    fontSize: {
+      type: String,
+      required: false,
+      default: '0.8rem'
     }
   })
 </script>
@@ -31,8 +36,16 @@ const props = defineProps({
       :icon="icon ? icon : ''"
     ></ion-icon>
     <ion-label>
-      <p class="exercise-paragraph-header">{{ title }}</p>
-      <p>{{ subTitle }}</p>
+      <p 
+        class="exercise-paragraph-header"
+      >
+        {{ title }}
+      </p>
+      <p
+        :style="`font-size: ${fontSize};`"
+      >
+        {{ subTitle }}
+      </p>
     </ion-label>
   </ion-item>
 </template>

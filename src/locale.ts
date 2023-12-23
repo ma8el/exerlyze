@@ -11,6 +11,7 @@ export const messages = {
         all: "All",
         custom: "Custom",
         to: "to",
+        today: "Today",
         home: { 
             title: "Home",
             hello: "Hello",
@@ -23,6 +24,8 @@ export const messages = {
             wellDone: "Well done!",
             youAreDone: "You are done for the week!",
             reviewYourPerformance: "Review your performance",
+            todayIsYourRestDay: "Today is rest day!",
+            results: "Results",
         },
         workouts: {
             title: "Workouts",
@@ -196,6 +199,7 @@ export const messages = {
         all: "Alles",
         custom: "Benutzerdefiniert",
         to: "bis",
+        today: "Heute",
         home: {
             title: "Startseite",
             hello: "Hallo",
@@ -208,6 +212,8 @@ export const messages = {
             wellDone: "Gut gemacht!",
             youAreDone: "Du bist für diese Woche fertig!",
             reviewYourPerformance: "Überprüfe deine Leistung",
+            todayIsYourRestDay: "Heute ist Restday!",
+            results: "Ergebnisse",
         },
         workouts: {
             title: "Workouts",
@@ -381,6 +387,7 @@ export const messages = {
         all: "Total",
         custom: "Personnalisé",
         to: "à",
+        today: "Aujourd'hui",
         home: {
             title: "Accueil",
             hello: "Bonjour",
@@ -393,6 +400,8 @@ export const messages = {
             wellDone: "Bien joué !",
             youAreDone: "Vous avez terminé pour la semaine !",
             reviewYourPerformance: "Revoyez votre performance",
+            todayIsYourRestDay: "Aujourd'hui est un jour de repos !",
+            results: "Résultats",
         },
         workouts: {
             title: "Entraînements",

@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { IonItem, IonThumbnail, IonTitle, IonCard } from '@ionic/vue';
+  import TodaysEventSlide from '@/components/TodaysEventSlide.vue';
   import UpcomingEventsSlide from '@/components/UpcomingEventsSlide.vue';
   import PageWithCalendar from '@/layouts/PageWithCalendar.vue';
   import WorkoutVolumeBarChart from '@/components/Charts/WorkoutVolumeBarChart.vue';
@@ -33,7 +34,7 @@
 
     <h2 class="ion-margin">{{ $t('yourDay') }}</h2>
     <OverviewCard :date="new Date()" />
-    <UpcomingEventsSlide />
+    <TodaysEventSlide />
  
     <h2 class="ion-margin">{{ $t('yourWeek') }}</h2>
     <UpcomingEventsSlide />
