@@ -72,7 +72,6 @@ onMounted(() => {
     :pagination="pagination"
   >
     <SwiperSlide 
-      class="swiper-slide" 
       v-for="(item, index) in items" :key="item.id"
       :style="{'min-width': minWidth, 'max-width': maxWidth, 'width': slideWidth}"
     >
@@ -80,8 +79,7 @@ onMounted(() => {
     </SwiperSlide>
     <SwiperSlide 
       v-if="hasLastSlide"
-      class="swiper-slide"
-      :style="{'min-width': minWidth, 'max-width': maxWidth, 'width': slideWidth}"
+      :style="{'min-width': minWidth, 'width': '100%'}"
     >
       <slot name="lastSlide"></slot>
     </SwiperSlide>
