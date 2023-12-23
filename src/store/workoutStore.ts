@@ -281,11 +281,11 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
     })
 
     function getWorkoutPlanById(id: string): WorkoutPlan | undefined {
-        return workoutPlans.value.find(w => w.id === id)
+        return getWorkoutPlans.value.find(w => w.id === id)
     }
 
     function getPlannedWorkoutsByWorkoutId(workoutId: string): PlannedWorkout[] {
-        return plannedWorkouts.value.filter(w => w.workout_id === workoutId)
+        return getPlannedWorkouts.value.filter(w => w.workout_id === workoutId)
     }
 
     async function addWorkoutPlan(workoutPlan: WorkoutPlan) {
@@ -323,7 +323,7 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
     }
 
     function getPlannedWorkoutById(id: string): PlannedWorkout | undefined {
-        return plannedWorkouts.value.find(w => w.id === id)
+        return getPlannedWorkouts.value.find(w => w.id === id)
     }
 
     async function addPlannedWorkout(plannedWorkout: PlannedWorkout) {
@@ -335,7 +335,7 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
     }
 
     function getPlannedWorkoutsByWorkoutPlanId(workoutPlanId: string): PlannedWorkout[] {
-        return plannedWorkouts.value.filter(w => w.workout_plan_id === workoutPlanId)
+        return getPlannedWorkouts.value.filter(w => w.workout_plan_id === workoutPlanId)
     }
 
     async function updatePlannedWorkout(plannedWorkout: PlannedWorkout) {
