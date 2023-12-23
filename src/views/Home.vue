@@ -36,6 +36,7 @@
     <UpcomingEventsSlide />
  
     <h2 class="ion-margin">{{ $t('yourWeek') }}</h2>
+    <UpcomingEventsSlide />
     <ChartContainerCard>
       <WorkoutVolumeBarChart />
     </ChartContainerCard>

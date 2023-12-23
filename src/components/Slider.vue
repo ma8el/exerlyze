@@ -1,8 +1,20 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
+import { ref } from 'vue';
+
 const props = defineProps({
-  items: Object,
-  minWidth: String,
-  maxWidth: String
+  items: {
+    type: Object,
+    required: true
+  },
+  minWidth: {
+    type: String,
+    default: '100%'
+  },
+  maxWidth: {
+    type: String,
+    default: '100%'
+  }
 })
 </script>
 

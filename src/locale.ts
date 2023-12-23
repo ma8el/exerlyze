@@ -19,7 +19,10 @@ export const messages = {
             macroDistribution: "Macro distribution",
             missingProtein: "Missing Protein",
             performedWorkouts: "Performed Workouts",
-            performedVolume: "Performed Volume"
+            performedVolume: "Performed Volume",
+            wellDone: "Well done!",
+            youAreDone: "You are done for the week!",
+            reviewYourPerformance: "Review your performance",
         },
         workouts: {
             title: "Workouts",
@@ -201,7 +204,10 @@ export const messages = {
             macroDistribution: "Makroverteilung",
             missingProtein: "Proteinlücke",
             performedWorkouts: "Absolvierte Workouts",
-            performedVolume: "Bewältigtes Volume"
+            performedVolume: "Bewältigtes Volume",
+            wellDone: "Gut gemacht!",
+            youAreDone: "Du bist für diese Woche fertig!",
+            reviewYourPerformance: "Überprüfe deine Leistung",
         },
         workouts: {
             title: "Workouts",
@@ -303,7 +309,7 @@ export const messages = {
         },
         or: "oder",
         yourDay: "@:your @:day",
-        yourWeek: "@:your @:week",
+        yourWeek: "Deine @:week",
         email: "E-Mail",
         sendMagicLink: "Sende Magic Link",
         tryFirst: "Willst du die App testen?",
@@ -383,7 +389,10 @@ export const messages = {
             macroDistribution: "Répartition des macros",
             missingProtein: "Protéines manquantes",
             performedWorkouts: "Entraînements effectués",
-            performedVolume: "Volume effectué"
+            performedVolume: "Volume effectué",
+            wellDone: "Bien joué !",
+            youAreDone: "Vous avez terminé pour la semaine !",
+            reviewYourPerformance: "Revoyez votre performance",
         },
         workouts: {
             title: "Entraînements",
