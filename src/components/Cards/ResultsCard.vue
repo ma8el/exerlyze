@@ -112,10 +112,16 @@ const getAggregatedPerformancePerExercise = (exerciseId: string) => {
 <style scoped>
   ion-label {
     font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   p {
     font-size: 0.8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .scrollable-card {

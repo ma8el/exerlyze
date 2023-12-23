@@ -33,3 +33,8 @@ export const getCurrentWeekDates = () => {
 
     return dates;
 }
+
+export const getDayIndex = (day: Date | undefined) => {
+    if (day === undefined) return (new Date().getDay() - 1) % 7;
+    return (new Date(day).getDay() - 1) % 7;
+}

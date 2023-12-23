@@ -12,6 +12,7 @@ import { Workout,
 import { ref, computed } from 'vue';
 import { useStorage } from '@vueuse/core';
 import { useUserSettingsStore } from './userSettingsStore';
+import { getDayIndex } from '@/helpers/time';
 
 export const useDayOfWeekStore = defineStore({
     id: 'dayOfWeek',
@@ -284,7 +285,7 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
         const dayOfWeekStore = useDayOfWeekStore()
         const workoutStore = useWorkoutStore()
 
-        const today = (new Date().getDay() - 1) % 7
+        const today = getDayIndex(undefined)
         const dayOfWeek = dayOfWeekStore.getDaysOfWeek.find(w => w.id === today)
         const plannedWorkoutsOfToday = getPlannedWorkouts.value.filter(w => w.day_of_week_id === today)
         const fullWorkoutPlansOfToday = plannedWorkoutsOfToday.map((w: PlannedWorkout) => {
@@ -526,6 +527,24 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
         }).filter(w => w !== undefined) as FullWorkoutSession[]
     })
 
+    const getFullWorkoutSessionsOfThisWeek = computed(() => {
+        const workoutStore = useWorkoutStore()
+        const today = new Date()
+        const firstDayOfWeek = new Date(new Date(today.setDate(today.getDate() - today.getDay())).setHours(0,0,0,0));
+        const lastDayOfWeek = new Date(new Date(today.setDate(today.getDate() - today.getDay() + 6)).setHours(23, 59, 59, 0));
+        return workoutSessions.value.map(w => {
+            const workout = workoutStore.getWorkoutById(w.workout_id)
+            if (workout && new Date(w.finished_at) >= firstDayOfWeek && new Date(w.finished_at) <= lastDayOfWeek) {
+                return {
+                    ...w,
+                    workout: workout,
+                    workoutPerformance: workoutSessionPerformances.value.filter(p => p.workout_session_id === w.id)
+                } as FullWorkoutSession
+            }
+            return undefined
+        }).filter(w => w !== undefined) as FullWorkoutSession[]
+    })
+
     function getNewWorkoutSessionId(): string {
         return uuidv4();
     }
@@ -754,6 +773,7 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
         getWorkoutSessionPerformances,
         getFullWorkoutSessions,
         getFullWorkoutSessionsOfToday,
+        getFullWorkoutSessionsOfThisWeek,
         getNewWorkoutSessionId,
         getNewWorkoutSessionPerformanceId,
         getWorkoutSessionById,
