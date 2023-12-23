@@ -87,6 +87,8 @@
     :slide-width="'80%'"
     :min-width="'200px'"
     :max-width="'300px'"
+    :pagination="true"
+    :has-last-slide="true"
   >
     <template v-slot:default="slotProps">
       <BaseCard

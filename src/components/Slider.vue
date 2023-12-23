@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { Scrollbar } from 'swiper/modules';
+import { Scrollbar, Pagination } from 'swiper/modules';
 import { ref, onMounted, watch } from 'vue';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-const modules = ref([Scrollbar]);
+const modules = ref([Scrollbar, Pagination]);
 const swiperRef = ref();
 
 const props = defineProps({
@@ -33,6 +33,16 @@ const props = defineProps({
     type: String,
     required: false,
     default: '200px'
+  },
+  pagination: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  hasLastSlide: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 
@@ -59,6 +69,7 @@ onMounted(() => {
     :slides-per-view="'auto'"
     :space-between="5"
     :scrollbar="{ draggable: true }"
+    :pagination="pagination"
   >
     <SwiperSlide 
       class="swiper-slide" 
@@ -68,6 +79,7 @@ onMounted(() => {
       <slot :item="item"></slot>
     </SwiperSlide>
     <SwiperSlide 
+      v-if="hasLastSlide"
       class="swiper-slide"
       :style="{'min-width': minWidth, 'max-width': maxWidth, 'width': slideWidth}"
     >
@@ -79,5 +91,6 @@ onMounted(() => {
 <style scoped lang="scss">
 .swiper {
   width: 100%;
+  --swiper-pagination-bullet-inactive-color: #fff;
 }
 </style>
