@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { IonButton } from '@ionic/vue';
 import { useRouter } from 'vue-router';
-import complete from '../../../assets/illustrations/complete.svg';
+import complete from '../../../assets/illustrations/complete.png';
 import BaseCard from './BaseCard.vue';
 
 const redirect = () => {
