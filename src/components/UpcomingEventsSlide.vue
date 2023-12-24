@@ -34,7 +34,6 @@
     const filteredWorkoutSessions = workoutSessions.value.filter((workoutSession) => workoutSession.workout_id == workoutId);
     if (filteredWorkoutSessions.length > 0) {
       const workoutSession = filteredWorkoutSessions.find((workoutSession) => getDayIndex(new Date(workoutSession.started_at)) == Number(day));
-      console.log(workoutSession)
       if (workoutSession) {
         return true;
       } else {
@@ -47,10 +46,8 @@
 
   const getWorkoutSession = (day: string, workoutId: string): FullWorkoutSession => {
     const filteredWorkoutSessions = workoutSessions.value.filter((workoutSession) => workoutSession.workout_id == workoutId);
-    console.log(filteredWorkoutSessions)
     if (filteredWorkoutSessions.length > 0) {
       const workoutSession = filteredWorkoutSessions.find((workoutSession) => getDayIndex(new Date(workoutSession.started_at)) == Number(day));
-      console.log(filteredWorkoutSessions)
       if (workoutSession) {
         return workoutSession;
       } else {
@@ -88,8 +85,6 @@
   })
 
  onMounted(() => {
-    console.log(plannedWorkouts.value)
-    console.log(workoutSessions.value)
     setNextWorkout();
   })
 </script>
