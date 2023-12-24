@@ -214,6 +214,7 @@ export const useWorkoutStore = defineStore('workout', () => {
                     updated_at: workout.updated_at,
                     workout_id: workout.id,
                     exercise_id: exercise.exercise_id,
+                    set_index: exercise.set_index,
                     sets: exercise.sets,
                     reps: exercise.reps,
                     weight: exercise.weight,

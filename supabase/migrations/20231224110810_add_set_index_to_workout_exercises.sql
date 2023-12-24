@@ -1,0 +1,1 @@
+ALTER TABLE workout_exercises ADD COLUMN set_index integer NOT NULL;

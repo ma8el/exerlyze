@@ -8,6 +8,7 @@
      IonRow,
      IonCol,
      IonIcon,
+     IonReorder,
      modalController } from '@ionic/vue';
   import ExerciseDetailModal from './Modals/ExerciseDetailModal.vue';
   import SetIcon from '@/icons/set.svg';
@@ -61,6 +62,9 @@
 </script>
 
 <template>
+<div
+  class="card-container"
+>
   <ion-card>
     <ion-card-content>
       <div class="thumbnail-card">
@@ -148,9 +152,26 @@
       </div>
     </ion-card-content>
   </ion-card>
+  <ion-reorder
+    class="reorder-button"
+  ></ion-reorder>
+  </div>
 </template>
 
 <style scoped>
+.card-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.reorder-button {
+  margin: 0;
+  padding: 0;
+}
+ion-card {
+  padding: 0;
+  margin: 0;
+}
 ion-card-content {
   padding: 0;
   padding-inline-start: 10px;
@@ -186,7 +207,7 @@ ion-item {
   width: 80px;
   height: 80px;
   object-fit: cover;
-  margin: 0 8px 0 0;
+  margin: 0;
   border-radius: 10px;
 }
 

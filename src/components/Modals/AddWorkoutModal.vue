@@ -14,6 +14,7 @@
            IonList,
            IonAccordion,
            IonAccordionGroup,
+           IonReorderGroup,
            modalController } from '@ionic/vue';
   import { ref, onMounted, computed } from 'vue'
   import { useWorkoutStore, useDayOfWeekStore, useWorkoutPlanStore } from '../../store/workoutStore';
@@ -155,7 +156,7 @@
   }
 
   const addExercise = async (e: ExerciseSelection[]) => {
-    for (const exercise of e) {
+    for (const [index, exercise] of e.entries()) {
       exercises.value.push({
         id: exercise.id,
         created_at: new Date(),
@@ -163,6 +164,7 @@
         workout_id: generatedWorkoutId.value,
         exercise_id: exercise.exercise_id,
         name: exercise.name,
+        set_index: index,
         sets: exercise.sets,
         reps: exercise.reps,
         weight: exercise.weight,
@@ -200,6 +202,13 @@
   const setOpen = (state: boolean) => {
     isOpen.value = state;
   };
+
+  const handleReorder = (event: any) => {
+    exercises.value[event.detail.from].set_index = event.detail.to
+    exercises.value[event.detail.to].set_index = event.detail.from
+    event.detail.complete();
+//    exercises.value = event.detail.complete(exercises.value);
+  }
 
   onMounted(() => {
     if (props.workoutId) {
@@ -323,22 +332,25 @@
           </ion-button>
         </ion-col>
       </ion-row>
-
-      <ExerciseItem 
-        v-for="(exercise, index) in exercises"
-        v-model:sets="exercises[index].sets"
-        v-model:reps="exercises[index].reps"
-        v-model:weight="exercises[index].weight"
-        :key="index" 
-        :id="exercise.id"
-        :created_at="exercise.created_at"
-        :updated_at="exercise.updated_at"
-        :workout_id="exercise.workout_id"
-        :exercise_id="exercise.exercise_id"
-        :name="exercise.name"
-        class="exercise-item ion-margin"
-        @update:valid="exercises[index].valid = $event"
-       />
+      <ion-reorder-group :disabled="false" @ionItemReorder="handleReorder($event)">
+        <div v-for="(exercise, index) in exercises" :key="index">
+         <ExerciseItem 
+           v-model:sets="exercises[index].sets"
+           v-model:reps="exercises[index].reps"
+           v-model:weight="exercises[index].weight"
+           :key="index" 
+           :id="exercise.id"
+           :created_at="exercise.created_at"
+           :updated_at="exercise.updated_at"
+           :workout_id="exercise.workout_id"
+           :exercise_id="exercise.exercise_id"
+           :name="exercise.name"
+           :set_index="index"
+           class="exercise-item ion-margin"
+           @update:valid="exercises[index].valid = $event"
+         />
+        </div>
+       </ion-reorder-group>
       <AddExerciseButton class="ion-margin" @save-exercises="addExercise"/>
       <ion-button
         v-if="workoutId"
