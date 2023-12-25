@@ -203,11 +203,22 @@
     isOpen.value = state;
   };
 
+  const updateSetIndex = () => {
+    exercises.value.forEach((exercise, index) => {
+      exercise.set_index = index
+    })
+  }
+
+  const handleDeleteExercise = (index: number) => {
+    exercises.value.splice(index, 1)
+    updateSetIndex()
+  }
+
   const handleReorder = (event: any) => {
-    exercises.value[event.detail.from].set_index = event.detail.to
-    exercises.value[event.detail.to].set_index = event.detail.from
+    const movedExercise = exercises.value.splice(event.detail.from, 1)[0];
+    exercises.value.splice(event.detail.to, 0, movedExercise);
+    updateSetIndex()
     event.detail.complete();
-//    exercises.value = event.detail.complete(exercises.value);
   }
 
   onMounted(() => {
@@ -333,7 +344,7 @@
         </ion-col>
       </ion-row>
       <ion-reorder-group :disabled="false" @ionItemReorder="handleReorder($event)">
-        <div v-for="(exercise, index) in exercises" :key="index">
+        <div v-for="(exercise, index) in exercises" :key="exercise.id">
          <ExerciseItem 
            v-model:sets="exercises[index].sets"
            v-model:reps="exercises[index].reps"
@@ -345,9 +356,10 @@
            :workout_id="exercise.workout_id"
            :exercise_id="exercise.exercise_id"
            :name="exercise.name"
-           :set_index="index"
+           :set_index="exercise.set_index"
            class="exercise-item ion-margin"
            @update:valid="exercises[index].valid = $event"
+           @delete:exercise="handleDeleteExercise(index)"
          />
         </div>
        </ion-reorder-group>
