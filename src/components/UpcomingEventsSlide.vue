@@ -11,6 +11,7 @@
   import NoMoreWorkoutsThisWeekCard from './Cards/NoMoreWorkoutsThisWeekCard.vue';
   import { getDayIndex } from '@/helpers/time';
   import { FullWorkoutSession } from '@/types/index';
+import { filter } from 'ionicons/icons';
 
   const workoutPlanStore = useWorkoutPlanStore();
   const workoutSessionStore = useWorkoutSessionStore();
@@ -32,27 +33,21 @@
 
   const isPerformed = (day: string, workoutId: string) => {
     const filteredWorkoutSessions = workoutSessions.value.filter((workoutSession) => workoutSession.workout_id == workoutId);
-    if (filteredWorkoutSessions.length > 0) {
-      const workoutSession = filteredWorkoutSessions.find((workoutSession) => getDayIndex(new Date(workoutSession.started_at)) == Number(day));
-      if (workoutSession) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
+    if (filteredWorkoutSessions.length == 0) {
       return false;
-    }
+    } else if (filteredWorkoutSessions.length == 1) {
+      return true;
+    } else {
+      return false
+    } 
   }
 
   const getWorkoutSession = (day: string, workoutId: string): FullWorkoutSession => {
     const filteredWorkoutSessions = workoutSessions.value.filter((workoutSession) => workoutSession.workout_id == workoutId);
-    if (filteredWorkoutSessions.length > 0) {
-      const workoutSession = filteredWorkoutSessions.find((workoutSession) => getDayIndex(new Date(workoutSession.started_at)) == Number(day));
-      if (workoutSession) {
-        return workoutSession;
-      } else {
-        return {} as FullWorkoutSession;
-      }
+    if (filteredWorkoutSessions.length == 0) {
+      return {} as FullWorkoutSession;
+    } else if (filteredWorkoutSessions.length == 1) {
+      return filteredWorkoutSessions[0];
     } else {
       return {} as FullWorkoutSession;
     }
