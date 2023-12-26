@@ -85,6 +85,8 @@ export const useUserStore = defineStore('userStore', () => {
     const gender = useStorage('gender', ref<string | undefined>());
     const dateOfBirth = useStorage('dateOfBirth', ref<Date>(new Date()));
     const height = useStorage('height', ref<number | string | undefined>());
+    const updated_at = useStorage('updated_at', ref<Date>(new Date()));
+    const created_at = useStorage('created_at', ref<Date>(new Date()));
     const isComplete = computed(() => {
         if (userName.value === "undefined"
             || userName.value === undefined) {
@@ -138,15 +140,19 @@ export const useUserStore = defineStore('userStore', () => {
     }
     const setUserName = (name: string) => {
         userName.value = name
+        updated_at.value = new Date()
     }
     const setGender = (selectedGender: string) => {
         gender.value = selectedGender
+        updated_at.value = new Date()
     }
     const setDateOfBirth = (selectedDateOfBirth: Date) => {
         dateOfBirth.value = new Date(selectedDateOfBirth)
+        updated_at.value = new Date()
     }
     const setHeight = (selectedHeight: number) => {
         height.value = selectedHeight
+        updated_at.value = new Date()
     }
     const fetchUser = async () => {
         const session = await supabase.auth.getSession()
@@ -156,10 +162,12 @@ export const useUserStore = defineStore('userStore', () => {
             console.log(error)
             return
           }
-          userName.value = data.username
-          gender.value = data.gender
-          dateOfBirth.value = new Date(data.date_of_birth)
-          height.value = data.height
+          if (updated_at.value < data.updated_at) {
+            userName.value = data.username
+            gender.value = data.gender
+            dateOfBirth.value = new Date(data.date_of_birth)
+            height.value = data.height
+          }
         }
     }
     const syncUser = async () => {
@@ -168,6 +176,8 @@ export const useUserStore = defineStore('userStore', () => {
             await fetchUser()
             const { error } = await supabase.from('profiles')
             .upsert({
+                created_at: created_at.value,
+                updated_at: new Date(),
                 username: getUserName(),
                 height: getHeight(),
                 gender: getGender(),

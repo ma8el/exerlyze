@@ -1,5 +1,5 @@
 export enum NutritionGoal {
     LoseWeight = 'loseWeight',
-    GainMuscle = 'gainmuscle',
+    GainMuscle = 'gainMuscle',
     StayFit = 'stayFit',
 };
