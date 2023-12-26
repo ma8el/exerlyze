@@ -42,16 +42,16 @@ import { filter } from 'ionicons/icons';
 //    } 
 //  }
 
-  const getWorkoutSession = (workoutId: string): FullWorkoutSession => {
-    const filteredWorkoutSessions = workoutSessions.value.filter((workoutSession) => workoutSession.workout_id == workoutId);
-    if (filteredWorkoutSessions.length == 0) {
-      return {} as FullWorkoutSession;
-    } else if (filteredWorkoutSessions.length == 1) {
-      return filteredWorkoutSessions[0];
-    } else {
-      return {} as FullWorkoutSession;
-    }
-  }
+//  const getWorkoutSession = (workoutId: string): FullWorkoutSession => {
+//    const filteredWorkoutSessions = workoutSessions.value.filter((workoutSession) => workoutSession.workout_id == workoutId);
+//    if (filteredWorkoutSessions.length == 0) {
+//      return {} as FullWorkoutSession;
+//    } else if (filteredWorkoutSessions.length == 1) {
+//      return filteredWorkoutSessions[0];
+//    } else {
+//      return {} as FullWorkoutSession;
+//    }
+//  }
 
   const setNextWorkout = () => {
     const today = getDayIndex(undefined) + 1;
@@ -97,7 +97,6 @@ import { filter } from 'ionicons/icons';
   >
     <template v-slot:default="slotProps">
       <BaseCard
-        v-if="Object.keys(getWorkoutSession(slotProps.item.workout_id)).length == 0"
         img_src="https://ionicframework.com/docs/img/demos/card-media.png"
         :title="slotProps.item.workout.name"
         :content="true"
@@ -108,10 +107,6 @@ import { filter } from 'ionicons/icons';
         </template>
         <StartWorkoutButton :workoutId="slotProps.item.workout_id" />
       </BaseCard>
-      <ResultsCard
-        v-else
-        :workoutSession="getWorkoutSession(slotProps.item.workout_id)"
-      />
     </template>
     <template #lastSlide>
       <NoMoreWorkoutsThisWeekCard />
