@@ -31,18 +31,18 @@ import { filter } from 'ionicons/icons';
     return nextEventIndex;
   }
 
-  const isPerformed = (day: string, workoutId: string) => {
-    const filteredWorkoutSessions = workoutSessions.value.filter((workoutSession) => workoutSession.workout_id == workoutId);
-    if (filteredWorkoutSessions.length == 0) {
-      return false;
-    } else if (filteredWorkoutSessions.length == 1) {
-      return true;
-    } else {
-      return false
-    } 
-  }
+//  const isPerformed = (workoutId: string) => {
+//    const filteredWorkoutSessions = workoutSessions.value.filter((workoutSession) => workoutSession.workout_id == workoutId);
+//    if (filteredWorkoutSessions.length == 0) {
+//      return false;
+//    } else if (filteredWorkoutSessions.length == 1) {
+//      return true;
+//    } else {
+//      return false
+//    } 
+//  }
 
-  const getWorkoutSession = (day: string, workoutId: string): FullWorkoutSession => {
+  const getWorkoutSession = (workoutId: string): FullWorkoutSession => {
     const filteredWorkoutSessions = workoutSessions.value.filter((workoutSession) => workoutSession.workout_id == workoutId);
     if (filteredWorkoutSessions.length == 0) {
       return {} as FullWorkoutSession;
@@ -97,7 +97,7 @@ import { filter } from 'ionicons/icons';
   >
     <template v-slot:default="slotProps">
       <BaseCard
-        v-if="!isPerformed(slotProps.item.day_of_week_id, slotProps.item.workout_id)"
+        v-if="Object.keys(getWorkoutSession(slotProps.item.workout_id)).length == 0"
         img_src="https://ionicframework.com/docs/img/demos/card-media.png"
         :title="slotProps.item.workout.name"
         :content="true"
@@ -110,7 +110,7 @@ import { filter } from 'ionicons/icons';
       </BaseCard>
       <ResultsCard
         v-else
-        :workoutSession="getWorkoutSession(slotProps.item.day_of_week_id, slotProps.item.workout_id)"
+        :workoutSession="getWorkoutSession(slotProps.item.workout_id)"
       />
     </template>
     <template #lastSlide>

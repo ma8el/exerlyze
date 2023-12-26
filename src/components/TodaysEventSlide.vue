@@ -68,7 +68,7 @@
         <StartWorkoutButton :workoutId="slotProps.item.workout_id" />
       </BaseCard>
       <ResultsCard
-        v-if="getWorkoutSession(slotProps.item.workout_id)"
+        v-if="Object.keys(getWorkoutSession(slotProps.item.workout_id)).length !== 0"
         :workoutSession="getWorkoutSession(slotProps.item.workout_id)"
       />
     </template>
