@@ -12,11 +12,9 @@
            IonRow,
            IonLabel,
            IonList,
-           IonAccordion,
-           IonAccordionGroup,
            IonReorderGroup,
            modalController } from '@ionic/vue';
-  import { ref, onMounted, computed } from 'vue'
+  import { ref, onMounted, computed, watch } from 'vue'
   import { useWorkoutStore, useDayOfWeekStore, useWorkoutPlanStore } from '../../store/workoutStore';
   import AddExerciseButton from '../Buttons/AddExerciseButton.vue'
   import ExerciseItem from '../ExerciseItem.vue';
@@ -48,12 +46,8 @@
   const alertButtons = ['OK'];
 
   const restTime = ref<number>(60)
-  const rir = ref<number>(2)
-  const individualRestTime = ref<boolean>(false)
-  const individualRir = ref<boolean>(false)
 
   const restTimeValid = ref<boolean>(true)
-  const rirValid = ref<boolean>(true)
 
   const workoutPlan = ref<WorkoutPlan>()
   const plannedWorkouts = ref<PlannedWorkout[]>()
@@ -65,7 +59,7 @@
 
   const isValid = computed(() => {
     return workoutName.value.length > 0 && exercisesSelected.value && exercises.value.every((exercise) => exercise.valid) &&
-           restTimeValid.value && rirValid.value && weekDays.value.length > 0
+           restTimeValid.value && weekDays.value.length > 0
   })
 
   const save = async () => {
@@ -169,7 +163,6 @@
         reps: exercise.reps,
         weight: exercise.weight,
         resttime: restTime.value,
-        rir: rir.value,
       })
     }
   }
@@ -221,6 +214,12 @@
     event.detail.complete();
   }
 
+  watch(restTime, (value) => {
+    exercises.value.forEach((exercise) => {
+      exercise.resttime = value
+    })
+  })
+
   onMounted(() => {
     if (props.workoutId) {
       getWorkoutData(props.workoutId)
@@ -267,8 +266,6 @@
       </ion-item>
 
       <ion-list class="settings-list" lines="none" :inset="true">
-      <ion-accordion-group>
-        <ion-accordion value="workoutSettings">
           <ion-item slot="header" color="light">
             <ion-label>{{ $t('workoutSettings') }}</ion-label>
           </ion-item>
@@ -285,43 +282,7 @@
               @update:valid="restTimeValid = $event"
             />
           </ion-item>
-
-          <ion-item slot="content">
-            <ion-label slot="start">{{ $t('workouts.rir') }}</ion-label>
-            <NumericInput
-              slot="end"
-              label=""
-              :min-value="0"
-              :max-value="10"
-              :input-value="rir"
-              @update:input-value="rir = $event"
-              @update:valid="rirValid = $event"
-            />
-          </ion-item>
-        </ion-accordion>
-
-        <ion-accordion value="advanced">
-          <ion-item slot="header" color="light">
-            <ion-label>{{ $t('settings.advancedSettings') }}</ion-label>
-          </ion-item>
-          <ion-item slot="content">
-            <ion-toggle
-              v-model="individualRestTime"
-            >
-              {{ $t('settings.individualRestTime') }}
-            </ion-toggle>
-          </ion-item>
-
-          <ion-item slot="content">
-            <ion-toggle
-              v-model="individualRir"
-            >
-              {{ $t('settings.individualRIR') }}
-            </ion-toggle>
-          </ion-item>
-        </ion-accordion>
-      </ion-accordion-group>
-      </ion-list>
+     </ion-list>
 
       <ion-row class="ion-justify-items-center ion-margin">
         <ion-col size="6">
@@ -349,6 +310,7 @@
            v-model:sets="exercises[index].sets"
            v-model:reps="exercises[index].reps"
            v-model:weight="exercises[index].weight"
+           v-model:resttime="exercises[index].resttime"
            :key="index" 
            :id="exercise.id"
            :created_at="exercise.created_at"

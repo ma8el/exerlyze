@@ -22,7 +22,11 @@
   import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
 
   const props = defineProps<Exercise>()
-  const emit = defineEmits(['update:sets', 'update:reps', 'update:weight', 'update:valid', 'delete:exercise'])
+  const emit = defineEmits(['update:sets', 
+                            'update:reps',
+                            'update:weight',
+                            'update:valid',
+                            'delete:exercise'])
   const bucketUrl = ref<string>()
   const url = ref<string>()
   const loading = ref<boolean>(true)
@@ -50,10 +54,6 @@
     })
   }
 
-  onMounted(async () => {
-    updateImage()
-  })
-
   const openExerciseDetailModal = async () => {
     const modal = await modalController.create({
       component: ExerciseDetailModal,
@@ -72,6 +72,10 @@
 
   watch(valid, (value) => {
     emit('update:valid', value)
+  })
+
+  onMounted(async () => {
+    updateImage()
   })
 </script>
 
