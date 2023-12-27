@@ -43,6 +43,7 @@
           :sets="slotProps.item.sets"
           :reps="slotProps.item.reps"
           :weight="slotProps.item.weight"
+          :set_index="slotProps.item.set_index"
         />
       </template>
     </Slider>

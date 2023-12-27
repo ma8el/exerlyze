@@ -34,6 +34,7 @@
               sets: 0,
               reps: 0,
               weight: 0,
+              set_index: 0,
               isSelected: false,
             }
           })
@@ -68,6 +69,7 @@
               sets: 0,
               reps: 0,
               weight: 0,
+              set_index: 0,
               isSelected: false,
             }
           })
