@@ -5,13 +5,10 @@
   import StartWorkoutButton from './Buttons/StartWorkoutButton.vue';
   import BaseCard from './Cards/BaseCard.vue';
   import NoWorkoutPlannedCard from './Cards/NoWorkoutPlannedCard.vue';
-  import ResultsCard from './Cards/ResultsCard.vue';
   import Slider from './Slider.vue';
   import { onMounted, ref, watch } from 'vue';
   import NoMoreWorkoutsThisWeekCard from './Cards/NoMoreWorkoutsThisWeekCard.vue';
   import { getDayIndex } from '@/helpers/time';
-  import { FullWorkoutSession } from '@/types/index';
-import { filter } from 'ionicons/icons';
 
   const workoutPlanStore = useWorkoutPlanStore();
   const workoutSessionStore = useWorkoutSessionStore();
