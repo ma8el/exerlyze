@@ -5,14 +5,15 @@
            IonCardHeader,
            IonCardContent,
            IonRow,
-           IonCol,
-           IonList,
-           IonSkeletonText } from '@ionic/vue';
+           IonCol } from '@ionic/vue';
   import { supabase } from '@/supabase';
   import { useUserSettingsStore } from '@/store/userSettingsStore';
   import { bodyOutline } from 'ionicons/icons';
-  import BaseInfoCard from '../Cards/BaseInfoCard.vue';
-  import BaseFullPageModal from './BaseFullPageModal.vue';
+  import BaseSegments from '@/components/BaseSegments.vue';
+  import BaseInfoCard from '@/components/Cards/BaseInfoCard.vue';
+  import BaseFullPageModal from '@/components/Modals/BaseFullPageModal.vue';
+  import ExerciseContentSkeleton from '@/components/Skeletons/ExerciseContentSkeleton.vue';
+  import ImageSkeleton from '@/components/Skeletons/ImageSkeleton.vue';
   import LevelIcon from '@/icons/level.svg';
   import { ref, onMounted, watch } from 'vue';
 
@@ -34,6 +35,9 @@
   const exerciseExecution = ref<string>()
   const loading = ref<boolean>(true)
 
+  const descriptionSelected = ref<boolean>(true)
+  const executionSelected = ref<boolean>(false)
+
   const getExerciseData = async (exerciseId: number) => {
     const setLocale = userSettingsStore.getLocale()
       await supabase
@@ -50,87 +54,88 @@
       })
   }
 
-  onMounted(() => {
-    getExerciseData(props.exerciseId)
-  })
+  const selectDescription = () => {
+    descriptionSelected.value = true
+    executionSelected.value = false
+  }
+
+  const selectExecution = () => {
+    descriptionSelected.value = false
+    executionSelected.value = true
+  }
 
   watch(() => exercise.value, () => {
-    loading.value = false
+    loading.value = true
     exerciseName.value = exercise.value[`name_${userSettingsStore.getLocale()}`]
     exerciseDescription.value = exercise.value[`description_${userSettingsStore.getLocale()}`]
     exerciseExecution.value = exercise.value[`execution_${userSettingsStore.getLocale()}`]
+    loading.value = false
+  })
+
+  onMounted(async () => {
+    loading.value = true
+    await getExerciseData(props.exerciseId)
+    loading.value = false
   })
 </script>
 
 <template>
-  <ion-list v-if="loading">
-    <ion-img>
-        <ion-skeleton-text :animated="true"></ion-skeleton-text>
-    </ion-img>
-    <ion-card-title class="ion-margin">
-        <ion-skeleton-text :animated="true"></ion-skeleton-text>
-    </ion-card-title>
-    <ion-card>
-        <ion-card-header>
-          <ion-skeleton-text :animated="true"></ion-skeleton-text>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-skeleton-text :animated="true"></ion-skeleton-text>
-        </ion-card-content>
-    </ion-card>
-    <ion-card>
-        <ion-card-header>
-          <ion-skeleton-text :animated="true"></ion-skeleton-text>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-skeleton-text :animated="true"></ion-skeleton-text>
-        </ion-card-content>
-    </ion-card>
-  </ion-list>
-  <BaseFullPageModal 
-    v-else
+ <BaseFullPageModal 
     :saveButton="false"
     backColor="dark"
   >
     <template #modalHeader>
+      <ImageSkeleton v-if="loading" />
       <ion-img
+        v-else
         :src="props.exerciseUrl"
         alt="Exercise Image"
-      ></ion-img>
+      />
     </template>
     <template #modalContent>
-      <ion-card-title class="ion-margin">
-        {{ exerciseName }}
-      </ion-card-title>
-      <p class="exercise-description ion-padding ion-margin">
-        {{ exerciseDescription}}
-      </p>
- 
-      <ion-row>
-        <ion-col size="6" class="ion-padding">
-          <BaseInfoCard
-            :title="$t('workouts.type')"
-            :subTitle="`Compound`"
-            :icon="LevelIcon"
-          />
-        </ion-col>
-        <ion-col size="6" class="ion-padding">
-          <BaseInfoCard
-            :title="$t('workouts.muscle')"
-            subTitle="Biceps"
-            :iconSource="bodyOutline"
-          />
-        </ion-col>
-      </ion-row>
+      <div v-if="loading">
+        <ExerciseContentSkeleton />
+      </div>
+      <div v-else>
+        <ion-card-title class="ion-margin">
+          {{ exerciseName }}
+        </ion-card-title>
+        <ion-row>
+          <ion-col size="6" class="ion-padding">
+            <BaseInfoCard
+              :title="$t('workouts.type')"
+              :subTitle="`Compound`"
+              :icon="LevelIcon"
+            />
+          </ion-col>
+          <ion-col size="6" class="ion-padding">
+            <BaseInfoCard
+              :title="$t('workouts.muscle')"
+              subTitle="Biceps"
+              :iconSource="bodyOutline"
+            />
+          </ion-col>
+        </ion-row>
 
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>{{ $t('execution') }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <p>{{ exerciseExecution }}</p>
-        </ion-card-content>
-      </ion-card>
+        <BaseSegments
+          :leftSegmentLabel="$t('description')"
+          :rightSegmentLabel="$t('execution')"
+          @leftSegmentSelected="selectDescription"
+          @rightSegmentSelected="selectExecution"
+        />
+ 
+        <ion-card v-if="descriptionSelected">
+          <ion-card-content>
+            <p>{{ exerciseDescription}}</p>
+          </ion-card-content>
+        </ion-card>
+        <ion-card v-if="executionSelected">
+          <ion-card-content>
+            <p>{{ exerciseExecution }}</p>
+          </ion-card-content>
+        </ion-card>
+ 
+      </div>
     </template>
   </BaseFullPageModal>
 </template>
