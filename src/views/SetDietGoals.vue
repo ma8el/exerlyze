@@ -163,6 +163,9 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+ion-item {
+  border-radius: 10px;
+}
 .nutrition-values {
   margin-bottom: 16px;
 }

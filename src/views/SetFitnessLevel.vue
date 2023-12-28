@@ -179,6 +179,9 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+ion-item {
+  border-radius: 10px;
+}
 .strength-values {
   margin-bottom: 16px;
 }
