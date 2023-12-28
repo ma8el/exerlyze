@@ -8,6 +8,9 @@ http://ionicframework.com/docs/theming/ */
 
 /** Ionic CSS Variables **/
 :root {
+  margin-top: constant(safe-area-inset-top);
+  margin-top: env(safe-area-inset-top);
+
   --ion-font-family: 'SF-Pro-Display';
 
   /** primary **/
@@ -125,6 +128,10 @@ http://ionicframework.com/docs/theming/ */
 
   --ion-item-background: #1E1F24;
   --ion-card-background: #1E1F24;
+}
+
+ion-tab-bar {
+  margin-bottom: calc(env(safe-area-inset-top));
 }
 
 @media (prefers-color-scheme: dark) {

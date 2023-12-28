@@ -137,7 +137,7 @@ onIonViewDidLeave(() =>{
 <style scoped lang="scss">
 ion-tabs{
 	ion-fab {
-		margin-bottom: env(safe-area-inset-bottom); /* fix notch ios*/
+		margin-bottom: env(5px + safe-area-inset-bottom); /* fix notch ios*/
 		ion-fab-button {
 			--box-shadow: none;
 		}
@@ -176,7 +176,7 @@ ion-tabs{
 			border-top-left-radius: 18px;
 		}
 		svg {    
-			width: 72px;
+			width: 80px;
 			margin-top: 19px;
 			path{
 				fill:  var(--ion-color-light);
