@@ -85,6 +85,8 @@ export const messages = {
             left: "Left",
             nutritionOverview: "@:nutrition.title @:overview",
             diet: "Diet",
+            noProductsFound: "No products found",
+            networkTimeout: "Network timeout! Check your internet connection.",
         },
         profile: {
             title: "Profile",
@@ -272,7 +274,9 @@ export const messages = {
             activity: "Aktivität",
             left: "Übrig",
             nutritionOverview: "Nähstoffüberblick",
-            diet: "Ernährung"
+            diet: "Ernährung",
+            noProductsFound: "Keine Produkte gefunden",
+            networkTimeout: "Netzwerk Timeout! Überprüfe deine Internetverbindung.",
         },
         profile: {
             title: "Profil",
@@ -461,6 +465,8 @@ export const messages = {
             left: "Restant",
             nutritionOverview: "@:nutrition.title @:overview",
             diet: "Régime",
+            noProductsFound: "Aucun produit trouvé",
+            networkTimeout: "Délai d'attente du réseau! Vérifiez votre connexion Internet.",
         },
         profile: {
             title: "Profil",

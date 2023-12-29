@@ -6,26 +6,39 @@ const searchEndpoint = "cgi/search.pl?search_terms="
 
 const fields = 'fields=_id,_keywords,product_name,image_front_thumb_url,image_front_small_url,image_front_url,ingredients,nutriments,nutriscore_grade,nutriscore_score'
 
+const axiosInstance = axios.create({
+  baseURL: nutritionURL,
+  timeout: 10000,
+})
+
 export default function useNutritionApi() {
   async function getProductByBarcode(barcode: string) {
-    const { data } = await axios.get(
-      `${nutritionURL}${productEndpoint}${barcode}?${fields}`
-    )
-    return data
+    try {
+      const { data } = await axiosInstance.get(`${productEndpoint}${barcode}?${fields}`)
+      return data
+    } catch (error) {
+      return { error: true}
+    }
   }
 
   async function getProductById(id: string) {
-    const { data } = await axios.get(
-      `${nutritionURL}${productEndpoint}${id}?${fields}`
-    )
-    return data
-  }
+    try {
+      const { data } = await axiosInstance.get(`${productEndpoint}${id}?${fields}`)
+      return data
+    } catch (error) {
+      return { error: true}
+    }
+ }
 
   async function searchProduct(query: string) {
-    const { data } = await axios.get(
-      `${nutritionURL}${searchEndpoint}${query}&${fields}&action=process&json=1`
-    )
-    return data
+    try {
+      const { data } = await axiosInstance.get(
+        `${searchEndpoint}${query}&${fields}&action=process&json=1`
+      )
+      return data
+    } catch (error) {
+      return { error: true}
+    }
   }
 
   return { getProductById, getProductByBarcode, searchProduct }
