@@ -17,10 +17,9 @@
   import ProteinIcon from '@/icons/protein.vue';
   import FatIcon from '@/icons/fat.vue';
   import { FilteredNutritionApiProduct } from '@/types/nutrition';
-  import { PropType } from 'vue';
+  import { PropType, onMounted } from 'vue';
   import { nutritionDetails, stringToFixedDigits } from '@/helpers/nutrition';
   import { defaultImage } from '@/composables/supabase';
-import { onMounted } from 'vue';
 
   const props = defineProps({
     product: {
@@ -160,8 +159,8 @@ import { onMounted } from 'vue';
           class="nutrition-list"
         >
           <ion-item class="nutrition-list-item">
-            <ion-label>{{ $t(`nutrition.${detail.name.toLowerCase()}`) }}</ion-label>
-            <ion-label slot="end">{{ stringToFixedDigits(product.nutriments[detail.value], 2) }} {{ product.nutriments[detail.unit] ? product.nutriments[detail.unit]: 'g' }}</ion-label>
+            <ion-label slot="start">{{ $t(`nutrition.${detail.name.toLowerCase()}`) }}</ion-label>
+            <ion-label class="nutrition-list-item-label" slot="end">{{ stringToFixedDigits(product.nutriments[detail.value], 2) }} {{ product.nutriments[detail.unit] ? product.nutriments[detail.unit]: 'g' }}</ion-label>
           </ion-item>
         </ion-list>
       </BaseCard>
@@ -189,7 +188,9 @@ import { onMounted } from 'vue';
     border-radius: 10px;
     margin: 10px 0 0 0;
   }
-
+  ion-item.nutrition-list-item .nutrition-list-item-label {
+    flex-grow: 0 !important;
+  }
   .nutrition-list-item.md {
     border-radius: 10px;
     margin: 0;
