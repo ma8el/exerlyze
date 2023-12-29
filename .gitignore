@@ -33,3 +33,5 @@ npm-debug.log*
 
 tests/e2e/videos
 .env
+resources/ios/**/*
+resources/android/**/*
