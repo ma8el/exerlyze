@@ -1,5 +1,6 @@
 export const messages = {
     en: {
+        invalidEmail: "Invalid email",
         language: "Language",
         sync: "Syncing",
         yes: "Yes",
@@ -190,6 +191,7 @@ export const messages = {
         when: "When?",
     },
     de: {
+        invalidEmail: "Ungültige E-Mail",
         language: "Sprache",
         sync: "Synchronisiere",
         yes: "Ja",
@@ -380,6 +382,7 @@ export const messages = {
         when: "Wann?",
     },
     fr: {
+        invalidEmail: "E-mail invalide",
         language: "Langue",
         sync: "Synchronisation",
         yes: "Oui",

@@ -15,8 +15,8 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useDark } from '@vueuse/core'
 import { supabase } from '@/supabase';
-import EmailIcon from '@/icons/email.svg';
 import Line from '@/components/Line.vue';
+import EmailInput from '@/components/EmailInput.vue';
 import { useUserStore } from '@/store/bodyMetricsStore';
 import { useUserFitnessLevelStore } from '@/store/userSettingsStore';
 import { useFoodDiaryStore } from '@/store/foodDiary';
@@ -33,6 +33,8 @@ const email = ref('');
 const router = useRouter();
 const isOpen = ref(false);
 const loading = ref(false);
+
+const valid = ref<boolean>(true);
 
 const alertButtons = [
  {
@@ -109,16 +111,12 @@ onMounted(async () => {
               <img v-else src="../../assets/logo_transparent_black.png" alt="Dark Logo" />
             </div>
             <form @submit.prevent="onLogin">
-              <ion-item lines="none">
-                <ion-icon :icon="EmailIcon" slot="end"></ion-icon>
-                <ion-input 
-                  :label="$t('email')"
-                  type="email"
-                  label-placement="floating"
-                  v-model="email">
-                </ion-input>
-              </ion-item>
-              <ion-button id="magic-link-button" expand="block" type="submit" class="ion-margin-top" :disabled="loading">
+              <EmailInput
+                :inputEmail="email"
+                @update:inputEmail="email = $event"
+                @update:valid="valid = $event"
+              />
+             <ion-button id="magic-link-button" expand="block" type="submit" class="ion-margin-top" :disabled="loading || !valid">
                 {{ $t('sendMagicLink') }}
               </ion-button>
 
