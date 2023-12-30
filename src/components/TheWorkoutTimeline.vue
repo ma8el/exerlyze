@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { IonText } from '@ionic/vue';
 import ActivityWorkoutList from './ActivityWorkoutList.vue';
 import { dateToIsoString, dateToLocaleString } from '@/helpers/time';
 import { useWorkoutSessionStore } from '@/store/workoutStore';
@@ -32,10 +33,29 @@ onMounted(() => {
         :selectedDate="new Date(date)"
       />
     </div>
+    <div 
+      v-if="uniqueWorkoutSessionDates.length === 0"
+      class="no-workouts-container ion-justify-content-center ion-align-items-center"
+    >
+      <ion-text
+       class="ion-text-center"
+      >
+        {{ $t('workouts.noWorkoutsYet') }}
+      </ion-text>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.no-workouts-container {
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  :is(ion-text) {
+    color: #888888;
+    text-align: center;
+  }
+}
 .ion-padding {
   position: relative;
 }
