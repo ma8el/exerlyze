@@ -15,8 +15,9 @@
   import RepsIcon from '@/icons/reps.svg';
   import WeightIcon from '@/icons/weight.svg';
   import TimeIcon from '@/icons/time.svg';
+  import NumericInput from '../NumericInput.vue';
   import { useWorkoutSessionStore } from '@/store/workoutStore';
-  import { computed } from 'vue';
+  import { ref, computed } from 'vue';
   import { WorkoutSessionPerformance } from '@/types';
 
   interface ChangedWorkoutSessionPerformance extends WorkoutSessionPerformance {
@@ -29,6 +30,8 @@
       required: true
     }
   })
+
+  const repsValid = ref<boolean>(true);
 
   const workoutSessionStore = useWorkoutSessionStore();
   const workoutSession = JSON.parse(JSON.stringify(workoutSessionStore.getFullWorkoutSessionById(props.workoutSessionId)));
@@ -71,8 +74,10 @@
   };
 
   const updatePerformedReps = (index: number, value: any) => {
-    workoutSession.workoutPerformance[index].performed_reps = parseInt(value.detail.value)
+    console.log(value);
+    workoutSession.workoutPerformance[index].performed_reps = parseInt(value)
     workoutSession.workoutPerformance[index].changed = true;
+    console.log(workoutSession.workoutPerformance[index]);
   };
 
   const update = async () => {
@@ -157,18 +162,35 @@
                 </ion-label>
               </ion-col>
               <ion-col size="5">
-                <ion-row class="ion-align-items-center">
-                  <ion-icon :icon="RepsIcon"></ion-icon>
-                  <ion-input 
+                <ion-item lines="none">
+                  <ion-col size="3">
+                    <ion-icon :icon="RepsIcon"></ion-icon>
+                  </ion-col>
+<!--                  <ion-input 
                     :value="set.performed_reps"
                     :clear-on-edit="true"
                     @ion-input="value => updatePerformedReps(index, value)"
                     type="number"
                     inputmode="numeric"
                   >
-                  </ion-input>
-                  <ion-label>x</ion-label>
-                </ion-row>
+                  </ion-input>-->
+                  <ion-col size="7">
+                    <NumericInput
+                      :label="$t('workouts.reps')"
+                      :placeholder="$t('workouts.reps')"
+                      :minValue="1"
+                      :maxValue="20"
+                      error-text="Invalid"
+                      :clear-input="false"
+                      :inputValue="set.performed_reps"
+                      @update:inputValue="updatePerformedReps(index, $event)"
+                      @update:valid="repsValid = $event"
+                    />
+                  </ion-col>
+                  <ion-col size="1">
+                    <ion-label>x</ion-label>
+                  </ion-col>
+                </ion-item>
               </ion-col>
               <ion-col size="5">
                 <ion-row class="ion-align-items-center">

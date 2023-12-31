@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import { IonItem,
-         IonList,
-         IonListHeader,
-         IonLabel,
-         IonInput,
-         IonRow,
-         IonCol,
+import { IonList,
          IonFab,
          IonFabButton,
          IonIcon,
@@ -13,9 +7,6 @@ import { IonItem,
 import { bookmarkOutline, playForwardOutline, checkmarkDoneOutline } from 'ionicons/icons';
 import BaseFullPageModal from './BaseFullPageModal.vue';
 import ActiveExerciseCard from '../Cards/ActiveExerciseCard.vue';
-import WeightIcon from '@/icons/weight.svg';
-import RepsIcon from '@/icons/reps.svg';
-import SetIcon from '@/icons/set.svg';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
 import { ref, reactive, onMounted, computed, watch } from 'vue';
 
@@ -35,7 +26,7 @@ const props = defineProps({
 const workoutStore = useWorkoutStore();
 const workoutSessionStore = useWorkoutSessionStore();
 
-const setRefs = ref<InstanceType<typeof IonList>[]>([]);
+const setRef = ref<InstanceType<typeof IonList>[]>([]);
 
 const startedAt = ref<Date>(new Date());
 const currentSet = ref<number>(0);
@@ -111,15 +102,17 @@ watch(currentSet, (newValue) => {
   if(workoutSessionSets && workoutSessionSets[newValue]) {
     currentReps.value = workoutSessionSets[newValue].reps;
     currentWeight.value = workoutSessionSets[newValue].weight;
-    if (setRefs.value.length > 0) {
-      setRefs.value[newValue].$el.scrollIntoView({
+    console.log(setRef.value)
+    if (setRef.value.length > 0) {
+      console.log(setRef.value[newValue])
+      setRef.value[newValue].$el.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
         inline: 'center',
       });
     }
   }
-}, { immediate: true });
+});
 
 const updatePerformedWeight = (index: number, value: any) => {
   if (!workoutSessionSets) {
@@ -152,77 +145,33 @@ const updatePerformedReps = (index: number, value: any) => {
 };
 
 onMounted(() => {
-  currentSet.value = 0;
   startedAt.value = new Date();
 });
 </script>
 
 <template>
-  <BaseFullPageModal v-if="workout" back-color="dark">
+  <BaseFullPageModal 
+    v-if="workout" 
+    back-color="dark"
+  >
     <template #saveButton>
       <ion-icon :icon="bookmarkOutline" @click="save"/>
     </template>
-    <template #modalHeader>
-      <ActiveExerciseCard v-if="currentWorkoutSet"
-        class="active-exercise-card"
-        :exerciseId="currentWorkoutSet.exerciseId"
-        :name="currentWorkoutSet.name"
-      />
-    </template>
     <template v-if="workoutSessionSets" #modalContent>
-      <ion-list class="exercise-list">
-        <div
-          v-for = "(set, index) in workoutSessionSets"
-          :key="index"
-          class="ion-padding"
-        >
-        <ion-list-header
-          v-if="set.currentSet === 1"
-        >
-          {{ set.name }}
-        </ion-list-header>
-        <ion-item 
-          lines="none"
-          :class="{ 'highlighted': currentSet === index  }"
-          ref="setRefs"
-        >
-          <ion-col size="2">
-            <ion-label>
-              <ion-icon :icon="SetIcon"></ion-icon>
-              {{ set.currentSet }}
-            </ion-label>
-          </ion-col>
-          <ion-col size="5">
-            <ion-row class="ion-align-items-center">
-              <ion-icon :icon="RepsIcon" class="icons"></ion-icon>
-              <ion-input 
-                :value="set.plannedReps"
-                :clear-on-edit="true"
-                @ion-input="value => updatePerformedReps(index, value)"
-                type="number"
-                inputmode="numeric"
-              >
-              </ion-input>
-              <ion-label>x</ion-label>
-            </ion-row>
-          </ion-col>
-          <ion-col size="5">
-            <ion-row class="ion-align-items-center">
-              <ion-icon :icon="WeightIcon"></ion-icon>
-              <ion-input 
-                :value="set.plannedWeight"
-                :clear-on-edit="true"
-                @ion-input="value => updatePerformedWeight(index, value)"
-                type="number"
-                inputmode="numeric"
-              >
-              </ion-input>
-              <ion-label>{{ $t('weightUnitBig') }}</ion-label>
-            </ion-row>
-          </ion-col>
-        </ion-item>
-        </div>
-      </ion-list>
+      <ActiveExerciseCard
+        ref="setRef"
+        v-for = "(set, index) in workoutSessionSets"
+        :key="index"
+        :exerciseId="set.exerciseId"
+        :name="set.name"
+        :transitionTrigger="index === currentSet"
+        :currentSet="set.currentSet"
+        :plannedReps="set.plannedReps"
+        :plannedWeight="set.plannedWeight"
+        @update:reps="updatePerformedReps(index, $event)"
+        @update:weight="updatePerformedWeight(index, $event)"
+      />
+      <div class="bottom-margin"></div>
     </template>
     <template #modalFooter>
       <ion-fab 
@@ -233,7 +182,7 @@ onMounted(() => {
           <ion-fab-button color="primary">
             <ion-icon 
               :icon="playForwardOutline"
-              @click="nextSet"
+              @click="nextSet()"
             >
             </ion-icon>
           </ion-fab-button>
@@ -256,49 +205,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.active-exercise-card {
-  margin: 0 0 20px 0;
-}
-
-.exercise-list {
-  background: none;
-  :is(ion-list-header) {
-    margin-bottom: 15px;
-  }
-  :is(ion-item) {
-    border-radius: 10px;
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    opacity: 0.5;
-    transform: scale(1);
-    :is(ion-icon) {
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-    :is(ion-input) {
-      --background: var(--ion-color-step-100);
-      border-radius: 10px;
-      margin: 0 2px 0 2px;
-      padding: 0;
-    }
-    :is(ion-item) {
-      margin: 10px 0 10px 0;
-      padding: 0;
-    }
-  }
-}
-
-ion-item.highlighted {
-  opacity: 1 !important;
-  transform: scale(1.05) !important;
-  :is(ion-icon) {
-    opacity: 1 !important;
-  }
-  :is(ion-input) {
-    opacity: 1 !important;
-  }
-  :is(ion-item) {
-    opacity: 1 !important;
-  }
+.bottom-margin {
+  height: 5rem;
 }
 </style>
