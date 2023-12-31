@@ -4,8 +4,9 @@ import { useRouter } from 'vue-router';
 import complete from '../../../assets/illustrations/complete.png';
 import BaseCard from './BaseCard.vue';
 
+const router = useRouter();
+
 const redirect = () => {
-  const router = useRouter();
   router.push('/insights');
 }
 </script>
