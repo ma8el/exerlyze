@@ -5,8 +5,8 @@ import { IonList,
          IonIcon,
          modalController } from '@ionic/vue';
 import { bookmarkOutline, playForwardOutline, checkmarkDoneOutline } from 'ionicons/icons';
-import BaseFullPageModal from './BaseFullPageModal.vue';
-import ActiveExerciseCard from '../Cards/ActiveExerciseCard.vue';
+import BaseFullPageModal from '@/components/Modals/BaseFullPageModal.vue';
+import WorkoutExerciseItem from '@/components/WorkoutExerciseItem.vue';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
 import { ref, reactive, onMounted, computed, watch } from 'vue';
 
@@ -158,7 +158,7 @@ onMounted(() => {
       <ion-icon :icon="bookmarkOutline" @click="save"/>
     </template>
     <template v-if="workoutSessionSets" #modalContent>
-      <ActiveExerciseCard
+      <WorkoutExerciseItem
         ref="setRef"
         v-for = "(set, index) in workoutSessionSets"
         :key="index"
