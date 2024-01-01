@@ -28,6 +28,7 @@ const currentReps = ref<number>(0);
 const currentWeight = ref<number>(0);
 
 const workout = workoutStore.getWorkoutById(props.workoutId);
+const workoutName = workout !== undefined ? workout.name: '';
 let workoutSessionSets = reactive(workoutSessionStore.createFullWorkoutSessionSets(props.workoutId));
 
 const currentWorkoutSet = computed(() => {
@@ -131,6 +132,8 @@ const updatePerformedReps = (index: number, value: any) => {
 
 onMounted(() => {
   startedAt.value = new Date();
+  console.log(workoutName)
+  console.log(workoutSessionSets);
 });
 </script>
 
@@ -141,6 +144,9 @@ onMounted(() => {
   >
     <template #saveButton>
       <ion-icon :icon="bookmarkOutline" @click="save"/>
+    </template>
+    <template #modalHeader>
+      <p class="header-title">{{ workoutName }}</p>
     </template>
     <template v-if="workoutSessionSets" #modalContent>
       <WorkoutExerciseItem
@@ -212,5 +218,11 @@ ion-button {
   :is(ion-label) {
     margin-right: 2px;
   }
+}
+.header-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
 }
 </style>
