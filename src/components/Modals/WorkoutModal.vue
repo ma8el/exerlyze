@@ -1,20 +1,16 @@
 <script setup lang="ts">
-import { IonList,
-         IonFab,
-         IonFabButton,
+import { IonLabel,
+         IonRow,
+         IonCol,
+         IonButton,
          IonIcon,
          modalController } from '@ionic/vue';
 import { bookmarkOutline, playForwardOutline, checkmarkDoneOutline } from 'ionicons/icons';
 import BaseFullPageModal from '@/components/Modals/BaseFullPageModal.vue';
 import WorkoutExerciseItem from '@/components/WorkoutExerciseItem.vue';
+import StopWatch from '../StopWatch.vue';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
 import { ref, reactive, onMounted, computed, watch } from 'vue';
-
-interface ListRef {
-  $el: {
-    scrollIntoView: (options?: boolean | ScrollIntoViewOptions) => void;
-  };
-}
 
 const props = defineProps({
   workoutId: {
@@ -25,8 +21,6 @@ const props = defineProps({
 
 const workoutStore = useWorkoutStore();
 const workoutSessionStore = useWorkoutSessionStore();
-
-const setRef = ref<InstanceType<typeof IonList>[]>([]);
 
 const startedAt = ref<Date>(new Date());
 const currentSet = ref<number>(0);
@@ -164,32 +158,46 @@ onMounted(() => {
       <div class="bottom-margin"></div>
     </template>
     <template #modalFooter>
-      <ion-fab 
-        vertical="bottom"
-        horizontal="end"
-        v-if="!isFinished"
+      <ion-row
+       class="ion-align-items-center"
       >
-          <ion-fab-button color="primary">
-            <ion-icon 
-              :icon="playForwardOutline"
-              @click="nextSet()"
-            >
-            </ion-icon>
-          </ion-fab-button>
-      </ion-fab>
-      <ion-fab 
-        vertical="bottom"
-        horizontal="end"
-        v-else
-      >
-          <ion-fab-button color="primary">
-            <ion-icon 
-              :icon="checkmarkDoneOutline"
-              @click="save"
-            >
-            </ion-icon>
-          </ion-fab-button>
-      </ion-fab>
+        <ion-col size="7">
+          <StopWatch/>
+        </ion-col>
+        <ion-col size="5">
+          <ion-button 
+           v-if="!isFinished"
+           @click="nextSet()"
+           color="primary"
+           shape="round"
+           >
+            <ion-label>
+              {{ $t('next')  }}
+            </ion-label>
+             <ion-icon 
+               :icon="playForwardOutline"
+               @click="nextSet()"
+             >
+             </ion-icon>
+           </ion-button>
+           <ion-button 
+             v-else 
+             @click="save()"
+             shape="round"
+             color="primary"
+           >
+             <ion-label>
+               {{ $t('finish')  }}
+             </ion-label>
+             <ion-icon 
+               class="button-icon"
+               :icon="checkmarkDoneOutline"
+               @click="save"
+             >
+             </ion-icon>
+           </ion-button>
+        </ion-col>
+      </ion-row>
     </template>
   </BaseFullPageModal>
 </template>
@@ -197,5 +205,12 @@ onMounted(() => {
 <style scoped>
 .bottom-margin {
   height: 5rem;
+}
+ion-button {
+  --border-radius: 1rem;
+  height: 2.5rem;
+  :is(ion-label) {
+    margin-right: 2px;
+  }
 }
 </style>
