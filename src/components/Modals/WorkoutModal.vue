@@ -27,6 +27,8 @@ const currentSet = ref<number>(0);
 const currentReps = ref<number>(0);
 const currentWeight = ref<number>(0);
 
+const showBreak = ref<boolean>(false);
+
 const workout = workoutStore.getWorkoutById(props.workoutId);
 const workoutName = workout !== undefined ? workout.name: '';
 let workoutSessionSets = reactive(workoutSessionStore.createFullWorkoutSessionSets(props.workoutId));
@@ -66,7 +68,8 @@ const save = async () => {
         performed_reps: parseInt(set.reps),
         planned_weight: parseFloat(set.plannedWeight),
         performed_weight: parseFloat(set.weight),
-        resttime: 0,
+        planned_resttime: parseInt(set.plannedResttime),
+        performed_resttime: parseInt(set.resttime),
         created_at: new Date(),
         updated_at: new Date(),
       }))
@@ -75,6 +78,7 @@ const save = async () => {
 };
 
 const nextSet = () => {
+  showBreak.value = false;
   if (!currentWorkoutSet.value) {
     return;
   }
@@ -83,6 +87,7 @@ const nextSet = () => {
   if (workoutSessionSets && currentSet.value === workoutSessionSets.length - 1) {
     return;
   }
+
   currentSet.value++;
 };
 
@@ -130,10 +135,23 @@ const updatePerformedReps = (index: number, value: any) => {
   });
 };
 
+const updateResttime = (index: number, value: any) => {
+  if (!workoutSessionSets) {
+    return;
+  }
+  workoutSessionSets = workoutSessionSets.map((set: any, i: number) => {
+    if (i === index) {
+      return {
+        ...set,
+        resttime: parseInt(value),
+      };
+    }
+    return set;
+  });
+};
+
 onMounted(() => {
   startedAt.value = new Date();
-  console.log(workoutName)
-  console.log(workoutSessionSets);
 });
 </script>
 
@@ -154,12 +172,15 @@ onMounted(() => {
         :key="index"
         :exerciseId="set.exerciseId"
         :name="set.name"
-        :transitionTrigger="index === currentSet"
+        :transitionTrigger="index === currentSet && !showBreak"
         :currentSet="set.currentSet"
         :plannedReps="set.plannedReps"
         :plannedWeight="set.plannedWeight"
+        :planned-resttime="set.plannedResttime"
+        :show-break="index === currentSet && showBreak"
         @update:reps="updatePerformedReps(index, $event)"
         @update:weight="updatePerformedWeight(index, $event)"
+        @update:resttime="updateResttime(index, $event)"
       />
       <div class="bottom-margin"></div>
     </template>
@@ -172,20 +193,34 @@ onMounted(() => {
         </ion-col>
         <ion-col size="5">
           <ion-button 
-           v-if="!isFinished"
-           @click="nextSet()"
-           color="primary"
-           shape="round"
+             v-if="!isFinished && !showBreak"
+             @click="showBreak = true"
+             color="primary"
+             shape="round"
            >
             <ion-label>
               {{ $t('next')  }}
             </ion-label>
              <ion-icon 
                :icon="playForwardOutline"
-               @click="nextSet()"
              >
              </ion-icon>
            </ion-button>
+           <ion-button 
+             v-else-if="!isFinished && showBreak"
+             @click="nextSet()"
+             color="primary"
+             shape="round"
+           >
+            <ion-label>
+              {{ $t('next')  }}
+            </ion-label>
+             <ion-icon 
+               :icon="playForwardOutline"
+             >
+             </ion-icon>
+           </ion-button>
+ 
            <ion-button 
              v-else 
              @click="save()"
@@ -198,7 +233,6 @@ onMounted(() => {
              <ion-icon 
                class="button-icon"
                :icon="checkmarkDoneOutline"
-               @click="save"
              >
              </ion-icon>
            </ion-button>

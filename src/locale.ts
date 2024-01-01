@@ -61,6 +61,7 @@ export const messages = {
             deleteWorkoutPlanAlertMessage: "You are about to delete this plan",
             restTime: "Rest time",
             rir: "RIR",
+            break: "Break",
         },
         nutrition: {
             title: "Nutrition",
@@ -253,6 +254,7 @@ export const messages = {
             deleteWorkoutPlanAlertMessage: "Dies löscht den ausgewählten Plan",
             restTime: "Pausenzeit",
             rir: "RIR",
+            break: "Pause",
         },
         nutrition: {
             title: "Ernährung",
@@ -445,6 +447,7 @@ export const messages = {
             deleteWorkoutPlanAlertMessage: "Vous êtes sur le point de supprimer ce plan",
             restTime: "Temps de repos",
             rir: "RIR",
+            break: "Pause",
         },
         nutrition: {
             title: "Nutrition",

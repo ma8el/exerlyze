@@ -8,8 +8,10 @@
   import SetIcon from '@/icons/set.svg';
   import WeightIcon from '@/icons/weight.svg';
   import RepsIcon from '@/icons/reps.svg';
+  import Timer from './Timer.vue';
   import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
   import { ref, onMounted, watch } from 'vue';
+import { start } from '@popperjs/core';
 
   const props = defineProps({
     exerciseId: {
@@ -32,20 +34,30 @@
       type: Number,
       required: true
     },
+    plannedResttime: {
+      type: Number,
+      required: true
+    },
     transitionTrigger: {
       type: Boolean,
       required: true
-    }
-  })
+    },
+    showBreak: {
+      type: Boolean,
+      required: true
+    },
+ })
 
   const emit = defineEmits(['update:reps',
                             'update:weight',
+                            'update:resttime',
                             'update:valid'])
 
   const loading= ref<boolean>(true)
   const bucketUrl = ref<string>()
   const url = ref<string>()
   const setRef = ref<InstanceType<typeof IonRow>>();
+  const startTimer = ref<boolean>(false);
 
   const getImageUrl = async () => {
     loading.value = true
@@ -79,13 +91,17 @@
     getImageUrl()
   })
 
+  watch(() => props.showBreak, (newVal) => {
+    startTimer.value = newVal
+  })
+
   onMounted(async () => {
     getImageUrl()
   })
 </script>
 
 <template>
- <ion-item 
+<ion-item 
     lines="none"
     :class="{ 'highlighted': transitionTrigger, 'item-expanded': transitionTrigger }"
   >
@@ -147,6 +163,23 @@
       </ion-col>
     </ion-row>
   </ion-item>
+
+  <Transition
+    name="slide-down"
+    :duration="{ enter: 1000, leave: 500 }"
+  >
+    <ion-item 
+      lines="none"
+      v-if="showBreak"
+      class="highlighted item-expanded"
+    >
+      <Timer
+        :initialTime="plannedResttime"
+        :startTimer="startTimer"
+        @update:resttime="emit('update:resttime', $event)"
+      />
+    </ion-item>
+  </Transition>
 </template>
 
 <style scoped>

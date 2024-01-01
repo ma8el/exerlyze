@@ -642,7 +642,9 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
                     plannedReps: exercise.reps,
                     reps: exercise.reps,
                     plannedWeight: exercise.weight,
-                    weight: exercise.weight
+                    weight: exercise.weight,
+                    plannedResttime: exercise.resttime,
+                    resttime: exercise.resttime,
                   };
                 });
               });
