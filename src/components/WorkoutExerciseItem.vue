@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { IonItem,
            IonLabel,
-           IonInput,
            IonIcon,
            IonRow,
            IonCol} from '@ionic/vue';
@@ -9,44 +8,22 @@
   import WeightIcon from '@/icons/weight.svg';
   import RepsIcon from '@/icons/reps.svg';
   import Timer from './Timer.vue';
+  import NumericInput from './NumericInput.vue';
   import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
-  import { ref, onMounted, watch } from 'vue';
-import { start } from '@popperjs/core';
+  import { ref, onMounted, computed, watch } from 'vue';
 
-  const props = defineProps({
-    exerciseId: {
-      type: Number,
-      required: true
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    currentSet: {
-      type: Number,
-      required: true
-    },
-    plannedReps: {
-      type: Number,
-      required: true
-    },
-    plannedWeight: {
-      type: Number,
-      required: true
-    },
-    plannedResttime: {
-      type: Number,
-      required: true
-    },
-    transitionTrigger: {
-      type: Boolean,
-      required: true
-    },
-    showBreak: {
-      type: Boolean,
-      required: true
-    },
- })
+  interface Props {
+    exerciseId: number;
+    name: string;
+    currentSet: number;
+    reps: number;
+    weight: number;
+    resttime: number;
+    transitionTrigger: boolean;
+    showBreak: boolean;
+  }
+
+  const props = defineProps<Props>()
 
   const emit = defineEmits(['update:reps',
                             'update:weight',
@@ -58,6 +35,13 @@ import { start } from '@popperjs/core';
   const url = ref<string>()
   const setRef = ref<InstanceType<typeof IonRow>>();
   const startTimer = ref<boolean>(false);
+
+  const repsValid = ref<boolean>(true)
+  const weightValid = ref<boolean>(true)
+
+  const isValid = computed(() => {
+    return repsValid.value && weightValid.value
+  })
 
   const getImageUrl = async () => {
     loading.value = true
@@ -95,6 +79,10 @@ import { start } from '@popperjs/core';
     startTimer.value = newVal
   })
 
+  watch(() => isValid.value, (value) => {
+    emit('update:valid', value)
+  })
+
   onMounted(async () => {
     getImageUrl()
   })
@@ -127,7 +115,7 @@ import { start } from '@popperjs/core';
     </ion-row>
 
     <ion-row class="ion-align-items-center">
-      <ion-col size="2">
+      <ion-col size="2" class="ion-margin-top">
         <ion-label>
           <ion-icon :icon="SetIcon"></ion-icon>
           {{ currentSet }}
@@ -135,30 +123,48 @@ import { start } from '@popperjs/core';
       </ion-col>
       <ion-col size="5">
         <ion-row class="ion-align-items-center">
-          <ion-icon :icon="RepsIcon" class="icons"></ion-icon>
-          <ion-input 
-            :value="plannedReps"
-            :clear-on-edit="true"
-            @ion-input="emit('update:reps', $event.detail.value)"
-            type="number"
-            inputmode="numeric"
-          >
-          </ion-input>
-          <ion-label>x</ion-label>
+          <ion-col size="2" class="ion-margin-top">
+            <ion-icon :icon="RepsIcon" class="icons"></ion-icon>
+          </ion-col>
+          <ion-col size="7">
+            <NumericInput
+              :label="$t('workouts.reps')"
+              :placeholder="$t('workouts.reps')"
+              :minValue="1"
+              :maxValue="20"
+              :clear-input="false"
+              error-text="Invalid"
+              :input-value="reps"
+              @update:input-value="emit('update:reps', $event)"
+              @update:valid="repsValid = $event"
+            />
+          </ion-col>
+          <ion-col size="3" class="ion-margin-top ion-margin-left">
+            <ion-label>x</ion-label>
+          </ion-col>
         </ion-row>
       </ion-col>
       <ion-col size="5">
         <ion-row class="ion-align-items-center">
-          <ion-icon :icon="WeightIcon"></ion-icon>
-          <ion-input 
-            :value="plannedWeight"
-            :clear-on-edit="true"
-            @ion-input="emit('update:weight', $event.detail.value)"
-            type="number"
-            inputmode="numeric"
-          >
-          </ion-input>
-          <ion-label>{{ $t('weightUnitBig') }}</ion-label>
+          <ion-col size="2" class="ion-margin-top">
+            <ion-icon :icon="WeightIcon"></ion-icon>
+          </ion-col>
+          <ion-col size="7">
+            <NumericInput
+              :label="$t('weight')"
+              :placeholder="$t('weight')"
+              :minValue="1"
+              :maxValue="500"
+              :clear-input="false"
+              error-text="Invalid"
+              :input-value="weight"
+              @update:input-value="emit('update:weight', $event)"
+              @update:valid="weightValid = $event"
+            />
+          </ion-col>
+          <ion-col size="3" class="ion-margin-top">
+            <ion-label>{{ $t('weightUnitBig') }}</ion-label>
+          </ion-col>
         </ion-row>
       </ion-col>
     </ion-row>
@@ -174,7 +180,7 @@ import { start } from '@popperjs/core';
       class="highlighted item-expanded"
     >
       <Timer
-        :initialTime="plannedResttime"
+        :initialTime="resttime"
         :startTimer="startTimer"
         @update:resttime="emit('update:resttime', $event)"
       />

@@ -10,7 +10,7 @@ import BaseFullPageModal from '@/components/Modals/BaseFullPageModal.vue';
 import WorkoutExerciseItem from '@/components/WorkoutExerciseItem.vue';
 import StopWatch from '../StopWatch.vue';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
-import { ref, reactive, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 const props = defineProps({
   workoutId: {
@@ -24,24 +24,24 @@ const workoutSessionStore = useWorkoutSessionStore();
 
 const startedAt = ref<Date>(new Date());
 const currentSet = ref<number>(0);
-const currentReps = ref<number>(0);
-const currentWeight = ref<number>(0);
 
 const showBreak = ref<boolean>(false);
 
 const workout = workoutStore.getWorkoutById(props.workoutId);
 const workoutName = workout !== undefined ? workout.name: '';
-let workoutSessionSets = reactive(workoutSessionStore.createFullWorkoutSessionSets(props.workoutId));
+const workoutSessionSets = ref(workoutSessionStore.createFullWorkoutSessionSets(props.workoutId));
+
+const valid = ref<boolean>(true);
 
 const currentWorkoutSet = computed(() => {
   if (!workoutSessionSets) {
     return undefined;
   }
-  return workoutSessionSets[currentSet.value];
+  return workoutSessionSets.value[currentSet.value];
 });
 
 const save = async () => {
-    if (!workoutSessionSets) {
+    if (!workoutSessionSets.value) {
       return;
     }
     const workoutSessionId = workoutSessionStore.getNewWorkoutSessionId();
@@ -59,7 +59,7 @@ const save = async () => {
       notes: '',
     })
     await workoutSessionStore.addWorkoutSessionPerformances(
-      workoutSessionSets.map((set: any, index: number) => ({
+      workoutSessionSets.value.map((set: any, index: number) => ({
         id: set.id,
         workout_session_id: workoutSessionId,
         exercise_id: set.exerciseId,
@@ -82,9 +82,7 @@ const nextSet = () => {
   if (!currentWorkoutSet.value) {
     return;
   }
-  currentWorkoutSet.value.reps = currentReps.value;
-  currentWorkoutSet.value.weight = currentWeight.value;
-  if (workoutSessionSets && currentSet.value === workoutSessionSets.length - 1) {
+  if (workoutSessionSets.value && currentSet.value === workoutSessionSets.value.length - 1) {
     return;
   }
 
@@ -92,63 +90,11 @@ const nextSet = () => {
 };
 
 const isFinished = computed(() => {
-  if (!workoutSessionSets) {
+  if (!workoutSessionSets.value) {
     return false;
   }
-  return currentSet.value === workoutSessionSets.length - 1;
+  return currentSet.value === workoutSessionSets.value.length - 1;
 });
-
-watch(currentSet, (newValue) => {
-  if(workoutSessionSets && workoutSessionSets[newValue]) {
-    currentReps.value = workoutSessionSets[newValue].reps;
-    currentWeight.value = workoutSessionSets[newValue].weight;
-  }
-});
-
-const updatePerformedWeight = (index: number, value: any) => {
-  if (!workoutSessionSets) {
-    return;
-  }
-  workoutSessionSets = workoutSessionSets.map((set: any, i: number) => {
-    if (i === index) {
-      return {
-        ...set,
-        weight: parseFloat(value.detail.value),
-      };
-    }
-    return set;
-  });
-};
-
-const updatePerformedReps = (index: number, value: any) => {
-  if (!workoutSessionSets) {
-    return;
-  }
-  workoutSessionSets = workoutSessionSets.map((set: any, i: number) => {
-    if (i === index) {
-      return {
-        ...set,
-        reps: parseInt(value.detail.value),
-      };
-    }
-    return set;
-  });
-};
-
-const updateResttime = (index: number, value: any) => {
-  if (!workoutSessionSets) {
-    return;
-  }
-  workoutSessionSets = workoutSessionSets.map((set: any, i: number) => {
-    if (i === index) {
-      return {
-        ...set,
-        resttime: parseInt(value),
-      };
-    }
-    return set;
-  });
-};
 
 onMounted(() => {
   startedAt.value = new Date();
@@ -158,6 +104,7 @@ onMounted(() => {
 <template>
   <BaseFullPageModal 
     v-if="workout" 
+    :disable-button="!valid"
     back-color="dark"
   >
     <template #saveButton>
@@ -174,15 +121,12 @@ onMounted(() => {
         :name="set.name"
         :transitionTrigger="index === currentSet && !showBreak"
         :currentSet="set.currentSet"
-        :plannedReps="set.plannedReps"
-        :plannedWeight="set.plannedWeight"
-        :planned-resttime="set.plannedResttime"
+        v-model:reps="workoutSessionSets[index].reps"
+        v-model:weight="workoutSessionSets[index].weight"
+        v-model:resttime="workoutSessionSets[index].resttime"
         :show-break="index === currentSet && showBreak"
-        @update:reps="updatePerformedReps(index, $event)"
-        @update:weight="updatePerformedWeight(index, $event)"
-        @update:resttime="updateResttime(index, $event)"
+        @update:valid="valid = $event"
       />
-      <div class="bottom-margin"></div>
     </template>
     <template #modalFooter>
       <ion-row
@@ -197,6 +141,7 @@ onMounted(() => {
              @click="showBreak = true"
              color="primary"
              shape="round"
+             :disabled="!valid"
            >
             <ion-label>
               {{ $t('next')  }}
@@ -211,6 +156,7 @@ onMounted(() => {
              @click="nextSet()"
              color="primary"
              shape="round"
+             :disabled="!valid"
            >
             <ion-label>
               {{ $t('next')  }}
@@ -226,6 +172,7 @@ onMounted(() => {
              @click="save()"
              shape="round"
              color="primary"
+             :disabled="!valid"
            >
              <ion-label>
                {{ $t('finish')  }}
@@ -243,9 +190,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.bottom-margin {
-  height: 5rem;
-}
 ion-button {
   --border-radius: 1rem;
   height: 2.5rem;
