@@ -102,15 +102,6 @@ watch(currentSet, (newValue) => {
   if(workoutSessionSets && workoutSessionSets[newValue]) {
     currentReps.value = workoutSessionSets[newValue].reps;
     currentWeight.value = workoutSessionSets[newValue].weight;
-    console.log(setRef.value)
-    if (setRef.value.length > 0) {
-      console.log(setRef.value[newValue])
-      setRef.value[newValue].$el.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center',
-      });
-    }
   }
 });
 
@@ -159,7 +150,6 @@ onMounted(() => {
     </template>
     <template v-if="workoutSessionSets" #modalContent>
       <WorkoutExerciseItem
-        ref="setRef"
         v-for = "(set, index) in workoutSessionSets"
         :key="index"
         :exerciseId="set.exerciseId"

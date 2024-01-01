@@ -45,6 +45,7 @@
   const loading= ref<boolean>(true)
   const bucketUrl = ref<string>()
   const url = ref<string>()
+  const setRef = ref<InstanceType<typeof IonRow>>();
 
   const getImageUrl = async () => {
     loading.value = true
@@ -57,6 +58,22 @@
     })
     loading.value = false
   }
+
+  const scrollIntoView = () => {
+    if (setRef.value) {
+      setRef.value.$el.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center'
+      });
+    }
+  }
+
+  watch(() => props.transitionTrigger, () => {
+    if (props.transitionTrigger) {
+      scrollIntoView()
+    }
+  })
 
   watch(() => props.exerciseId, () => {
     getImageUrl()
@@ -84,7 +101,10 @@
       />
     </Transition>
  
-    <ion-row>
+    <ion-row
+      ref="setRef"
+      class="scroll-padding"
+    >
       <ion-col>
         <ion-label>{{ name }}</ion-label>
       </ion-col>
@@ -181,6 +201,11 @@ ion-item.highlighted {
   :is(ion-item) {
     opacity: 1 !important;
   }
+}
+
+.scroll-padding {
+  padding-top: 70px; /* Adjust this value to match your header's height */
+  margin-top: -70px; /* Negative margin to offset the added padding */
 }
 
 .item-expanded {
