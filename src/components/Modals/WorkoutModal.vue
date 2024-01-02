@@ -59,11 +59,11 @@ const save = async () => {
       notes: '',
     })
     await workoutSessionStore.addWorkoutSessionPerformances(
-      workoutSessionSets.value.map((set: any, index: number) => ({
+      workoutSessionSets.value.map((set: any) => ({
         id: set.id,
         workout_session_id: workoutSessionId,
         exercise_id: set.exerciseId,
-        set: index,
+        set: set.currentSet,
         planned_reps: parseInt(set.plannedReps),
         performed_reps: parseInt(set.reps),
         planned_weight: parseFloat(set.plannedWeight),
@@ -120,6 +120,7 @@ onMounted(() => {
         :exerciseId="set.exerciseId"
         :name="set.name"
         :transitionTrigger="index === currentSet && !showBreak"
+        :show-image="index === currentSet && !showBreak"
         :currentSet="set.currentSet"
         v-model:reps="workoutSessionSets[index].reps"
         v-model:weight="workoutSessionSets[index].weight"

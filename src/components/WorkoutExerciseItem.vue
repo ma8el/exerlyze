@@ -21,6 +21,7 @@
     resttime: number;
     transitionTrigger: boolean;
     showBreak: boolean;
+    showImage?: boolean;
   }
 
   const props = defineProps<Props>()
@@ -91,7 +92,7 @@
 <template>
 <ion-item 
     lines="none"
-    :class="{ 'highlighted': transitionTrigger, 'item-expanded': transitionTrigger }"
+    :class="{ 'highlighted': transitionTrigger, 'item-expanded': showImage }"
   >
     <Transition
       name="slide-down"
@@ -100,7 +101,7 @@
       <img 
         :src="url ? url : defaultImage"
         :key="url"
-        v-if="transitionTrigger"
+        v-if="showImage"
         class="active-exercise-img"
       />
     </Transition>

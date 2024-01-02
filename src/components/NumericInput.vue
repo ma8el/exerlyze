@@ -80,7 +80,11 @@ const validate = (ev: any) => {
 }
 
 const onInput = (ev: any) => {
-    emit('update:inputValue', ev.target.value)
+    let value = ev.target.value;
+    if (ev.target.value === '') {
+      value = 0
+    }
+    emit('update:inputValue', parseInt(value))
     validate(ev)
 }
 
