@@ -1,29 +1,17 @@
 <script setup lang="ts">
-import { IonItem,
-         IonList,
-         IonListHeader,
-         IonLabel,
-         IonInput,
+import { IonLabel,
          IonRow,
          IonCol,
-         IonFab,
-         IonFabButton,
+         IonButton,
          IonIcon,
          modalController } from '@ionic/vue';
 import { bookmarkOutline, playForwardOutline, checkmarkDoneOutline } from 'ionicons/icons';
-import BaseFullPageModal from './BaseFullPageModal.vue';
-import ActiveExerciseCard from '../Cards/ActiveExerciseCard.vue';
-import WeightIcon from '@/icons/weight.svg';
-import RepsIcon from '@/icons/reps.svg';
-import SetIcon from '@/icons/set.svg';
+import BaseFullPageModal from '@/components/Modals/BaseFullPageModal.vue';
+import WorkoutExerciseItem from '@/components/WorkoutExerciseItem.vue';
+import StopWatch from '../StopWatch.vue';
+import ActivityDetailModal from './ActivityDetailModal.vue';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
-import { ref, reactive, onMounted, computed, watch } from 'vue';
-
-interface ListRef {
-  $el: {
-    scrollIntoView: (options?: boolean | ScrollIntoViewOptions) => void;
-  };
-}
+import { ref, onMounted, computed } from 'vue';
 
 const props = defineProps({
   workoutId: {
@@ -35,31 +23,33 @@ const props = defineProps({
 const workoutStore = useWorkoutStore();
 const workoutSessionStore = useWorkoutSessionStore();
 
-const setRefs = ref<InstanceType<typeof IonList>[]>([]);
+const workoutSessionId = ref<string>('');
 
 const startedAt = ref<Date>(new Date());
 const currentSet = ref<number>(0);
-const currentReps = ref<number>(0);
-const currentWeight = ref<number>(0);
+
+const showBreak = ref<boolean>(false);
 
 const workout = workoutStore.getWorkoutById(props.workoutId);
-let workoutSessionSets = reactive(workoutSessionStore.createFullWorkoutSessionSets(props.workoutId));
+const workoutName = workout !== undefined ? workout.name: '';
+const workoutSessionSets = ref(workoutSessionStore.createFullWorkoutSessionSets(props.workoutId));
+
+const valid = ref<boolean>(true);
 
 const currentWorkoutSet = computed(() => {
   if (!workoutSessionSets) {
     return undefined;
   }
-  return workoutSessionSets[currentSet.value];
+  return workoutSessionSets.value[currentSet.value];
 });
 
 const save = async () => {
-    if (!workoutSessionSets) {
+    if (!workoutSessionSets.value) {
       return;
     }
-    const workoutSessionId = workoutSessionStore.getNewWorkoutSessionId();
     // TODO: Track not fully completed workouts
     await workoutSessionStore.addWorkoutSession({
-      id: workoutSessionId,
+      id: workoutSessionId.value,
       workout_id: props.workoutId,
       created_at: new Date(),
       updated_at: new Date(),
@@ -71,16 +61,17 @@ const save = async () => {
       notes: '',
     })
     await workoutSessionStore.addWorkoutSessionPerformances(
-      workoutSessionSets.map((set: any, index: number) => ({
+      workoutSessionSets.value.map((set: any) => ({
         id: set.id,
-        workout_session_id: workoutSessionId,
+        workout_session_id: workoutSessionId.value,
         exercise_id: set.exerciseId,
-        set: index,
+        set: set.currentSet,
         planned_reps: parseInt(set.plannedReps),
         performed_reps: parseInt(set.reps),
         planned_weight: parseFloat(set.plannedWeight),
         performed_weight: parseFloat(set.weight),
-        resttime: 0,
+        planned_resttime: parseInt(set.plannedResttime),
+        performed_resttime: parseInt(set.resttime),
         created_at: new Date(),
         updated_at: new Date(),
       }))
@@ -89,216 +80,142 @@ const save = async () => {
 };
 
 const nextSet = () => {
+  showBreak.value = false;
   if (!currentWorkoutSet.value) {
     return;
   }
-  currentWorkoutSet.value.reps = currentReps.value;
-  currentWorkoutSet.value.weight = currentWeight.value;
-  if (workoutSessionSets && currentSet.value === workoutSessionSets.length - 1) {
+  if (workoutSessionSets.value && currentSet.value === workoutSessionSets.value.length - 1) {
     return;
   }
+
   currentSet.value++;
 };
 
 const isFinished = computed(() => {
-  if (!workoutSessionSets) {
+  if (!workoutSessionSets.value) {
     return false;
   }
-  return currentSet.value === workoutSessionSets.length - 1;
+  return currentSet.value === workoutSessionSets.value.length - 1;
 });
 
-watch(currentSet, (newValue) => {
-  if(workoutSessionSets && workoutSessionSets[newValue]) {
-    currentReps.value = workoutSessionSets[newValue].reps;
-    currentWeight.value = workoutSessionSets[newValue].weight;
-    if (setRefs.value.length > 0) {
-      setRefs.value[newValue].$el.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center',
-      });
-    }
-  }
-}, { immediate: true });
-
-const updatePerformedWeight = (index: number, value: any) => {
-  if (!workoutSessionSets) {
-    return;
-  }
-  workoutSessionSets = workoutSessionSets.map((set: any, i: number) => {
-    if (i === index) {
-      return {
-        ...set,
-        weight: parseFloat(value.detail.value),
-      };
-    }
-    return set;
+const finishWorkout = async () => {
+  await save();
+  const modal = await modalController.create({
+    component: ActivityDetailModal,
+    componentProps: {
+      workoutSessionId: workoutSessionId.value
+    },
   });
-};
-
-const updatePerformedReps = (index: number, value: any) => {
-  if (!workoutSessionSets) {
-    return;
-  }
-  workoutSessionSets = workoutSessionSets.map((set: any, i: number) => {
-    if (i === index) {
-      return {
-        ...set,
-        reps: parseInt(value.detail.value),
-      };
-    }
-    return set;
-  });
+  await modal.present();
 };
 
 onMounted(() => {
-  currentSet.value = 0;
   startedAt.value = new Date();
+  workoutSessionId.value = workoutSessionStore.getNewWorkoutSessionId();
 });
 </script>
 
 <template>
-  <BaseFullPageModal v-if="workout" back-color="dark">
+  <BaseFullPageModal 
+    v-if="workout" 
+    :disable-button="!valid"
+    back-color="dark"
+  >
     <template #saveButton>
       <ion-icon :icon="bookmarkOutline" @click="save"/>
     </template>
     <template #modalHeader>
-      <ActiveExerciseCard v-if="currentWorkoutSet"
-        class="active-exercise-card"
-        :exerciseId="currentWorkoutSet.exerciseId"
-        :name="currentWorkoutSet.name"
-      />
+      <p class="header-title">{{ workoutName }}</p>
     </template>
     <template v-if="workoutSessionSets" #modalContent>
-      <ion-list class="exercise-list">
-        <div
-          v-for = "(set, index) in workoutSessionSets"
-          :key="index"
-          class="ion-padding"
-        >
-        <ion-list-header
-          v-if="set.currentSet === 1"
-        >
-          {{ set.name }}
-        </ion-list-header>
-        <ion-item 
-          lines="none"
-          :class="{ 'highlighted': currentSet === index  }"
-          ref="setRefs"
-        >
-          <ion-col size="2">
-            <ion-label>
-              <ion-icon :icon="SetIcon"></ion-icon>
-              {{ set.currentSet }}
-            </ion-label>
-          </ion-col>
-          <ion-col size="5">
-            <ion-row class="ion-align-items-center">
-              <ion-icon :icon="RepsIcon" class="icons"></ion-icon>
-              <ion-input 
-                :value="set.plannedReps"
-                :clear-on-edit="true"
-                @ion-input="value => updatePerformedReps(index, value)"
-                type="number"
-                inputmode="numeric"
-              >
-              </ion-input>
-              <ion-label>x</ion-label>
-            </ion-row>
-          </ion-col>
-          <ion-col size="5">
-            <ion-row class="ion-align-items-center">
-              <ion-icon :icon="WeightIcon"></ion-icon>
-              <ion-input 
-                :value="set.plannedWeight"
-                :clear-on-edit="true"
-                @ion-input="value => updatePerformedWeight(index, value)"
-                type="number"
-                inputmode="numeric"
-              >
-              </ion-input>
-              <ion-label>{{ $t('weightUnitBig') }}</ion-label>
-            </ion-row>
-          </ion-col>
-        </ion-item>
-        </div>
-      </ion-list>
+      <WorkoutExerciseItem
+        v-for = "(set, index) in workoutSessionSets"
+        :key="index"
+        :exerciseId="set.exerciseId"
+        :name="set.name"
+        :transitionTrigger="index === currentSet && !showBreak"
+        :show-image="index === currentSet && !showBreak"
+        :currentSet="set.currentSet"
+        v-model:reps="workoutSessionSets[index].reps"
+        v-model:weight="workoutSessionSets[index].weight"
+        v-model:resttime="workoutSessionSets[index].resttime"
+        :show-break="index === currentSet && showBreak"
+        @update:valid="valid = $event"
+      />
     </template>
     <template #modalFooter>
-      <ion-fab 
-        vertical="bottom"
-        horizontal="end"
-        v-if="!isFinished"
+      <ion-row
+       class="ion-align-items-center"
       >
-          <ion-fab-button color="primary">
-            <ion-icon 
-              :icon="playForwardOutline"
-              @click="nextSet"
-            >
-            </ion-icon>
-          </ion-fab-button>
-      </ion-fab>
-      <ion-fab 
-        vertical="bottom"
-        horizontal="end"
-        v-else
-      >
-          <ion-fab-button color="primary">
-            <ion-icon 
-              :icon="checkmarkDoneOutline"
-              @click="save"
-            >
-            </ion-icon>
-          </ion-fab-button>
-      </ion-fab>
+        <ion-col size="7">
+          <StopWatch/>
+        </ion-col>
+        <ion-col size="5">
+          <ion-button 
+             v-if="!isFinished && !showBreak"
+             @click="showBreak = true"
+             color="primary"
+             shape="round"
+             :disabled="!valid"
+           >
+            <ion-label>
+              {{ $t('next')  }}
+            </ion-label>
+             <ion-icon 
+               :icon="playForwardOutline"
+             >
+             </ion-icon>
+           </ion-button>
+           <ion-button 
+             v-else-if="!isFinished && showBreak"
+             @click="nextSet()"
+             color="primary"
+             shape="round"
+             :disabled="!valid"
+           >
+            <ion-label>
+              {{ $t('next')  }}
+            </ion-label>
+             <ion-icon 
+               :icon="playForwardOutline"
+             >
+             </ion-icon>
+           </ion-button>
+ 
+           <ion-button 
+             v-else 
+             @click="finishWorkout()"
+             shape="round"
+             color="primary"
+             :disabled="!valid"
+           >
+             <ion-label>
+               {{ $t('finish')  }}
+             </ion-label>
+             <ion-icon 
+               class="button-icon"
+               :icon="checkmarkDoneOutline"
+             >
+             </ion-icon>
+           </ion-button>
+        </ion-col>
+      </ion-row>
     </template>
   </BaseFullPageModal>
 </template>
 
 <style scoped>
-.active-exercise-card {
-  margin: 0 0 20px 0;
-}
-
-.exercise-list {
-  background: none;
-  :is(ion-list-header) {
-    margin-bottom: 15px;
-  }
-  :is(ion-item) {
-    border-radius: 10px;
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    opacity: 0.5;
-    transform: scale(1);
-    :is(ion-icon) {
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-    :is(ion-input) {
-      --background: var(--ion-color-step-100);
-      border-radius: 10px;
-      margin: 0 2px 0 2px;
-      padding: 0;
-    }
-    :is(ion-item) {
-      margin: 10px 0 10px 0;
-      padding: 0;
-    }
+ion-button {
+  --border-radius: 1rem;
+  height: 2.5rem;
+  :is(ion-label) {
+    margin-right: 2px;
   }
 }
-
-ion-item.highlighted {
-  opacity: 1 !important;
-  transform: scale(1.05) !important;
-  :is(ion-icon) {
-    opacity: 1 !important;
-  }
-  :is(ion-input) {
-    opacity: 1 !important;
-  }
-  :is(ion-item) {
-    opacity: 1 !important;
-  }
+.header-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
 }
 </style>

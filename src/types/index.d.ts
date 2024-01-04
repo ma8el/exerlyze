@@ -21,7 +21,7 @@ export interface Exercise {
     sets: number,
     reps: number,
     weight: number,
-    resttime?: number,
+    resttime: number,
     rir?: number,
     valid?: boolean,
 };
@@ -118,7 +118,8 @@ export interface WorkoutSessionPerformance {
     performed_weight: number,
     planned_rir?: number,
     performed_rir?: number,
-    resttime: number,
+    planned_resttime: number,
+    performed_resttime: number,
     created_at: Date,
     updated_at: Date,
 }

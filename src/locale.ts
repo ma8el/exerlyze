@@ -61,6 +61,7 @@ export const messages = {
             deleteWorkoutPlanAlertMessage: "You are about to delete this plan",
             restTime: "Rest time",
             rir: "RIR",
+            break: "Break",
         },
         nutrition: {
             title: "Nutrition",
@@ -146,6 +147,7 @@ export const messages = {
         yourHeight: "@:your @:profile.height",
         dateOfBirth: "Date of birth",
         next: "Next",
+        finish: "Finish",
         track: "Track",
         add: "Add",
         delete: "Delete",
@@ -252,6 +254,7 @@ export const messages = {
             deleteWorkoutPlanAlertMessage: "Dies löscht den ausgewählten Plan",
             restTime: "Pausenzeit",
             rir: "RIR",
+            break: "Pause",
         },
         nutrition: {
             title: "Ernährung",
@@ -338,6 +341,7 @@ export const messages = {
         yourHeight: "@:your @:profile.height",
         dateOfBirth: "Geburtsdatum",
         next: "Weiter",
+        finish: "Beenden",
         track: "Tracken",
         add: "Hinzufügen",
         enter: "Eingeben",
@@ -443,6 +447,7 @@ export const messages = {
             deleteWorkoutPlanAlertMessage: "Vous êtes sur le point de supprimer ce plan",
             restTime: "Temps de repos",
             rir: "RIR",
+            break: "Pause",
         },
         nutrition: {
             title: "Nutrition",
@@ -528,6 +533,7 @@ export const messages = {
         yourHeight: "@:your @:profile.height",
         dateOfBirth: "Date de naissance",
         next: "Suivant",
+        finish: "Terminer",
         track: "Suivi",
         add: "Ajoutez",
         delete: "Supprimer",

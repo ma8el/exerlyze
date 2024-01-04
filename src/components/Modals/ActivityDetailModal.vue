@@ -1,12 +1,7 @@
 <script setup lang="ts">
-  import { IonInput,
-           IonIcon,
+  import { IonIcon,
            IonRow,
            IonCol,
-           IonListHeader,
-           IonList,
-           IonItem,
-           IonLabel,
            modalController } from '@ionic/vue';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import BaseInfoCard from '../Cards/BaseInfoCard.vue';
@@ -15,12 +10,13 @@
   import RepsIcon from '@/icons/reps.svg';
   import WeightIcon from '@/icons/weight.svg';
   import TimeIcon from '@/icons/time.svg';
+  import WorkoutExerciseItem from '../WorkoutExerciseItem.vue';
   import { useWorkoutSessionStore } from '@/store/workoutStore';
-  import { computed } from 'vue';
-  import { WorkoutSessionPerformance } from '@/types';
+  import { ref, computed } from 'vue';
+  import { Exercise, FullWorkoutSession, WorkoutSessionPerformance } from '@/types';
 
   interface ChangedWorkoutSessionPerformance extends WorkoutSessionPerformance {
-    changed: boolean;
+    changed?: boolean;
   }
 
   const props = defineProps({
@@ -31,53 +27,57 @@
   })
 
   const workoutSessionStore = useWorkoutSessionStore();
-  const workoutSession = JSON.parse(JSON.stringify(workoutSessionStore.getFullWorkoutSessionById(props.workoutSessionId)));
+  // Copy workout session to prevent changes to workout session store without saving
+  const workoutSession = ref<FullWorkoutSession | undefined>(JSON.parse(JSON.stringify(workoutSessionStore.getFullWorkoutSessionById(props.workoutSessionId))));
+  const workoutSessionSets = computed((): ChangedWorkoutSessionPerformance[] => {
+    if (!workoutSession.value) {
+      return [];
+    }
+   return workoutSession.value.workoutPerformance;
+  });
 
   const totalSets = computed(() => {
-    if (!workoutSession) {
+    if (!workoutSession.value) {
       return 0;
     }
-    return workoutSession.workoutPerformance.length;
+    return workoutSession.value.workoutPerformance.length;
   });
 
   const totalReps = computed(() => {
-    if (!workoutSession) {
+    if (!workoutSession.value) {
       return 0;
     }
-    return workoutSession.workoutPerformance.reduce((acc: number, set: WorkoutSessionPerformance) => acc + set.performed_reps, 0);
+    return workoutSession.value.workoutPerformance.reduce((acc: number, set: WorkoutSessionPerformance) => acc + set.performed_reps, 0);
   });
 
   const totalWeight = computed(() => {
-    if (!workoutSession) {
+    if (!workoutSession.value) {
       return 0;
     }
-    return workoutSession.workoutPerformance.reduce((acc: number, set: WorkoutSessionPerformance) => acc + set.performed_reps * set.performed_weight, 0);
+    return workoutSession.value.workoutPerformance.reduce((acc: number, set: WorkoutSessionPerformance) => acc + set.performed_reps * set.performed_weight, 0);
   });
 
   const workoutDuration = computed(() => {
-    if (!workoutSession) {
+    if (!workoutSession.value) {
       return 0;
     }
-    const hours = Math.abs(new Date(workoutSession.finished_at).getHours() - new Date(workoutSession.started_at).getHours());
-    const minutes = Math.abs(new Date(workoutSession.finished_at).getMinutes() - new Date(workoutSession.started_at).getMinutes());
-    const seconds = Math.abs(new Date(workoutSession.finished_at).getSeconds() - new Date(workoutSession.started_at).getSeconds());
+    const hours = Math.abs(new Date(workoutSession.value.finished_at).getHours() - new Date(workoutSession.value.started_at).getHours());
+    const minutes = Math.abs(new Date(workoutSession.value.finished_at).getMinutes() - new Date(workoutSession.value.started_at).getMinutes());
+    const seconds = Math.abs(new Date(workoutSession.value.finished_at).getSeconds() - new Date(workoutSession.value.started_at).getSeconds());
     const formattedDuration = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     return formattedDuration;
   });
 
-  const updatePerformedWeight = (index: number, value: any) => {
-    workoutSession.workoutPerformance[index].performed_weight = parseFloat(value.detail.value)
-    workoutSession.workoutPerformance[index].changed = true;
-  };
-
-  const updatePerformedReps = (index: number, value: any) => {
-    workoutSession.workoutPerformance[index].performed_reps = parseInt(value.detail.value)
-    workoutSession.workoutPerformance[index].changed = true;
+  const getExerciseName = (exerciseId: number) => {
+    if (!workoutSession.value) {
+      return '';
+    }
+    return workoutSession.value.workout.exercises.filter((exercise: Exercise) => exercise.exercise_id === exerciseId)[0].name;
   };
 
   const update = async () => {
-    if (workoutSession) {
-      const changedSets = workoutSession.workoutPerformance.filter((set: ChangedWorkoutSessionPerformance) => set.changed)
+    if (workoutSession.value) {
+      const changedSets = workoutSessionSets.value.filter((set: ChangedWorkoutSessionPerformance) => set.changed)
                           .map(({ changed, ...rest }: ChangedWorkoutSessionPerformance) => rest);
       await workoutSessionStore.updateWorkoutSessionById(props.workoutSessionId, changedSets);
       return modalController.dismiss(null, 'save');
@@ -126,109 +126,34 @@
           />
         </ion-col>
       </ion-row>
-      <ion-list 
-        v-if="workoutSession"
-        class="exercise-list"
+      <div
+        class="ion-margin"
       >
-        <div
-          v-for = "(exercise, index) in workoutSession.workout.exercises"
-          :key="index"
-          class="exercise-list-item"
-        >
-          <ion-list-header
-            v-if="exercise.name"
-          >
-            {{ exercise.name }}
-          </ion-list-header>
- 
-          <div
-            v-for = "(set, index) in workoutSession.workoutPerformance.filter((set: WorkoutSessionPerformance) => set.exercise_id === exercise.exercise_id)"
-            :key="index"
-            class="exercise-list-item"
-          >
-            <ion-item 
-              lines="none"
-              ref="setRefs"
-            >
-              <ion-col size="2">
-                <ion-label>
-                  <ion-icon :icon="SetIcon"></ion-icon>
-                  {{ index + 1 }}
-                </ion-label>
-              </ion-col>
-              <ion-col size="5">
-                <ion-row class="ion-align-items-center">
-                  <ion-icon :icon="RepsIcon"></ion-icon>
-                  <ion-input 
-                    :value="set.performed_reps"
-                    :clear-on-edit="true"
-                    @ion-input="value => updatePerformedReps(index, value)"
-                    type="number"
-                    inputmode="numeric"
-                  >
-                  </ion-input>
-                  <ion-label>x</ion-label>
-                </ion-row>
-              </ion-col>
-              <ion-col size="5">
-                <ion-row class="ion-align-items-center">
-                  <ion-icon :icon="WeightIcon"></ion-icon>
-                  <ion-input 
-                    :value="set.performed_weight"
-                    :clear-on-edit="true"
-                    @ion-input="value => updatePerformedWeight(index, value)"
-                    type="number"
-                    inputmode="numeric"
-                  >
-                  </ion-input>
-                  <ion-label>{{ $t('weightUnitBig') }}</ion-label>
-                </ion-row>
-              </ion-col>
-            </ion-item>
-          </div>
-        </div>
-      </ion-list>
+      <WorkoutExerciseItem
+        v-for = "(set, index) in workoutSessionSets"
+        :key="index"
+        :exerciseId="set.exercise_id"
+        :name="getExerciseName(set.exercise_id)"
+        :transitionTrigger="true"
+        :show-image="false"
+        :currentSet="set.set"
+        v-model:reps="workoutSessionSets[index].performed_reps"
+        v-model:weight="workoutSessionSets[index].performed_weight"
+        v-model:resttime="workoutSessionSets[index].performed_resttime"
+        @update:reps="workoutSessionSets[index].changed = true"
+        @update:weight="workoutSessionSets[index].changed = true"
+        :show-break="false"
+      />
+      </div>
     </template>
   </BaseFullPageModal>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .header-title {
   font-size: 1.1rem;
   font-weight: bold;
   display: flex;
   justify-content: center;
-}
-.exercise-list {
-  background: none;
-  :is(ion-list-header) {
-    margin-bottom: 15px;
-  }
-  :is(ion-item) {
-    border-radius: 10px;
-    :is(ion-icon) {
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-    :is(ion-input) {
-      --background: var(--ion-color-step-100);
-      border-radius: 10px;
-      margin: 0 5px 0 2px;
-      padding: 0;
-    }
-    :is(ion-item) {
-      margin: 5px 0 5px 0;
-      padding: 0;
-    }
-  }
-}
-.exercise-list-item {
-  margin: 10px;
-}
-
-.exercise-list-item-input {
-  margin: 1000px;
-  padding: 100px;
 }
 </style>

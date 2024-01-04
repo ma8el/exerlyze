@@ -1,0 +1,2 @@
+ALTER TABLE workout_session_performances ADD COLUMN performed_resttime integer;
+ALTER TABLE workout_session_performances RENAME COLUMN resttime TO planned_resttime;
