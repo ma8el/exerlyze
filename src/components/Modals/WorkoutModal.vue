@@ -9,6 +9,7 @@ import { bookmarkOutline, playForwardOutline, checkmarkDoneOutline } from 'ionic
 import BaseFullPageModal from '@/components/Modals/BaseFullPageModal.vue';
 import WorkoutExerciseItem from '@/components/WorkoutExerciseItem.vue';
 import StopWatch from '../StopWatch.vue';
+import ActivityDetailModal from './ActivityDetailModal.vue';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
 import { ref, onMounted, computed } from 'vue';
 
@@ -21,6 +22,8 @@ const props = defineProps({
 
 const workoutStore = useWorkoutStore();
 const workoutSessionStore = useWorkoutSessionStore();
+
+const workoutSessionId = ref<string>('');
 
 const startedAt = ref<Date>(new Date());
 const currentSet = ref<number>(0);
@@ -44,10 +47,9 @@ const save = async () => {
     if (!workoutSessionSets.value) {
       return;
     }
-    const workoutSessionId = workoutSessionStore.getNewWorkoutSessionId();
     // TODO: Track not fully completed workouts
     await workoutSessionStore.addWorkoutSession({
-      id: workoutSessionId,
+      id: workoutSessionId.value,
       workout_id: props.workoutId,
       created_at: new Date(),
       updated_at: new Date(),
@@ -61,7 +63,7 @@ const save = async () => {
     await workoutSessionStore.addWorkoutSessionPerformances(
       workoutSessionSets.value.map((set: any) => ({
         id: set.id,
-        workout_session_id: workoutSessionId,
+        workout_session_id: workoutSessionId.value,
         exercise_id: set.exerciseId,
         set: set.currentSet,
         planned_reps: parseInt(set.plannedReps),
@@ -96,8 +98,20 @@ const isFinished = computed(() => {
   return currentSet.value === workoutSessionSets.value.length - 1;
 });
 
+const finishWorkout = async () => {
+  await save();
+  const modal = await modalController.create({
+    component: ActivityDetailModal,
+    componentProps: {
+      workoutSessionId: workoutSessionId.value
+    },
+  });
+  await modal.present();
+};
+
 onMounted(() => {
   startedAt.value = new Date();
+  workoutSessionId.value = workoutSessionStore.getNewWorkoutSessionId();
 });
 </script>
 
@@ -170,7 +184,7 @@ onMounted(() => {
  
            <ion-button 
              v-else 
-             @click="save()"
+             @click="finishWorkout()"
              shape="round"
              color="primary"
              :disabled="!valid"
