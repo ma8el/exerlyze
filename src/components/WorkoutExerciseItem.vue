@@ -96,7 +96,7 @@
   >
     <Transition
       name="slide-down"
-      :duration="{ enter: 1000, leave: 500 }"
+      :duration="{ enter: 500, leave: 500 }"
     >
       <img 
         :src="url ? url : defaultImage"
@@ -173,7 +173,7 @@
 
   <Transition
     name="slide-down"
-    :duration="{ enter: 1000, leave: 500 }"
+    :duration="{ enter: 500, leave: 500 }"
   >
     <ion-item 
       lines="none"
@@ -249,7 +249,7 @@ ion-item.highlighted {
 }
 
 .item-expanded {
-  transition: all 1s ease;
+  transition: all 0.5s ease;
   max-height: 500px;
 }
 
@@ -261,13 +261,13 @@ ion-item.highlighted {
 }
 
 .slide-down-enter-active {
-  transition: all 1s;
+  transition: all 0.5s ease;
   max-height: 500px;
   opacity: 1;
 }
 
 .slide-down-leave-active {
-  transition: all 0.5s;
+  transition: all 0.5s ease;
   max-height: 0;
   opacity: 0;
 }
