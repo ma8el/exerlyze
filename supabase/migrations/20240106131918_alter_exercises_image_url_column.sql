@@ -1,0 +1,1 @@
+ALTER TABLE exercises RENAME COLUMN image_url TO ressource_name;

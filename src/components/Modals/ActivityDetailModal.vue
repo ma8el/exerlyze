@@ -135,7 +135,7 @@
         :exerciseId="set.exercise_id"
         :name="getExerciseName(set.exercise_id)"
         :transitionTrigger="true"
-        :show-image="false"
+        :show-video="false"
         :currentSet="set.set"
         v-model:reps="workoutSessionSets[index].performed_reps"
         v-model:weight="workoutSessionSets[index].performed_weight"

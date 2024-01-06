@@ -21,7 +21,7 @@
     resttime: number;
     transitionTrigger: boolean;
     showBreak: boolean;
-    showImage?: boolean;
+    showVideo?: boolean;
   }
 
   const props = defineProps<Props>()
@@ -32,7 +32,7 @@
                             'update:valid'])
 
   const loading= ref<boolean>(true)
-  const bucketUrl = ref<string>()
+  const ressourceName = ref<string>()
   const url = ref<string>()
   const setRef = ref<InstanceType<typeof IonRow>>();
   const startTimer = ref<boolean>(false);
@@ -47,10 +47,10 @@
   const getImageUrl = async () => {
     loading.value = true
     await getBucketUrlFromTable('exercises', props.exerciseId).then((response) => {
-      bucketUrl.value = response.data?.image_url
+      ressourceName.value = response.data?.ressource_name
     })
-    if (!bucketUrl.value) return
-    await getSignedObjectUrl('exercise_images', bucketUrl.value).then((response) => {
+    if (!ressourceName.value) return
+    await getSignedObjectUrl('exercise_videos', `${ressourceName.value}.mp4`).then((response) => {
       url.value = response.data?.signedUrl
     })
     loading.value = false
@@ -92,18 +92,20 @@
 <template>
 <ion-item 
     lines="none"
-    :class="{ 'highlighted': transitionTrigger, 'item-expanded': showImage }"
+    :class="{ 'highlighted': transitionTrigger, 'item-expanded': showVideo }"
   >
     <Transition
       name="slide-down"
       :duration="{ enter: 500, leave: 500 }"
     >
-      <img 
-        :src="url ? url : defaultImage"
-        :key="url"
-        v-if="showImage"
-        class="active-exercise-img"
-      />
+     <video
+        autoplay
+        loop
+        v-if="showVideo"
+        :src="url"
+        alt="Exercise Video"
+        class="active-exercise-video"
+      ></video>
     </Transition>
  
     <ion-row
@@ -253,7 +255,7 @@ ion-item.highlighted {
   max-height: 500px;
 }
 
-.active-exercise-img {
+.active-exercise-video {
   transition: all 0.5s ease;
   max-height: 500px;
   opacity: 1;

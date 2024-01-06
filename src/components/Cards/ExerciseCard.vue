@@ -10,16 +10,16 @@
 
   const props = defineProps<Exercise>()
   const loading = ref<boolean>(true)
-  const bucketUrl = ref<string>()
+  const ressourceName = ref<string>()
   const url = ref<string>()
 
   onMounted(async () => {
     loading.value = true
     await getBucketUrlFromTable('exercises', props.exercise_id).then((response) => {
-      bucketUrl.value = response.data?.image_url
+      ressourceName.value = response.data?.ressource_name
     })
-    if (!bucketUrl.value) return
-    await getSignedObjectUrl('exercise_images', bucketUrl.value).then((response) => {
+    if (!ressourceName.value) return
+    await getSignedObjectUrl('exercise_images', `${ressourceName.value}.jpg`).then((response) => {
       url.value = response.data?.signedUrl
     })
     loading.value = false

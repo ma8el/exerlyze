@@ -26,7 +26,7 @@ INSERT INTO public.muscles (id, name_en, name_de, name_fr, description_en, descr
 (16, 'Triceps', 'Trizeps', 'Triceps', 'The triceps are a muscle group located on the back of the upper arm. They are responsible for the extension of the arm at the elbow joint.', 'Der Trizeps ist eine Muskelgruppe, die sich auf der Rückseite des Oberarms befindet. Sie ist für die Streckung des Arms am Ellenbogengelenk verantwortlich.', 'Les triceps sont un groupe de muscles situés à l''arrière du bras. Ils sont responsables de l''extension du bras au niveau de l''articulation du coude.'),
 (17, 'Upper Back', 'Oberer Rücken', 'Haut du dos', 'The upper back muscles are located on the back of the upper body. They are responsible for the extension and lateral flexion of the spine, i.e. the movement of the spine away from the body and the bending of the spine to the side.', 'Die oberen Rückenmuskeln befinden sich auf der Rückseite des Oberkörpers. Sie sind für die Streckung und laterale Beugung der Wirbelsäule, d.h. die Bewegung der Wirbelsäule vom Körper weg und die Beugung der Wirbelsäule zur Seite, verantwortlich.', 'Les muscles du haut du dos sont situés à l''arrière du haut du corps. Ils sont responsables de l''extension et de la flexion latérale de la colonne vertébrale, c''est-à-dire du mouvement de la colonne vertébrale vers l''extérieur du corps et de la flexion de la colonne vertébrale sur le côté.');
 
-INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, description_de, description_fr, execution_en, execution_de, execution_fr, muscles, image_url) VALUES
+INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, description_de, description_fr, execution_en, execution_de, execution_fr, muscles, ressource_name) VALUES
 ('Deadlift', 'Kreuzheben', 'Soulevé de terre',
  'The deadlift is a compound exercise that trains the muscles of the lower back, glutes, hamstrings, quadriceps, calves, forearms, traps and abdominals. It is performed by lifting a barbell from the floor to the hips.',
  'Das Kreuzheben ist eine Verbundübung, die die Muskeln des unteren Rückens, der Gesäßmuskeln, der Beinbeuger, der Quadrizeps, der Wadenmuskeln, der Unterarme, des Trapezius und der Bauchmuskeln trainiert. Es wird ausgeführt, indem eine Langhantel vom Boden zu den Hüften gehoben wird.',
@@ -35,7 +35,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
  'Stellen Sie sich mit den Füßen schulterbreit auseinander und den Zehen leicht nach außen zeigend hin. Beugen Sie sich nach unten und greifen Sie die Langhantel mit einem schulterbreiten Obergriff. Halten Sie Ihren Rücken gerade und Ihren Kopf in einer neutralen Position. Heben Sie die Langhantel, indem Sie Ihre Knie und Hüften strecken. Halten Sie Ihre Arme gerade und Ihren Rücken gerade. Heben Sie die Langhantel, bis Sie aufrecht stehen. Senken Sie die Langhantel, indem Sie Ihre Knie und Hüften beugen. Halten Sie Ihre Arme gerade und Ihren Rücken gerade. Senken Sie die Langhantel, bis sie den Boden berührt. Wiederholen Sie.',
  'Placez-vous les pieds écartés à la largeur des épaules et les orteils légèrement tournés vers l''extérieur. Penchez-vous et saisissez la barre avec une prise supérieure à la largeur des épaules. Gardez le dos droit et la tête dans une position neutre. Soulevez la barre en étendant vos genoux et vos hanches. Gardez les bras tendus et le dos droit. Soulevez la barre jusqu''à ce que vous soyez debout. Abaissez la barre en pliant vos genoux et vos hanches. Gardez les bras tendus et le dos droit. Abaissez la barre jusqu''à ce qu''elle touche le sol. Répétez.',
  ARRAY[8,7,10,15],
- 'deadlift.png'
+ 'deadlift'
  ),
 ('Bench Press', 'Bankdrücken', 'Développé couché',
  'The bench press is a compound exercise that trains the muscles of the chest, shoulders, triceps and abdominals. It is performed by lifting a barbell from the chest to the arms.',
@@ -45,7 +45,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
  'Legen Sie sich auf eine Bank mit den Füßen flach auf dem Boden. Greifen Sie die Langhantel mit einem schulterbreiten Obergriff. Halten Sie Ihren Rücken gerade und Ihren Kopf in einer neutralen Position. Heben Sie die Langhantel, indem Sie Ihre Arme strecken. Halten Sie Ihre Arme gerade und Ihren Rücken gerade. Heben Sie die Langhantel, bis Ihre Arme vollständig gestreckt sind. Senken Sie die Langhantel, indem Sie Ihre Arme beugen. Halten Sie Ihre Arme gerade und Ihren Rücken gerade. Senken Sie die Langhantel, bis sie Ihre Brust berührt. Wiederholen Sie.',
  'Allongez-vous sur un banc avec les pieds à plat sur le sol. Saisissez la barre avec une prise supérieure à la largeur des épaules. Gardez le dos droit et la tête dans une position neutre. Soulevez la barre en tendant les bras. Gardez les bras tendus et le dos droit. Soulevez la barre jusqu''à ce que vos bras soient complètement tendus. Abaissez la barre en pliant les bras. Gardez les bras tendus et le dos droit. Abaissez la barre jusqu''à ce qu''elle touche votre poitrine. Répétez.',
  ARRAY[5,16,14],
- 'benchpress.png'
+ 'barbell_bench_press'
 ),
 ('Squat', 'Kniebeugen', 'Squat',
  'The squat is a compound exercise that trains the muscles of the glutes, quadriceps, hamstrings, calves, abdominals and lower back. It is performed by lifting a barbell from the floor to the hips.',
@@ -55,7 +55,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
  'Stellen Sie sich mit den Füßen schulterbreit auseinander und den Zehen leicht nach außen zeigend hin. Beugen Sie sich nach unten und greifen Sie die Langhantel mit einem schulterbreiten Obergriff. Halten Sie Ihren Rücken gerade und Ihren Kopf in einer neutralen Position. Heben Sie die Langhantel, indem Sie Ihre Knie und Hüften strecken. Halten Sie Ihre Arme gerade und Ihren Rücken gerade. Heben Sie die Langhantel, bis Sie aufrecht stehen. Senken Sie die Langhantel, indem Sie Ihre Knie und Hüften beugen. Halten Sie Ihre Arme gerade und Ihren Rücken gerade. Senken Sie die Langhantel, bis sie den Boden berührt. Wiederholen Sie.',
  'Placez-vous les pieds écartés à la largeur des épaules et les orteils légèrement tournés vers l''extérieur. Penchez-vous et saisissez la barre avec une prise supérieure à la largeur des épaules. Gardez le dos droit et la tête dans une position neutre. Soulevez la barre en étendant vos genoux et vos hanches. Gardez les bras tendus et le dos droit. Soulevez la barre jusqu''à ce que vous soyez debout. Abaissez la barre en pliant vos genoux et vos hanches. Gardez les bras tendus et le dos droit. Abaissez la barre jusqu''à ce qu''elle touche le sol. Répétez.',
  ARRAY[13,8,7,10],
- 'barbell_squat.png'),
+ 'back_squats'),
 ('Overhead Press', 'Schulterdrücken', 'Développé militaire',
  'The overhead press is a compound exercise that trains the muscles of the shoulders, triceps and abdominals. It is performed by lifting a barbell from the shoulders to the arms.',
  'Das Schulterdrücken ist eine Verbundübung, die die Muskeln der Schultern, des Trizeps und der Bauchmuskeln trainiert. Es wird ausgeführt, indem eine Langhantel von den Schultern zu den Armen gehoben wird.',
@@ -64,7 +64,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
  'Stellen Sie sich mit den Füßen schulterbreit auseinander und den Zehen leicht nach außen zeigend hin. Beugen Sie sich nach unten und greifen Sie die Langhantel mit einem schulterbreiten Obergriff. Halten Sie Ihren Rücken gerade und Ihren Kopf in einer neutralen Position. Heben Sie die Langhantel, indem Sie Ihre Arme strecken. Halten Sie Ihre Arme gerade und Ihren Rücken gerade. Heben Sie die Langhantel, bis Ihre Arme vollständig gestreckt sind. Senken Sie die Langhantel, indem Sie Ihre Arme beugen. Halten Sie Ihre Arme gerade und Ihren Rücken gerade. Senken Sie die Langhantel, bis sie Ihre Schultern berührt. Wiederholen Sie.',
  'Placez-vous les pieds écartés à la largeur des épaules et les orteils légèrement tournés vers l''extérieur. Penchez-vous et saisissez la barre avec une prise supérieure à la largeur des épaules. Gardez le dos droit et la tête dans une position neutre. Soulevez la barre en tendant les bras. Gardez les bras tendus et le dos droit. Soulevez la barre jusqu''à ce que vos bras soient complètement tendus. Abaissez la barre en pliant les bras. Gardez les bras tendus et le dos droit. Abaissez la barre jusqu''à ce qu''elle touche vos épaules. Répétez.',
  ARRAY[14,16,17],
- 'overhead_press.png'),
+ 'standing_barbell_military_press'),
 ('Pull Up', 'Klimmzug', 'Traction',
  'The pull up is a compound exercise that trains the muscles of the back, shoulders, biceps and abdominals. It is performed by lifting the body from a hanging position to a position above the bar.',
  'Der Klimmzug ist eine Verbundübung, die die Muskeln des Rückens, der Schultern, des Bizeps und der Bauchmuskeln trainiert. Er wird ausgeführt, indem der Körper von einer hängenden Position in eine Position über der Stange gehoben wird.',
@@ -73,7 +73,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
  'Greifen Sie die Stange mit einem schulterbreiten Obergriff. Halten Sie Ihre Arme gerade und Ihren Rücken gerade. Heben Sie Ihren Körper, indem Sie Ihre Arme beugen. Halten Sie Ihre Arme gerade und Ihren Rücken gerade. Heben Sie Ihren Körper, bis Ihr Kinn über der Stange ist. Senken Sie Ihren Körper, indem Sie Ihre Arme strecken. Halten Sie Ihre Arme gerade und Ihren Rücken gerade. Senken Sie Ihren Körper, bis Ihre Arme vollständig gestreckt sind. Wiederholen Sie.',
  'Saisissez la barre avec une prise supérieure à la largeur des épaules. Gardez les bras tendus et le dos droit. Soulevez votre corps en pliant les bras. Gardez les bras tendus et le dos droit. Soulevez votre corps jusqu''à ce que votre menton soit au-dessus de la barre. Abaissez votre corps en tendant les bras. Gardez les bras tendus et le dos droit. Abaissez votre corps jusqu''à ce que vos bras soient complètement tendus. Répétez.',
  ARRAY[9,3,17],
- 'pull_up.png'),
+ 'wide_grip_pull_up'),
 (
   'Leg Press', 
   'Beinpresse', 
@@ -85,7 +85,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
   'Setzen Sie sich in die Beinpresse-Maschine mit flachen Füßen auf der Plattform. Drücken Sie die Plattform weg, indem Sie Ihre Beine strecken, und kehren Sie dann kontrolliert in die Ausgangsposition zurück.', 
   'Asseyez-vous sur la machine avec les pieds à plat sur la plateforme. Poussez la plateforme en étendant vos jambes, puis revenez en position initiale de manière contrôlée.', 
   ARRAY[13,7,8], 
-  'leg_press.png'
+  'leg_press'
 ),
 (
   'Lat Pulldown', 
@@ -98,7 +98,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
   'Setzen Sie sich an die Kabelmaschine, greifen Sie die Stange weiter als schulterbreit. Ziehen Sie die Stange zu Ihrer Brust und lassen Sie sie langsam wieder hochgehen.', 
   'Asseyez-vous à la machine à câbles, les mains écartées plus larges que les épaules sur la barre. Tirez la barre vers votre poitrine, puis laissez-la remonter lentement.', 
   ARRAY[9,3,11], 
-  'lat_pulldown.png'
+  'wide_grip_lat_pulldown'
 ),
 (
   'Tricep Dips', 
@@ -111,7 +111,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
   'Greifen Sie die Parallelstangen oder Bank und stützen Sie Ihren Körper. Senken Sie Ihren Körper, indem Sie Ihre Ellenbogen beugen, bis sie einen Winkel von 90 Grad erreichen, dann drücken Sie sich zurück in den Start.', 
   'Saisissez les barres parallèles ou le banc et soutenez votre corps. Abaissez votre corps en pliant vos coudes jusqu''à 90 degrés, puis poussez-vous en arrière au départ.', 
   ARRAY[16], 
-  'tricep_dips.png'
+  'triceps_dips'
 ),
 (
   'Russian Twists', 
@@ -124,7 +124,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
   'Setzen Sie sich auf den Boden, lehnen Sie sich leicht zurück, heben Sie Ihre Füße, wenn möglich, und drehen Sie Ihren Oberkörper abwechselnd zur Seite, mit oder ohne Gewicht.', 
   'Asseyez-vous sur le sol, penchez-vous légèrement en arrière, levez vos pieds si possible, et tournez votre torse pour toucher alternativement le sol à côté de vous avec ou sans poids.', 
   ARRAY[1], 
-  'russian_twists.png'
+  'russian_twists'
 ),
 (
   'Facepulls', 
@@ -137,7 +137,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
   'Stehen Sie der Kabelmaschine gegenüber, greifen Sie das Seil mit beiden Händen. Ziehen Sie das Seil zu Ihrem Gesicht, während Sie das Seil teilen und die Schulterblätter zusammenziehen.', 
   'Tenez-vous face à la machine à câbles, saisissez la corde avec les deux mains. Tirez la corde vers votre visage en écartant la corde et en rapprochant les omoplates.', 
   ARRAY[11, 14], 
-  'facepulls.png'
+  'face_pulls'
 ),
 (
   'Biceps Curls', 
@@ -150,7 +150,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
   'Stehen Sie schulterbreit auseinander, Gewichte an Ihren Seiten. Krümmen Sie die Gewichte zu Ihren Schultern, indem Sie Ihre Ellenbogen stationär halten, und senken Sie sie dann wieder ab.', 
   'Tenez-vous debout, les pieds écartés à la largeur des épaules, les poids sur vos côtés. Fléchissez les poids vers vos épaules en gardant vos coudes immobiles, puis abaissez-les.', 
   ARRAY[3], 
-  'biceps_curls.png'
+  'dumbbell_curls'
 ),
 (
   'T-Bar Rows', 
@@ -163,7 +163,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
   'Stehen Sie über die T-Stange, beugen Sie sich an der Hüfte nach vorne, greifen Sie den Griff. Ziehen Sie das Gewicht zu Ihrer Brust und senken Sie es dann wieder zum Start.', 
   'Tenez-vous debout en chevauchant la barre en T, penchez-vous en avant au niveau des hanches, saisissez la poignée. Tirez le poids vers votre poitrine, puis abaissez-le au départ.', 
   ARRAY[11, 9], 
-  't_bar_row.png'
+  't_bar_row'
 ),
 (
     'Shrugs', 
@@ -176,7 +176,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
     'Stehen Sie schulterbreit, Gewichte an Ihren Seiten. Heben Sie Ihre Schultern zu Ihren Ohren, halten Sie kurz an, und senken Sie dann wieder ab.', 
     'Tenez-vous debout, les pieds écartés à la largeur des épaules, les poids sur vos côtés. Levez vos épaules vers vos oreilles, maintenez brièvement, puis abaissez-les.', 
     ARRAY[15], 
-    'shrugs.png'
+    'dumbbell_shrugs'
 ),
 (
     'Dumbbell Lateral Raises', 
@@ -189,7 +189,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
     'Stehen Sie schulterbreit auseinander, Gewichte an den Seiten. Heben Sie die Gewichte seitlich mit leicht gebeugten Ellenbogen und senken Sie sie dann wieder ab.', 
     'Tenez-vous debout, les pieds écartés à la largeur des épaules, les poids sur vos côtés. Soulevez les poids sur les côtés avec un léger pli aux coudes, puis abaissez-les.', 
     ARRAY[14], 
-    'dumbbell_lateral_raises.png'
+    'dumbbell_lateral_raise'
 ),
 (
     'Cable Crossover', 
@@ -202,7 +202,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
     'Stehen Sie zwischen zwei Kabeltürmen mit hoch eingestellten Rollen. Lehnen Sie sich leicht vor, strecken Sie Ihre Arme zur Seite, und bringen Sie Ihre Hände vor Ihnen zusammen.', 
     'Tenez-vous entre deux tours de câble avec des poulies réglées en haut. Penchez-vous légèrement en avant, étendez les bras sur les côtés, puis amenez vos mains ensemble devant vous.', 
     ARRAY[5], 
-    'cable_crossover.png'
+    'standing_cable_chest_press'
 ),
 (
     'Dumbbell Bench Press', 
@@ -215,7 +215,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
     'Liegen Sie auf einer Bank mit Hanteln in jeder Hand. Drücken Sie die Gewichte nach oben, bis Ihre Arme gerade sind, und senken Sie sie dann wieder auf Brusthöhe.', 
     'Allongez-vous sur un banc avec des haltères dans chaque main. Pressez les poids vers le haut jusqu''à ce que vos bras soient tendus, puis abaissez-les au niveau de la poitrine.', 
     ARRAY[5], 
-    'dumbbell_bench_press.png'
+    'dumbbell_bench_press'
 ),
 (
     'Incline Flye', 
@@ -228,7 +228,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
     'Liegen Sie auf einer Schrägbank mit Gewichten. Strecken Sie Ihre Arme über Ihrer Brust aus, öffnen Sie dann Ihre Arme weit und senken Sie die Gewichte zu den Seiten, bevor Sie sie wieder hochbringen.', 
     'Allongez-vous sur un banc incliné avec des poids. Tendez vos bras au-dessus de votre poitrine, puis ouvrez grand vos bras et abaissez les poids sur les côtés avant de les remonter.', 
     ARRAY[5], 
-    'incline_flye.png'
+    'incline_dumbbell_flyes'
 ),
 (
     'Leg Curl', 
@@ -241,7 +241,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
     'Legen Sie sich auf die Bauchseite auf die Beinbeugemaschine. Beugen Sie Ihre Knie, um das Gewicht zu Ihrem Gesäß zu ziehen, und kehren Sie dann langsam in die Ausgangsposition zurück.', 
     'Allongez-vous face contre terre sur la machine à leg curls. Pliez vos genoux pour tirer le poids vers vos fesses, puis revenez lentement en position de départ.', 
     ARRAY[8], 
-    'leg_curl.png'
+    'lying_leg_curls'
 ),
 (
     'Leg Extension', 
@@ -254,7 +254,7 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
     'Setzen Sie sich auf die Beinstreckmaschine mit Schienbeinen unter den Polstern. Heben Sie das Gewicht, indem Sie Ihre Beine strecken, und senken Sie sie dann wieder ab.', 
     'Asseyez-vous sur la machine à extensions de jambe avec les tibias sous les coussinets. Soulevez le poids en étendant vos jambes, puis abaissez-les.', 
     ARRAY[13], 
-    'leg_extension.png'
+    'leg_extension'
 ),
 (
     'Bulgarian Split Squat', 
@@ -267,6 +267,6 @@ INSERT INTO public.exercises (name_en, name_de, name_fr, description_en, descrip
     'Stehen Sie in einer Ausfallschritt-Position mit einem Fuß auf einer Bank hinter Ihnen. Senken Sie Ihren Körper, indem Sie Ihr vorderes Knie beugen, und drücken Sie sich dann zurück in den Start.', 
     'Tenez-vous en position de fente avec un pied sur un banc derrière vous. Abaissez votre corps en pliant votre genou avant, puis poussez-vous en arrière au départ.', 
     ARRAY[13, 7], 
-    'bulgarian_split_squat.png'
+    'bulgarian_split_squats'
 )
 ;

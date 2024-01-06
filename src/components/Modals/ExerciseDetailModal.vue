@@ -42,7 +42,7 @@
     const setLocale = userSettingsStore.getLocale()
       await supabase
       .from('exercises')
-      .select(`id, name_${setLocale}, description_${setLocale}, execution_${setLocale}, image_url`)
+      .select(`id, name_${setLocale}, description_${setLocale}, execution_${setLocale}, ressource_name`)
       .eq('id', exerciseId)
       .single()
       .then((response) => {
@@ -64,6 +64,15 @@
     executionSelected.value = true
   }
 
+  const getVideoUrl = async () => {
+    const {data, error } = await supabase
+      .storage
+      .from('exercise_videos')
+      .createSignedUrl(`${exercise.value.ressource_name}.mp4`, 60)
+    const signedUrl = data?.signedUrl
+    return signedUrl
+  }
+
   watch(() => exercise.value, () => {
     loading.value = true
     exerciseName.value = exercise.value[`name_${userSettingsStore.getLocale()}`]
@@ -72,9 +81,11 @@
     loading.value = false
   })
 
+  const videoUrl = ref<string>()
   onMounted(async () => {
     loading.value = true
     await getExerciseData(props.exerciseId)
+    videoUrl.value = await getVideoUrl()
     loading.value = false
   })
 </script>
@@ -86,11 +97,13 @@
   >
     <template #modalHeader>
       <ImageSkeleton v-if="loading" />
-      <ion-img
-        v-else
-        :src="props.exerciseUrl"
+      <video
+        autoplay
+        loop
+        v-else-if="!loading"
+        :src="videoUrl"
         alt="Exercise Image"
-      />
+      ></video>
     </template>
     <template #modalContent>
       <div v-if="loading">
@@ -141,6 +154,11 @@
 </template>
 
 <style scoped>
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .exercise-description {
     font-size: 0.9rem;
 }

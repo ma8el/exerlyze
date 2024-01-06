@@ -19,7 +19,7 @@
   const images = ref<string[]>([])
   const userSettingsStore = useUserSettingsStore()
   const loading = ref<boolean>(true)
-  const bucketUrl = ref<string>()
+  const ressourceName = ref<string>()
 
   const getExercises = async () => {
     const setLocale = userSettingsStore.getLocale()
@@ -52,10 +52,10 @@
   const getImages = async () => {
     for (const exercise of exercises.value) {
       await getBucketUrlFromTable('exercises', exercise.exercise_id).then((response) => {
-        bucketUrl.value = response.data?.image_url
+        ressourceName.value = response.data?.ressource_name
       })
-      if (!bucketUrl.value) return
-      const response = await getSignedObjectUrl('exercise_images', bucketUrl.value)
+      if (!ressourceName.value) return
+      const response = await getSignedObjectUrl('exercise_images', `${ressourceName.value}.jpg`)
       const signedUrl = response.data?.signedUrl
       if (!signedUrl) {
         images.value.push(defaultImage)

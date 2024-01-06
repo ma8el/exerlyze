@@ -12,18 +12,13 @@ export const getSignedObjectUrl = async (bucket: string, bucketUrl: string) => {
     return await supabase
       .storage
       .from(bucket)
-      .createSignedUrl(bucketUrl, 60, {
-        transform: {
-          width: 100,
-          height: 100,
-        }
-    })
+      .createSignedUrl(bucketUrl, 60)
 };
 
 export const getBucketUrlFromTable = async (table: string, id: number) => {
     return await supabase
       .from(table)
-      .select('image_url')
+      .select('ressource_name')
       .eq('id', id)
       .single()
 }

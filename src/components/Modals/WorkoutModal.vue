@@ -134,7 +134,7 @@ onMounted(() => {
         :exerciseId="set.exerciseId"
         :name="set.name"
         :transitionTrigger="index === currentSet && !showBreak"
-        :show-image="index === currentSet && !showBreak"
+        :show-video="index === currentSet && !showBreak"
         :currentSet="set.currentSet"
         v-model:reps="workoutSessionSets[index].reps"
         v-model:weight="workoutSessionSets[index].weight"
