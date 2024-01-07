@@ -2,10 +2,19 @@
   import { v4 as uuidv4 } from 'uuid';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import { IonItem,
+           IonList,
            IonCheckbox,
+           IonRow,
+           IonCol,
+           IonAvatar,
+           IonIcon,
+           IonLabel,
            IonButton,
            IonSearchbar,
-           modalController } from '@ionic/vue';
+           IonInfiniteScroll,
+           IonInfiniteScrollContent,
+           modalController, 
+           InfiniteScrollCustomEvent} from '@ionic/vue';
   import ExerciseDetailModal from '@/components/Modals/ExerciseDetailModal.vue';
   import ListSkeleton from '@/components/Skeletons/ListSkeleton.vue';
   import { ref, onMounted, onUnmounted } from 'vue';
@@ -15,53 +24,64 @@
   import { bookmarkOutline } from 'ionicons/icons';
   import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
 
-  const exercises = ref<ExerciseSelection[]>([])
+  interface ExerciseSelectionWithImage extends ExerciseSelection {
+    image: string
+  }
+
+  const exercises = ref<ExerciseSelectionWithImage[]>([])
   const images = ref<string[]>([])
   const userSettingsStore = useUserSettingsStore()
   const loading = ref<boolean>(true)
   const ressourceName = ref<string>()
+  const selected = ref<ExerciseSelection[]>([])
 
-  const getExercises = async () => {
+  const getExercises = async (page: number) => {
+    const pageLength = 15
+    const lowerBound = page * pageLength
+    const upperBound = lowerBound + pageLength - 1
     const setLocale = userSettingsStore.getLocale()
-    await supabase
+    const response = await supabase
       .from('exercises')
       .select(`id, name_${setLocale}`)
-      .then((response) => {
-        if (response.error) {
-          console.log(response.error)
-        } else {
-          exercises.value = response.data.map((exercise) => {
-            return {
-              // @ts-ignore
-              id: uuidv4(),
-              // @ts-ignore
-              exercise_id: exercise.id,
-              // @ts-ignore
-              name: exercise[`name_${setLocale}`],
-              sets: 0,
-              reps: 0,
-              weight: 0,
-              set_index: 0,
-              isSelected: false,
-            }
-          })
+      .order(`name_${setLocale}`, { ascending: true })
+      .range(lowerBound, upperBound)
+    if (response.error) {
+      console.log(response.error)
+      return
+    } else {
+      const newExercisesPromises = response.data.map(async (exercise) => {
+        return {
+          // @ts-ignore
+          id: uuidv4(),
+          // @ts-ignore
+          exercise_id: exercise.id,
+          // @ts-ignore
+          name: exercise[`name_${setLocale}`],
+          sets: 0,
+          reps: 0,
+          weight: 0,
+          set_index: 0,
+          isSelected: false,
+          // @ts-ignore
+          image: await getImage(exercise.id)
         }
       })
+      const newExercises = await Promise.all(newExercisesPromises)
+      exercises.value = [...exercises.value, ...newExercises]
+    }
   }
 
-  const getImages = async () => {
-    for (const exercise of exercises.value) {
-      await getBucketUrlFromTable('exercises', exercise.exercise_id).then((response) => {
-        ressourceName.value = response.data?.ressource_name
-      })
-      if (!ressourceName.value) return
-      const response = await getSignedObjectUrl('exercise_images', `${ressourceName.value}.jpg`)
-      const signedUrl = response.data?.signedUrl
-      if (!signedUrl) {
-        images.value.push(defaultImage)
-      } else {
-        images.value.push(signedUrl)
-      }
+  const getImage = async (exerciseId: number) => {
+    await getBucketUrlFromTable('exercises', exerciseId).then((response) => {
+      ressourceName.value = response.data?.ressource_name
+    })
+    if (!ressourceName.value) return defaultImage
+    const response = await getSignedObjectUrl('exercise_thumbnails', `${ressourceName.value}.jpg`)
+    const signedUrl = response.data?.signedUrl
+    if (!signedUrl) {
+      return defaultImage
+    } else {
+      return signedUrl
     }
   }
 
@@ -77,11 +97,12 @@
       .from('exercises')
       .select(`id, name_${setLocale}`)
       .ilike(`name_${setLocale}`, `%${searchedExercise}%`)
-      .then((response) => {
+      .order(`name_${setLocale}`, { ascending: true })
+      .then(async (response) => {
         if (response.error) {
           console.log(response.error)
         } else {
-          exercises.value = response.data.map((exercise) => {
+          const exercisePromises = response.data.map(async (exercise) => {
             return {
               // @ts-ignore
               id: uuidv4(),
@@ -94,13 +115,20 @@
               weight: 0,
               set_index: 0,
               isSelected: false,
+              // @ts-ignore
+              image: await getImage(exercise.id)
             }
           })
+          exercises.value = await Promise.all(exercisePromises)
         }
       })
   }
 
-  const selected = ref<ExerciseSelection[]>([])
+  const loadMoreExercises = async (ev: InfiniteScrollCustomEvent) => {
+    const page = Math.floor(exercises.value.length / 15)
+    await getExercises(page)
+    ev.target.complete();
+  }
 
   const save = () => {
     modalController.dismiss(selected.value, 'save');
@@ -128,10 +156,11 @@
   }
 
   onMounted(async () => {
+    exercises.value = []
+    images.value = []
     selected.value = []
     loading.value = true
-    await getExercises()
-    await getImages()
+    await getExercises(0)
     loading.value = false
   })
 
@@ -152,6 +181,7 @@
       <ion-item>
         <ion-searchbar 
           :placeholder="$t('exercise')"
+          :debounce="500"
           @ionChange="queryExercises"
           @ionInput="queryExercises"
           @ionClear="removeExercises"
@@ -163,37 +193,67 @@
         <ListSkeleton />
       </div>
       <div v-else>
-      <ion-item class="exercise-item" v-for="(exercise, index) in exercises">
-        <ion-checkbox slot="start" label-placement="end" :checked="exercise.isSelected" @ionChange="toggleExercise(exercise)">
-          <ion-row class="ion-align-items-center" size="auto">
-            <img class="exercise-image" :src="images[index]" style="width: 30px; height: 30px; margin-right: 10px;"/>
-            <ion-label>{{ exercise.name }}</ion-label>
+        <ion-list>
+          <ion-row 
+            class="exercise-item ion-align-items-center" 
+            v-for="(exercise, index) in exercises"
+          >
+              <ion-col class="checkbox-col" size="10">
+                <ion-checkbox 
+                  label-placement="end"
+                  :checked="exercise.isSelected"
+                  @ionChange="toggleExercise(exercise)"
+                >
+                  <ion-row class="ion-align-items-center">
+                      <ion-avatar>
+                        <img class="exercise-image" :src="exercise.image"/>
+                      </ion-avatar>
+                      <ion-label class="exercise-name">{{ exercise.name }}</ion-label>
+                  </ion-row>
+                </ion-checkbox>
+              </ion-col>
+              <ion-col size="2">
+                <ion-button 
+                  size="small"
+                  fill="clear"
+                  @click="openExerciseDetailModal(exercise, images[index])"
+                >
+                  Info
+                </ion-button>
+              </ion-col>
           </ion-row>
-        </ion-checkbox>
-        <ion-button 
-          slot="end"
-          size="small"
-          fill="clear"
-          @click="openExerciseDetailModal(exercise, images[index])"
-        >
-          Info
-        </ion-button>
-      </ion-item>
+        </ion-list>
+        <ion-infinite-scroll threshold="100px" @ionInfinite="loadMoreExercises">
+          <ion-infinite-scroll-content>
+          </ion-infinite-scroll-content>
+        </ion-infinite-scroll>
       </div>
     </template>
   </BaseFullPageModal>
 </template>
 
 <style scoped>
-  .exercise-image {
-    border-radius: 50%;
-    height: 50px;
-    width: 50px;
+.header-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+}
+.exercise-name {
+    font-size: 1rem;
+    max-width: 75%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-left: 10px;
   }
-  .header-title {
-    font-size: 1.1rem;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-  }
+.exercise-image {
+  border-radius: 10px;
+}
+
+.checkbox-col {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 </style>
