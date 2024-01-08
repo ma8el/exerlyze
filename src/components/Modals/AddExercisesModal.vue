@@ -17,11 +17,12 @@
            InfiniteScrollCustomEvent} from '@ionic/vue';
   import ExerciseDetailModal from '@/components/Modals/ExerciseDetailModal.vue';
   import ListSkeleton from '@/components/Skeletons/ListSkeleton.vue';
+  import MuscleFilterModal from './MuscleFilterModal.vue';
   import { ref, onMounted, onUnmounted } from 'vue';
   import { ExerciseSelection } from '@/types';
   import { supabase } from '@/supabase';
   import { useUserSettingsStore } from '@/store/userSettingsStore';
-  import { bookmarkOutline } from 'ionicons/icons';
+  import { bookmarkOutline, filter } from 'ionicons/icons';
   import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
 
   interface ExerciseSelectionWithImage extends ExerciseSelection {
@@ -32,6 +33,7 @@
   const images = ref<string[]>([])
   const userSettingsStore = useUserSettingsStore()
   const loading = ref<boolean>(true)
+  const filtered = ref<boolean>(false)
   const ressourceName = ref<string>()
   const selected = ref<ExerciseSelection[]>([])
 
@@ -124,6 +126,40 @@
       })
   }
 
+  const queryExerciseByMuscle = (muscleId: number) => {
+    exercises.value = []
+    const setLocale = userSettingsStore.getLocale()
+    supabase
+      .from('exercises')
+      .select(`id, name_${setLocale}`)
+      .contains('muscles', [muscleId])
+      .order(`name_${setLocale}`, { ascending: true })
+      .then(async (response) => {
+        if (response.error) {
+          console.log(response.error)
+        } else {
+          const exercisePromises = response.data.map(async (exercise) => {
+            return {
+              // @ts-ignore
+              id: uuidv4(),
+              // @ts-ignore
+              exercise_id: exercise.id,
+              // @ts-ignore
+              name: exercise[`name_${setLocale}`],
+              sets: 0,
+              reps: 0,
+              weight: 0,
+              set_index: 0,
+              isSelected: false,
+              // @ts-ignore
+              image: await getImage(exercise.id)
+            }
+          })
+          exercises.value = await Promise.all(exercisePromises)
+        }
+      })
+  }
+
   const loadMoreExercises = async (ev: InfiniteScrollCustomEvent) => {
     const page = Math.floor(exercises.value.length / 15)
     await getExercises(page)
@@ -155,6 +191,29 @@
     modal.present();
   }
 
+  const openFilter = async () => {
+    const modal = await modalController.create({
+      component: MuscleFilterModal,
+      cssClass: 'full-screen-modal',
+      initialBreakpoint: 0.75,
+    });
+    modal.present();
+    const { data, role } = await modal.onWillDismiss();
+    if (role == 'save') {
+      if (data.selected == 'all') {
+        filtered.value = false
+        loading.value = true
+        getExercises(0)
+        loading.value = false
+      } else {
+        filtered.value = true
+        loading.value = true
+        queryExerciseByMuscle(data.selected)
+        loading.value = false
+      }
+    }
+  }
+
   onMounted(async () => {
     exercises.value = []
     images.value = []
@@ -179,6 +238,7 @@
     </template>
     <template #modalContent>
       <ion-item>
+        <ion-col size="10">
         <ion-searchbar 
           :placeholder="$t('exercise')"
           :debounce="500"
@@ -187,6 +247,16 @@
           @ionClear="removeExercises"
         >
         </ion-searchbar>
+        </ion-col>
+        <ion-col size="2">
+          <ion-button
+            class="filter-button"
+            fill="clear"
+            @click="openFilter()"
+          >
+            <ion-icon :icon="filter"/>
+          </ion-button>
+        </ion-col>
       </ion-item>
  
       <div v-if="loading">
@@ -223,7 +293,7 @@
               </ion-col>
           </ion-row>
         </ion-list>
-        <ion-infinite-scroll threshold="100px" @ionInfinite="loadMoreExercises">
+        <ion-infinite-scroll v-if="!filtered" threshold="100px" @ionInfinite="loadMoreExercises">
           <ion-infinite-scroll-content>
           </ion-infinite-scroll-content>
         </ion-infinite-scroll>
@@ -255,5 +325,12 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+.filter-button {
+  --color: white;
+  :is(ion-icon) {
+    width: 25px;
+    height: 25px;
+  }
 }
 </style>
