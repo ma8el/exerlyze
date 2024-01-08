@@ -62,6 +62,8 @@ export const messages = {
             restTime: "Rest time",
             rir: "RIR",
             break: "Break",
+            compound: "Compound",
+            isolation: "Isolation",
         },
         nutrition: {
             title: "Nutrition",
@@ -255,6 +257,8 @@ export const messages = {
             restTime: "Pausenzeit",
             rir: "RIR",
             break: "Pause",
+            compound: "Grundübung",
+            isolation: "Isolationsübung",
         },
         nutrition: {
             title: "Ernährung",
@@ -448,6 +452,8 @@ export const messages = {
             restTime: "Temps de repos",
             rir: "RIR",
             break: "Pause",
+            compond: "Composé",
+            isolation: "Isolation",
         },
         nutrition: {
             title: "Nutrition",

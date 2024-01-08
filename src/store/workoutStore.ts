@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { defineStore } from 'pinia'
 import { supabase } from '@/supabase';
 import { Workout,
+         Muscle,
          PlannedWorkout,
          WorkoutPlan,
          DayOfWeek,
@@ -104,6 +105,52 @@ export const useDayOfWeekStore = defineStore({
         },
     }
 });
+
+export const useMuscleStore = defineStore('muscle', () => {
+    const muscles = ref(useStorage('muscles', [] as any[]))
+
+    const getMuscles = computed(() => muscles.value)
+
+    async function getMuscleById(id: number): Promise<Muscle | undefined> {
+        if (muscles.value.length === 0) {
+            await fetchMuscles()
+        }
+        return muscles.value.find(w => w.id === id)
+    }
+
+    async function getMuscleNameById(id: number): Promise<string | undefined> {
+        const muscle = await getMuscleById(id)
+        if (muscle) {
+            const userSettingsStore = useUserSettingsStore()
+            const locale = userSettingsStore.getLocale()
+            switch (locale) {
+                case 'de':
+                    return muscle.name_de
+                case 'fr':
+                    return muscle.name_fr
+                default:
+                    return muscle.name_en
+            }
+        }
+        return undefined
+    }
+
+    async function fetchMuscles() {
+        const { data, error } = await supabase.from('muscles').select('id, created_at, updated_at, name_en, name_de, name_fr')
+        if (error) {
+            console.error(error)
+        } else {
+            muscles.value = data
+        }
+    }
+    return {
+        muscles,
+        getMuscles,
+        getMuscleNameById,
+        getMuscleById,
+        fetchMuscles,
+    }
+})
 
 export const useWorkoutStore = defineStore('workout', () => {
     const workouts = ref(useStorage('workouts', [] as Workout[]))

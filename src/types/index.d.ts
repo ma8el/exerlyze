@@ -83,6 +83,16 @@ export interface DayOfWeek {
     name_fr: string,
 }
 
+export interface Muscle {
+    id: number,
+    created_at: Date,
+    updated_at: Date,
+    name: string,
+    name_en: string,
+    name_de: string,
+    name_fr: string,
+}
+
 export interface FullWorkoutPlan extends WorkoutPlan, PlannedWorkout {
     workout: Workout,
     dayOfWeek: string

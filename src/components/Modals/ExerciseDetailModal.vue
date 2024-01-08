@@ -1,13 +1,12 @@
 <script setup lang="ts">
   import { IonCard,
-           IonImg,
            IonCardTitle,
-           IonCardHeader,
            IonCardContent,
            IonRow,
            IonCol } from '@ionic/vue';
   import { supabase } from '@/supabase';
   import { useUserSettingsStore } from '@/store/userSettingsStore';
+  import { useMuscleStore } from '@/store/workoutStore';
   import { bodyOutline } from 'ionicons/icons';
   import BaseSegments from '@/components/BaseSegments.vue';
   import BaseInfoCard from '@/components/Cards/BaseInfoCard.vue';
@@ -29,10 +28,13 @@
   })
 
   const userSettingsStore = useUserSettingsStore()
+  const muscleStore = useMuscleStore()
+
   const exercise = ref()
   const exerciseName = ref<string>()
   const exerciseDescription = ref<string>()
   const exerciseExecution = ref<string>()
+  const muscleNames = ref<string[]>([])
   const loading = ref<boolean>(true)
 
   const descriptionSelected = ref<boolean>(true)
@@ -42,7 +44,7 @@
     const setLocale = userSettingsStore.getLocale()
       await supabase
       .from('exercises')
-      .select(`id, name_${setLocale}, description_${setLocale}, execution_${setLocale}, ressource_name`)
+      .select(`id, name_${setLocale}, description_${setLocale}, execution_${setLocale}, ressource_name, muscles`)
       .eq('id', exerciseId)
       .single()
       .then((response) => {
@@ -85,6 +87,9 @@
   onMounted(async () => {
     loading.value = true
     await getExerciseData(props.exerciseId)
+    muscleNames.value = await Promise.all(exercise.value.muscles.map(async (muscleId: number) => {
+      return await muscleStore.getMuscleNameById(muscleId)
+    }))
     videoUrl.value = await getVideoUrl()
     loading.value = false
   })
@@ -117,15 +122,17 @@
           <ion-col size="6" class="ion-padding">
             <BaseInfoCard
               :title="$t('workouts.type')"
-              :subTitle="`Compound`"
+              :subTitle="muscleNames.length > 1 ? $t('workouts.compound') : $t('workouts.isolation')"
               :icon="LevelIcon"
+              font-size="0.6rem"
             />
           </ion-col>
           <ion-col size="6" class="ion-padding">
             <BaseInfoCard
               :title="$t('workouts.muscle')"
-              subTitle="Biceps"
+              :subTitle="muscleNames.join(', ')"
               :iconSource="bodyOutline"
+              font-size="0.6rem"
             />
           </ion-col>
         </ion-row>

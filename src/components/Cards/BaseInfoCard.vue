@@ -36,16 +36,17 @@ const props = defineProps({
       :icon="icon ? icon : ''"
     ></ion-icon>
     <ion-label>
-      <p 
-        class="exercise-paragraph-header"
-      >
-        {{ title }}
-      </p>
-      <p
-        :style="`font-size: ${fontSize};`"
-      >
-        {{ subTitle }}
-      </p>
+        <p 
+          class="base-info-card-title"
+        >
+          {{ title }}
+        </p>
+        <p
+          :style="`font-size: ${fontSize};`"
+          class="base-info-card-subtitle"
+        >
+          {{ subTitle }}
+        </p>
     </ion-label>
   </ion-item>
 </template>
@@ -59,7 +60,7 @@ const props = defineProps({
   height: 25px;
   color: var(--ion-color-primary);
 }
-.exercise-paragraph-header {
+.base-info-card-title {
   font-size: 0.7rem;
   font-weight: bold;
 }
