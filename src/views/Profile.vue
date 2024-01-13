@@ -17,11 +17,12 @@
   import { 
     languageOutline,
     personOutline,
-    documentTextOutline,
     barChartOutline,
     notificationsOutline,
     mailOutline,
     checkboxOutline,
+    barbellOutline,
+    restaurantOutline,
     listOutline,
   } from 'ionicons/icons';
   import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
@@ -51,8 +52,12 @@
     router.push('/profile-settings');
   };
 
-  const openWorkoutSettings = () => {
-    router.push('/workout-settings');
+  const openFitnessLevelSettings = () => {
+    router.push('/fitness-level-settings');
+  };
+
+  const openDietGoalSettings = () => {
+    router.push('/complete-diet-profile');
   };
 
   const openActivityHistory = () => {
@@ -119,9 +124,13 @@
           <ion-icon :icon="personOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>{{ $t('profile.personalData') }}</ion-label>
         </ion-item>
-        <ion-item lines="none" :button="true" @click="openWorkoutSettings()">
-          <ion-icon :icon="documentTextOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-          <ion-label>{{ $t('settings.workout') }}</ion-label>
+        <ion-item lines="none" :button="true" @click="openFitnessLevelSettings()">
+          <ion-icon :icon="barbellOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>{{ $t('settings.fitnessLevel') }}</ion-label>
+        </ion-item>
+        <ion-item lines="none" :button="true" @click="openDietGoalSettings()">
+          <ion-icon :icon="restaurantOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>{{ $t('settings.dietGoals') }}</ion-label>
         </ion-item>
         <ion-item lines="none" :button="true" @click="openActivityHistory()">
           <ion-icon :icon="listOutline" color="primary" style="margin-right: 10px;"></ion-icon>

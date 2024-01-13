@@ -8,7 +8,7 @@ import SetDietGoals from '@/views/SetDietGoals.vue';
 import ProfileSettings from '@/views/ProfileSettings.vue';
 import ActivityHistory from '@/views/ActivityHistory.vue';
 import Insights from '@/views/Insights.vue';
-import WorkoutSettings from '@/views/WorkoutSettings.vue';
+import FitnessLevelSettingsVue from '@/views/FitnessLevelSettings.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -62,6 +62,10 @@ const routes: Array<RouteRecordRaw> = [
     component: ProfileSettings
   },
   {
+    path: '/fitness-level-settings',
+    component: FitnessLevelSettingsVue
+  },
+  {
     path: '/activity-history',
     component: ActivityHistory
   },
@@ -69,10 +73,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/insights',
     component: Insights
   },
-  {
-    path: '/workout-settings',
-    component: WorkoutSettings
-  }
 ]
 
 const router = createRouter({
