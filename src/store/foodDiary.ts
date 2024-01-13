@@ -35,6 +35,7 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
             daily_fat: defaultMacros.fat
         } as DailyNutritionGoal)
     })
+    const selectedNutritionGoal = computed(() => latestDailyNutritionGoal.value.nutrition_goal)
     const dailyCalories = computed(() => latestDailyNutritionGoal.value.daily_calories)
     const dailyCarbs = computed(() => latestDailyNutritionGoal.value.daily_carbs)
     const dailyProtein = computed(() => latestDailyNutritionGoal.value.daily_protein)
@@ -278,6 +279,7 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
 
     return {
         foodDiaryEntries,
+        selectedNutritionGoal,
         dailyCalories,
         dailyCarbs,
         dailyProtein,

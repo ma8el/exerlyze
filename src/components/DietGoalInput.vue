@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { v4 as uuidv4 } from 'uuid';
 import { IonButton, IonIcon, IonItem, IonSelect, IonSelectOption } from '@ionic/vue'
-import { chevronForward, flagOutline } from 'ionicons/icons';
+import { chevronForward, flagOutline, save } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import NumericInput from '@/components/NumericInput.vue';
 import Line from '@/components/Line.vue';
@@ -17,7 +17,7 @@ const props = defineProps({
     saveRedirectPath: {
         type: String,
         required: false,
-        default: '/complete-diet-profile',
+        default: '/tabs/home',
     },
 });
 
@@ -48,6 +48,7 @@ const setNutritionGoal = (value: NutritionGoal) => {
   } else if (value == NutritionGoal.StayFit){
     calories.value = foodDiaryStore.dailyCalories
   }
+  updateMacros()
 }
 
 const next = () => {
@@ -60,7 +61,7 @@ const next = () => {
       daily_fat: fat.value,
       nutrition_goal: selectedNutritionGoal.value,
     })
-    router.push('/tabs/home');
+    router.push(props.saveRedirectPath);
 }
 
 const updateMacros = () => {
@@ -76,6 +77,7 @@ const updateCalories = () => {
 }
 
 onMounted(() => {
+  selectedNutritionGoal.value = foodDiaryStore.selectedNutritionGoal
   calories.value = foodDiaryStore.dailyCalories
   carbs.value = foodDiaryStore.dailyCarbs
   protein.value = foodDiaryStore.dailyProtein
@@ -108,6 +110,7 @@ onMounted(() => {
         v-model:input-value="calories"
         @update:valid="caloriesValid = $event"
         @ion-blur="updateMacros()"
+        @ion-change="updateMacros()"
       />
       <ion-button expand="block" slot="end" shape="round" color="primary">
         {{ $t('calUnit') }} 
@@ -120,6 +123,7 @@ onMounted(() => {
         v-model:input-value="carbs"
         @update:valid="carbsValid = $event"
         @ion-blur="updateCalories()"
+        @ion-change="updateCalories()"
       />
       <ion-button expand="block" slot="end" shape="round" color="primary">
         {{ $t('weightUnitSmall') }} 
@@ -132,6 +136,7 @@ onMounted(() => {
         v-model:input-value="protein"
         @update:valid="proteinValid = $event"
         @ion-blur="updateCalories()"
+        @ion-change="updateCalories()"
       />
        <ion-button expand="block" slot="end" shape="round" color="primary">
           {{ $t('weightUnitSmall') }} 
@@ -144,6 +149,7 @@ onMounted(() => {
         v-model:input-value="fat"
         @update:valid="fatValid = $event"
         @ion-blur="updateCalories()"
+        @ion-change="updateCalories()"
       />
        <ion-button expand="block" slot="end" shape="round" color="primary">
           {{ $t('weightUnitSmall') }} 
