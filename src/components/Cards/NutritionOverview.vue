@@ -5,43 +5,65 @@
   import CarbsIcon from '@/icons/carbs.vue';
   import ProteinIcon from '@/icons/protein.vue';
   import FatIcon from '@/icons/fat.vue';
-  import { computed, inject } from 'vue';
+  import { ref, computed, inject, watch, onMounted, Ref } from 'vue';
   import { useFoodDiaryStore } from '@/store/foodDiary';
   import { selectedDateKey }  from '@/keys';
 
-  const selectedDate = inject(selectedDateKey);
+  const selectedDate = inject<Ref<Date>>(selectedDateKey, ref(new Date(new Date().setHours(0, 0, 0, 0))))
 
-  const dailyCalories = useFoodDiaryStore().dailyCalories;
-  const dailyCarbs = useFoodDiaryStore().dailyCarbs;
-  const dailyFat = useFoodDiaryStore().dailyFat;
-  const dailyProtein = useFoodDiaryStore().dailyProtein;
+  const foodDiaryStore = useFoodDiaryStore();
+
+  const loading = ref(true);
+
+  const calories = ref(0);
+  const carbs = ref(0);
+  const protein = ref(0);
+  const fat = ref(0);
+
+  const update = async () => {
+    loading.value = true;
+    const nutritionGoal = await foodDiaryStore.getNutritionGoalOfDate(selectedDate.value);
+    calories.value = nutritionGoal.daily_calories;
+    carbs.value = nutritionGoal.daily_carbs;
+    protein.value = nutritionGoal.daily_protein;
+    fat.value = nutritionGoal.daily_fat;
+    loading.value = false;
+  }
 
   const intake = computed(() => {
     if (!selectedDate) {
       return 0;
     }
-    return useFoodDiaryStore().getCaloriesOfDate(selectedDate.value);
+    return foodDiaryStore.getCaloriesOfDate(selectedDate.value);
   })
 
   const intakeCarbs = computed(() => {
     if (!selectedDate) {
       return 0;
     }
-    return useFoodDiaryStore().getCarbohydratesOfDate(selectedDate.value);
+    return foodDiaryStore.getCarbohydratesOfDate(selectedDate.value);
   })
 
   const intakeFat = computed(() => {
     if (!selectedDate) {
       return 0;
     }
-    return useFoodDiaryStore().getFatOfDate(selectedDate.value);
+    return foodDiaryStore.getFatOfDate(selectedDate.value);
   })
 
   const intakeProtein = computed(() => {
     if (!selectedDate) {
       return 0;
     }
-    return useFoodDiaryStore().getProteinOfDate(selectedDate.value);
+    return foodDiaryStore.getProteinOfDate(selectedDate.value);
+  })
+
+  watch(selectedDate, () => {
+    update();
+  })
+
+  onMounted(async () => {
+    await update();
   })
 </script>
 
@@ -60,7 +82,7 @@
           </div>
         </ion-thumbnail>
         <ion-label>{{ $t('nutrition.calories') }}</ion-label>
-        <ion-note slot="end">{{ intake }} / {{ dailyCalories }}</ion-note>
+        <ion-note slot="end">{{ intake }} / {{ calories }}</ion-note>
       </ion-item>
       <ion-item>
         <ion-thumbnail slot="start">
@@ -69,7 +91,7 @@
           </div>
         </ion-thumbnail>
         <ion-label>{{ $t('nutrition.carbohydrates') }}</ion-label>
-        <ion-note slot="end">{{ intakeCarbs }} g / {{ dailyCarbs }} g</ion-note>
+        <ion-note slot="end">{{ intakeCarbs }} g / {{ carbs }} g</ion-note>
       </ion-item>
       <ion-item>
          <ion-thumbnail slot="start">
@@ -78,7 +100,7 @@
           </div>
         </ion-thumbnail>
         <ion-label>{{ $t('nutrition.protein') }}</ion-label>
-        <ion-note slot="end">{{ intakeProtein }} g / {{ dailyProtein }} g</ion-note>
+        <ion-note slot="end">{{ intakeProtein }} g / {{ protein }} g</ion-note>
       </ion-item>
       <ion-item>
         <ion-thumbnail slot="start">
@@ -87,7 +109,7 @@
           </div>
         </ion-thumbnail>
         <ion-label>{{ $t('nutrition.fat') }}</ion-label>
-        <ion-note slot="end">{{ intakeFat }} g / {{ dailyFat }} g</ion-note>
+        <ion-note slot="end">{{ intakeFat }} g / {{ fat }} g</ion-note>
       </ion-item>
    </ion-list>
   </BaseCard>
