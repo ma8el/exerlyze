@@ -11,7 +11,7 @@ import { useFoodDiaryStore } from '@/store/foodDiary';
 import { useUserSettingsStore } from '@/store/userSettingsStore';
 import { getCurrentWeekDates } from '@/helpers/time';
 import BaseChartContainer from './BaseChartContainer.vue';
-import { computed, onMounted, reactive } from 'vue';
+import { ref, computed, onMounted, reactive } from 'vue';
 
 use([TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, MarkLineComponent, BarChart, CanvasRenderer])
 
@@ -22,6 +22,9 @@ const weekDays = getCurrentWeekDates();
 const foodDiaryStore = useFoodDiaryStore();
 const userSettingsStore = useUserSettingsStore();
 
+const weeklyConsumedCaloriesShadow = ref<number[]>([])
+const loading = ref(true)
+
 const weeklyConsumedCalories = computed(() => { 
   return weekDays.map(day => {
   const consumedCalories = foodDiaryStore.getCaloriesOfDate(day)
@@ -29,12 +32,16 @@ const weeklyConsumedCalories = computed(() => {
   })
 });
 
-const weeklyConsumedCaloriesShadow = computed(() => {
-  return weekDays.map(day => {
+const updateWeeklyConsumedCaloriesShadow = async () => {
+  loading.value = true
+  weeklyConsumedCaloriesShadow.value = await Promise.all(weekDays.map(async day => {
+    const nutritionGoal = await foodDiaryStore.getNutritionGoalOfDate(day)
+    const targetCalories = nutritionGoal.daily_calories
     const consumedCalories = foodDiaryStore.getCaloriesOfDate(day)
-    return Math.max(foodDiaryStore.dailyCalories - consumedCalories, 0)
-  })
-});
+    return Math.max(targetCalories - consumedCalories, 0)
+  }))
+  loading.value = false
+}
 
 const hasData = computed (() => {
   return weeklyConsumedCalories.value.reduce((acc, curr) => acc + curr, 0) > 0;
@@ -94,21 +101,24 @@ const getOptions = () => {
 
 let option = reactive(getOptions());
 
-foodDiaryStore.$subscribe((mutation, state) => {
+foodDiaryStore.$subscribe(async (mutation, state) => {
+  await updateWeeklyConsumedCaloriesShadow();
   Object.assign(option, getOptions());
 });
 
-userSettingsStore.$subscribe((mutation, state) => {
+userSettingsStore.$subscribe(async (mutation, state) => {
+  await updateWeeklyConsumedCaloriesShadow();
   Object.assign(option, getOptions());
 });
 
-onMounted(() => {
+onMounted(async () => {
+  await updateWeeklyConsumedCaloriesShadow();
   Object.assign(option, getOptions());
 });
 </script>
 
 <template>
-  <BaseChartContainer :hasData="hasData">
+  <BaseChartContainer :hasData="true">
     <v-chart :option="option" autoresize />
   </BaseChartContainer>
 </template>
