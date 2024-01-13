@@ -57,7 +57,7 @@
   };
 
   const openDietGoalSettings = () => {
-    router.push('/complete-diet-profile');
+    router.push('/diet-goal-settings');
   };
 
   const openActivityHistory = () => {
