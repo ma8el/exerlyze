@@ -1,15 +1,18 @@
 <script setup lang="ts">
   import { IonCard, IonCardContent, IonRow, IonCol } from '@ionic/vue';
   import BurnIcon from '@/icons/burn.svg';
-  import { computed, ref, inject } from 'vue';
+  import { onMounted, computed, ref, inject, watch, Ref } from 'vue';
   import { useFoodDiaryStore } from '@/store/foodDiary';
   import { selectedDateKey } from '@/keys';
   import NutritionKPIDoughnut from '@/components/Charts/NutritionKPIDoughnut.vue';
 
-  const selectedDate = inject(selectedDateKey)
+  const selectedDate = inject<Ref<Date>>(selectedDateKey, ref(new Date(new Date().setHours(0, 0, 0, 0))))
   const foodDiaryStore = useFoodDiaryStore();
 
-  const calories = ref(foodDiaryStore.dailyCalories);
+  const loading = ref(true);
+  const calories = ref(0);
+  const result = ref(0);
+
   const activity = ref(0);
 
   const intake = computed(() => {
@@ -19,10 +22,23 @@
     return foodDiaryStore.getCaloriesOfDate(selectedDate.value);
   })
 
-  const result = computed(() => {
-    return calories.value - intake.value + activity.value;
+  const update = async () => {
+    if (!selectedDate) {
+      return;
+    }
+    loading.value = true;
+    calories.value = (await foodDiaryStore.getNutritionGoalOfDate(selectedDate.value)).daily_calories;
+    result.value = calories.value - intake.value + activity.value;
+    loading.value = false;
+  }
+
+  watch(selectedDate, () => {
+    update();
   })
 
+  onMounted(async () => {
+    await update();
+  })
 </script>
 
 <template>
@@ -32,6 +48,7 @@
         <ion-col>
           <div class="top-polar-chart-container">
             <NutritionKPIDoughnut
+              v-if="!loading"
               :data="calories"
               :name="$t('nutrition.calories')"
               :max-value="calories"
@@ -68,6 +85,7 @@
         <ion-col size="4">
           <div class="bottom-polar-chart-container">
             <NutritionKPIDoughnut
+              v-if="!loading"
               :data="result"
               :name="$t('nutrition.left')"
               :max-value="calories + activity"
