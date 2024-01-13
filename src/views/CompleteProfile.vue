@@ -2,7 +2,7 @@
 import WelcomeSettingsLayout from '@/layouts/WelcomeSettingsLayout.vue';
 import UserMetricsInput from '@/components/UserMetricsInput.vue';
 import { useUserStore } from '@/store/bodyMetricsStore';
-import illustration from '../../assets/illustrations/fill_form.svg';
+import illustration from '../../assets/illustrations/fill_form.png';
 
 const userStore = useUserStore();
 const complete = userStore.isComplete;

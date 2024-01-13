@@ -9,7 +9,7 @@ import Line from '@/components/Line.vue';
 import { NutritionGoal } from '@/types/nutrition.enums';
 import { useFoodDiaryStore } from '@/store/foodDiary';
 import { ref, onMounted, computed } from 'vue';
-import illustration from '../../assets/illustrations/fill_diet_goals.svg';
+import illustration from '../../assets/illustrations/fill_diet_goals.png';
 
 const router = useRouter();
 const foodDiaryStore = useFoodDiaryStore();
