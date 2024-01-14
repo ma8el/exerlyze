@@ -111,7 +111,6 @@ userSettingsStore.$subscribe((mutation, state) => {
 });
 
 onMounted(() => {
-  console.log(weeklyWorkoutVolumeShadow.value)
   Object.assign(option, getOptions());
 });
 </script>
