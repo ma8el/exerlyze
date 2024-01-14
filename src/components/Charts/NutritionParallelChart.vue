@@ -37,12 +37,6 @@ const hasData = computed(() => {
 
 const maxValue = Math.max(...weeklyConsumedNutrition.value.flat());
 
-var schema = ref([
-  { name: 'carbs', index: 1, text: t('nutrition.carbs') },
-  { name: 'protein', index: 2, text: t('nutrition.protein') },
-  { name: 'fat', index: 3, text: t('nutrition.fat') },
-]);
-
 const getOptions = () => {
   const schema = [
     { name: 'carbs', index: 1, text: t('nutrition.carbs') },
