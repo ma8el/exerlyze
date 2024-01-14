@@ -44,6 +44,7 @@
           :reps="slotProps.item.reps"
           :weight="slotProps.item.weight"
           :set_index="slotProps.item.set_index"
+          :resttime="slotProps.item.resttime"
         />
       </template>
     </Slider>
