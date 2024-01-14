@@ -6,7 +6,7 @@ import { CanvasRenderer } from 'echarts/renderers'
 import VChart from 'vue-echarts';
 
 import { useI18n } from 'vue-i18n';
-import { useDayOfWeekStore, useWorkoutSessionStore } from '@/store/workoutStore';
+import { useDayOfWeekStore, useWorkoutSessionStore, useWorkoutPlanStore } from '@/store/workoutStore';
 import { useUserSettingsStore } from '@/store/userSettingsStore';
 import { getCurrentWeekDates } from '@/helpers/time';
 import BaseChartContainer from './BaseChartContainer.vue';
@@ -18,6 +18,7 @@ const { t } = useI18n();
 
 const dayOfWeekStore = useDayOfWeekStore();
 const weekDays = getCurrentWeekDates();
+const workoutPlanStore = useWorkoutPlanStore();
 const workoutSessionStore = useWorkoutSessionStore();
 const userSettingsStore = useUserSettingsStore();
 
@@ -31,8 +32,16 @@ const weeklyWorkoutVolume = computed(() => {
   })
 });
 
+const weeklyWorkoutVolumeShadow = computed(() => {
+  const plannedWorkoutVolume = weekDays.map(day => workoutPlanStore.getPlannedWorkoutVolumeOfDate(day));
+  return plannedWorkoutVolume.map((volume, index) => {
+    return Math.max(volume - weeklyWorkoutVolume.value[index], 0);
+  })
+});
+
 const hasData = computed (() => {
-  return weeklyWorkoutVolume.value.reduce((acc, curr) => acc + curr, 0) > 0;
+  return weeklyWorkoutVolume.value.reduce((acc, curr) => acc + curr, 0) > 0
+    || weeklyWorkoutVolumeShadow.value.reduce((acc, curr) => acc + curr, 0) > 0;
 });
 
 const getOptions = () => {
@@ -68,9 +77,21 @@ const getOptions = () => {
     {
       name: t('home.workoutVolume'),
       data: weeklyWorkoutVolume.value,
+      stack: 'volume',
       type: 'bar',
       color: '#3F63C8',
-    }
+      barWidth: '50%',
+      barCategoryGap: '20%',
+    },
+    {
+      name: 'shadow',
+      stack: 'volume',
+      data: weeklyWorkoutVolumeShadow.value,
+      type: 'bar',
+      color: 'rgba(255,255,255,0.1)',
+      barWidth: '50%',
+      barCategoryGap: '20%',
+    },
   ]
  }
 };
@@ -81,11 +102,16 @@ workoutSessionStore.$subscribe((mutation, state) => {
   Object.assign(option, getOptions());
 });
 
+workoutPlanStore.$subscribe((mutation, state) => {
+  Object.assign(option, getOptions());
+});
+
 userSettingsStore.$subscribe((mutation, state) => {
   Object.assign(option, getOptions());
 });
 
 onMounted(() => {
+  console.log(weeklyWorkoutVolumeShadow.value)
   Object.assign(option, getOptions());
 });
 </script>

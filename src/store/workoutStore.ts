@@ -355,6 +355,19 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
         return fullWorkoutPlansOfToday
     })
 
+    function getPlannedWorkoutVolumeOfDate(date: Date): number {
+        const dateIndex = getDayIndex(date)
+        const fullWorkoutPlanOfDate = getFullWorkoutPlans.value.filter(w => w.day_of_week_id === dateIndex)
+        const workoutExercises = fullWorkoutPlanOfDate.map(w => w.workout.exercises)
+        const workoutVolume = workoutExercises.reduce((acc, curr) => {
+            const exerciseVolume = curr.reduce((acc, curr) => {
+                return acc + curr.sets * curr.reps * curr.weight
+            }, 0)
+            return acc + exerciseVolume
+        }, 0)
+        return workoutVolume
+   }
+
     function getWorkoutPlanById(id: string): WorkoutPlan | undefined {
         return getWorkoutPlans.value.find(w => w.id === id)
     }
@@ -521,6 +534,7 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
         getNewId,
         getWorkoutPlanById,
         getPlannedWorkoutsByWorkoutId,
+        getPlannedWorkoutVolumeOfDate,
         addWorkoutPlan,
         updateWorkoutPlan,
         deleteWorkoutPlan,
