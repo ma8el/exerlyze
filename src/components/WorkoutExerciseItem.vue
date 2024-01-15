@@ -211,12 +211,12 @@ ion-item {
   /* Additional styles to ensure proper spacing */
   box-sizing: border-box; /* Include padding in the height calculation */
 
-  ion-icon {
+  :is(ion-icon) {
     margin-right: 5px;
     width: 15px;
     height: 15px;
   }
-  ion-input {
+  :is(ion-input) {
     --background: var(--ion-color-step-100);
     border-radius: 10px;
     margin: 0 2px 0 2px;
