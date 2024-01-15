@@ -1,22 +1,21 @@
 <script setup lang="ts">
   import { onIonViewDidEnter } from '@ionic/vue';
-  import { useWorkoutPlanStore, useWorkoutSessionStore } from '../store/workoutStore';
+  import { useWorkoutPlanStore } from '../store/workoutStore';
   import { useUserSettingsStore } from '@/store/userSettingsStore';
-  import StartWorkoutButton from './Buttons/StartWorkoutButton.vue';
-  import BaseCard from './Cards/BaseCard.vue';
   import NoWorkoutPlannedCard from './Cards/NoWorkoutPlannedCard.vue';
+  import PlannedWorkoutCard from './Cards/PlannedWorkoutCard.vue';
   import Slider from './Slider.vue';
   import { onMounted, ref, watch } from 'vue';
   import NoMoreWorkoutsThisWeekCard from './Cards/NoMoreWorkoutsThisWeekCard.vue';
   import { getDayIndex } from '@/helpers/time';
+import { computed } from 'vue';
+import { Exercise } from '@/types';
 
   const workoutPlanStore = useWorkoutPlanStore();
-  const workoutSessionStore = useWorkoutSessionStore();
   const userSettingsStore = useUserSettingsStore();
 
   const plannedWorkouts = ref(workoutPlanStore.getFullWorkoutPlans)
   const sortedPlannedWorkouts = ref(plannedWorkouts.value.sort((a, b) => a.day_of_week_id - b.day_of_week_id));
-  const workoutSessions = ref(workoutSessionStore.getFullWorkoutSessionsOfThisWeek);
   const nextWorkout = ref();
 
   const getNextEventIndex = (currentDay: number, events: number[]) => {
@@ -27,28 +26,6 @@
     }
     return nextEventIndex;
   }
-
-//  const isPerformed = (workoutId: string) => {
-//    const filteredWorkoutSessions = workoutSessions.value.filter((workoutSession) => workoutSession.workout_id == workoutId);
-//    if (filteredWorkoutSessions.length == 0) {
-//      return false;
-//    } else if (filteredWorkoutSessions.length == 1) {
-//      return true;
-//    } else {
-//      return false
-//    } 
-//  }
-
-//  const getWorkoutSession = (workoutId: string): FullWorkoutSession => {
-//    const filteredWorkoutSessions = workoutSessions.value.filter((workoutSession) => workoutSession.workout_id == workoutId);
-//    if (filteredWorkoutSessions.length == 0) {
-//      return {} as FullWorkoutSession;
-//    } else if (filteredWorkoutSessions.length == 1) {
-//      return filteredWorkoutSessions[0];
-//    } else {
-//      return {} as FullWorkoutSession;
-//    }
-//  }
 
   const setNextWorkout = () => {
     const today = getDayIndex(undefined) + 1;
@@ -93,17 +70,12 @@
     :has-last-slide="true"
   >
     <template v-slot:default="slotProps">
-      <BaseCard
-        img_src="https://ionicframework.com/docs/img/demos/card-media.png"
-        :title="slotProps.item.workout.name"
-        :content="true"
-        :sub-title="true"
-      >
-        <template #subtitle>
-          {{ $t('scheduledOn') }} {{ slotProps.item.dayOfWeek }}
-        </template>
-        <StartWorkoutButton :workoutId="slotProps.item.workout_id" />
-      </BaseCard>
+     <PlannedWorkoutCard
+        :workoutId="slotProps.item.workout_id"
+        :workoutName="slotProps.item.workout.name"
+        :scheduledOn="slotProps.item.dayOfWeek"
+        :exercise-ids="slotProps.item.workout.exercises.map((exercise: Exercise) => exercise.exercise_id)"
+      />
     </template>
     <template #lastSlide>
       <NoMoreWorkoutsThisWeekCard />

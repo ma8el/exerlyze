@@ -1,13 +1,12 @@
 <script setup lang="ts">
   import { useWorkoutPlanStore, useWorkoutSessionStore } from '../store/workoutStore';
   import { useUserSettingsStore } from '@/store/userSettingsStore';
-  import StartWorkoutButton from './Buttons/StartWorkoutButton.vue';
   import BaseCard from './Cards/BaseCard.vue';
-  import ResultsCard from './Cards/ResultsCard.vue';
   import Slider from './Slider.vue';
+  import PlannedWorkoutCard from './Cards/PlannedWorkoutCard.vue';
   import breakImage from '../../assets/illustrations/break.png';
   import { ref } from 'vue';
-  import { FullWorkoutSession } from '@/types/index';
+  import { Exercise } from '@/types';
 
   const workoutPlanStore = useWorkoutPlanStore();
   const workoutSessionStore = useWorkoutSessionStore();
@@ -29,19 +28,6 @@
   workoutSessionStore.$subscribe((mutation, state) => {
     workoutSessions.value = workoutSessionStore.getFullWorkoutSessionsOfToday;
   });
-
-  const isPerformed = (workoutId: string) => {
-    return workoutSessions.value.some((workoutSession) => workoutSession.workout_id == workoutId);
-  }
-
-  const getWorkoutSession = (workoutId: string): FullWorkoutSession => {
-    const workoutSession = workoutSessions.value.find((workoutSession) => workoutSession.workout_id == workoutId);
-    if (workoutSession) {
-      return workoutSession;
-    } else {
-      return {} as FullWorkoutSession;
-    }
-  }
 </script>
 
 <template>
@@ -55,21 +41,11 @@
     :has-last-slide="false"
   >
     <template v-slot:default="slotProps">
-      <BaseCard
-        v-if="!isPerformed(slotProps.item.workout_id)"
-        img_src="https://ionicframework.com/docs/img/demos/card-media.png"
-        :title="slotProps.item.workout.name"
-        :content="true"
-        :sub-title="true"
-      >
-        <template #subtitle>
-          {{ $t('scheduledOn') }} {{ $t('today') }}
-        </template>
-        <StartWorkoutButton :workoutId="slotProps.item.workout_id" />
-      </BaseCard>
-      <ResultsCard
-        v-if="Object.keys(getWorkoutSession(slotProps.item.workout_id)).length !== 0"
-        :workoutSession="getWorkoutSession(slotProps.item.workout_id)"
+     <PlannedWorkoutCard
+        :workoutId="slotProps.item.workout_id"
+        :workoutName="slotProps.item.workout.name"
+        :scheduledOn="$t('today')"
+        :exercise-ids="slotProps.item.workout.exercises.map((exercise: Exercise) => exercise.exercise_id)"
       />
     </template>
  </Slider>
