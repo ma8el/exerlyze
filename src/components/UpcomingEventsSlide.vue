@@ -28,7 +28,7 @@ import { Exercise } from '@/types';
   }
 
   const setNextWorkout = () => {
-    const today = getDayIndex(undefined) + 1;
+    const today = getDayIndex(undefined);
     const workoutDays = sortedPlannedWorkouts.value.map((workoutPlan) => workoutPlan.day_of_week_id);
     nextWorkout.value = getNextEventIndex(today, workoutDays);
   }

@@ -36,5 +36,7 @@ export const getCurrentWeekDates = () => {
 
 export const getDayIndex = (day: Date | undefined) => {
     if (day === undefined) return (new Date().getDay() - 1) % 7;
-    return (new Date(day).getDay() - 1) % 7;
+    const dayIndex = (new Date(day).getDay() - 1) % 7;
+    const cleanedDayIndex = dayIndex < 0 ? 6 : dayIndex;
+    return cleanedDayIndex;
 }

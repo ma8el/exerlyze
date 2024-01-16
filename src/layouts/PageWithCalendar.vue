@@ -2,8 +2,9 @@
   import AppLayout from '@/layouts/AppLayout.vue';
   import Calendar from '@/components/Calendar.vue';
   import { useWorkoutPlanStore } from '@/store/workoutStore';
-  import { reactive } from 'vue';
+  import { ref } from 'vue';
   import { getCurrentWeekDates } from '@/helpers/time'
+  import { getDayIndex } from '@/helpers/time';
 
   const props = defineProps({
     title: {
@@ -14,13 +15,19 @@
 
   const workoutPlanStore = useWorkoutPlanStore();
 
-  let workoutEventDates = reactive<Date[]>([])
-  workoutEventDates = getCurrentWeekDates().filter(
-    date => workoutPlanStore.getFullWorkoutPlans.some(workout => workout.day_of_week_id === date.getDay()))
+  const workoutEventDates = ref<Date[]>([])
+
+  const getWorkoutEvents = () => {
+    const workoutEvents = getCurrentWeekDates().filter(
+      date => workoutPlanStore.getFullWorkoutPlans.some(workout => workout.day_of_week_id === getDayIndex(date))
+    )
+    return workoutEvents;
+  }
+
+  workoutEventDates.value = getWorkoutEvents();
 
   workoutPlanStore.$subscribe((mutation, state) => {
-    workoutEventDates = getCurrentWeekDates().filter(
-      date => workoutPlanStore.getFullWorkoutPlans.some(workout => workout.day_of_week_id === date.getDay()));
+    workoutEventDates.value = getWorkoutEvents();
   });
 </script>
 
