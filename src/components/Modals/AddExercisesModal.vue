@@ -242,7 +242,6 @@
         <ion-searchbar 
           :placeholder="$t('exercise')"
           :debounce="500"
-          @ionChange="queryExercises"
           @ionInput="queryExercises"
           @ionClear="removeExercises"
         >
@@ -265,7 +264,7 @@
       <div v-else>
         <ion-list>
           <ion-row 
-            class="exercise-item ion-align-items-center" 
+            class="exercise-item ion-align-items-center ion-justify-content-between" 
             v-for="(exercise, index) in exercises"
           >
               <ion-col class="checkbox-col" size="10">
@@ -288,7 +287,7 @@
                   fill="clear"
                   @click="openExerciseDetailModal(exercise, images[index])"
                 >
-                  Info
+                  <p class="info-text">Info</p>
                 </ion-button>
               </ion-col>
           </ion-row>
@@ -303,14 +302,55 @@
 </template>
 
 <style scoped>
+@media (max-width: 400px) {
+  .exercise-name {
+    font-size: 12px;
+    margin-left: 5px;
+    max-width: 50%;
+  }
+  .exercise-image {
+    height: 50px;
+    width: 50px;
+  }
+  .info-text {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 600px) {
+  .exercise-name {
+    font-size: 14px;
+  }
+  .exercise-image {
+    height: 50px;
+    width: 50px;
+  }
+  .info-text {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 601px) {
+  .exercise-name {
+    font-size: 18px;
+  }
+  .exercise-image {
+    height: 70px;
+    width: 70px;
+  }
+  .info-text {
+    font-size: 18px;
+  }
+}
+
 .header-title {
   font-size: 1.1rem;
   font-weight: bold;
   display: flex;
   justify-content: center;
 }
+
 .exercise-name {
-    font-size: 1rem;
     max-width: 75%;
     overflow: hidden;
     white-space: nowrap;
