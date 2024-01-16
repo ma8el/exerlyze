@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { IonBackdrop } from '@ionic/vue'
 import { use } from 'echarts/core'
 import { ParallelChart } from 'echarts/charts'
 import { VisualMapComponent, ParallelComponent } from 'echarts/components'
@@ -44,39 +45,50 @@ const getOptions = () => {
     { name: 'fat', index: 3, text: t('nutrition.fat') },
   ];
   return {
-  title: {
-    text: t('home.macroDistribution'),
-    textStyle: {
-      color: 'white',
-    },
-  },
-  backgroundColor: '#1E1F24',
-  parallelAxis: [
-    { dim: 0, name: schema[0].text, min: 0, max: maxValue},
-    { dim: 1, name: schema[1].text, min: 0, max: maxValue},
-    { dim: 2, name: schema[2].text, min: 0, max: maxValue},
-  ],
-  parallel: {
-    left: '10%',
-    right: '15%',
-    bottom: 10,
-    parallelAxisDefault: {
-      nameGap: 20,
-      nameTextStyle: {
-        color: '#fff',
-        fontSize: 12
+    title: {
+      text: t('home.macroDistribution'),
+      textStyle: {
+        color: 'white',
       },
-   }
-  },
-  series: [
-    {
-      name: 'Nutrition Details',
-      type: 'parallel',
-      data: weeklyConsumedNutrition.value,
-      color: '#3F63C8',
     },
-  ]}
+    backgroundColor: '#1E1F24',
+    parallelAxis: [
+      { dim: 0, name: schema[0].text, min: 0, max: maxValue},
+      { dim: 1, name: schema[1].text, min: 0, max: maxValue},
+      { dim: 2, name: schema[2].text, min: 0, max: maxValue},
+    ],
+    parallel: {
+      left: '10%',
+      right: '15%',
+      bottom: 10,
+      parallelAxisDefault: {
+        nameGap: 20,
+        nameTextStyle: {
+          color: '#fff',
+          fontSize: 12
+        },
+     }
+    },
+    series: [
+      {
+        name: 'Nutrition Details',
+        type: 'parallel',
+        data: weeklyConsumedNutrition.value,
+        color: '#3F63C8',
+      },
+    ],
+    toolbox: {
+      feature: {
+        brush: {
+          show: false
+        }
+      }
+    },
+    brush: {
+      brushType: 'none'
+    }
   }
+}
 
 let option = reactive(getOptions());
 
@@ -99,6 +111,16 @@ onIonViewDidEnter(async () => {
 
 <template>
   <BaseChartContainer :hasData="hasData">
-    <v-chart :option="option" autoresize />
+    <div class="parallel-chart-wrapper">
+      <v-chart :option="option" autoresize />
+    </div>
   </BaseChartContainer>
 </template>
+
+<style scoped>
+.parallel-chart-wrapper {
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+}
+</style>

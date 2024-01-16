@@ -116,6 +116,16 @@ onIonViewDidEnter(async () => {
 
 <template>
   <BaseChartContainer :loading="loading" :hasData="true">
-    <v-chart :option="option" autoresize />
+    <div class="parallel-chart-wrapper">
+      <v-chart :option="option" autoresize />
+    </div>
   </BaseChartContainer>
 </template>
+
+<style scoped>
+.parallel-chart-wrapper {
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+}
+</style>
