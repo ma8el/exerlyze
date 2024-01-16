@@ -86,6 +86,12 @@ const getOptions = async () => {
         color: 'grey', // set the color of the x-axis grid
       },
     },
+    axisLabel: {
+      formatter: (value: number) => {
+        if (value < 10000) return value;
+        return value / 1000 + 'k';
+      },
+    }
   },
   grid: {
     left: 40,
