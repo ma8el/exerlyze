@@ -3,10 +3,7 @@ import { IonPage,
          IonContent,
          IonGrid,
          IonRow,
-         IonIcon,
          IonCol,
-         IonItem,
-         IonInput,
          IonButtons,
          IonLabel,
          IonButton,
@@ -21,6 +18,7 @@ import { useUserStore } from '@/store/bodyMetricsStore';
 import { useUserFitnessLevelStore } from '@/store/userSettingsStore';
 import { useFoodDiaryStore } from '@/store/foodDiary';
 import { syncWithBackend } from '@/composables/supabase';
+import { App, URLOpenListenerEvent } from '@capacitor/app';
 
 const userStore = useUserStore();
 const userFitnessLevelStore = useUserFitnessLevelStore();
@@ -48,6 +46,28 @@ const alertButtons = [
 const setOpen = (value: boolean) => {
   isOpen.value = value;
 };
+
+const setSession = async (access_token: string, refresh_token: string) => {
+    return supabase.auth.setSession({ access_token, refresh_token });
+}
+
+const setupListener = async () => {
+  App.addListener('appUrlOpen', async (data: URLOpenListenerEvent) => {
+    const openUrl = data.url;
+
+    const access = openUrl.split('#access_token=').pop()?.split('&')[0];
+    const refresh = openUrl.split('&refresh_token=').pop()?.split('&')[0]
+
+    if (!access || !refresh) {
+      return;
+    }
+    await setSession(access, refresh)
+    const session = await supabase.auth.getSession()
+    if (session) {
+      redirect()
+    }
+  });
+}
 
 const onLogin = async () => {
   try {
@@ -87,6 +107,8 @@ const redirect = async () => {
 
 const session = ref()
 onMounted(async () => {
+  setupListener();
+
   await supabase.auth.getSession().then(({ data }) => {
     session.value = data.session
   })

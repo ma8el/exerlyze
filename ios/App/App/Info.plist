@@ -47,5 +47,14 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>The app enables the scanning of various barcodes.</string>
+	<key>CFBundleURLTypes</key>
+	    <array>
+	        <dict>
+	        <key>CFBundleURLSchemes</key>
+	        <array>
+	            <string>exerlyze</string>
+	        </array>
+	    </dict>
+	</array>
 </dict>
 </plist>
