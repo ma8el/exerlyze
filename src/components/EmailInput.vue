@@ -40,8 +40,6 @@ const validate = (email: string) => {
 }
 
 const onInput = (ev: any) => {
-    console.log(ev.target.value)
-    console.log(validityClass.value)
     emit('update:inputEmail', ev.target.value)
     validate(ev.target.value)
 }
