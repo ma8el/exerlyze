@@ -105,7 +105,7 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         }
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
-            const { data, error } = await supabase.from('daily_nutrition_goals').select('*').lte('created_at', date).order('created_at', { ascending: false }).limit(1).single()
+            const { data, error } = await supabase.from('daily_nutrition_goals').select('*').lte('created_at', selectedDate.toISOString()).order('created_at', { ascending: false }).limit(1).single()
             if (error) {
                 console.error(error)
             } else {
@@ -113,23 +113,23 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
             }
         }
         const sortedNutritionGoals = dailyNutritionGoals.value.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-        let nutrutionGoalOfDate = sortedNutritionGoals[0];
+        let nutritionGoalOfDate = sortedNutritionGoals[0];
 
         for (const nutritionGoal of sortedNutritionGoals) {
             if (new Date(new Date(nutritionGoal.created_at).setHours(0, 0, 0, 0)) <= selectedDate) {
-              nutrutionGoalOfDate = nutritionGoal;
+              nutritionGoalOfDate = nutritionGoal;
             } else {
               break;
             }
         }
         return {
-            id: nutrutionGoalOfDate.id,
-            created_at: nutrutionGoalOfDate.created_at,
-            nutrition_goal: nutrutionGoalOfDate.nutrition_goal,
-            daily_calories: nutrutionGoalOfDate.daily_calories,
-            daily_carbs: nutrutionGoalOfDate.daily_carbs,
-            daily_protein: nutrutionGoalOfDate.daily_protein,
-            daily_fat: nutrutionGoalOfDate.daily_fat
+            id: nutritionGoalOfDate.id,
+            created_at: nutritionGoalOfDate.created_at,
+            nutrition_goal: nutritionGoalOfDate.nutrition_goal,
+            daily_calories: nutritionGoalOfDate.daily_calories,
+            daily_carbs: nutritionGoalOfDate.daily_carbs,
+            daily_protein: nutritionGoalOfDate.daily_protein,
+            daily_fat: nutritionGoalOfDate.daily_fat
         } as DailyNutritionGoal
     }
 
