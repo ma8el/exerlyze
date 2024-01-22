@@ -3,7 +3,7 @@ import { modalController } from '@ionic/vue';
 import LoadingModal from '@/components/Modals/LoadingModal.vue';
 import { useUserStore, useWeightStore } from '@/store/bodyMetricsStore';
 import { useFoodDiaryStore } from '@/store/foodDiary';
-import { useWorkoutStore, useWorkoutPlanStore, useWorkoutSessionStore } from '@/store/workoutStore';
+import { useWorkoutStore, useMuscleStore, useWorkoutPlanStore, useWorkoutSessionStore } from '@/store/workoutStore';
 import { useUserFitnessLevelStore } from '@/store/userSettingsStore';
 
 export const defaultImage = 'https://ionicframework.com/docs/img/demos/card-media.png';
@@ -40,10 +40,12 @@ export const syncWithBackend = async () => {
   const workoutSessionStore = useWorkoutSessionStore();
   const foodDiaryStore = useFoodDiaryStore();
   const userFitnessLevelStore = useUserFitnessLevelStore();
+  const muscleStore = useMuscleStore();
 //  await userStore.fetchUser();
   await userStore.syncUser();
   await weightStore.syncWeights();
   await workoutStore.syncWorkouts();
+  await muscleStore.fetchMuscles();
   await workoutPlanStore.syncWorkoutPlans();
   await workoutSessionStore.syncWorkoutSessions();
   await workoutPlanStore.syncPlannedWorkouts();
