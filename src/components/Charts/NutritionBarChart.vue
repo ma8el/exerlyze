@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { use } from 'echarts/core'
 import { BarChart } from 'echarts/charts'
-import { TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, MarkLineComponent } from 'echarts/components'
+import { TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, MarkLineComponent, ToolboxComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import VChart from 'vue-echarts';
 
@@ -13,7 +13,7 @@ import { getCurrentWeekDates } from '@/helpers/time';
 import BaseChartContainer from './BaseChartContainer.vue';
 import { ref, computed, onMounted, reactive } from 'vue';
 
-use([TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, MarkLineComponent, BarChart, CanvasRenderer])
+use([TitleComponent, TooltipComponent, GridComponent, VisualMapComponent, MarkLineComponent, BarChart, CanvasRenderer, ToolboxComponent])
 
 const { t } = useI18n();
 

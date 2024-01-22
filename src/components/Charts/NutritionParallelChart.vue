@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { IonBackdrop } from '@ionic/vue'
 import { use } from 'echarts/core'
 import { ParallelChart } from 'echarts/charts'
-import { VisualMapComponent, ParallelComponent } from 'echarts/components'
+import { VisualMapComponent, ParallelComponent, BrushComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import VChart from 'vue-echarts';
 
@@ -14,8 +13,7 @@ import BaseChartContainer from './BaseChartContainer.vue';
 import { ref, computed, reactive, onMounted } from 'vue';
 import { onIonViewDidEnter } from '@ionic/vue';
 
-
-use([VisualMapComponent, ParallelComponent, ParallelChart, CanvasRenderer])
+use([VisualMapComponent, ParallelComponent, ParallelChart, CanvasRenderer, BrushComponent])
 
 const { t } = useI18n();
 
