@@ -37,6 +37,18 @@
   const ressourceName = ref<string>()
   const selected = ref<ExerciseSelection[]>([])
 
+  const sortExercises = () => {
+    exercises.value.sort((a, b) => {
+      if (a.isSelected && !b.isSelected) {
+        return -1;
+      }
+      if (!a.isSelected && b.isSelected) {
+        return 1;
+      }
+      return 0;
+    });
+  };
+
   const getExercises = async (page: number) => {
     const pageLength = 15
     const lowerBound = page * pageLength
@@ -87,12 +99,17 @@
     }
   }
 
-  const removeExercises = () => {
-    exercises.value = []
+  const removeExercises = async () => {
+    loading.value = true
+    await getExercises(0)
+    loading.value = false
   }
 
   const queryExercises = async (e: any) => {
     const searchedExercise: string = e.target.value;
+
+    const selectedExercises = exercises.value.filter(ex => ex.isSelected);
+
     exercises.value = [];
     const setLocale = userSettingsStore.getLocale()
     await supabase
@@ -121,12 +138,14 @@
               image: await getImage(exercise.id)
             }
           })
-          exercises.value = await Promise.all(exercisePromises)
+          const newExercises = await Promise.all(exercisePromises)
+          exercises.value = [...selectedExercises, ...newExercises.filter(ne => !selectedExercises.find(se => se.id === ne.id))];
         }
       })
   }
 
-  const queryExerciseByMuscle = (muscleId: number) => {
+  const queryExerciseByMuscle = async (muscleId: number) => {
+    const selectedExercises = exercises.value.filter(ex => ex.isSelected);
     exercises.value = []
     const setLocale = userSettingsStore.getLocale()
     supabase
@@ -155,7 +174,8 @@
               image: await getImage(exercise.id)
             }
           })
-          exercises.value = await Promise.all(exercisePromises)
+          const newExercises = await Promise.all(exercisePromises)
+          exercises.value = [...selectedExercises, ...newExercises.filter(ne => !selectedExercises.find(se => se.id === ne.id))];
         }
       })
   }
@@ -181,6 +201,7 @@
           selected.value.splice(index, 1);
         }
       }
+    sortExercises();
   }
 
   const openExerciseDetailModal = async (exercise: ExerciseSelection, image: string) => {
@@ -203,12 +224,12 @@
       if (data.selected == 'all') {
         filtered.value = false
         loading.value = true
-        getExercises(0)
+        await getExercises(0)
         loading.value = false
       } else {
         filtered.value = true
         loading.value = true
-        queryExerciseByMuscle(data.selected)
+        await queryExerciseByMuscle(data.selected)
         loading.value = false
       }
     }
@@ -266,6 +287,7 @@
           <ion-row 
             class="exercise-item ion-align-items-center ion-justify-content-between" 
             v-for="(exercise, index) in exercises"
+            :key="exercise.id"
           >
               <ion-col class="checkbox-col" size="10">
                 <ion-checkbox 
