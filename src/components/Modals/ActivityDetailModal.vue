@@ -13,7 +13,7 @@
   import WorkoutExerciseItem from '../WorkoutExerciseItem.vue';
   import { useWorkoutSessionStore } from '@/store/workoutStore';
   import { ref, computed } from 'vue';
-  import { Exercise, FullWorkoutSession, WorkoutSessionPerformance } from '@/types';
+  import { FullWorkoutSession, WorkoutSessionPerformance, FullWorkoutSessionSet } from '@/types';
 
   interface ChangedWorkoutSessionPerformance extends WorkoutSessionPerformance {
     changed?: boolean;
@@ -67,13 +67,6 @@
     const formattedDuration = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     return formattedDuration;
   });
-
-  const getExerciseName = (exerciseId: number) => {
-    if (!workoutSession.value) {
-      return '';
-    }
-    return workoutSession.value.workout.exercises.filter((exercise: Exercise) => exercise.exercise_id === exerciseId)[0].name;
-  };
 
   const update = async () => {
     if (workoutSession.value) {
@@ -133,7 +126,7 @@
         v-for = "(set, index) in workoutSessionSets"
         :key="index"
         :exerciseId="set.exercise_id"
-        :name="getExerciseName(set.exercise_id)"
+        :name="set.exercise_name"
         :transitionTrigger="true"
         :show-video="false"
         :currentSet="set.set"

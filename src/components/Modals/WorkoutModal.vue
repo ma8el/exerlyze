@@ -11,16 +11,24 @@ import WorkoutExerciseItem from '@/components/WorkoutExerciseItem.vue';
 import StopWatch from '../StopWatch.vue';
 import ActivityDetailModal from './ActivityDetailModal.vue';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, PropType } from 'vue';
+import { FullWorkoutSessionSet } from '@/types';
 
 const props = defineProps({
   workoutId: {
     type: String,
     required: true
+  },
+  workoutName: {
+    type: String,
+    required: true
+  },
+  fullWorkoutSessionSets: {
+    type: Array as PropType<FullWorkoutSessionSet[]>,
+    required: true
   }
 });
 
-const workoutStore = useWorkoutStore();
 const workoutSessionStore = useWorkoutSessionStore();
 
 const workoutSessionId = ref<string>('');
@@ -30,9 +38,8 @@ const currentSet = ref<number>(0);
 
 const showBreak = ref<boolean>(false);
 
-const workout = workoutStore.getWorkoutById(props.workoutId);
-const workoutName = workout !== undefined ? workout.name: '';
-const workoutSessionSets = ref(workoutSessionStore.createFullWorkoutSessionSets(props.workoutId));
+const workoutName = props.workoutName;
+const workoutSessionSets = ref(props.fullWorkoutSessionSets);
 
 const valid = ref<boolean>(true);
 
@@ -65,6 +72,7 @@ const save = async () => {
         id: set.id,
         workout_session_id: workoutSessionId.value,
         exercise_id: set.exerciseId,
+        exercise_name: set.name,
         set: set.currentSet,
         planned_reps: parseInt(set.plannedReps),
         performed_reps: parseInt(set.reps),
@@ -100,10 +108,11 @@ const isFinished = computed(() => {
 
 const finishWorkout = async () => {
   await save();
+  console.log(workoutSessionSets.value)
   const modal = await modalController.create({
     component: ActivityDetailModal,
     componentProps: {
-      workoutSessionId: workoutSessionId.value
+      workoutSessionId: workoutSessionId.value,
     },
   });
   await modal.present();
@@ -117,7 +126,6 @@ onMounted(() => {
 
 <template>
   <BaseFullPageModal 
-    v-if="workout" 
     :disable-button="!valid"
     back-color="dark"
   >

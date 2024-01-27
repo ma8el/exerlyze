@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { IonButton, modalController } from '@ionic/vue';
   import WorkoutModal from '@/components/Modals/WorkoutModal.vue';
+  import StartWorkoutModal from '../Modals/StartWorkoutModal.vue';
 
   const props = defineProps({
     workoutId: {
@@ -11,21 +12,15 @@
   
   const openModal = async () => {
     const modal = await modalController.create({
-      component: WorkoutModal,
+//      component: WorkoutModal,
+      component: StartWorkoutModal,
       componentProps: {
         workoutId: props.workoutId
       },
       cssClass: 'full-screen-modal',
     });
     modal.present();
-
-    const { data, role } = await modal.onWillDismiss();
-    if (role == 'save') {
-      console.log('Save', data);
-    } else {
-      console.log('Close', data);
-    };
-  }
+ }
 </script>
 
 <template>

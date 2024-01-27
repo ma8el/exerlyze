@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import { IonRow, IonCol, IonItem, IonLabel, IonNote } from '@ionic/vue';
+import { IonRow, IonCol, IonLabel } from '@ionic/vue';
 import TimeIcon from '@/icons/time.svg';
-import BaseCard from './BaseCard.vue';
+import BaseCard from '@/components/Cards/BaseCard.vue';
 import SetIcon from '@/icons/set.svg';
-import BaseHorizontalBarChart from '../Charts/BaseHorizontalBarChart.vue';
-import BaseInfoCard from './BaseInfoCard.vue';
+import BaseHorizontalBarChart from '@/components/Charts/BaseHorizontalBarChart.vue';
+import BaseInfoCard from '@/components/Cards/BaseInfoCard.vue';
 import { FullWorkoutSession } from '@/types';
 import { useI18n } from 'vue-i18n';
 import { PropType, computed } from 'vue';
+
+interface Exercise {
+  id: number;
+  name: string;
+}
 
 const props = defineProps({
     workoutSession: {
@@ -31,18 +36,22 @@ const duration = computed(() => {
   return formattedDuration;
 })
 
+const getAggregatedExercises = computed(() => {
+  const workoutPerformance = props.workoutSession.workoutPerformance;
+  const exercises = workoutPerformance.reduce((acc: Exercise[], performance) => {
+      if (!acc.some((exercise) => exercise.id == performance.exercise_id))
+        acc.push({
+          id: performance.exercise_id,
+          name: performance.exercise_name,
+        });
+      return acc;
+    }, []);
+  return exercises;
+});
+
 const totalSets = computed(() => {
   return props.workoutSession.workoutPerformance.length;
 });
-
-const getExerciseName = (exerciseId: string) => {
-  const exercise = props.workoutSession.workout.exercises.find((exercise) => Number(exercise.exercise_id) == Number(exerciseId));
-  if (exercise) {
-    return exercise.name;
-  } else {
-    return '';
-  }
-}
 
 const getAggregatedPerformancePerExercise = (exerciseId: string) => {
   const exercise = props.workoutSession.workoutPerformance.filter((exercise) => Number(exercise.exercise_id) == Number(exerciseId));
@@ -85,23 +94,23 @@ const getAggregatedPerformancePerExercise = (exerciseId: string) => {
     </ion-row>
     <div class="scrollable-card">
     <div
-        v-for="exercise in workoutSession.workout.exercises"
+        v-for="exercise in getAggregatedExercises"
     >
       <ion-row>
         <ion-col>
         <BaseHorizontalBarChart
-          :data="getAggregatedPerformancePerExercise(exercise.exercise_id.toString()).performance"
-          :max-value="getAggregatedPerformancePerExercise(exercise.exercise_id.toString()).targetPerformance"
+          :data="getAggregatedPerformancePerExercise(exercise.id.toString()).performance"
+          :max-value="getAggregatedPerformancePerExercise(exercise.id.toString()).targetPerformance"
           color="#3F63C8"
         />
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="6">
-          <ion-label>{{ getExerciseName(exercise.exercise_id.toString()) }}</ion-label>
+          <ion-label>{{ exercise.name }}</ion-label>
         </ion-col >
-        <ion-col size="6" v-if="getAggregatedPerformancePerExercise(exercise.exercise_id.toString()).performance > 0">
-          <p style="text-align: right;">{{ getAggregatedPerformancePerExercise(exercise.exercise_id.toString()).performance }} / {{ getAggregatedPerformancePerExercise(exercise.exercise_id.toString()).targetPerformance }} {{ $t('weightUnitBig') }}</p>
+        <ion-col size="6" v-if="getAggregatedPerformancePerExercise(exercise.id.toString()).performance > 0">
+          <p style="text-align: right;">{{ getAggregatedPerformancePerExercise(exercise.id.toString()).performance }} / {{ getAggregatedPerformancePerExercise(exercise.id.toString()).targetPerformance }} {{ $t('weightUnitBig') }}</p>
         </ion-col>
       </ion-row>
     </div>
