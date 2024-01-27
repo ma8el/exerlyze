@@ -138,3 +138,17 @@ export interface FullWorkoutSession extends WorkoutSession {
     workout: Workout,
     workoutPerformance: WorkoutSessionPerformance[]
 }
+
+export interface FullWorkoutSessionSet {
+    id: string,
+    exerciseId: number,
+    name: string,
+    sets: number,
+    currentSet: number,
+    plannedReps: number,
+    reps: number,
+    plannedWeight: number,
+    weight: number,
+    plannedResttime: number,
+    resttime: number,
+}

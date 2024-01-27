@@ -11,11 +11,20 @@ import WorkoutExerciseItem from '@/components/WorkoutExerciseItem.vue';
 import StopWatch from '../StopWatch.vue';
 import ActivityDetailModal from './ActivityDetailModal.vue';
 import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, PropType } from 'vue';
+import { FullWorkoutSessionSet } from '@/types';
 
 const props = defineProps({
   workoutId: {
     type: String,
+    required: true
+  },
+  workoutName: {
+    type: String,
+    required: true
+  },
+  fullWorkoutSessionSets: {
+    type: Array as PropType<FullWorkoutSessionSet[]>,
     required: true
   }
 });
@@ -30,9 +39,11 @@ const currentSet = ref<number>(0);
 
 const showBreak = ref<boolean>(false);
 
-const workout = workoutStore.getWorkoutById(props.workoutId);
-const workoutName = workout !== undefined ? workout.name: '';
-const workoutSessionSets = ref(workoutSessionStore.createFullWorkoutSessionSets(props.workoutId));
+//const workout = workoutStore.getWorkoutById(props.workoutId);
+//const workoutName = workout !== undefined ? workout.name: '';
+//const workoutSessionSets = ref(workoutSessionStore.createFullWorkoutSessionSets(props.workoutId));
+const workoutName = props.workoutName;
+const workoutSessionSets = ref(props.fullWorkoutSessionSets);
 
 const valid = ref<boolean>(true);
 
@@ -103,7 +114,8 @@ const finishWorkout = async () => {
   const modal = await modalController.create({
     component: ActivityDetailModal,
     componentProps: {
-      workoutSessionId: workoutSessionId.value
+      workoutSessionId: workoutSessionId.value,
+      workoutSessionSets: workoutSessionSets.value,
     },
   });
   await modal.present();
@@ -117,7 +129,6 @@ onMounted(() => {
 
 <template>
   <BaseFullPageModal 
-    v-if="workout" 
     :disable-button="!valid"
     back-color="dark"
   >
