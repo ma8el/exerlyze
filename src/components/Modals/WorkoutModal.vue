@@ -29,7 +29,6 @@ const props = defineProps({
   }
 });
 
-const workoutStore = useWorkoutStore();
 const workoutSessionStore = useWorkoutSessionStore();
 
 const workoutSessionId = ref<string>('');
@@ -39,9 +38,6 @@ const currentSet = ref<number>(0);
 
 const showBreak = ref<boolean>(false);
 
-//const workout = workoutStore.getWorkoutById(props.workoutId);
-//const workoutName = workout !== undefined ? workout.name: '';
-//const workoutSessionSets = ref(workoutSessionStore.createFullWorkoutSessionSets(props.workoutId));
 const workoutName = props.workoutName;
 const workoutSessionSets = ref(props.fullWorkoutSessionSets);
 
@@ -76,6 +72,7 @@ const save = async () => {
         id: set.id,
         workout_session_id: workoutSessionId.value,
         exercise_id: set.exerciseId,
+        exercise_name: set.name,
         set: set.currentSet,
         planned_reps: parseInt(set.plannedReps),
         performed_reps: parseInt(set.reps),
@@ -111,11 +108,11 @@ const isFinished = computed(() => {
 
 const finishWorkout = async () => {
   await save();
+  console.log(workoutSessionSets.value)
   const modal = await modalController.create({
     component: ActivityDetailModal,
     componentProps: {
       workoutSessionId: workoutSessionId.value,
-      workoutSessionSets: workoutSessionSets.value,
     },
   });
   await modal.present();
