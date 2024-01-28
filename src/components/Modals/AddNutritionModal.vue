@@ -35,6 +35,9 @@
 
   const session = ref();
 
+  const recentlyAddedSelected = ref<boolean>(true);
+  const favoriteSelected = ref<boolean>(false);
+
   const rawBarcode = computed(() => {
     const assignedBarcode = barcode.value?.rawValue;
     return assignedBarcode ? assignedBarcode : '';
@@ -43,7 +46,11 @@
   const removeProducts = () => {
     displayedInput.value = '';
     warnMessage.value = '';
-    products.value = [];
+    if (recentlyAddedSelected.value) {
+      queryRecentlyAdded();
+    } else if (favoriteSelected.value) {
+      queryFavorites();
+    }
   }
 
   const requestPermissions = async () => {
@@ -109,6 +116,9 @@
   }
 
   const queryFavorites = async () => {
+    favoriteSelected.value = true;
+    recentlyAddedSelected.value = false;
+
     loading.value = true;
     warnMessage.value = '';
     if (session.value.data.session === null) {
@@ -134,6 +144,9 @@
   }
 
   const queryRecentlyAdded = async () => {
+    recentlyAddedSelected.value = true;
+    favoriteSelected.value = false;
+
     loading.value = true;
     warnMessage.value = '';
     const recentlyAddedItems = await useNutritionApi().getRecentlyAddedProducts()
