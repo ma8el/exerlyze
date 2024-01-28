@@ -42,6 +42,12 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
     const dailyFat = computed(() => latestDailyNutritionGoal.value.daily_fat)
     const getFoodDiaryEntries = computed(() => foodDiaryEntries.value)
 
+    const getRecentlyAddedFoodIds = computed(() => {
+        const sortedFoodDiaryEntries = foodDiaryEntries.value.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        const recentlyAddedFoodIds = sortedFoodDiaryEntries.slice(0, 10).map(entry => entry.food_id)
+        return recentlyAddedFoodIds
+    })
+
     const dailyNutritionGoalComplete = computed(() => {
         return new Date(latestDailyNutritionGoal.value.created_at).toDateString() !== new Date("1900-01-01").toDateString()
     })
@@ -285,6 +291,7 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         dailyProtein,
         dailyFat,
         getFoodDiaryEntries,
+        getRecentlyAddedFoodIds,
         latestDailyNutritionGoal,
         dailyNutritionGoalComplete,
         addDailyNutritionGoal,

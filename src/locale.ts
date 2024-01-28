@@ -93,6 +93,8 @@ export const messages = {
             networkTimeout: "Network timeout! Check your internet connection.",
             recentlyAdded: "Recently added",
             favorites: "Favorites",
+            noFavorites: "No favorites found",
+            logInForFavorites: "Log in to add favorites",
         },
         profile: {
             title: "Profile",
@@ -291,6 +293,8 @@ export const messages = {
             networkTimeout: "Netzwerk Timeout! Überprüfe deine Internetverbindung.",
             recentlyAdded: "Kürzlich hinzugefügt",
             favorites: "Favoriten",
+            noFavorites: "Keine Favoriten gefunden",
+            logInForFavorites: "Logge dich ein um Favoriten hinzuzufügen",
         },
         profile: {
             title: "Profil",
@@ -489,6 +493,8 @@ export const messages = {
             networkTimeout: "Délai d'attente du réseau! Vérifiez votre connexion Internet.",
             recentlyAdded: "Récemment ajouté",
             favorites: "Favoris",
+            noFavorites: "Aucun favori trouvé",
+            logInForFavorites: "Connectez-vous pour ajouter des favoris",
         },
         profile: {
             title: "Profil",
