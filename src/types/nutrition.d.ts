@@ -24,6 +24,7 @@ export interface FilteredNutritionApiProduct {
     nutriments: any,
     nutriscore_grade: string,
     nutriscore_score: number
+    isFavorite: boolean,
 }
 
 export interface NutritionApiSearchResponse {

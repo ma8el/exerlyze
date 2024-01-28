@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { IonList,
-           IonSpinner,
            IonLabel,
            IonAvatar,
            IonSearchbar,
@@ -13,14 +12,17 @@
            alertController,
            isPlatform,
            modalController } from '@ionic/vue';
-  import { barcodeOutline, warningOutline } from 'ionicons/icons';
+  import { barcodeOutline, warningOutline, star, starOutline } from 'ionicons/icons';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import NutritionProductDetailsModal from './NutritionProductDetailsModal.vue';
+  import BaseSegments from '../BaseSegments.vue';
+  import ListSkeleton from '../Skeletons/ListSkeleton.vue';
   import useNutritionApi from '@/composables/nutrition';
   import { Barcode, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
   import { ref, onMounted, computed } from 'vue';
   import { NutritionApiSearchResponse, FilteredNutritionApiProduct } from '@/types/nutrition';
   import { useI18n } from 'vue-i18n';
+  import { supabase } from '@/supabase';
 
   const { t } = useI18n();
 
@@ -31,10 +33,39 @@
   const products = ref<FilteredNutritionApiProduct[]>([]);
   const warnMessage = ref<string>('');
 
+  const session = ref();
+
+  const recentlyAddedSelected = ref<boolean>(true);
+  const favoriteSelected = ref<boolean>(false);
+
   const rawBarcode = computed(() => {
     const assignedBarcode = barcode.value?.rawValue;
     return assignedBarcode ? assignedBarcode : '';
   })
+
+  const removeProducts = () => {
+    displayedInput.value = '';
+    warnMessage.value = '';
+    if (recentlyAddedSelected.value) {
+      queryRecentlyAdded();
+    } else if (favoriteSelected.value) {
+      queryFavorites();
+    }
+  }
+
+  const requestPermissions = async () => {
+    const { camera } = await BarcodeScanner.requestPermissions();
+    return camera === 'granted' || camera === 'limited';
+  }
+
+  const presentAlert = async (message: string) => {
+    const alert = await alertController.create({
+      header: 'Warning',
+      message: message,
+      buttons: ['Close'],
+    });
+    await alert.present();
+  }
 
   const queryProducts = (e: any) => {
     displayedInput.value = e.target.value;
@@ -54,29 +85,11 @@
         return;
       }
       const data: NutritionApiSearchResponse = res;
-      products.value = data.products;
+      for (const product of data.products) {
+        products.value.push(product);
+      }
       loading.value = false;
     })
-  }
-
-  const removeProducts = () => {
-    displayedInput.value = '';
-    warnMessage.value = '';
-    products.value = [];
-  }
-
-  const requestPermissions = async () => {
-    const { camera } = await BarcodeScanner.requestPermissions();
-    return camera === 'granted' || camera === 'limited';
-  }
-
-  const presentAlert = async (message: string) => {
-    const alert = await alertController.create({
-      header: 'Warning',
-      message: message,
-      buttons: ['Action'],
-    });
-    await alert.present();
   }
 
   const scanBarcode = async () => {
@@ -87,17 +100,68 @@
     }
     removeProducts();
     loading.value = true;
+    warnMessage.value = '';
 
     const { barcodes } = await BarcodeScanner.scan();
     barcode.value = barcodes[0];
     displayedInput.value = rawBarcode.value;
     const queriedProduct = await useNutritionApi().getProductByBarcode(rawBarcode.value)
-    if (queriedProduct.status !== 1) {
+    if (queriedProduct.error) {
       warnMessage.value = t('nutrition.noProductsFound');
       loading.value = false;
       return;
     }
-    products.value.push(queriedProduct.product);
+    products.value.push(queriedProduct.data);
+    loading.value = false;
+  }
+
+  const queryFavorites = async () => {
+    favoriteSelected.value = true;
+    recentlyAddedSelected.value = false;
+
+    loading.value = true;
+    warnMessage.value = '';
+    if (session.value.data.session === null) {
+      warnMessage.value = t('nutrition.logInForFavorites');
+      loading.value = false;
+      return;
+    }
+    warnMessage.value = '';
+    const favoriteItems = await useNutritionApi().getFavoriteProducts()
+    if (favoriteItems.error) {
+      warnMessage.value = t('nutrition.networkTimeout');
+      loading.value = false;
+      return;
+    }
+    products.value = [];
+    for (const product of favoriteItems.data) {
+      products.value.push(product);
+    }
+    if (products.value.length === 0) {
+      warnMessage.value = t('nutrition.noFavorites');
+    }
+    loading.value = false;
+  }
+
+  const queryRecentlyAdded = async () => {
+    recentlyAddedSelected.value = true;
+    favoriteSelected.value = false;
+
+    loading.value = true;
+    warnMessage.value = '';
+    const recentlyAddedItems = await useNutritionApi().getRecentlyAddedProducts()
+    if (recentlyAddedItems.error) {
+      warnMessage.value = t('nutrition.networkTimeout');
+      loading.value = false;
+      return;
+    }
+    products.value = [];
+    for (const product of recentlyAddedItems.data) {
+      products.value.push(product);
+    }
+    if (products.value.length === 0) {
+      warnMessage.value = t('nutrition.noProductsFound');
+    }
     loading.value = false;
   }
 
@@ -111,7 +175,26 @@
     modal.present();
   }
 
+  const toggleFavorite = async (product: FilteredNutritionApiProduct) => {
+    if (session.value.data.session === null) {
+      presentAlert('You need to be logged in to add favorites');
+      return;
+    }
+    product.isFavorite = !product.isFavorite;
+
+    if (product.isFavorite) {
+      await supabase.from('favorite_nutrition_items').insert({
+        food_id: product._id,
+      })
+    } else {
+      await supabase.from('favorite_nutrition_items').delete().match({
+        food_id: product._id,
+      })
+    }
+ }
+
   onMounted (async () => {
+    session.value = await supabase.auth.getSession();
     try {
       const isSupported = await BarcodeScanner.isSupported()
       if (!isSupported.supported) {
@@ -129,6 +212,7 @@
         await BarcodeScanner.installGoogleBarcodeScannerModule();
       }
     }
+    await queryRecentlyAdded();
   })
 </script>
 
@@ -162,11 +246,17 @@
         </ion-button>
         </ion-col>
       </ion-item>
+      <BaseSegments
+        :leftSegmentLabel="$t('nutrition.recentlyAdded')"
+        :rightSegmentLabel="$t('nutrition.favorites')"
+        @leftSegmentSelected="queryRecentlyAdded"
+        @rightSegmentSelected="queryFavorites"
+      />
       <ion-list
         class="ion-padding ion-text-center"
         v-if="loading"
       >
-        <ion-spinner/>
+        <ListSkeleton />
       </ion-list>
       <ion-list
         v-else
@@ -182,6 +272,12 @@
           <ion-label>
             {{ product.product_name }}
           </ion-label>
+          <ion-icon
+            slot="end"
+            :icon="product.isFavorite ? star : starOutline"
+            :color="product.isFavorite ? 'warning' : 'medium'"
+            @click.stop="toggleFavorite(product)"
+          />
         </ion-item>
       </ion-list>
 
