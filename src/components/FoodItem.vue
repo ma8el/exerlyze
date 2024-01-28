@@ -56,8 +56,8 @@
 
   const modifyFoodItem = async () => {
     const productQuery = await useNutritionApi().getProductById(props.foodId)
-    if (productQuery.status === 1) {
-      const product = productQuery.product
+    if (!productQuery.error) {
+      const product = productQuery.data.product
       const modal = await modalController.create({
         id: 'nutrition-product-details-modal',
         component: NutritionProductDetailsModal,
