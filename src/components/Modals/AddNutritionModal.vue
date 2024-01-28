@@ -13,7 +13,7 @@
            alertController,
            isPlatform,
            modalController } from '@ionic/vue';
-  import { barcodeOutline, warningOutline } from 'ionicons/icons';
+  import { barcodeOutline, warningOutline, star, starOutline } from 'ionicons/icons';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import NutritionProductDetailsModal from './NutritionProductDetailsModal.vue';
   import useNutritionApi from '@/composables/nutrition';
@@ -54,7 +54,12 @@
         return;
       }
       const data: NutritionApiSearchResponse = res;
-      products.value = data.products;
+      for (const product of data.products) {
+        products.value.push({
+          ...product,
+          isFavorite: false,
+        });
+      }
       loading.value = false;
     })
   }
@@ -97,7 +102,10 @@
       loading.value = false;
       return;
     }
-    products.value.push(queriedProduct.product);
+    products.value.push({
+      ...queriedProduct.product,
+      isFavorite: false,
+    });
     loading.value = false;
   }
 
@@ -109,6 +117,10 @@
       cssClass: 'full-screen-modal',
     });
     modal.present();
+  }
+
+  const toggleFavorite = (product: FilteredNutritionApiProduct) => {
+    product.isFavorite = !product.isFavorite;
   }
 
   onMounted (async () => {
@@ -182,6 +194,12 @@
           <ion-label>
             {{ product.product_name }}
           </ion-label>
+          <ion-icon
+            slot="end"
+            :icon="product.isFavorite ? star : starOutline"
+            :color="product.isFavorite ? 'warning' : 'medium'"
+            @click.stop="toggleFavorite(product)"
+          />
         </ion-item>
       </ion-list>
 
