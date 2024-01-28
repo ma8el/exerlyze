@@ -44,7 +44,7 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
 
     const getRecentlyAddedFoodIds = computed(() => {
         const sortedFoodDiaryEntries = foodDiaryEntries.value.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-        const recentlyAddedFoodIds = sortedFoodDiaryEntries.slice(0, 10).map(entry => entry.food_id)
+        const recentlyAddedFoodIds = sortedFoodDiaryEntries.map(entry => entry.food_id).filter((value, index, self) => self.indexOf(value) === index).slice(0, 10)
         return recentlyAddedFoodIds
     })
 
