@@ -42,6 +42,7 @@ const workoutName = props.workoutName;
 const workoutSessionSets = ref(props.fullWorkoutSessionSets);
 
 const valid = ref<boolean>(true);
+const disable = ref<boolean>(false);
 
 const currentWorkoutSet = computed(() => {
   if (!workoutSessionSets) {
@@ -107,8 +108,9 @@ const isFinished = computed(() => {
 });
 
 const finishWorkout = async () => {
+  disable.value = true;
   await save();
-  console.log(workoutSessionSets.value)
+  disable.value = false;
   const modal = await modalController.create({
     component: ActivityDetailModal,
     componentProps: {
@@ -195,7 +197,7 @@ onMounted(() => {
              @click="finishWorkout()"
              shape="round"
              color="primary"
-             :disabled="!valid"
+             :disabled="!valid || disable"
            >
              <ion-label>
                {{ $t('finish')  }}
