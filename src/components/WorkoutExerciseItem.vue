@@ -1,5 +1,7 @@
 <script setup lang="ts">
   import { IonItem,
+           IonCard,
+           IonCardContent,
            IonLabel,
            IonIcon,
            IonRow,
@@ -9,7 +11,7 @@
   import RepsIcon from '@/icons/reps.svg';
   import Timer from './Timer.vue';
   import NumericInput from './NumericInput.vue';
-  import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
+  import { getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
   import { ref, onMounted, computed, watch } from 'vue';
 
   interface Props {
@@ -90,7 +92,7 @@
 </script>
 
 <template>
-<ion-item 
+  <ion-card 
     lines="none"
     :class="{ 'highlighted': transitionTrigger, 'item-expanded': showVideo }"
   >
@@ -98,16 +100,18 @@
       name="slide-down"
       :duration="{ enter: 500, leave: 500 }"
     >
-     <video
-        autoplay
-        loop
-        v-if="showVideo"
-        :src="url"
-        alt="Exercise Video"
-        class="active-exercise-video"
-      ></video>
+      <div v-if="showVideo">
+       <video
+          autoplay
+          loop
+          :src="url"
+          alt="Exercise Video"
+          class="active-exercise-video"
+        ></video>
+      </div>
     </Transition>
- 
+
+    <ion-card-content>
     <ion-row
       ref="setRef"
       class="scroll-padding"
@@ -171,7 +175,8 @@
         </ion-row>
       </ion-col>
     </ion-row>
-  </ion-item>
+    </ion-card-content>
+  </ion-card>
 
   <Transition
     name="slide-down"
@@ -192,11 +197,7 @@
 </template>
 
 <style scoped>
-ion-item {
-  padding-right: 16px;
-  padding-left: 16px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+ion-card {
   --border-radius: 10px !important;
   transition: opacity 0.5s ease, transform 0.5s ease;
   opacity: 0.5;
@@ -224,24 +225,26 @@ ion-item {
   }
 }
 
-ion-item.highlighted {
-  --padding-start: 0;
-  --padding-end: 0;
-  --padding-inline-start: 0;
-  --padding-inline-end: 0;
-  --inner-padding-end: 0;
-  padding-top: 16px;
-  padding-bottom: 16px;
+ion-card.highlighted {
   opacity: 1 !important;
-  transform: scale(1.05) !important;
+  transform: scale(1.02) !important;
   :is(ion-icon) {
     opacity: 1 !important;
   }
   :is(ion-input) {
     opacity: 1 !important;
+    color: white;
   }
   :is(ion-item) {
     opacity: 1 !important;
+  }
+  :is(ion-label) {
+    opacity: 1 !important;
+    color: white;
+  }
+  :is(ion-icon) {
+    opacity: 1 !important;
+    color: white;
   }
 }
 
