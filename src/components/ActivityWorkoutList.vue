@@ -1,9 +1,11 @@
 <script setup lang="ts">
   import { IonList,
            modalController } from '@ionic/vue';
+  import { ref, onMounted } from 'vue';
   import BaseCard from '@/components/Cards/BaseCard.vue';
+  import CardSkeleton from './Skeletons/CardSkeleton.vue';
   import ActivityDetailModal from '@/components/Modals/ActivityDetailModal.vue';
-  import { useWorkoutSessionStore } from '@/store/workoutStore';
+  import { useWorkoutStore, useWorkoutSessionStore } from '@/store/workoutStore';
   import { defaultImage } from '@/composables/supabase';
 
   const props = defineProps({
@@ -13,8 +15,14 @@
     }
   })
 
+  const loading = ref<boolean>(true)
+
   const workoutSessionStore = useWorkoutSessionStore();
+  const workoutStore = useWorkoutStore();
+
   const workoutSessions = workoutSessionStore.getFullWorkoutSessionsByDate(props.selectedDate);
+
+  const urls = ref<string[]>([])
 
   const openModal = async (workoutSessionId: String) => {
     if ( !workoutSessionId ) {
@@ -28,6 +36,31 @@
     });
     await modal.present();
   }
+
+  const getRandomImageUrlFromSessions = async () => {
+    if ( !workoutSessions ) {
+      return defaultImage
+    }
+    const exerciseIds = workoutSessions.map((workoutSession) => {
+      return workoutSession.workout.exercises.map((exercise) => {
+        return exercise.exercise_id
+      })
+    })
+    const randomExerciseIds = exerciseIds.map((ids) => {
+      return ids[Math.floor(Math.random() * ids.length)]
+    })
+
+    const imageUrls = await Promise.all(randomExerciseIds.map(async (exerciseId) => {
+      return await workoutStore.getWorkoutImageUrl(Number(exerciseId))
+    }))
+    urls.value = imageUrls
+  }
+
+  onMounted(async () => {
+    loading.value = true
+    await getRandomImageUrlFromSessions()
+    loading.value = false
+  })
 </script>
 
 <template>
@@ -40,7 +73,8 @@
       :key="index"
     >
       <BaseCard
-        :img_src="defaultImage"
+        v-if="!loading"
+        :img_src="urls[index]"
         :title="workoutSession.workout.name"
         :subTitle="true"
         :button="true"
@@ -50,6 +84,7 @@
           {{  workoutSession.workout.exercises.length + ' exercises'  }}
         </template>
       </BaseCard>
+      <CardSkeleton v-else/>
     </div>
   </ion-list>
 </template>

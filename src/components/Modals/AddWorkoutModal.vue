@@ -90,6 +90,10 @@
         deleted: false
       })
     }
+    for (const exercise of exercises.value) {
+      await workoutStore.cacheWorkoutImage(exercise.exercise_id)
+      await workoutStore.cacheWorkoutVideo(exercise.exercise_id)
+    }
     modalController.dismiss(null, 'save');
   }
 

@@ -15,6 +15,13 @@ export const getSignedObjectUrl = async (bucket: string, bucketUrl: string) => {
       .createSignedUrl(bucketUrl, 60)
 };
 
+export const downloadObject = async (bucket: string, bucketUrl: string) => {
+    return await supabase
+      .storage
+      .from(bucket)
+      .download(bucketUrl)
+}
+
 export const getBucketUrlFromTable = async (table: string, id: number) => {
     return await supabase
       .from(table)
