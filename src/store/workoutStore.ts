@@ -14,6 +14,8 @@ import { ref, computed } from 'vue';
 import { useStorage } from '@vueuse/core';
 import { useUserSettingsStore } from './userSettingsStore';
 import { getDayIndex } from '@/helpers/time';
+import { WorkoutMediaDB } from '@/db';
+import { getBucketUrlFromTable, getSignedObjectUrl, downloadObject } from '@/composables/supabase';
 
 export const useDayOfWeekStore = defineStore({
     id: 'dayOfWeek',
@@ -173,6 +175,77 @@ export const useWorkoutStore = defineStore('workout', () => {
         }
     }
 
+    async function cacheWorkoutImage(exercise_id: number) {
+        const workoutMediaDB = new WorkoutMediaDB()
+        const { data } = await getBucketUrlFromTable('exercises', exercise_id)
+        if (!data) return
+        const image = await downloadObject('exercise_images', `${data.ressource_name}.jpg`) 
+        const imageBlob = image.data
+        if (imageBlob == null) {
+            return
+        }
+        await workoutMediaDB.workoutImages.put({ exercise_id: exercise_id, image: imageBlob });
+    }
+
+    async function cacheWorkoutVideo(exercise_id: number) {
+        const workoutMediaDB = new WorkoutMediaDB()
+        const { data } = await getBucketUrlFromTable('exercises', exercise_id)
+        if (!data) return
+        const video = await downloadObject('exercise_videos', `${data.ressource_name}.mp4`) 
+        const videoBlob = video.data
+        if (videoBlob == null) {
+            return
+        }
+        await workoutMediaDB.workoutVideos.put({ exercise_id: exercise_id, video: videoBlob });
+    }
+
+    async function getWorkoutImage(exercise_id: number): Promise<Blob | undefined> {
+        const workoutMediaDB = new WorkoutMediaDB()
+        const image = await workoutMediaDB.workoutImages.get(exercise_id);
+        if (image) {
+            return image;
+        }
+        return undefined;
+    }
+
+    async function fetchVideoUrlFromIndexDB(exercise_id: number): Promise<string | undefined> {
+        const workoutMediaDB = new WorkoutMediaDB()
+        const video = await workoutMediaDB.workoutVideos.get(exercise_id);
+        if (video) {
+            const videoUrl = URL.createObjectURL(video.video);
+            if (videoUrl) {
+                return videoUrl;
+            }
+        }
+        return undefined;
+    };
+
+    async function fetchVideoUrlFromSupabase(exercise_id: number): Promise<string | undefined> {
+        const response = await getBucketUrlFromTable('exercises', exercise_id)
+        const ressource_name = response.data?.ressource_name
+        if (!ressource_name) return undefined
+        const videoResponse = await getSignedObjectUrl('exercise_videos', `${ressource_name}.mp4`)
+        const videoUrl = videoResponse.data?.signedUrl
+        return videoUrl
+    }
+
+    async function getWorkoutVideoUrl(exercise_id: number): Promise<string | undefined> {
+        try {
+            const videoUrl = await fetchVideoUrlFromIndexDB(exercise_id)
+            if (videoUrl) {
+                return videoUrl
+            }
+            const videoUrlFromSupabase = await fetchVideoUrlFromSupabase(exercise_id)
+            if (videoUrlFromSupabase) {
+                return videoUrlFromSupabase
+            }
+            return undefined
+        } catch (error) {
+            console.error(error)
+            return undefined
+        }
+    }
+
     async function updateWorkout(workout: Workout) {
         const index = workouts.value.findIndex(w => w.id === workout.id)
         workouts.value[index] = workout
@@ -289,6 +362,10 @@ export const useWorkoutStore = defineStore('workout', () => {
         getNewId,
         getWorkoutById,
         addWorkout,
+        cacheWorkoutImage,
+        cacheWorkoutVideo,
+        getWorkoutImage,
+        getWorkoutVideoUrl,
         updateWorkout,
         deleteWorkout,
         fetchWorkouts,

@@ -12,6 +12,7 @@
   import Timer from './Timer.vue';
   import NumericInput from './NumericInput.vue';
   import { getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
+  import { useWorkoutStore } from '@/store/workoutStore';
   import { ref, onMounted, computed, watch } from 'vue';
 
   interface Props {
@@ -42,19 +43,15 @@
   const repsValid = ref<boolean>(true)
   const weightValid = ref<boolean>(true)
 
+  const workoutStore = useWorkoutStore()
+
   const isValid = computed(() => {
     return repsValid.value && weightValid.value
   })
 
-  const getImageUrl = async () => {
+  const getVideoUrl = async () => {
     loading.value = true
-    await getBucketUrlFromTable('exercises', props.exerciseId).then((response) => {
-      ressourceName.value = response.data?.ressource_name
-    })
-    if (!ressourceName.value) return
-    await getSignedObjectUrl('exercise_videos', `${ressourceName.value}.mp4`).then((response) => {
-      url.value = response.data?.signedUrl
-    })
+    url.value = await workoutStore.getWorkoutVideoUrl(props.exerciseId)
     loading.value = false
   }
 
@@ -75,7 +72,7 @@
   })
 
   watch(() => props.exerciseId, () => {
-    getImageUrl()
+    getVideoUrl()
   })
 
   watch(() => props.showBreak, (newVal) => {
@@ -87,7 +84,7 @@
   })
 
   onMounted(async () => {
-    getImageUrl()
+    getVideoUrl()
   })
 </script>
 
