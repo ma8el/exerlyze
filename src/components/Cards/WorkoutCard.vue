@@ -10,6 +10,7 @@
 
   const openModal = async () => {
     const modal = await modalController.create({
+      id: 'add-workout-modal',
       component: AddWorkoutModal,
       componentProps: { workoutId: props.id },
       cssClass: 'full-screen-modal',

@@ -20,6 +20,7 @@
   import ExerciseItem from '../ExerciseItem.vue';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import NumericInput from '../NumericInput.vue';
+  import LoadingModal from './LoadingModal.vue';
   import { Exercise, ExerciseSelection, WorkoutPlan, PlannedWorkout } from '@/types';
   import { bookmarkOutline } from 'ionicons/icons';
   import UpdateIcon from '@/icons/update.svg';
@@ -63,6 +64,15 @@
   })
 
   const save = async () => {
+    const loadingModal = await modalController.create({
+      component: LoadingModal,
+      componentProps: {
+        showLoadingMessage: true,
+        loadingMessage: 'save',
+      },
+    });
+    await loadingModal.present();
+
     await workoutStore.addWorkout({
       id: generatedWorkoutId.value,
       created_at: new Date(),
@@ -94,7 +104,8 @@
       await workoutStore.cacheWorkoutImage(exercise.exercise_id)
       await workoutStore.cacheWorkoutVideo(exercise.exercise_id)
     }
-    modalController.dismiss(null, 'save');
+    loadingModal.dismiss();
+    modalController.dismiss(null, 'save', 'add-workout-modal');
   }
 
   const update = async () => {
@@ -137,7 +148,7 @@
         }
       }
     }
-    modalController.dismiss(null, 'save');
+    modalController.dismiss(null, 'save', 'add-workout-modal');
   }
 
   const deleteWorkout = async () => {
@@ -147,7 +158,7 @@
     }
     const hasDeleted = await workoutStore.deleteWorkout(props.workoutId)
     if (hasDeleted) {
-      modalController.dismiss(null, 'save');
+      modalController.dismiss(null, 'save', 'add-workout-modal');
     } else {
       isOpen.value = true
     }
