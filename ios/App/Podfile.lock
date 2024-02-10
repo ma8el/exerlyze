@@ -11,7 +11,7 @@ PODS:
   - CapacitorMlkitBarcodeScanning (5.3.0):
     - Capacitor
     - GoogleMLKit/BarcodeScanning (= 4.0.0)
-  - CapacitorNetwork (5.0.6):
+  - CapacitorNetwork (5.0.7):
     - Capacitor
   - CapacitorStatusBar (5.0.1):
     - Capacitor
@@ -120,7 +120,7 @@ SPEC CHECKSUMS:
   CapacitorHaptics: 4bdfc3b0137e7d9040892c81332827929b896d3c
   CapacitorKeyboard: 5e1667b7b70e23b147f9fc91bafa458be41cba77
   CapacitorMlkitBarcodeScanning: ea08ef246e5d3511d5a231a59fae36b16ad9acb3
-  CapacitorNetwork: d80b3e79bef6ec37640ee2806c19771f07ff2d0c
+  CapacitorNetwork: 81ef9728aa7a65cac8c1181ce79e578162b57b57
   CapacitorStatusBar: 4edd082a8dadcedb5b1fa2b8480d67a220c79849
   GoogleDataTransport: 57c22343ab29bc686febbf7cbb13bad167c2d8fe
   GoogleMLKit: 2bd0dc6253c4d4f227aad460f69215a504b2980e
