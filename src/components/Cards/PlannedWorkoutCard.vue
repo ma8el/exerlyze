@@ -2,8 +2,7 @@
 import BaseCard from './BaseCard.vue';
 import StartWorkoutButton from '../Buttons/StartWorkoutButton.vue';
 import ResultsCard from './ResultsCard.vue';
-import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
-import { useWorkoutSessionStore } from '@/store/workoutStore';
+import { useWorkoutStore, useWorkoutSessionStore } from '@/store/workoutStore';
 import { ref, computed, onMounted, PropType } from 'vue';
 import { FullWorkoutSession } from '@/types';
 
@@ -27,10 +26,10 @@ const props = defineProps({
     },
 });
 
+const workoutStore = useWorkoutStore();
 const workoutSessionStore = useWorkoutSessionStore();
 
 const loading = ref<boolean>(true)
-const ressourceName = ref<string>()
 const url = ref<string>()
 
 const workoutSessions = computed(() => {
@@ -57,13 +56,7 @@ const getRandomExerciseId = () => {
 onMounted(async () => {
   loading.value = true
   const exerciseId = getRandomExerciseId();
-  await getBucketUrlFromTable('exercises', exerciseId).then((response) => {
-    ressourceName.value = response.data?.ressource_name
-  })
-  if (!ressourceName.value) return
-  await getSignedObjectUrl('exercise_images', `${ressourceName.value}.jpg`).then((response) => {
-    url.value = response.data?.signedUrl
-  })
+  url.value = await workoutStore.getWorkoutImageUrl(exerciseId)
   loading.value = false
 })
 </script>
@@ -72,7 +65,7 @@ onMounted(async () => {
 <template>
   <BaseCard
     v-if="!isPerformed(workoutId) && !loading"
-    :img_src="url ? url : defaultImage"
+    :img_src="url"
     :title="workoutName"
     :content="true"
     :sub-title="true"

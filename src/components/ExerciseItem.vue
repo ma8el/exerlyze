@@ -5,7 +5,6 @@
      IonLabel,
      IonCard,
      IonCardContent,
-     IonSpinner,
      IonRow,
      IonCol,
      IonIcon,
@@ -17,9 +16,10 @@
   import WeightIcon from '@/icons/weight.svg';
   import { closeCircleOutline } from 'ionicons/icons';
   import NumericInput from './NumericInput.vue';
+  import ImageSkeleton from '@/components/Skeletons/ImageSkeleton.vue';
+  import { useWorkoutStore } from '@/store/workoutStore';
   import { Exercise } from '@/types'
   import { ref, watch, onMounted, computed } from 'vue';
-  import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
 
   const props = defineProps<Exercise>()
   const emit = defineEmits(['update:sets', 
@@ -27,13 +27,14 @@
                             'update:weight',
                             'update:valid',
                             'delete:exercise'])
-  const ressourceName = ref<string>()
   const url = ref<string>()
   const loading = ref<boolean>(true)
 
   const setsValid = ref<boolean>(true)
   const repsValid = ref<boolean>(true)
   const weightValid = ref<boolean>(true)
+
+  const workoutStore = useWorkoutStore()
 
   const valid = computed(() => {
     return setsValid.value && repsValid.value && weightValid.value
@@ -45,13 +46,8 @@
 
   const updateImage = async () => {
     loading.value = true
-    await getBucketUrlFromTable('exercises', props.exercise_id).then((response) => {
-      ressourceName.value = response.data?.ressource_name
-    })
-    if (!ressourceName.value) return
-    await getSignedObjectUrl('exercise_images', `${ressourceName.value}.jpg`).then((response) => {
-      url.value = response.data?.signedUrl
-    })
+    url.value = await workoutStore.getWorkoutImageUrl(props.exercise_id)
+    loading.value = false
   }
 
   const openExerciseDetailModal = async () => {
@@ -89,11 +85,11 @@
         <img 
           v-if="!loading"
           alt="Exercise Image"
-          :src="url ? url: defaultImage"
+          :src="url"
           class="thumbnail-img"
           @click="openExerciseDetailModal"
         />
-        <ion-spinner v-else/>
+        <ImageSkeleton v-else class="thumbnail-img" />
         <div class="thumbnail-content">
           <ion-row>
             <ion-col size="10">

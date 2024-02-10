@@ -6,6 +6,8 @@
              IonCardContent,
              IonRow,
              IonCol } from '@ionic/vue';
+    import { onMounted, ref } from 'vue';
+    import ImageSkeleton from '../Skeletons/ImageSkeleton.vue';
     
     const props = defineProps({
         title: String,
@@ -21,11 +23,30 @@
         img_height: String,
         titleSize: String
     })
+
+    const loading = ref<boolean>(false)
+
+    const handleLoad = () => {
+      loading.value = false
+    }
+
+    onMounted(() => {
+      if ( props.img_src ) {
+        loading.value = true
+      }
+    })
 </script>
 
 <template>
   <ion-card>
-    <img v-if="img_src" :src="img_src" :style="{height: img_height}" />
+    <img 
+      v-if="img_src && !loading"
+      :src="img_src"
+      :style="{height: img_height}"
+      @load="handleLoad"
+      @error="handleLoad"
+    />
+    <image-skeleton v-else-if="img_src && loading" :style="{height: img_height, 'max-height': '150px'}"/>
     <ion-card-header>
       <ion-row class="ion-justify-content-between ion-align-items-center">
         <ion-col size="auto">

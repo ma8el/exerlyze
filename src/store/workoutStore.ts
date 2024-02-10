@@ -15,7 +15,7 @@ import { useStorage } from '@vueuse/core';
 import { useUserSettingsStore } from './userSettingsStore';
 import { getDayIndex } from '@/helpers/time';
 import { WorkoutMediaDB } from '@/db';
-import { getBucketUrlFromTable, getSignedObjectUrl, downloadObject } from '@/composables/supabase';
+import { getBucketUrlFromTable, getSignedObjectUrl, downloadObject, defaultImage } from '@/composables/supabase';
 
 export const useDayOfWeekStore = defineStore({
     id: 'dayOfWeek',
@@ -197,15 +197,48 @@ export const useWorkoutStore = defineStore('workout', () => {
             return
         }
         await workoutMediaDB.workoutVideos.put({ exercise_id: exercise_id, video: videoBlob });
-    }
+    };
 
-    async function getWorkoutImage(exercise_id: number): Promise<Blob | undefined> {
+    async function fetchImageUrlFromIndexDB(exercise_id: number): Promise<string | undefined> {
         const workoutMediaDB = new WorkoutMediaDB()
         const image = await workoutMediaDB.workoutImages.get(exercise_id);
         if (image) {
-            return image;
+            const imageUrl = URL.createObjectURL(image.image);
+            if (imageUrl) {
+                return imageUrl;
+            }
         }
         return undefined;
+    };
+
+    async function fetchImageUrlFromSupabase(exercise_id: number): Promise<string | undefined> {
+        const response = await getBucketUrlFromTable('exercises', exercise_id)
+        const ressource_name = response.data?.ressource_name
+        if (!ressource_name) return undefined
+        const imageResponse = await getSignedObjectUrl('exercise_images', `${ressource_name}.jpg`)
+        const imageUrl = imageResponse.data?.signedUrl
+        return imageUrl
+    }
+
+    async function getWorkoutImageUrl(exercise_id: number): Promise<string> {
+        try {
+            const imageUrl = await fetchImageUrlFromIndexDB(exercise_id)
+            if (imageUrl) {
+                return imageUrl
+            }
+        } catch (error) {
+            console.error(error)
+        }
+        try {
+            const imageUrlFromSupabase = await fetchImageUrlFromSupabase(exercise_id)
+            if (imageUrlFromSupabase) {
+                return imageUrlFromSupabase
+            }
+            return defaultImage
+        } catch (error) {
+            console.error(error)
+            return defaultImage
+        }
     }
 
     async function fetchVideoUrlFromIndexDB(exercise_id: number): Promise<string | undefined> {
@@ -235,6 +268,10 @@ export const useWorkoutStore = defineStore('workout', () => {
             if (videoUrl) {
                 return videoUrl
             }
+        } catch (error) {
+            console.error(error)
+        }
+        try {
             const videoUrlFromSupabase = await fetchVideoUrlFromSupabase(exercise_id)
             if (videoUrlFromSupabase) {
                 return videoUrlFromSupabase
@@ -364,7 +401,7 @@ export const useWorkoutStore = defineStore('workout', () => {
         addWorkout,
         cacheWorkoutImage,
         cacheWorkoutVideo,
-        getWorkoutImage,
+        getWorkoutImageUrl,
         getWorkoutVideoUrl,
         updateWorkout,
         deleteWorkout,
