@@ -511,10 +511,12 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
 
     async function deleteWorkoutPlan(id: string) {
         const index = workoutPlans.value.findIndex(w => w.id === id)
+        console.log(workoutPlans.value[index])
 
         workoutPlans.value[index].deleted = true
         workoutPlans.value[index].updated_at = new Date()
-        plannedWorkouts.value.forEach(async (w: PlannedWorkout) => {
+        const plannedWorkouts = getPlannedWorkoutsByWorkoutPlanId(id)
+        plannedWorkouts.forEach(async (w: PlannedWorkout) => {
             await deletePlannedWorkout(w.id)
         })
 
