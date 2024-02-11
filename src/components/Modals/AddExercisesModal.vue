@@ -50,6 +50,7 @@
   };
 
   const getExercises = async (page: number) => {
+    const selectedExercises = exercises.value.filter(ex => ex.isSelected);
     const pageLength = 15
     const lowerBound = page * pageLength
     const upperBound = lowerBound + pageLength - 1
@@ -81,7 +82,9 @@
         }
       })
       const newExercises = await Promise.all(newExercisesPromises)
-      exercises.value = [...exercises.value, ...newExercises]
+      exercises.value = [...selectedExercises,
+                         ...exercises.value.filter(ne => !selectedExercises.find(se => se.id === ne.id)),
+                         ...newExercises.filter(ne => !selectedExercises.find(se => se.id === ne.id))]
     }
   }
 
@@ -106,6 +109,7 @@
   }
 
   const queryExercises = async (e: any) => {
+    loading.value = true
     const searchedExercise: string = e.target.value;
 
     const selectedExercises = exercises.value.filter(ex => ex.isSelected);
@@ -142,13 +146,14 @@
           exercises.value = [...selectedExercises, ...newExercises.filter(ne => !selectedExercises.find(se => se.id === ne.id))];
         }
       })
+      loading.value = false
   }
 
   const queryExerciseByMuscle = async (muscleId: number) => {
     const selectedExercises = exercises.value.filter(ex => ex.isSelected);
     exercises.value = []
     const setLocale = userSettingsStore.getLocale()
-    supabase
+    await supabase
       .from('exercises')
       .select(`id, name_${setLocale}`)
       .contains('muscles', [muscleId])
