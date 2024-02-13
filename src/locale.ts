@@ -64,6 +64,8 @@ export const messages = {
             break: "Break",
             compound: "Compound",
             isolation: "Isolation",
+            addWarmup: "Add warmup sets",
+            warmup: "Warmup",
         },
         nutrition: {
             title: "Nutrition",
@@ -264,6 +266,8 @@ export const messages = {
             break: "Pause",
             compound: "Grundübung",
             isolation: "Isolationsübung",
+            addWarmup: "Aufwärmsätze hinzufügen",
+            warmup: "Aufwärmsätze",
         },
         nutrition: {
             title: "Ernährung",
@@ -464,6 +468,8 @@ export const messages = {
             break: "Pause",
             compond: "Composé",
             isolation: "Isolation",
+            addWarmup: "Ajouter des séries d'échauffement",
+            warmup: "Échauffement",
         },
         nutrition: {
             title: "Nutrition",

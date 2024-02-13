@@ -152,4 +152,5 @@ export interface FullWorkoutSessionSet {
     weight: number,
     plannedResttime: number,
     resttime: number,
+    isWarmup?: boolean,
 }

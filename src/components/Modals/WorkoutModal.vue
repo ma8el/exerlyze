@@ -10,9 +10,9 @@ import BaseFullPageModal from '@/components/Modals/BaseFullPageModal.vue';
 import WorkoutExerciseItem from '@/components/WorkoutExerciseItem.vue';
 import StopWatch from '../StopWatch.vue';
 import ActivityDetailModal from './ActivityDetailModal.vue';
-import { useWorkoutSessionStore, useWorkoutStore } from '@/store/workoutStore';
+import { useWorkoutSessionStore } from '@/store/workoutStore';
 import { ref, onMounted, computed, PropType } from 'vue';
-import { FullWorkoutSessionSet } from '@/types';
+import { FullWorkoutSessionSet, WorkoutSessionPerformance } from '@/types';
 
 const props = defineProps({
   workoutId: {
@@ -26,6 +26,10 @@ const props = defineProps({
   fullWorkoutSessionSets: {
     type: Array as PropType<FullWorkoutSessionSet[]>,
     required: true
+  },
+  addWarmup: {
+    type: Boolean,
+    default: true
   }
 });
 
@@ -55,6 +59,7 @@ const save = async () => {
     if (!workoutSessionSets.value) {
       return;
     }
+    const actualWorkoutSessionSets = workoutSessionSets.value.filter((set: any) => !set.isWarmup);
     // TODO: Track not fully completed workouts
     await workoutSessionStore.addWorkoutSession({
       id: workoutSessionId.value,
@@ -69,7 +74,7 @@ const save = async () => {
       notes: '',
     })
     await workoutSessionStore.addWorkoutSessionPerformances(
-      workoutSessionSets.value.map((set: any) => ({
+      actualWorkoutSessionSets.map((set: any) => ({
         id: set.id,
         workout_session_id: workoutSessionId.value,
         exercise_id: set.exerciseId,
@@ -146,6 +151,7 @@ onMounted(() => {
         :transitionTrigger="index === currentSet && !showBreak"
         :show-video="index === currentSet && !showBreak"
         :currentSet="set.currentSet"
+        :is-warmup="set.isWarmup"
         v-model:reps="workoutSessionSets[index].reps"
         v-model:weight="workoutSessionSets[index].weight"
         v-model:resttime="workoutSessionSets[index].resttime"

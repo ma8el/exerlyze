@@ -11,7 +11,6 @@
   import RepsIcon from '@/icons/reps.svg';
   import Timer from './Timer.vue';
   import NumericInput from './NumericInput.vue';
-  import { getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
   import { useWorkoutStore } from '@/store/workoutStore';
   import { ref, onMounted, computed, watch } from 'vue';
 
@@ -24,6 +23,7 @@
     resttime: number;
     transitionTrigger: boolean;
     showBreak: boolean;
+    isWarmup?: boolean;
     showVideo?: boolean;
   }
 
@@ -35,7 +35,6 @@
                             'update:valid'])
 
   const loading= ref<boolean>(true)
-  const ressourceName = ref<string>()
   const url = ref<string>()
   const setRef = ref<InstanceType<typeof IonRow>>();
   const startTimer = ref<boolean>(false);
@@ -118,7 +117,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row class="ion-align-items-center">
+    <ion-row class="ion-align-items-center" v-if="!isWarmup">
       <ion-col size="2" class="ion-margin-top">
         <ion-label>
           <ion-icon :icon="SetIcon"></ion-icon>
