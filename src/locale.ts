@@ -200,6 +200,7 @@ export const messages = {
         offlineMessage: "You are offline!",
         onlineMessage: "You are online!",
         when: "When?",
+        filterByExercise: "Filter by exercise",
     },
     de: {
         invalidEmail: "Ungültige E-Mail",
@@ -402,6 +403,7 @@ export const messages = {
         offlineMessage: "Du bist offline!",
         onlineMessage: "Du bist online!",
         when: "Wann?",
+        filterByExercise: "Nach Übung filtern",
     },
     fr: {
         invalidEmail: "E-mail invalide",
@@ -604,5 +606,6 @@ export const messages = {
         offlineMessage: "Vous êtes hors ligne!",
         onlineMessage: "Vous êtes en ligne!",
         when: "Quand?",
+        filterByExercise: "Filtrer par exercice",
     },
 }

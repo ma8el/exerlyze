@@ -511,8 +511,6 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
 
     async function deleteWorkoutPlan(id: string) {
         const index = workoutPlans.value.findIndex(w => w.id === id)
-        console.log(workoutPlans.value[index])
-
         workoutPlans.value[index].deleted = true
         workoutPlans.value[index].updated_at = new Date()
         const plannedWorkouts = getPlannedWorkoutsByWorkoutPlanId(id)

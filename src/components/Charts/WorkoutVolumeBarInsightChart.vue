@@ -8,8 +8,26 @@ import VChart from 'vue-echarts';
 
 import { useI18n } from 'vue-i18n';
 import BaseChartContainer from './BaseChartContainer.vue';
-import { computed, reactive, onMounted } from 'vue';
-import { watch, ref } from 'vue';
+import { computed, onMounted, watch, watchEffect, ref } from 'vue';
+
+interface VDailyAggregatedWorkoutVolumeByExercise {
+  date: string;
+  exercise_id: number;
+  planned_volume: number;
+  user_id: string;
+  volume: number;
+}
+
+interface VDailyAggregatedWorkoutVolume {
+  date: string;
+  user_id: string;
+  volume: number;
+}
+
+interface WeeklyWorkoutVolume {
+  date: string;
+  volume: number;
+}
 
 use([TitleComponent, LegendComponent, GridComponent, BarChart, CanvasRenderer])
 
@@ -22,12 +40,20 @@ const props = defineProps({
     type: Date,
     required: true,
   },
+  selectedExercise: {
+    type: Number,
+    required: false,
+    default: undefined,
+  },
 });
 
 const { t } = useI18n();
-const loading = ref(true);
+const loading = ref<boolean>(true);
 const option = ref({});
-const hasData = ref(true);
+const hasData = ref<boolean>(true);
+
+const weeklyWorkoutVolume = ref<(string | number)[][]>([]);
+const xAxisData = ref<string[]>([]);
 
 const startDate = computed(() => {
   return props.startDate;
@@ -37,32 +63,69 @@ const endDate = computed(() => {
   return props.endDate;
 });
 
-const weeklyWorkoutVolume = computed(async () => {
-  loading.value = true;
+const getWeeklyWorkoutVolume = async () => {
   const { data, error } = await supabase
     .from('v_daily_aggregated_workout_volume')
     .select()
     .gte('date', startDate.value.toDateString())
     .lte('date', endDate.value.toISOString())
-  const plotData = data?.map((entry: any) => {
-    return [
-      entry.date,
-      entry.volume,
-    ]
-  });
-  loading.value = false;
-  return plotData;
-});
-
-const xAxisData = computed(async () => {
-  const data = await weeklyWorkoutVolume.value;
-  if (!data) {
+    .returns<VDailyAggregatedWorkoutVolume[]>();
+  if (data === null || data === undefined) {
     return [];
+  } else {
+    return data.map((entry) => {
+      return {
+        date: entry.date,
+        volume: entry.volume,
+      };
+    });
   }
-  return data.map((entry: any) => entry[0])
+};
+
+const getWeeklyWorkoutVolumeByExercise = async () => {
+  const { data, error } = await supabase
+    .from('v_daily_aggregated_workout_volume_by_exercise')
+    .select()
+    .gte('date', startDate.value.toDateString())
+    .lte('date', endDate.value.toISOString())
+    .filter('exercise_id', 'eq', props.selectedExercise)
+    .returns<VDailyAggregatedWorkoutVolumeByExercise[]>();
+  if (data === null || data === undefined) {
+    return [];
+  } else {
+    return data.map((entry) => {
+      return {
+        date: entry.date,
+        volume: entry.volume,
+      };
+    });
+  }
+};
+
+watchEffect(async () => {
+  loading.value = true;
+  let data;
+  if (props.selectedExercise !== undefined) {
+    data = await getWeeklyWorkoutVolumeByExercise();
+  } else {
+    data = await getWeeklyWorkoutVolume();
+  }
+
+  if (data === null || data === undefined) {
+    weeklyWorkoutVolume.value = [];
+    xAxisData.value = [];
+    return;
+  }
+
+  weeklyWorkoutVolume.value = data.map((entry) => [entry.date, entry.volume]);
+  xAxisData.value = data.map(entry => entry.date);
+
+  option.value = getOptions();
+  hasData.value = weeklyWorkoutVolume.value.length > 0;
+  loading.value = false;
 });
 
-const getOptions = async () => {
+const getOptions = () => {
  return {
   title: {
     text: t('home.workoutVolume'),
@@ -72,7 +135,7 @@ const getOptions = async () => {
   },
   xAxis: {
     type: 'category',
-    data: await xAxisData.value,
+    data: xAxisData.value,
   },
   yAxis: {
     type: 'value',
@@ -100,7 +163,7 @@ const getOptions = async () => {
   series: [
     {
       name: t('home.workoutVolume'),
-      data: await weeklyWorkoutVolume.value,
+      data: weeklyWorkoutVolume.value,
       type: 'bar',
       color: '#3F63C8',
     }
@@ -123,6 +186,11 @@ const reloadData = async () => {
 watch([startDate, endDate], async () => {
   await reloadData();
 });
+
+//watch(props.selectedExercise, async () => {
+//  console.log(props.selectedExercise)
+//  await reloadData();
+//});
 
 onMounted(async () => {
   await reloadData();
