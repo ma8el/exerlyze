@@ -340,7 +340,7 @@
     width: 50px;
   }
   .info-text {
-    font-size: 12px;
+    font-size: 10px;
   }
 }
 
@@ -378,12 +378,10 @@
 }
 
 .exercise-name {
-    max-width: 75%;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    margin-left: 10px;
-  }
+  white-space: nowrap;
+  margin-left: 10px;
+}
+
 .exercise-image {
   border-radius: 10px;
 }
