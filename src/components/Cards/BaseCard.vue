@@ -21,7 +21,19 @@
         },
         img_src: String,
         img_height: String,
-        titleSize: String
+        titleSize: String,
+        titleColSize: {
+          type: String,
+          default: "8",
+        },
+        titleEndColOffset: {
+          type: String,
+          default: "0",
+        },
+        titleEndColSize: {
+          type: String,
+          default: "4",
+        },
     })
 
     const loading = ref<boolean>(false)
@@ -49,7 +61,7 @@
     <image-skeleton v-else-if="img_src && loading" :style="{height: img_height, 'max-height': '150px'}"/>
     <ion-card-header>
       <ion-row class="ion-justify-content-between ion-align-items-center">
-        <ion-col size="auto">
+        <ion-col :size="titleColSize">
           <ion-card-title 
             v-if="title"
             :style="{'font-size': titleSize, 'overflow': 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap'}"
@@ -57,7 +69,9 @@
             {{ title }}
           </ion-card-title>
         </ion-col>
-        <slot name="titleEnd"></slot>
+        <ion-col :size="titleEndColSize" :offset="titleEndColOffset">
+          <slot name="titleEnd"></slot>
+        </ion-col>
       </ion-row>
       <ion-card-subtitle v-if="subTitle">
         <slot name="subtitle"></slot>
