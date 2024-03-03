@@ -65,6 +65,7 @@ onMounted(async () => {
 <template>
   <BaseCard
     v-if="!isPerformed(workoutId) && !loading"
+    title-col-size="12"
     :img_src="url"
     :title="workoutName"
     :content="true"

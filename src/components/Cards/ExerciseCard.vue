@@ -25,6 +25,7 @@
   <BaseCard
     v-if="!loading"
     class="exercise-card"
+    title-col-size="12"
     :img_src="url"
     :title="name"
     :sub-title="true"
