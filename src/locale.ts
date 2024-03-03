@@ -66,6 +66,8 @@ export const messages = {
             isolation: "Isolation",
             addWarmup: "Add warmup sets",
             warmup: "Warmup",
+            setAllSets: "Set all sets",
+            setAllReps: "Set all reps",
         },
         nutrition: {
             title: "Nutrition",
@@ -269,6 +271,8 @@ export const messages = {
             isolation: "Isolationsübung",
             addWarmup: "Aufwärmsätze hinzufügen",
             warmup: "Aufwärmsätze",
+            setAllSets: "Sätze einstellen",
+            setAllReps: "Wdhs einstellen",
         },
         nutrition: {
             title: "Ernährung",
@@ -442,7 +446,7 @@ export const messages = {
             schedule: "Programme",
             select: "Sélectionner",
             selectScheduleDuration: "Sélectionner la durée du programme",
-            reps: "Répétitions",
+            reps: "Répéts.",
             set: "Série | Séries",
             addWorkout: "@:add @:workouts.workout",
             deleteWorkout: "@:delete @:workouts.workout",
@@ -472,6 +476,8 @@ export const messages = {
             isolation: "Isolation",
             addWarmup: "Ajouter des séries d'échauffement",
             warmup: "Échauffement",
+            setAllSets: "Définir les sets",
+            setAllReps: "Définir les répéts.",
         },
         nutrition: {
             title: "Nutrition",
