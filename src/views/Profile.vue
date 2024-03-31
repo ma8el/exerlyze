@@ -84,7 +84,7 @@
     <template #avatar>
       <Transition name="fade" class="avatar-wrapper">
         <div class="avatar-wrapper">
-          <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          <img alt="Logo white" class="avatar-image" src="../../assets/logo_transparent_white_no_text.png" />
         </div>
       </Transition>
     </template>
@@ -192,6 +192,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  background-color: black;
   position: absolute;
   top: 30px;
   left: 50%; /* Center the avatar */
@@ -199,12 +200,16 @@
   border: 3px solid white;
   z-index: 10;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   :is(img) {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
+    width: 80%;
+    transform: translateY(-5px);
+    height: auto;
   }
 }
+
 .name {
   display: flex;
   font-size: 1.5rem;
@@ -214,6 +219,7 @@
     margin: 50px 0 0 0;
   }
 }
+
 ion-content {
   --background: none;
   :is(ion-row) {

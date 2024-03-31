@@ -20,8 +20,8 @@
   >
     <template #toolbarContent>
       <ion-item lines="none">
-        <ion-thumbnail slot="start">
-          <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+        <ion-thumbnail class="avatar-wrapper" slot="start">
+          <img alt="Logo white" src="../../assets/logo_transparent_white_no_text.png" />
         </ion-thumbnail>
         <ion-title 
           size="large"
@@ -53,14 +53,28 @@
 </template>
 
 <style scoped>
+.avatar-wrapper {
+  display: flex;
+  justify-content: center;
+  background-color: black;
+  :is(img) {
+    width: 30px;
+    height: 30px;
+    transform: translateY(1px);
+    border-radius: 0%;
+  }
+}
+
 ion-item {
   --background: none;
 }
+
 ion-title {
   align-items: center;
   margin: 0;
   padding: 0;
 }
+
 ion-thumbnail {
   --border-radius: 50%;
   border: 1px solid white !important;
