@@ -111,6 +111,7 @@ export const messages = {
             other: "Other",
             contactUs: "Contact us",
             privacyPolicy: "Privacy Policy",
+            termsOfService: "Terms of Service",
         },
         settings: {
             title: "Settings",
@@ -316,7 +317,7 @@ export const messages = {
             other: "Sonstiges",
             contactUs: "Kontaktiere uns",
             privacyPolicy: "Datenschutzvereinbarung",
- 
+            termsOfService: "Nutzungsbedingungen",
         },
         settings: {
             title: "Einstellungen",
@@ -521,6 +522,7 @@ export const messages = {
             other: "Autre",
             contactUs: "Contactez-nous",
             privacyPolicy: "Politique de confidentialité",
+            termsOfService: "Conditions d'utilisation",
         },
         settings: {
             title: "Paramètres",
