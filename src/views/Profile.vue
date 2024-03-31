@@ -117,7 +117,7 @@
       </ion-row>
     </div>
 
-    <div class="account">
+    <div class="settings-item">
       <ion-label class="head_lbl">{{ $t('profile.account') }}</ion-label>
       <div class="info">
         <ion-item lines="none" :button="true" @click="openProfileSettings()">
@@ -132,6 +132,12 @@
           <ion-icon :icon="restaurantOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>{{ $t('settings.dietGoals') }}</ion-label>
         </ion-item>
+     </div>
+    </div>
+
+    <div class="settings-item">
+      <ion-label class="head_lbl">{{ $t('fitness') }}</ion-label>
+      <div class="info">
         <ion-item lines="none" :button="true" @click="openActivityHistory()">
           <ion-icon :icon="listOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>{{ $t('activityHistory') }}</ion-label>
@@ -143,39 +149,42 @@
       </div>
     </div>
 
-    <div class="notification">
+<!--    <div class="notification">
       <ion-label class="head_lbl">{{ $t('profile.notification') }}</ion-label>
       <ion-item lines="none">
         <ion-icon :icon="notificationsOutline" color="primary" style="margin-right: 10px;"></ion-icon>
         <ion-label>Pop-out Notificatioon</ion-label>
         <ion-toggle mode="ios" color="primary" checked></ion-toggle>
       </ion-item>
-    </div>
+    </div>-->
 
-    <div class="other">
+    <div class="settings-item">
       <ion-label class="head_lbl">{{ $t('profile.other') }}</ion-label>
-      <ion-item lines="none">
-        <ion-icon :icon="languageOutline" color="primary" style="margin-right: 10px"></ion-icon>
-        <ion-select 
-          :label="$t('language')"
-          :placeholder="$t('language')"
-          v-model="selectedLang"
-          @ionChange="changeLocale($event.detail.value)"
-        >
-          <ion-select-option value="en">🇬🇧 English</ion-select-option>
-          <ion-select-option value="de">🇩🇪 Deutsch</ion-select-option>
-          <ion-select-option value="fr">🇫🇷 Français</ion-select-option>
-        </ion-select>
-      </ion-item>
+      <div class="info">
+        <ion-item lines="none">
+          <ion-icon :icon="languageOutline" color="primary" style="margin-right: 10px"></ion-icon>
+          <ion-select 
+            :label="$t('language')"
+            :placeholder="$t('language')"
+            v-model="selectedLang"
+            @ionChange="changeLocale($event.detail.value)"
+            style="font-size: 14px;"
+          >
+            <ion-select-option value="en">🇬🇧 English</ion-select-option>
+            <ion-select-option value="de">🇩🇪 Deutsch</ion-select-option>
+            <ion-select-option value="fr">🇫🇷 Français</ion-select-option>
+          </ion-select>
+        </ion-item>
 
-      <ion-item lines="none">
-        <ion-icon :icon="mailOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-        <ion-label>{{ $t('profile.contactUs') }}</ion-label>
-      </ion-item>
-      <ion-item lines="none">
-        <ion-icon :icon="checkboxOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-        <ion-label>{{ $t('profile.privacyPolicy') }}</ion-label>
-      </ion-item>
+        <ion-item lines="none">
+          <ion-icon :icon="mailOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>{{ $t('profile.contactUs') }}</ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-icon :icon="checkboxOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>{{ $t('profile.privacyPolicy') }}</ion-label>
+        </ion-item>
+      </div>
     </div>
   </AppLayout>
 </template>
@@ -242,7 +251,7 @@ ion-content {
       }
     }
   }
-  .account {
+  .settings-item {
     padding: 10px;
     margin-top: 1rem;
     border-radius: 10px;
@@ -260,49 +269,6 @@ ion-content {
       :is(ion-label) {
         font-size: 14px;
       }
-    }
-  }
-  .notification {
-    padding: 10px;
-    margin-top: 1rem;
-    border-radius: 10px;
-    :is(ion-item) {
-      margin-top: 10px;
-      border-radius: 10px;
-    }
-    .head_lbl {
-      font-size: 18px;
-    }
-    :is(ion-item) {
-      :is(ion-icon) {
-        font-size: 20px;
-      }
-      :is(ion-label) {
-        font-size: 14px;
-      }
-    }
-  }
-  .other {
-    padding: 10px;
-    margin-top: 1rem;
-    margin-bottom: 150px;
-    :is(ion-item) {
-      margin-top: 10px;
-      border-radius: 10px;
-    }
-    .head_lbl {
-      font-size: 18px;
-    }
-    :is(ion-item) {
-      :is(ion-icon) {
-        font-size: 20px;
-      }
-     :is(ion-label) {
-        font-size: 14px;
-      }
-    }
-    :is(ion-select) {
-      font-size: 14px;
     }
   }
 }
