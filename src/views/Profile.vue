@@ -1,12 +1,10 @@
 <script setup lang="ts">
   import {
-    IonContent,
     IonItem,
     IonLabel,
     IonRow,
     IonCol,
     IonCard,
-    IonToggle,
     IonIcon,
     IonSelect,
     IonSelectOption,
@@ -18,7 +16,7 @@
     languageOutline,
     personOutline,
     barChartOutline,
-    notificationsOutline,
+    newspaperOutline,
     mailOutline,
     checkboxOutline,
     barbellOutline,
@@ -179,6 +177,10 @@
         <ion-item lines="none">
           <ion-icon :icon="mailOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>{{ $t('profile.contactUs') }}</ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-icon :icon="newspaperOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>{{ $t('profile.termsOfService') }}</ion-label>
         </ion-item>
         <ion-item lines="none">
           <ion-icon :icon="checkboxOutline" color="primary" style="margin-right: 10px;"></ion-icon>
