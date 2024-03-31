@@ -9,9 +9,10 @@
     IonSelect,
     IonSelectOption,
   } from '@ionic/vue';
+  import { Browser } from '@capacitor/browser';
   import AppLayout from '@/layouts/AppLayout.vue';
   import { useRouter } from 'vue-router';
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   import { 
     languageOutline,
     personOutline,
@@ -41,6 +42,29 @@
 
   const selectedLang = ref(userSettingsStore.getLocale())
 
+  const pageUrl = import.meta.env.VITE_PAGE_URL;
+  const contactUsUrl = computed(() => {
+    if (selectedLang.value === 'de') {
+      return `${pageUrl}/${selectedLang.value}/support`;
+    } else {
+      return `${pageUrl}/support`;
+    }
+  });
+  const termsOfServiceUrl = computed(() => {
+    if (selectedLang.value === 'de') {
+      return `${pageUrl}/${selectedLang.value}/terms-of-service`;
+    } else {
+      return `${pageUrl}/terms-of-service`;
+    }
+  })
+  const privacyPolicyUrl = computed(() =>{
+    if (selectedLang.value === 'de') {
+      return `${pageUrl}/${selectedLang.value}/privacy-policy`;
+    } else {
+      return `${pageUrl}/privacy-policy`;
+    }
+  })
+
   const changeLocale = (lang: string) => {
     userSettingsStore.setLocale(lang)
     i18n.locale.value = lang;
@@ -64,6 +88,18 @@
 
   const openInsights = () => {
     router.push('/insights');
+  };
+
+  const openContactUs = async () => {
+    await Browser.open({ url: contactUsUrl.value });
+  };
+
+  const openTermsOfService = async () => {
+    await Browser.open({ url: termsOfServiceUrl.value });
+  };
+
+  const openPrivacyPolicy = async () => {
+    await Browser.open({ url: privacyPolicyUrl.value });
   };
 
   userWeightStore.$subscribe(() => {
@@ -174,15 +210,15 @@
           </ion-select>
         </ion-item>
 
-        <ion-item lines="none">
+        <ion-item lines="none" :button="true" @click="openContactUs()">
           <ion-icon :icon="mailOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>{{ $t('profile.contactUs') }}</ion-label>
         </ion-item>
-        <ion-item lines="none">
+        <ion-item lines="none" :button="true" @click="openTermsOfService()">
           <ion-icon :icon="newspaperOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>{{ $t('profile.termsOfService') }}</ion-label>
         </ion-item>
-        <ion-item lines="none">
+        <ion-item lines="none" :button="true" @click="openPrivacyPolicy()">
           <ion-icon :icon="checkboxOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>{{ $t('profile.privacyPolicy') }}</ion-label>
         </ion-item>
