@@ -24,7 +24,7 @@
         titleSize: String,
         titleColSize: {
           type: String,
-          default: "8",
+          default: "12",
         },
         titleEndColOffset: {
           type: String,
@@ -32,7 +32,7 @@
         },
         titleEndColSize: {
           type: String,
-          default: "4",
+          default: "0",
         },
     })
 
