@@ -239,7 +239,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background-color: black;
+  background-color: var(--ion-background-color);
   position: absolute;
   top: 30px;
   left: 50%; /* Center the avatar */

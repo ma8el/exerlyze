@@ -28,7 +28,6 @@ const props = defineProps({
 <template>
   <ion-item
     class="exercise-item"
-    color="light"
   >
     <ion-icon
       class="ion-margin-end exercise-icon"

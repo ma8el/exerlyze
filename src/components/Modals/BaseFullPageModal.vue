@@ -12,7 +12,7 @@
     title: String,
     backColor: {
       type: String,
-      default: 'light'
+      default: 'dark'
     },
     saveButton: {
       type: Boolean,
@@ -61,12 +61,5 @@
 .header-container {
   width: 100%;
   min-height: 70px;
-}
-
-ion-content {
-	overflow: hidden;
-  --background: none;
-  background-image: url('../../../assets/app_background.jpg');
-  background-size: cover;
 }
 </style>

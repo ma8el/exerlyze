@@ -42,7 +42,7 @@ const props = defineProps({
 
 <style scoped>
 .loading-content {
-  --background: black;
+  --background: var(--ion-background-color);
 }
 .logo-container {
   display: flex;
