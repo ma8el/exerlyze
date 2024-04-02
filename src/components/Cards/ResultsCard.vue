@@ -82,6 +82,7 @@ const getAggregatedPerformancePerExercise = (exerciseId: string) => {
           :subTitle="duration"
           :icon="TimeIcon"
           :font-size="'0.75rem'"
+          :is-dark="true"
         />
       </ion-col>
       <ion-col size="6">
@@ -89,6 +90,7 @@ const getAggregatedPerformancePerExercise = (exerciseId: string) => {
           :title="$t('workouts.set', 2)"
           :subTitle="totalSets"
           :icon="SetIcon"
+          :is-dark="true"
         ></BaseInfoCard>
       </ion-col>
     </ion-row>

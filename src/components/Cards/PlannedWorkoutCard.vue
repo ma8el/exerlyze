@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import BaseCard from './BaseCard.vue';
 import StartWorkoutButton from '../Buttons/StartWorkoutButton.vue';
-import ResultsCard from './ResultsCard.vue';
-import { useWorkoutStore, useWorkoutSessionStore } from '@/store/workoutStore';
-import { ref, computed, onMounted, PropType } from 'vue';
-import { FullWorkoutSession } from '@/types';
+import { useWorkoutStore, useWorkoutPlanStore, useWorkoutSessionStore } from '@/store/workoutStore';
+import { ref, onMounted, PropType } from 'vue';
 
 const props = defineProps({
     workoutId: {
@@ -27,27 +25,9 @@ const props = defineProps({
 });
 
 const workoutStore = useWorkoutStore();
-const workoutSessionStore = useWorkoutSessionStore();
 
 const loading = ref<boolean>(true)
 const url = ref<string>()
-
-const workoutSessions = computed(() => {
-    return workoutSessionStore.getFullWorkoutSessionsOfToday;
-});
-
-const isPerformed = (workoutId: string) => {
-  return workoutSessions.value.some((workoutSession) => workoutSession.workout_id == workoutId);
-}
-
-const getWorkoutSession = (workoutId: string): FullWorkoutSession => {
-  const workoutSession = workoutSessions.value.find((workoutSession) => workoutSession.workout_id == workoutId);
-  if (workoutSession) {
-    return workoutSession;
-  } else {
-    return {} as FullWorkoutSession;
-  }
-}
 
 const getRandomExerciseId = () => {
   return props.exerciseIds[Math.floor(Math.random() * props.exerciseIds.length)];
@@ -64,7 +44,7 @@ onMounted(async () => {
 
 <template>
   <BaseCard
-    v-if="!isPerformed(workoutId) && !loading"
+    v-if="!loading"
     title-col-size="12"
     :img_src="url"
     :title="workoutName"
@@ -76,9 +56,4 @@ onMounted(async () => {
     </template>
     <StartWorkoutButton :workoutId="workoutId" />
   </BaseCard>
-  <ResultsCard
-    v-if="Object.keys(getWorkoutSession(workoutId)).length !== 0"
-    :workoutSession="getWorkoutSession(workoutId)"
-  />
- 
 </template>
