@@ -84,6 +84,7 @@
 <style scoped>
   .workout-card {
     --background: none;
+    box-shadow: none;
     margin: 0;
   }
   .exercise-slider { 

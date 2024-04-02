@@ -33,7 +33,7 @@ import { installI18n } from './i18n';
 
 if (isPlatform('android') && !isPlatform('mobileweb')) {
   StatusBar.setStyle({ style: Style.Dark });
-  StatusBar.setBackgroundColor({ color: '#000000' });
+  StatusBar.setBackgroundColor({ color: '#111827' });
 }
 
 const pinia = createPinia();

@@ -56,7 +56,7 @@
 .avatar-wrapper {
   display: flex;
   justify-content: center;
-  background-color: black;
+  background-color: var(--ion-background-color);
   :is(img) {
     width: 30px;
     height: 30px;

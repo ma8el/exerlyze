@@ -34,7 +34,7 @@
       foregroundBorderRadius = [0, 0, 0, 0];
     }
   return ({
-    backgroundColor: '#1E1F24',
+    backgroundColor: '#1c253a',
     grid: { show: false, top: '0%', left: '0%', right: '0%', bottom: '0%', containerLabel: false },
     xAxis: {
       type: 'value',

@@ -86,7 +86,7 @@
 
 <style scoped lang="scss">
 .carbs {
-  color: var(--ion-color-primary);
+  color: #3F63C8;
   font-size: 13px;
   margin-bottom: 10px;
 }

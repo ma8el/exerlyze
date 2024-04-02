@@ -331,7 +331,7 @@
       </ion-item>
 
       <ion-list class="settings-list" lines="none" :inset="true">
-          <ion-item slot="header" color="light">
+          <ion-item slot="header">
             <ion-label>{{ $t('workoutSettings') }}</ion-label>
           </ion-item>
  

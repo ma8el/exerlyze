@@ -49,7 +49,7 @@ const getOptions = () => {
         color: 'white',
       },
     },
-    backgroundColor: '#1E1F24',
+    backgroundColor: '#1c253a',
     parallelAxis: [
       { dim: 0, name: schema[0].text, min: 0, max: maxValue},
       { dim: 1, name: schema[1].text, min: 0, max: maxValue},

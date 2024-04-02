@@ -154,15 +154,15 @@ ion-tabs{
 			content: " ";
 			width: 100%;
 			bottom: 0;
-			background: var(--ion-color-light);
+			background: var(--ion-color-dark);
 			height: env(safe-area-inset-bottom);
 			position: absolute;
 		}
 		ion-tab-button {
-			--background: var(--ion-color-light);
+			--background: var(--ion-color-dark);
 		}
 		ion-tab-button.md {
-			--background: var(--ion-color-light);
+			--background: var(--ion-color-dark);
       font-size: 0.5rem;
       :is(ion-icon) {
         font-size: 2rem;
@@ -180,7 +180,7 @@ ion-tabs{
 			width: 80px;
 			margin-top: 19px;
 			path{
-				fill:  var(--ion-color-light);
+				fill:  var(--ion-color-dark);
 			}		
 		}
 	}

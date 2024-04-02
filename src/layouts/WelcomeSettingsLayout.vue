@@ -88,6 +88,7 @@ onMounted(() => {
 <style scoped lang="scss">
 ion-header {
   position: absolute;
+  box-shadow: none;
   z-index: 1;
  ion-toolbar {
     padding: 10px 0 20px 0;

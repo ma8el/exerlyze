@@ -91,7 +91,7 @@
     </ion-item-option>
     <ion-item-option 
       @click="deleteFoodItem"
-      color="secondary"
+      color="danger"
       class="last-entry"
     >
       <ion-icon slot="icon-only" :icon="trashOutline"></ion-icon>
@@ -126,6 +126,7 @@ ion-item-sliding {
     margin-bottom: 10px;
     width: 25px;
     height: 25px;
+    color: white;
   }
 }
 
