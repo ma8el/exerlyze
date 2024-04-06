@@ -32,8 +32,6 @@
   });
 
   const getWorkoutSession = (workoutId: string): FullWorkoutSession => {
-    console.log(workoutSessions.value)
-    console.log(plannedWorkouts.value)
     const workoutSession = workoutSessions.value.find((workoutSession) => workoutSession.workout_id == workoutId);
     if (workoutSession) {
       return workoutSession;
