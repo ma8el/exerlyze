@@ -14,7 +14,7 @@ import { ref, computed } from 'vue';
 import { useStorage } from '@vueuse/core';
 import { useUserSettingsStore } from './userSettingsStore';
 import { getDayIndex } from '@/helpers/time';
-import { WorkoutMediaDB } from '@/db';
+import { MuscleDB, WorkoutMediaDB } from '@/db';
 import { getBucketUrlFromTable, getSignedObjectUrl, downloadObject, defaultImage } from '@/composables/supabase';
 
 export const useDayOfWeekStore = defineStore({
@@ -109,15 +109,23 @@ export const useDayOfWeekStore = defineStore({
 });
 
 export const useMuscleStore = defineStore('muscle', () => {
-    const muscles = ref(useStorage('muscles', [] as any[]))
+    const muscles = ref([] as Muscle[])
 
-    const getMuscles = computed(() => muscles.value)
+    const getMuscles = computed(() => {
+        if (muscles.value.length === 0) {
+            const muscleDB = new MuscleDB()
+            muscleDB.muscles.toArray().then((data) => {
+                muscles.value = data
+            })
+        }
+        return muscles.value
+    })
 
     async function getMuscleById(id: number): Promise<Muscle | undefined> {
-        if (muscles.value.length === 0) {
+        if (getMuscles.value.length === 0) {
             await fetchMuscles()
         }
-        return muscles.value.find(w => w.id === id)
+        return getMuscles.value.find(w => w.id === id)
     }
 
     async function getMuscleNameById(id: number): Promise<string | undefined> {
@@ -138,11 +146,12 @@ export const useMuscleStore = defineStore('muscle', () => {
     }
 
     async function fetchMuscles() {
-        const { data, error } = await supabase.from('muscles').select('id, created_at, updated_at, name_en, name_de, name_fr')
+        const { data, error } = await supabase.from('muscles').select('id, created_at, updated_at, name_en, name_de, name_fr').returns<Muscle[]>()
+        const muscleDB = new MuscleDB()
         if (error) {
             console.error(error)
         } else {
-            muscles.value = data
+            muscleDB.muscles.bulkPut(data)
         }
     }
     return {
