@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
-import { useWorkoutStore, useWorkoutPlanStore } from '@/store/workoutStore';
+import { useWorkoutStore, useWorkoutPlanStore, useWorkoutSessionStore } from '@/store/workoutStore';
 import { onMounted } from 'vue';
 
 const workoutStore = useWorkoutStore();
 const workoutPlanStore = useWorkoutPlanStore();
+const workoutSessionStore = useWorkoutSessionStore();
 
 workoutStore.$subscribe(() => {
   workoutStore.saveWorkoutsToIndexDB();
@@ -14,9 +15,14 @@ workoutPlanStore.$subscribe(() => {
   workoutPlanStore.saveWorkoutPlansToIndexDB();
 });
 
+workoutSessionStore.$subscribe(() => {
+  workoutSessionStore.saveWorkoutSessionsToIndexDB();
+});
+
 onMounted(() => {
   workoutStore.loadWorkoutsFromIndexDB();
   workoutPlanStore.loadWorkoutPlansFromIndexDB();
+  workoutSessionStore.loadWorkoutSessionsFromIndexDB();
 });
 </script>
 

@@ -713,8 +713,26 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
 })
 
 export const useWorkoutSessionStore = defineStore('workoutSession', () => {
-    const workoutSessions = ref(useStorage('workoutSessions', [] as WorkoutSession[]))
-    const workoutSessionPerformances = ref(useStorage('workoutSessionPerformance', [] as WorkoutSessionPerformance[]))
+    const workoutSessions = ref<WorkoutSession[]>([])
+    const workoutSessionPerformances = ref<WorkoutSessionPerformance[]>([])
+
+    function saveWorkoutSessionsToIndexDB() {
+        const workoutDB = new WorkoutDB()
+        const plainWorkoutSessions = JSON.parse(JSON.stringify(workoutSessions.value))
+        const plainWorkoutSessionPerformances = JSON.parse(JSON.stringify(workoutSessionPerformances.value))
+        workoutDB.workoutSessions.bulkPut(plainWorkoutSessions)
+        workoutDB.workoutSessionPerformances.bulkPut(plainWorkoutSessionPerformances)
+    }
+
+    function loadWorkoutSessionsFromIndexDB() {
+        const workoutDB = new WorkoutDB()
+        workoutDB.workoutSessions.toArray().then((data) => {
+            workoutSessions.value = data
+        })
+        workoutDB.workoutSessionPerformances.toArray().then((data) => {
+            workoutSessionPerformances.value = data
+        })
+    }
 
     const getWorkoutSessions = computed(() => workoutSessions.value)
     const getWorkoutSessionPerformances = computed(() => workoutSessionPerformances.value)
@@ -993,6 +1011,8 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
 
     return {
         workoutSessions,
+        saveWorkoutSessionsToIndexDB,
+        loadWorkoutSessionsFromIndexDB,
         workoutSessionPerformances,
         getWorkoutSessions,
         getWorkoutSessionPerformances,
