@@ -14,8 +14,11 @@ import { ref, computed } from 'vue';
 import { useStorage } from '@vueuse/core';
 import { useUserSettingsStore } from './userSettingsStore';
 import { getDayIndex } from '@/helpers/time';
-import { MuscleDB, WorkoutMediaDB } from '@/db';
-import { getBucketUrlFromTable, getSignedObjectUrl, downloadObject, defaultImage } from '@/composables/supabase';
+import { MuscleDB, WorkoutMediaDB, WorkoutDB } from '@/db';
+import { getBucketUrlFromTable,
+         getSignedObjectUrl,
+         downloadObject,
+         defaultImage } from '@/composables/supabase';
 
 export const useDayOfWeekStore = defineStore({
     id: 'dayOfWeek',
@@ -164,12 +167,25 @@ export const useMuscleStore = defineStore('muscle', () => {
 })
 
 export const useWorkoutStore = defineStore('workout', () => {
-    const workouts = ref(useStorage('workouts', [] as Workout[]))
+    const workouts = ref([] as Workout[])
 
     const getWorkouts = computed(() => workouts.value.filter(w => !w.deleted))
 
     function getNewId() {
         return uuidv4()
+    }
+
+    function saveWorkoutsToIndexDB() {
+        const workoutDB = new WorkoutDB()
+        const plainWorkouts = JSON.parse(JSON.stringify(workouts.value))
+        workoutDB.workouts.bulkPut(plainWorkouts)
+    }
+
+    function loadWorkoutsFromIndexDB() {
+        const workoutDB = new WorkoutDB()
+        workoutDB.workouts.toArray().then((data) => {
+            workouts.value = data
+        })
     }
 
     function getWorkoutById(id: string): Workout | undefined {
@@ -406,6 +422,8 @@ export const useWorkoutStore = defineStore('workout', () => {
         workouts,
         getWorkouts,
         getNewId,
+        saveWorkoutsToIndexDB,
+        loadWorkoutsFromIndexDB,
         getWorkoutById,
         addWorkout,
         cacheWorkoutImage,
