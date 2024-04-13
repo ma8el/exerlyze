@@ -438,14 +438,32 @@ export const useWorkoutStore = defineStore('workout', () => {
 })
 
 export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
-    const workoutPlans = ref(useStorage('workoutPlans', [] as WorkoutPlan[]))
-    const plannedWorkouts = ref(useStorage('plannedWorkouts', [] as PlannedWorkout[]))
+    const workoutPlans = ref<WorkoutPlan[]>([])
+    const plannedWorkouts = ref<PlannedWorkout[]>([])
 
     const getPlannedWorkouts = computed(() => plannedWorkouts.value.filter(w => !w.deleted))
     const getWorkoutPlans = computed(() => workoutPlans.value.filter(w => !w.deleted))
 
     function getNewId() {
         return uuidv4()
+    }
+
+    function saveWorkoutPlansToIndexDB() {
+        const workoutDB = new WorkoutDB()
+        const plainWorkoutPlans = JSON.parse(JSON.stringify(workoutPlans.value))
+        const plainPlanndedWorkouts = JSON.parse(JSON.stringify(plannedWorkouts.value))
+        workoutDB.workoutPlans.bulkPut(plainWorkoutPlans)
+        workoutDB.plannedWorkouts.bulkPut(plainPlanndedWorkouts)
+    }
+
+    function loadWorkoutPlansFromIndexDB() {
+        const workoutDB = new WorkoutDB()
+        workoutDB.workoutPlans.toArray().then((data) => {
+            workoutPlans.value = data
+        })
+        workoutDB.plannedWorkouts.toArray().then((data) => {
+            plannedWorkouts.value = data
+        })
     }
 
     const getFullWorkoutPlans = computed(() => {
@@ -670,6 +688,8 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
     return {
         workoutPlans,
         getWorkoutPlans,
+        loadWorkoutPlansFromIndexDB,
+        saveWorkoutPlansToIndexDB,
         getFullWorkoutPlansOfToday,
         getFullWorkoutPlans,
         getNewId,

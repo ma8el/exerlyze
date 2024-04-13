@@ -1,16 +1,22 @@
 <script setup lang="ts">
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
-import { useWorkoutStore } from '@/store/workoutStore';
+import { useWorkoutStore, useWorkoutPlanStore } from '@/store/workoutStore';
 import { onMounted } from 'vue';
 
 const workoutStore = useWorkoutStore();
+const workoutPlanStore = useWorkoutPlanStore();
 
 workoutStore.$subscribe(() => {
   workoutStore.saveWorkoutsToIndexDB();
 });
 
+workoutPlanStore.$subscribe(() => {
+  workoutPlanStore.saveWorkoutPlansToIndexDB();
+});
+
 onMounted(() => {
   workoutStore.loadWorkoutsFromIndexDB();
+  workoutPlanStore.loadWorkoutPlansFromIndexDB();
 });
 </script>
 

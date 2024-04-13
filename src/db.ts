@@ -1,5 +1,5 @@
 import Dexie from 'dexie';
-import { Muscle, Workout } from '@/types';
+import { Muscle, Workout, WorkoutPlan, PlannedWorkout } from '@/types';
 
 interface WorkoutImage {
     exercise_id: number;
@@ -35,12 +35,14 @@ export class MuscleDB extends Dexie {
 
 export class WorkoutDB extends Dexie {
     workouts!: Dexie.Table<Workout, string>;
+    workoutPlans!: Dexie.Table<WorkoutPlan, string>;
+    plannedWorkouts!: Dexie.Table<PlannedWorkout, string>;
     constructor() {
         super('WorkoutDB');
         this.version(1).stores({
             workouts: '++id, created_at, updated_at, name, description, exercises, deleted',
-            workoutPlan: '++id, created_at, updated_at, name, description, deleted',
-            plannedWorkout: '++id, workout_id, workout_plan_id, day_of_week_id, time_of_day, deleted',
+            workoutPlans: '++id, created_at, updated_at, name, description, deleted',
+            plannedWorkouts: '++id, workout_id, workout_plan_id, day_of_week_id, time_of_day, deleted',
         });
     }
 };
