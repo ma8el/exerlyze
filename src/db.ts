@@ -6,6 +6,7 @@ import { Muscle,
          WorkoutSession,
          WorkoutSessionPerformance
          } from '@/types';
+import { FoodDiaryEntry, DailyNutritionGoal } from '@/types/nutrition';
 
 interface WorkoutImage {
     exercise_id: number;
@@ -56,3 +57,15 @@ export class WorkoutDB extends Dexie {
         });
     }
 };
+
+export class NutritionDB extends Dexie {
+    foodDiaryEntries!: Dexie.Table<FoodDiaryEntry, string>;
+    dailyNutritionGoals!: Dexie.Table<DailyNutritionGoal, string>;
+    constructor() {
+        super('NutritionDB');
+        this.version(1).stores({
+            foodDiaryEntries: '++id, created_at, food_id, food_name, quantity, unit, calories, carbohydrates, protein, fat, fiber, sugar, salt, sodium, image_front_thumb_url, deleted',
+            dailyNutritionGoals: '++id, created_at, nutrition_goal, daily_calories, daily_carbs, daily_protein, daily_fat',
+        });
+    }
+}
