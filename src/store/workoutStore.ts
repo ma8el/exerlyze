@@ -11,7 +11,6 @@ import { Workout,
          WorkoutSessionPerformance,
          FullWorkoutSession } from '@/types';
 import { ref, computed } from 'vue';
-import { useStorage } from '@vueuse/core';
 import { useUserSettingsStore } from './userSettingsStore';
 import { getDayIndex } from '@/helpers/time';
 import { MuscleDB, WorkoutMediaDB, WorkoutDB } from '@/db';
@@ -345,7 +344,7 @@ export const useWorkoutStore = defineStore('workout', () => {
         if (session.data.session !== null) {
             const { data, error } = await supabase.from('workouts').
                                                    select(`*, exercises:workout_exercises(*, name:exercises(name_${locale}))`).
-                                                   eq('deleted', false).
+//                                                   eq('deleted', false).
                                                    returns<Workout[]>()
             if (error) {
                 console.error(error)
@@ -741,6 +740,7 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
         const workoutStore = useWorkoutStore()
         return workoutSessions.value.map(w => {
             const workout = workoutStore.getWorkoutById(w.workout_id)
+            console.log(w.workout_id, workout)
             if (workout) {
                 return {
                     ...w,
