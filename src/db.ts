@@ -1,5 +1,6 @@
 import Dexie from 'dexie';
-import { Muscle,
+import { User,
+         Muscle,
          Workout,
          WorkoutPlan,
          PlannedWorkout,
@@ -17,6 +18,16 @@ interface WorkoutVideo {
     exercise_id: number;
     video: Blob;
 }
+
+export class UserDB extends Dexie {
+    user!: Dexie.Table<User, string>;
+    constructor() {
+        super('UserDB');
+        this.version(1).stores({
+            user: '++id, created_at, updated_at, userName, height, gender, dateOfBirth',
+        });
+    }
+};
 
 export class WorkoutMediaDB extends Dexie {
     workoutImages!: Dexie.Table<WorkoutImage, number>;

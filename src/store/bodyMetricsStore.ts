@@ -1,7 +1,8 @@
 import { supabase } from "@/supabase";
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
-import { Weight } from "@/types";
+import { UserDB } from "@/db";
+import { User, Weight } from "@/types";
 import { computed, ref } from "vue";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -81,12 +82,21 @@ export const useWeightStore = defineStore('weight', () => {
 })
 
 export const useUserStore = defineStore('userStore', () => {
-    const userName = useStorage('userName', ref<string | undefined>());
-    const gender = useStorage('gender', ref<string | undefined>());
-    const dateOfBirth = useStorage('dateOfBirth', ref<Date>(new Date()));
-    const height = useStorage('height', ref<number | string | undefined>());
-    const updated_at = useStorage('updated_at', ref<Date>(new Date()));
-    const created_at = useStorage('created_at', ref<Date>(new Date()));
+    const user = ref<User>({
+        created_at: new Date(),
+        updated_at: new Date(),
+        userName: 'Anonymous',
+        height: 0,
+        gender: 'male',
+        dateOfBirth: new Date(),
+    })
+    const userName = computed(() => user.value?.userName)
+    const gender = computed(() => user.value?.gender)
+    const dateOfBirth = computed(() => user.value?.dateOfBirth)
+    const height = computed(() => user.value?.height)
+    const updated_at = computed(() => user.value?.updated_at)
+    const created_at = computed(() => user.value?.created_at)
+
     const isComplete = computed(() => {
         if (userName.value === "undefined"
             || userName.value === undefined) {
@@ -99,12 +109,29 @@ export const useUserStore = defineStore('userStore', () => {
         if (dateOfBirth.value === undefined) {
             return false
         }
-        if (height.value === undefined
-            || height.value === "undefined") {
+        if (height.value === undefined) {
+//            || height.value === "undefined") {
             return false
         }
         return true
     })
+
+    const saveUserToIndexDB = () => {
+        const db = new UserDB()
+        const plainUser = JSON.parse(JSON.stringify(user.value))
+        db.user.put(plainUser)
+    }
+
+    const loadUserFromIndexDB = () => {
+        const db = new UserDB()
+        db.user.toArray().then((userData) => {
+            if (userData.length === 0) {
+                return
+            }
+            user.value = userData[0]
+        })
+    }
+
     const getUserName = (): string => {
         if (userName.value === undefined
             || userName.value === "undefined") {
@@ -116,6 +143,9 @@ export const useUserStore = defineStore('userStore', () => {
         return gender.value
     }
     const getDateOfBirth = (): Date => {
+        if (dateOfBirth.value === undefined) {
+            return new Date()
+        }
         return new Date(dateOfBirth.value)
     }
     const getAge = (): number | undefined => {
@@ -132,27 +162,28 @@ export const useUserStore = defineStore('userStore', () => {
         return age
     }
     const getHeight = (): number => {
-        if (height.value === undefined
-            || height.value === "undefined") {
+        if (height.value === undefined) {
+//            || height.value === "undefined") {
             return 0
         }
         return Number(height.value)
     }
     const setUserName = (name: string) => {
-        userName.value = name
-        updated_at.value = new Date()
+        console.log(user)
+        user.value.userName = name
+        user.value.updated_at = new Date()
     }
     const setGender = (selectedGender: string) => {
-        gender.value = selectedGender
-        updated_at.value = new Date()
+        user.value.gender = selectedGender
+        user.value.updated_at = new Date()
     }
     const setDateOfBirth = (selectedDateOfBirth: Date) => {
-        dateOfBirth.value = new Date(selectedDateOfBirth)
-        updated_at.value = new Date()
+        user.value.dateOfBirth = new Date(selectedDateOfBirth)
+        user.value.updated_at = new Date()
     }
     const setHeight = (selectedHeight: number) => {
-        height.value = selectedHeight
-        updated_at.value = new Date()
+        user.value.height = selectedHeight
+        user.value.updated_at = new Date()
     }
     const fetchUser = async () => {
         const session = await supabase.auth.getSession()
@@ -162,11 +193,11 @@ export const useUserStore = defineStore('userStore', () => {
             console.log(error)
             return
           }
-          if (updated_at.value < data.updated_at) {
-            userName.value = data.username
-            gender.value = data.gender
-            dateOfBirth.value = new Date(data.date_of_birth)
-            height.value = data.height
+          if (user.value && user.value.updated_at < data.updated_at) {
+            user.value.userName = data.username
+            user.value.gender = data.gender
+            user.value.dateOfBirth = new Date(data.date_of_birth)
+            user.value.height = data.height
           }
         }
     }
@@ -186,11 +217,14 @@ export const useUserStore = defineStore('userStore', () => {
         }
     }
     return {
+        user,
         userName,
         gender,
         dateOfBirth,
         height,
         isComplete,
+        saveUserToIndexDB,
+        loadUserFromIndexDB,
         getUserName,
         getGender,
         getDateOfBirth,
