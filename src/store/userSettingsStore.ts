@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { useStorage } from '@vueuse/core';
 import { ref } from 'vue';
 import { UserFitnessLevel } from '@/types';
+import { WorkoutDB } from '@/db';
 
 export const useUserSettingsStore = defineStore('userSettings', () => {
     const locale = useStorage('selectedLocale', ref<string | undefined>())
@@ -25,8 +26,22 @@ export const useUserSettingsStore = defineStore('userSettings', () => {
     }
 })
 
+const workoutDB = new WorkoutDB()
+
 export const useUserFitnessLevelStore = defineStore('userFitnessLevel', () => {
-    const userFitnessLevel = useStorage('userFitnessLevel', ref<UserFitnessLevel[]>([]))
+    const userFitnessLevel = ref<UserFitnessLevel[]>([])
+
+    function saveFitnessLevelToIndexDB() {
+        const plainFitnessLevel = JSON.parse(JSON.stringify(userFitnessLevel.value))
+        workoutDB.userFitnessLevel.bulkPut(plainFitnessLevel)
+    }
+
+    function loadFitnessLevelFromIndexDB() {
+        workoutDB.userFitnessLevel.toArray().then((data) => {
+            userFitnessLevel.value = data
+        })
+    }
+
     const setUserFitnessLevel = (newUserFitnessLevel: UserFitnessLevel) => {
         userFitnessLevel.value.push(newUserFitnessLevel)
         pushUserFitnessLevels([newUserFitnessLevel])
@@ -55,7 +70,6 @@ export const useUserFitnessLevelStore = defineStore('userFitnessLevel', () => {
         if (error) {
             console.error(error)
         } else {
-
             const mergedData: UserFitnessLevel[] = [...getUserFitnessLevel()];
             for (const fitnessLevel of data) {
                 const existingIndex = mergedData.findIndex((item) => item.id === fitnessLevel.id);
@@ -95,6 +109,9 @@ export const useUserFitnessLevelStore = defineStore('userFitnessLevel', () => {
         await pushUserFitnessLevels(userFitnessLevel.value)
     }
     return {
+        userFitnessLevel,
+        saveFitnessLevelToIndexDB,
+        loadFitnessLevelFromIndexDB,
         getUserFitnessLevel,
         hasExistingFitnessLevel,
         setUserFitnessLevel,

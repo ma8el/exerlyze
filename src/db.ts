@@ -6,7 +6,8 @@ import { User,
          PlannedWorkout,
          WorkoutSession,
          WorkoutSessionPerformance,
-         Weight
+         Weight,
+         UserFitnessLevel
          } from '@/types';
 import { FoodDiaryEntry, DailyNutritionGoal } from '@/types/nutrition';
 
@@ -60,6 +61,7 @@ export class WorkoutDB extends Dexie {
     plannedWorkouts!: Dexie.Table<PlannedWorkout, string>;
     workoutSessions!: Dexie.Table<WorkoutSession, string>;
     workoutSessionPerformances!: Dexie.Table<WorkoutSessionPerformance, string>;
+    userFitnessLevel!: Dexie.Table<UserFitnessLevel, string>;
     constructor() {
         super('WorkoutDB');
         this.version(1).stores({
@@ -68,6 +70,7 @@ export class WorkoutDB extends Dexie {
             plannedWorkouts: '++id, workout_id, workout_plan_id, day_of_week_id, time_of_day, deleted',
             workoutSessions: '++id, workout_id, created_at, updated_at, scheduled_at, started_at, finished_at, notes',
             workoutSessionPerformances: '++id, workout_session_id, exercise_id, sets, reps, weight, unit, duration, distance, deleted',
+            userFitnessLevel: '++id, created_at, fitness_level, deadlift_max, squat_max, bench_max, overhead_press_max, other',
         });
     }
 };
