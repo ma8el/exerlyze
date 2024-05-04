@@ -1,13 +1,12 @@
 import { supabase } from "@/supabase";
 import { defineStore } from "pinia";
-import { useStorage } from "@vueuse/core";
 import { UserDB } from "@/db";
 import { User, Weight } from "@/types";
 import { computed, ref } from "vue";
 import { v4 as uuidv4 } from 'uuid';
 
 export const useWeightStore = defineStore('weight', () => {
-    const weights = ref(useStorage('weights', [] as Weight[]))
+    const weights = ref<Weight[]>([])
     const getWeights = computed(() => weights.value)
     const currentWeight = computed(() => {
         return weights.value.reduce((prev, current) => {
@@ -19,6 +18,19 @@ export const useWeightStore = defineStore('weight', () => {
         const weekAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7)
         return weights.value.filter(weight => new Date(weight.created_at) >= weekAgo)
     })
+
+    function saveWeightsToIndexDB() {
+        const db = new UserDB()
+        const plainWeights = JSON.parse(JSON.stringify(weights.value))
+        db.weights.bulkPut(plainWeights)
+    }
+
+    function loadWeightsFromIndexDB() {
+        const db = new UserDB()
+        db.weights.toArray().then((weightData) => {
+            weights.value = weightData
+        })
+    }
 
     async function fetchWeights() {
         const session = await supabase.auth.getSession()
@@ -74,6 +86,8 @@ export const useWeightStore = defineStore('weight', () => {
         weights,
         getWeights,
         getWeightsOfWeek,
+        saveWeightsToIndexDB,
+        loadWeightsFromIndexDB,
         fetchWeights,
         syncWeights,
         getNewId,

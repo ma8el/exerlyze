@@ -5,7 +5,8 @@ import { User,
          WorkoutPlan,
          PlannedWorkout,
          WorkoutSession,
-         WorkoutSessionPerformance
+         WorkoutSessionPerformance,
+         Weight
          } from '@/types';
 import { FoodDiaryEntry, DailyNutritionGoal } from '@/types/nutrition';
 
@@ -21,10 +22,12 @@ interface WorkoutVideo {
 
 export class UserDB extends Dexie {
     user!: Dexie.Table<User, string>;
+    weights!: Dexie.Table<Weight, string>;
     constructor() {
         super('UserDB');
         this.version(1).stores({
             user: '++id, created_at, updated_at, userName, height, gender, dateOfBirth',
+            weights: '++id, weight, created_at, updated_at, unit',
         });
     }
 };
