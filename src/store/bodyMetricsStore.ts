@@ -183,7 +183,6 @@ export const useUserStore = defineStore('userStore', () => {
         return Number(height.value)
     }
     const setUserName = (name: string) => {
-        console.log(user)
         user.value.userName = name
         user.value.updated_at = new Date()
     }

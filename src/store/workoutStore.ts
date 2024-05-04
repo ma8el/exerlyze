@@ -740,7 +740,6 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
         const workoutStore = useWorkoutStore()
         return workoutSessions.value.map(w => {
             const workout = workoutStore.getWorkoutById(w.workout_id)
-            console.log(w.workout_id, workout)
             if (workout) {
                 return {
                     ...w,
