@@ -303,6 +303,7 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
 
     return {
         foodDiaryEntries,
+        dailyNutritionGoals,
         selectedNutritionGoal,
         dailyCalories,
         dailyCarbs,
