@@ -98,7 +98,7 @@ export const useWeightStore = defineStore('weight', () => {
 export const useUserStore = defineStore('userStore', () => {
     const user = ref<User>({
         created_at: new Date(),
-        updated_at: new Date(),
+        updated_at: new Date('1970-01-01T00:00:00.000Z'),
         userName: 'Anonymous',
         height: 0,
         gender: 'male',
@@ -206,7 +206,7 @@ export const useUserStore = defineStore('userStore', () => {
             console.log(error)
             return
           }
-          if (user.value && user.value.updated_at < data.updated_at) {
+          if (user.value && user.value.updated_at < new Date(data.updated_at)) {
             user.value.userName = data.username
             user.value.gender = data.gender
             user.value.dateOfBirth = new Date(data.date_of_birth)
