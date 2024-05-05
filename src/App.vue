@@ -40,7 +40,6 @@ weightStore.$subscribe(() => {
 });
 
 userFitnessLevelStore.$subscribe(() => {
-  console.log(userFitnessLevelStore.userFitnessLevel)
   userFitnessLevelStore.saveFitnessLevelToIndexDB();
 });
 
