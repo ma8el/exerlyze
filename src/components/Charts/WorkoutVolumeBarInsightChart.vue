@@ -187,11 +187,6 @@ watch([startDate, endDate], async () => {
   await reloadData();
 });
 
-//watch(props.selectedExercise, async () => {
-//  console.log(props.selectedExercise)
-//  await reloadData();
-//});
-
 onMounted(async () => {
   await reloadData();
 });

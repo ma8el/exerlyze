@@ -1,25 +1,17 @@
 import { v4 as uuidv4 } from "uuid";
 import { supabase } from "@/supabase";
 import { defineStore } from "pinia";
-import { useStorage } from "@vueuse/core";
-import { FoodDiaryEntry } from "@/types/nutrition";
+import { FoodDiaryEntry, DailyNutritionGoal } from "@/types/nutrition";
 import { ref, computed } from "vue";
 import { useUserStore, useWeightStore } from "@/store/bodyMetricsStore";
 import { NutritionGoal } from '@/types/nutrition.enums';
+import { NutritionDB } from '@/db';
 
-interface DailyNutritionGoal {
-    id: string;
-    created_at: Date;
-    nutrition_goal: NutritionGoal;
-    daily_calories: number;
-    daily_carbs: number;
-    daily_protein: number;
-    daily_fat: number;
-}
 
 export const useFoodDiaryStore = defineStore('nutriment', () => {
-    const foodDiaryEntries = ref(useStorage('foodDiaryEntries', [] as FoodDiaryEntry[]))
-    const dailyNutritionGoals = ref(useStorage('dailyNutritionGoals', [] as DailyNutritionGoal[]))
+    const foodDiaryEntries = ref([] as FoodDiaryEntry[])
+    const dailyNutritionGoals = ref([] as DailyNutritionGoal[])
+
     const latestDailyNutritionGoal = computed(() => {
         const defaultCalories = calculateBaseCalories()
         const defaultMacros = calculateBaseMacros(defaultCalories)
@@ -54,6 +46,32 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
 
     function getUniqueId() {
         return uuidv4()
+    }
+
+    function saveNutritionGoalToIndexDB() {
+        const nutritionDB = new NutritionDB()
+        const plainNutritionGoals = JSON.parse(JSON.stringify(dailyNutritionGoals.value))
+        nutritionDB.dailyNutritionGoals.bulkPut(plainNutritionGoals)
+    }
+
+    function saveFoodDiaryEntriesToIndexDB() {
+        const nutritionDB = new NutritionDB()
+        const plainFoodDiaryEntries = JSON.parse(JSON.stringify(foodDiaryEntries.value))
+        nutritionDB.foodDiaryEntries.bulkPut(plainFoodDiaryEntries)
+    }
+
+    function loadNutritionGoalFromIndexDB() {
+        const nutritionDB = new NutritionDB()
+        nutritionDB.dailyNutritionGoals.toArray().then((data) => {
+            dailyNutritionGoals.value = data
+        })
+    }
+
+    function loadFoodDiaryEntriesFromIndexDB() {
+        const nutritionDB = new NutritionDB()
+        nutritionDB.foodDiaryEntries.toArray().then((data) => {
+            foodDiaryEntries.value = data
+        })
     }
 
     function calculateBaseCalories() {
@@ -285,6 +303,7 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
 
     return {
         foodDiaryEntries,
+        dailyNutritionGoals,
         selectedNutritionGoal,
         dailyCalories,
         dailyCarbs,
@@ -294,6 +313,10 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         getRecentlyAddedFoodIds,
         latestDailyNutritionGoal,
         dailyNutritionGoalComplete,
+        saveNutritionGoalToIndexDB,
+        saveFoodDiaryEntriesToIndexDB,
+        loadNutritionGoalFromIndexDB,
+        loadFoodDiaryEntriesFromIndexDB,
         addDailyNutritionGoal,
         calculateBaseCalories,
         calculateBaseMacros,

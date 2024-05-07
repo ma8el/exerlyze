@@ -1,4 +1,12 @@
 import { FitnessLevel } from "@/types/workout.enums";
+interface User {
+    created_at: Date;
+    updated_at: Date;
+    userName: string;
+    height: number;
+    gender: string;
+    dateOfBirth: Date;
+}
 export interface UserFitnessLevel {
     id: string;
     created_at: Date;

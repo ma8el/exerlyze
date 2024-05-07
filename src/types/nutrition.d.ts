@@ -54,3 +54,13 @@ export interface FoodDiaryEntry {
     image_front_thumb_url: string,
     deleted: boolean,
 }
+
+export interface DailyNutritionGoal {
+    id: string;
+    created_at: Date;
+    nutrition_goal: NutritionGoal;
+    daily_calories: number;
+    daily_carbs: number;
+    daily_protein: number;
+    daily_fat: number;
+}
