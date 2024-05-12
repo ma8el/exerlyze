@@ -283,9 +283,9 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
             await fetchDailyNutritionGoals()
-            for (const dailyNutritionGoal of dailyNutritionGoals.value) {
-                await supabase.from('daily_nutrition_goals').upsert(dailyNutritionGoal)
-                // Add error handling as needed
+            const { error } = await supabase.from('daily_nutrition_goals').upsert(dailyNutritionGoals.value)
+            if (error) {
+                console.error(error)
             }
         }
     }
@@ -294,9 +294,9 @@ export const useFoodDiaryStore = defineStore('nutriment', () => {
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
             await fetchFoodDiaryEntries()
-            for (const foodDiaryEntry of foodDiaryEntries.value) {
-                await supabase.from('food_diary_entries').upsert(foodDiaryEntry)
-                // Add error handling as needed
+            const { error } = await supabase.from('food_diary_entries').upsert(foodDiaryEntries.value)
+            if (error) {
+                console.error(error)
             }
         }
     }
