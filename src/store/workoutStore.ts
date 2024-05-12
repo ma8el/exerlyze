@@ -999,13 +999,20 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
         if (session.data.session !== null) {
             await fetchWorkoutSessions()
             await fetchWorkoutSessionPerformances()
-            for (const workoutSession of workoutSessions.value) {
-                await pushWorkoutSession(workoutSession)
+            const { error: sessionError } = await supabase
+                .from('workout_sessions')
+                .upsert(workoutSessions.value)
+            if (sessionError) {
+                console.error(sessionError)
             }
-            for (const workoutSessionPerformance of workoutSessionPerformances.value) {
-                await pushWorkoutSessionPerformance(workoutSessionPerformance)
+
+            const { error } = await supabase
+                .from('workout_session_performances')
+                .upsert(workoutSessionPerformances.value)
+            if (error) {
+                console.error(error)
             }
-        }
+       }
     }
 
     return {
