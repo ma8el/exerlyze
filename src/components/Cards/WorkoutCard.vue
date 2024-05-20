@@ -1,15 +1,45 @@
 <script setup lang="ts">
-  import { modalController, IonCol, IonButton} from '@ionic/vue';
+  import { modalController, IonButton} from '@ionic/vue';
   import AddWorkoutModal from '../Modals/AddWorkoutModal.vue';
   import BaseCard from '@/components/Cards/BaseCard.vue';
   import Slider from '@/components/Slider.vue';
   import ExerciseCard from './ExerciseCard.vue';
   import { Workout } from '@/types';
+  import { useUserSettingsStore } from '@/store/userSettingsStore';
+  import { ref, computed } from 'vue';
 
   const props = defineProps<Workout>()
 
+  const userSettingsStore = useUserSettingsStore()
+  const locale = ref<string | undefined>(userSettingsStore.getLocale())
+
+  const titleColSize = computed(() => {
+    if (locale.value === 'en') {
+      return '9'
+    } else if(locale.value === 'de') {
+      return '8'
+    } else if (locale.value === 'fr') {
+      return '9'
+    } else {
+      return '9'
+    }
+  })
+
+  const titleEndColSize = computed(() => {
+    if (locale.value === 'en') {
+      return '3'
+    } else if(locale.value === 'de') {
+      return '4'
+    } else if (locale.value === 'fr') {
+      return '3'
+    } else {
+      return '3'
+    }
+  })
+
   const openModal = async () => {
     const modal = await modalController.create({
+      id: 'add-workout-modal',
       component: AddWorkoutModal,
       componentProps: { workoutId: props.id },
       cssClass: 'full-screen-modal',
@@ -23,13 +53,13 @@
     :title="name"
     :content="true"
     class="workout-card"
+    :title-col-size="titleColSize"
+    :title-end-col-size="titleEndColSize"
   >
     <template #titleEnd>
-      <ion-col offset="4" offset-md="2" offset-lg="1" size="3">
-        <ion-button fill="clear" size="small" class="title-button" @click="openModal()">
-          {{ $t('workouts.viewAll') }}
-        </ion-button>
-      </ion-col>
+      <ion-button fill="clear" size="small" @click="openModal()">
+        {{ $t('workouts.viewAll') }}
+      </ion-button>
     </template>
     <Slider :items="exercises" minWidth="200px" maxWidth="200px" class="exercise-slider">
       <template v-slot:default="slotProps">
@@ -52,11 +82,9 @@
 </template>
 
 <style scoped>
-  .title-button {
-    --color: var(--ion-color-primary);
-  }
   .workout-card {
     --background: none;
+    box-shadow: none;
     margin: 0;
   }
   .exercise-slider { 

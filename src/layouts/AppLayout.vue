@@ -102,19 +102,12 @@
     position: absolute;
     z-index: 1;
     ion-toolbar {
-      --background: none;
-      background-image: url('../../assets/header_background.jpg');
-      background-position: center center;
-      background-size: cover;
       padding: 10px 0 20px 0;
     }
   }
   ion-content {
     border-radius: 10px 10px 0 0;
   	overflow: hidden;
-    --background: none;
-    background-image: url('../../assets/app_background.jpg');
-    background-size: cover;
     z-index: 2;
     top: 70px;
   }

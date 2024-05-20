@@ -2,14 +2,20 @@
   import { v4 as uuidv4 } from 'uuid';
   import { IonReorderGroup,
            IonButton,
+           IonItem,
+           IonLabel,
+           IonToggle,
+           IonIcon,
            modalController } from '@ionic/vue';
-  import { ref, onMounted, computed, watch } from 'vue'
+  import { flameOutline } from 'ionicons/icons';
+  import { ref, onMounted, computed } from 'vue'
   import { useWorkoutStore } from '@/store/workoutStore';
   import AddExerciseButton from '@/components//Buttons/AddExerciseButton.vue'
   import ExerciseItem from '@/components/ExerciseItem.vue';
   import BaseFullPageModal from '@/components/Modals/BaseFullPageModal.vue';
   import WorkoutModal from '@/components/Modals/WorkoutModal.vue';
   import { Exercise, ExerciseSelection, FullWorkoutSessionSet } from '@/types';
+  import { useI18n } from 'vue-i18n';
 
   const props = defineProps({
     workoutId: {
@@ -17,6 +23,8 @@
       required: true
     }
   })
+
+  const { t } = useI18n()
 
   const workoutStore = useWorkoutStore()
   
@@ -27,6 +35,7 @@
   const exercises = ref<Exercise[]>([])
 
   const restTime = ref<number>(60)
+  const addWarmup = ref<boolean>(true)
 
   const exercisesSelected = computed(() => {
     return exercises.value.length > 0
@@ -43,6 +52,7 @@
         workoutId: props.workoutId,
         workoutName: workoutName.value,
         fullWorkoutSessionSets: createFullWorkoutSessionSets(exercises.value),
+        addWarmup: addWarmup.value
       },
       cssClass: 'full-screen-modal',
     });
@@ -115,6 +125,30 @@
         })
       }
     })
+    if (addWarmup.value) {
+      const newSets: FullWorkoutSessionSet[] = [];
+      let lastExerciseId: number | null = null;
+  
+      fullWorkoutSessionSets.forEach((set, index) => {
+        // Check if it's the first set of a new exercise to add a warmup set
+        if (set.exerciseId !== lastExerciseId) {
+          const warmupSet = {
+            ...set,
+            id: `warmup-${set.exerciseId}-${index}`,
+            isWarmup: true,
+            plannedReps: 10,
+            plannedWeight: 10,
+            reps: 10,
+            weight: 10,
+            name: `${t('workouts.warmup')} - ${set.name}`,
+          };
+          newSets.push(warmupSet);
+          lastExerciseId = set.exerciseId;
+        }
+        newSets.push(set);
+      })
+      return newSets
+    }
     return fullWorkoutSessionSets
   }
 
@@ -132,7 +166,17 @@
       <p class="header-title"> {{ workoutName }}</p>
     </template>
     <template #modalContent>
-     <ion-reorder-group :disabled="false" @ionItemReorder="handleReorder($event)">
+      <ion-item lines="none">
+        <ion-icon :icon="flameOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+        <ion-label>{{ $t('workouts.addWarmup') }}</ion-label>
+        <ion-toggle 
+          mode="ios"
+          color="primary"
+          checked
+          v-model="addWarmup"
+        ></ion-toggle>
+      </ion-item>
+      <ion-reorder-group :disabled="false" @ionItemReorder="handleReorder($event)">
         <div v-for="(exercise, index) in exercises" :key="exercise.id">
          <ExerciseItem 
            v-model:sets="exercises[index].sets"

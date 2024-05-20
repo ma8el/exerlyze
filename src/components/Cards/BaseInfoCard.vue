@@ -21,14 +21,18 @@ const props = defineProps({
       type: String,
       required: false,
       default: '0.8rem'
+    },
+    isDark: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   })
 </script>
 
 <template>
   <ion-item
-    class="exercise-item"
-    color="light"
+    :style="`--background: ${isDark ? 'var(--ion-background-color)' : 'var(--ion-item-background)'};`"
   >
     <ion-icon
       class="ion-margin-end exercise-icon"
@@ -52,8 +56,10 @@ const props = defineProps({
 </template>
 
 <style scoped>
-.exercise-item {
-  border-radius: 10px;
+ion-item {
+  --border-radius: 10px;
+  --border-width: 0px;
+  --border-color: #000;
 }
 .exercise-icon {
   width: 25px;

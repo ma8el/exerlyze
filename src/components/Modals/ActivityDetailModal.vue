@@ -61,11 +61,8 @@
     if (!workoutSession.value) {
       return 0;
     }
-    const hours = Math.abs(new Date(workoutSession.value.finished_at).getHours() - new Date(workoutSession.value.started_at).getHours());
-    const minutes = Math.abs(new Date(workoutSession.value.finished_at).getMinutes() - new Date(workoutSession.value.started_at).getMinutes());
-    const seconds = Math.abs(new Date(workoutSession.value.finished_at).getSeconds() - new Date(workoutSession.value.started_at).getSeconds());
-    const formattedDuration = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    return formattedDuration;
+    const duration = new Date(workoutSession.value.finished_at).getTime() - new Date(workoutSession.value.started_at).getTime();
+    return new Date(duration).toISOString().substr(11, 8);
   });
 
   const update = async () => {

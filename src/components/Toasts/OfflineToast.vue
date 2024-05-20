@@ -57,13 +57,13 @@ onMounted(async () => {
 <style scoped>
 .offline-toast {
   --background: var(--ion-color-danger);
-  --color: var(--ion-color-light);
+  --color: var(--ion-color-dark);
   margin-bottom: 5rem;
 }
 
 .online-toast {
   --background: var(--ion-color-success);
-  --color: var(--ion-color-light);
+  --color: var(--ion-color-dark);
   margin-bottom: 5rem;
 }
 </style>

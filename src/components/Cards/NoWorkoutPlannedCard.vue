@@ -6,6 +6,7 @@ import BaseCard from './BaseCard.vue';
 
 const openAddWorkoutModal = async () => {
   const modal = await modalController.create({
+    id: 'add-workout-modal',
     component: AddWorkoutModal,
     cssClass: 'full-screen-modal',
   });

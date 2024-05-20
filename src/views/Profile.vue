@@ -1,24 +1,23 @@
 <script setup lang="ts">
   import {
-    IonContent,
     IonItem,
     IonLabel,
     IonRow,
     IonCol,
     IonCard,
-    IonToggle,
     IonIcon,
     IonSelect,
     IonSelectOption,
   } from '@ionic/vue';
+  import { Browser } from '@capacitor/browser';
   import AppLayout from '@/layouts/AppLayout.vue';
   import { useRouter } from 'vue-router';
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   import { 
     languageOutline,
     personOutline,
     barChartOutline,
-    notificationsOutline,
+    newspaperOutline,
     mailOutline,
     checkboxOutline,
     barbellOutline,
@@ -42,6 +41,29 @@
   const userWeight = ref(userWeightStore.currentWeight);
 
   const selectedLang = ref(userSettingsStore.getLocale())
+
+  const pageUrl = import.meta.env.VITE_PAGE_URL;
+  const contactUsUrl = computed(() => {
+    if (selectedLang.value === 'de') {
+      return `${pageUrl}/${selectedLang.value}/support`;
+    } else {
+      return `${pageUrl}/support`;
+    }
+  });
+  const termsOfServiceUrl = computed(() => {
+    if (selectedLang.value === 'de') {
+      return `${pageUrl}/${selectedLang.value}/terms-of-service`;
+    } else {
+      return `${pageUrl}/terms-of-service`;
+    }
+  })
+  const privacyPolicyUrl = computed(() =>{
+    if (selectedLang.value === 'de') {
+      return `${pageUrl}/${selectedLang.value}/privacy-policy`;
+    } else {
+      return `${pageUrl}/privacy-policy`;
+    }
+  })
 
   const changeLocale = (lang: string) => {
     userSettingsStore.setLocale(lang)
@@ -68,6 +90,18 @@
     router.push('/insights');
   };
 
+  const openContactUs = async () => {
+    await Browser.open({ url: contactUsUrl.value });
+  };
+
+  const openTermsOfService = async () => {
+    await Browser.open({ url: termsOfServiceUrl.value });
+  };
+
+  const openPrivacyPolicy = async () => {
+    await Browser.open({ url: privacyPolicyUrl.value });
+  };
+
   userWeightStore.$subscribe(() => {
     userWeight.value = userWeightStore.currentWeight;
   });
@@ -84,7 +118,7 @@
     <template #avatar>
       <Transition name="fade" class="avatar-wrapper">
         <div class="avatar-wrapper">
-          <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          <img alt="Logo white" class="avatar-image" src="../../assets/logo_transparent_white_no_text.png" />
         </div>
       </Transition>
     </template>
@@ -117,7 +151,7 @@
       </ion-row>
     </div>
 
-    <div class="account">
+    <div class="settings-item">
       <ion-label class="head_lbl">{{ $t('profile.account') }}</ion-label>
       <div class="info">
         <ion-item lines="none" :button="true" @click="openProfileSettings()">
@@ -132,6 +166,12 @@
           <ion-icon :icon="restaurantOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>{{ $t('settings.dietGoals') }}</ion-label>
         </ion-item>
+     </div>
+    </div>
+
+    <div class="settings-item">
+      <ion-label class="head_lbl">{{ $t('fitness') }}</ion-label>
+      <div class="info">
         <ion-item lines="none" :button="true" @click="openActivityHistory()">
           <ion-icon :icon="listOutline" color="primary" style="margin-right: 10px;"></ion-icon>
           <ion-label>{{ $t('activityHistory') }}</ion-label>
@@ -143,39 +183,46 @@
       </div>
     </div>
 
-    <div class="notification">
+<!--    <div class="notification">
       <ion-label class="head_lbl">{{ $t('profile.notification') }}</ion-label>
       <ion-item lines="none">
         <ion-icon :icon="notificationsOutline" color="primary" style="margin-right: 10px;"></ion-icon>
         <ion-label>Pop-out Notificatioon</ion-label>
         <ion-toggle mode="ios" color="primary" checked></ion-toggle>
       </ion-item>
-    </div>
+    </div>-->
 
-    <div class="other">
+    <div class="settings-item">
       <ion-label class="head_lbl">{{ $t('profile.other') }}</ion-label>
-      <ion-item lines="none">
-        <ion-icon :icon="languageOutline" color="primary" style="margin-right: 10px"></ion-icon>
-        <ion-select 
-          :label="$t('language')"
-          :placeholder="$t('language')"
-          v-model="selectedLang"
-          @ionChange="changeLocale($event.detail.value)"
-        >
-          <ion-select-option value="en">🇬🇧 English</ion-select-option>
-          <ion-select-option value="de">🇩🇪 Deutsch</ion-select-option>
-          <ion-select-option value="fr">🇫🇷 Français</ion-select-option>
-        </ion-select>
-      </ion-item>
+      <div class="info">
+        <ion-item lines="none">
+          <ion-icon :icon="languageOutline" color="primary" style="margin-right: 10px"></ion-icon>
+          <ion-select 
+            :label="$t('language')"
+            :placeholder="$t('language')"
+            v-model="selectedLang"
+            @ionChange="changeLocale($event.detail.value)"
+            style="font-size: 14px;"
+          >
+            <ion-select-option value="en">🇬🇧 English</ion-select-option>
+            <ion-select-option value="de">🇩🇪 Deutsch</ion-select-option>
+            <ion-select-option value="fr">🇫🇷 Français</ion-select-option>
+          </ion-select>
+        </ion-item>
 
-      <ion-item lines="none">
-        <ion-icon :icon="mailOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-        <ion-label>{{ $t('profile.contactUs') }}</ion-label>
-      </ion-item>
-      <ion-item lines="none">
-        <ion-icon :icon="checkboxOutline" color="primary" style="margin-right: 10px;"></ion-icon>
-        <ion-label>{{ $t('profile.privacyPolicy') }}</ion-label>
-      </ion-item>
+        <ion-item lines="none" :button="true" @click="openContactUs()">
+          <ion-icon :icon="mailOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>{{ $t('profile.contactUs') }}</ion-label>
+        </ion-item>
+        <ion-item lines="none" :button="true" @click="openTermsOfService()">
+          <ion-icon :icon="newspaperOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>{{ $t('profile.termsOfService') }}</ion-label>
+        </ion-item>
+        <ion-item lines="none" :button="true" @click="openPrivacyPolicy()">
+          <ion-icon :icon="checkboxOutline" color="primary" style="margin-right: 10px;"></ion-icon>
+          <ion-label>{{ $t('profile.privacyPolicy') }}</ion-label>
+        </ion-item>
+      </div>
     </div>
   </AppLayout>
 </template>
@@ -192,6 +239,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  background-color: var(--ion-background-color);
   position: absolute;
   top: 30px;
   left: 50%; /* Center the avatar */
@@ -199,12 +247,16 @@
   border: 3px solid white;
   z-index: 10;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   :is(img) {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
+    width: 80%;
+    transform: translateY(-5px);
+    height: auto;
   }
 }
+
 .name {
   display: flex;
   font-size: 1.5rem;
@@ -214,6 +266,7 @@
     margin: 50px 0 0 0;
   }
 }
+
 ion-content {
   --background: none;
   :is(ion-row) {
@@ -236,7 +289,7 @@ ion-content {
       }
     }
   }
-  .account {
+  .settings-item {
     padding: 10px;
     margin-top: 1rem;
     border-radius: 10px;
@@ -254,49 +307,6 @@ ion-content {
       :is(ion-label) {
         font-size: 14px;
       }
-    }
-  }
-  .notification {
-    padding: 10px;
-    margin-top: 1rem;
-    border-radius: 10px;
-    :is(ion-item) {
-      margin-top: 10px;
-      border-radius: 10px;
-    }
-    .head_lbl {
-      font-size: 18px;
-    }
-    :is(ion-item) {
-      :is(ion-icon) {
-        font-size: 20px;
-      }
-      :is(ion-label) {
-        font-size: 14px;
-      }
-    }
-  }
-  .other {
-    padding: 10px;
-    margin-top: 1rem;
-    margin-bottom: 150px;
-    :is(ion-item) {
-      margin-top: 10px;
-      border-radius: 10px;
-    }
-    .head_lbl {
-      font-size: 18px;
-    }
-    :is(ion-item) {
-      :is(ion-icon) {
-        font-size: 20px;
-      }
-     :is(ion-label) {
-        font-size: 14px;
-      }
-    }
-    :is(ion-select) {
-      font-size: 14px;
     }
   }
 }

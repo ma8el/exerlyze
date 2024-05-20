@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { v4 as uuidv4 } from 'uuid';
+  import { useI18n } from 'vue-i18n';
   import { IonIcon,
            IonInput,
            IonButton,
@@ -7,7 +8,7 @@
            IonItem,
            IonSelect,
            IonSelectOption,
-           IonToggle,
+           IonPicker,
            IonCol,
            IonRow,
            IonLabel,
@@ -20,15 +21,26 @@
   import ExerciseItem from '../ExerciseItem.vue';
   import BaseFullPageModal from './BaseFullPageModal.vue';
   import NumericInput from '../NumericInput.vue';
+  import LoadingModal from './LoadingModal.vue';
   import { Exercise, ExerciseSelection, WorkoutPlan, PlannedWorkout } from '@/types';
   import { bookmarkOutline } from 'ionicons/icons';
   import UpdateIcon from '@/icons/update.svg';
+
+  interface PickerOutput {
+    options: {
+      text: string;
+      value: number;
+      columnIndex: number;
+    };
+  }
 
   const props = defineProps({
     workoutId: {
       type: String,
     }
   })
+
+  const { t } = useI18n()
 
   const workoutStore = useWorkoutStore()
   const dayOfWeekStore = useDayOfWeekStore()
@@ -53,6 +65,45 @@
   const plannedWorkouts = ref<PlannedWorkout[]>()
   const weekDays = ref<number[]>([])
 
+  const pickerColumns = [
+    {
+      name: 'options',
+      options: Array.from({ length: 20 }, (_, i) => i + 1).map((i) => ({ text: i.toString(), value: i })),
+    },
+  ]
+
+  const setPickerButtons = [
+    {
+      text: `${t('dismiss')}`,
+      role: 'cancel',
+    },
+    {
+      text: `${t('save')}`,
+      handler: (value: PickerOutput) => {
+        exercises.value = exercises.value.map((exercise) => {
+          exercise.sets = value.options.value
+          return exercise
+        })
+      },
+    },
+  ];
+
+  const repsPickerButtons = [
+    {
+      text: `${t('dismiss')}`,
+      role: 'cancel',
+    },
+    {
+      text: `${t('save')}`,
+      handler: (value: PickerOutput) => {
+        exercises.value = exercises.value.map((exercise) => {
+          exercise.reps = value.options.value
+          return exercise
+        })
+      },
+    },
+  ];
+
   const exercisesSelected = computed(() => {
     return exercises.value.length > 0
   })
@@ -63,6 +114,15 @@
   })
 
   const save = async () => {
+    const loadingModal = await modalController.create({
+      component: LoadingModal,
+      componentProps: {
+        showLoadingMessage: true,
+        loadingMessage: 'save',
+      },
+    });
+    await loadingModal.present();
+
     await workoutStore.addWorkout({
       id: generatedWorkoutId.value,
       created_at: new Date(),
@@ -90,7 +150,12 @@
         deleted: false
       })
     }
-    modalController.dismiss(null, 'save');
+    for (const exercise of exercises.value) {
+      await workoutStore.cacheWorkoutImage(exercise.exercise_id)
+      await workoutStore.cacheWorkoutVideo(exercise.exercise_id)
+    }
+    loadingModal.dismiss();
+    modalController.dismiss(null, 'save', 'add-workout-modal');
   }
 
   const update = async () => {
@@ -133,7 +198,7 @@
         }
       }
     }
-    modalController.dismiss(null, 'save');
+    modalController.dismiss(null, 'save', 'add-workout-modal');
   }
 
   const deleteWorkout = async () => {
@@ -143,7 +208,7 @@
     }
     const hasDeleted = await workoutStore.deleteWorkout(props.workoutId)
     if (hasDeleted) {
-      modalController.dismiss(null, 'save');
+      modalController.dismiss(null, 'save', 'add-workout-modal');
     } else {
       isOpen.value = true
     }
@@ -266,7 +331,7 @@
       </ion-item>
 
       <ion-list class="settings-list" lines="none" :inset="true">
-          <ion-item slot="header" color="light">
+          <ion-item slot="header">
             <ion-label>{{ $t('workoutSettings') }}</ion-label>
           </ion-item>
  
@@ -287,22 +352,34 @@
       <ion-row class="ion-justify-items-center ion-margin">
         <ion-col size="6">
           <ion-button
+            id="set-all-sets-button"
             size="small"
             expand="block"
-            :disabled="true"
+            :disabled="exercises.length === 0"
           >
-            Set all Sets
+            {{ $t('workouts.setAllSets') }}
           </ion-button>
+          <ion-picker
+            trigger="set-all-sets-button"
+            :columns="pickerColumns"
+            :buttons="setPickerButtons"
+          />
         </ion-col>
-        <ion-col size="6">
+       <ion-col size="6">
           <ion-button
+            id="set-all-reps-button"
             size="small"
             expand="block"
-            :disabled="true"
+            :disabled="exercises.length === 0"
           >
-            Set all Reps
+            {{ $t('workouts.setAllReps') }}
           </ion-button>
-        </ion-col>
+          <ion-picker
+            trigger="set-all-reps-button"
+            :columns="pickerColumns"
+            :buttons="repsPickerButtons"
+          />
+       </ion-col>
       </ion-row>
       <ion-reorder-group :disabled="false" @ionItemReorder="handleReorder($event)">
         <div v-for="(exercise, index) in exercises" :key="exercise.id">

@@ -6,6 +6,8 @@
              IonCardContent,
              IonRow,
              IonCol } from '@ionic/vue';
+    import { onMounted, ref } from 'vue';
+    import ImageSkeleton from '../Skeletons/ImageSkeleton.vue';
     
     const props = defineProps({
         title: String,
@@ -19,16 +21,47 @@
         },
         img_src: String,
         img_height: String,
-        titleSize: String
+        titleSize: String,
+        titleColSize: {
+          type: String,
+          default: "12",
+        },
+        titleEndColOffset: {
+          type: String,
+          default: "0",
+        },
+        titleEndColSize: {
+          type: String,
+          default: "0",
+        },
+    })
+
+    const loading = ref<boolean>(false)
+
+    const handleLoad = () => {
+      loading.value = false
+    }
+
+    onMounted(() => {
+      if ( props.img_src ) {
+        loading.value = true
+      }
     })
 </script>
 
 <template>
   <ion-card>
-    <img v-if="img_src" :src="img_src" :style="{height: img_height}" />
+    <img 
+      v-if="img_src && !loading"
+      :src="img_src"
+      :style="{height: img_height}"
+      @load="handleLoad"
+      @error="handleLoad"
+    />
+    <image-skeleton v-else-if="img_src && loading" :style="{height: img_height, 'max-height': '150px'}"/>
     <ion-card-header>
       <ion-row class="ion-justify-content-between ion-align-items-center">
-        <ion-col size="auto">
+        <ion-col :size="titleColSize">
           <ion-card-title 
             v-if="title"
             :style="{'font-size': titleSize, 'overflow': 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap'}"
@@ -36,7 +69,9 @@
             {{ title }}
           </ion-card-title>
         </ion-col>
-        <slot name="titleEnd"></slot>
+        <ion-col :size="titleEndColSize" :offset="titleEndColOffset">
+          <slot name="titleEnd"></slot>
+        </ion-col>
       </ion-row>
       <ion-card-subtitle v-if="subTitle">
         <slot name="subtitle"></slot>

@@ -92,7 +92,7 @@ const save = () => {
 }
 
 ion-datetime-button {
-  --background: #000;
+  --background: var(--ion-background-color);
   --color: var(--ion-color-primary);
   --border-color: var(--ion-color-primary);
   --border-radius: 0;

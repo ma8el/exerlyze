@@ -30,6 +30,8 @@
  const value = ref(undefined);
  const weightPercentage = ref(0);
 
+ const selectedExercise = ref<number | undefined>(undefined);
+
  const startDate = computed(() => {
    return props.startDate;
  });
@@ -64,6 +66,10 @@
   const weightData = await weightChangePercentage.value;
   weightPercentage.value = weightData.weight_change_percentage;
  }
+
+ const updateFilter = (exercise: number) => {
+   selectedExercise.value = exercise;
+ };
 
  watch([startDate, endDate], async () => {
    await refreshData();
@@ -124,10 +130,14 @@
         />
       </ion-col>
     </ion-row>
-    <ChartContainerCard>
+    <ChartContainerCard 
+      :has-filter="true"
+      @update-filter="updateFilter($event)"
+    >
       <WorkoutVolumeBarInsightChart
         :startDate="startDate"
         :endDate="endDate"
+        :selected-exercise="selectedExercise"
       />
     </ChartContainerCard>
 

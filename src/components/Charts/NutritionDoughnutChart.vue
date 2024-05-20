@@ -17,7 +17,7 @@
 
   const option = computed(() => {
     const commonOption = {
-      backgroundColor: '#1E1F24',
+      backgroundColor: '#1c253a',
       barWidth: '15px',
       radiusAxis: {
           type: 'category',

@@ -2,26 +2,21 @@
   import { IonSpinner, IonIcon, IonRow, IonCol, IonGrid } from '@ionic/vue';
   import { onMounted, ref } from 'vue';
   import BaseCard from './BaseCard.vue';
+  import { useWorkoutStore } from '@/store/workoutStore';
   import WeightIcon from '@/icons/weight.svg';
   import RepsIcon from '@/icons/reps.svg';
   import SetIcon from '@/icons/set.svg';
-  import { defaultImage, getBucketUrlFromTable, getSignedObjectUrl } from '@/composables/supabase';
   import { Exercise } from '@/types';
 
   const props = defineProps<Exercise>()
   const loading = ref<boolean>(true)
-  const ressourceName = ref<string>()
   const url = ref<string>()
+
+  const workoutStore = useWorkoutStore()
 
   onMounted(async () => {
     loading.value = true
-    await getBucketUrlFromTable('exercises', props.exercise_id).then((response) => {
-      ressourceName.value = response.data?.ressource_name
-    })
-    if (!ressourceName.value) return
-    await getSignedObjectUrl('exercise_images', `${ressourceName.value}.jpg`).then((response) => {
-      url.value = response.data?.signedUrl
-    })
+    url.value = await workoutStore.getWorkoutImageUrl(props.exercise_id)
     loading.value = false
   })
 </script>
@@ -30,7 +25,8 @@
   <BaseCard
     v-if="!loading"
     class="exercise-card"
-    :img_src="url ? url : defaultImage"
+    title-col-size="12"
+    :img_src="url"
     :title="name"
     :sub-title="true"
     :img_height="'100px'"

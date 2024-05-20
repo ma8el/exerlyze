@@ -17,7 +17,9 @@
 <template>
   <ion-list class="diary-list ion-padding">
     <ion-item-group class="ion-padding-bottom">
-      <ion-item-divider>
+      <ion-item-divider
+        style="background-color: var(--ion-card-background)"
+      >
         <ion-label>
           {{ $t('nutrition.breakfast') }}
         </ion-label>
@@ -39,7 +41,9 @@
       </template>
     </ion-item-group>
     <ion-item-group class="ion-padding-bottom">
-      <ion-item-divider>
+      <ion-item-divider
+        style="background-color: var(--ion-card-background)"
+      >
         <ion-label>
           {{ $t('nutrition.lunch') }}
         </ion-label>
@@ -61,7 +65,9 @@
       </template>
     </ion-item-group>
     <ion-item-group class="ion-padding-bottom">
-      <ion-item-divider>
+      <ion-item-divider
+        style="background-color: var(--ion-card-background)"
+      >
         <ion-label>
           {{ $t('nutrition.dinner') }}
         </ion-label>

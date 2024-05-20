@@ -34,7 +34,7 @@
     background: none;
 
     ion-segment-button {
-      --indicator-color: #3F63C8;
+      --indicator-color: var(--ion-color-primary);
       margin: 0 16px 0 16px;
     }
   }

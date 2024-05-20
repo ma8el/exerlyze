@@ -17,9 +17,10 @@
   import ProteinIcon from '@/icons/protein.vue';
   import FatIcon from '@/icons/fat.vue';
   import { FilteredNutritionApiProduct } from '@/types/nutrition';
-  import { PropType, onMounted } from 'vue';
+  import { ref, computed, PropType, onMounted } from 'vue';
   import { nutritionDetails, stringToFixedDigits } from '@/helpers/nutrition';
   import { defaultImage } from '@/composables/supabase';
+  import { useUserSettingsStore } from '@/store/userSettingsStore';
 
   const props = defineProps({
     product: {
@@ -30,6 +31,33 @@
         type: String,
         required: false,
         default: undefined
+    }
+  })
+
+  const userSettingsStore = useUserSettingsStore()
+  const locale = ref<string | undefined>(userSettingsStore.getLocale())
+
+  const titleColSize = computed(() => {
+    if (locale.value === 'en') {
+      return '9'
+    } else if(locale.value === 'de') {
+      return '8'
+    } else if (locale.value === 'fr') {
+      return '8'
+    } else {
+      return '8'
+    }
+  })
+
+  const titleEndColSize = computed(() => {
+    if (locale.value === 'en') {
+      return '3'
+    } else if(locale.value === 'de') {
+      return '4'
+    } else if (locale.value === 'fr') {
+      return '4'
+    } else {
+      return '4'
     }
   })
 
@@ -68,17 +96,18 @@
     <template #modalContent>
       <BaseCard
         :title="product.product_name"
+        :title-col-size="titleColSize"
+        title-end-col-offset="0"
+        :title-end-col-size="titleEndColSize"
         title-size="1.5rem"
         :content="true"
         class="nutrition-overview-card ion-no-margin"
       >
         <template #titleEnd>
-          <ion-col offset="4" offset-md="2" offset-lg="1" size="3">
-            <ion-button fill="clear" @click="openAddNutrimentModal()">
-              <ion-label v-if="foodDiaryEntryId === undefined" class="nutrition-add-item">+ {{ $t('add') }}</ion-label>
-              <ion-label v-else class="nutrition-add-item">+ {{ $t('update') }}</ion-label>
-            </ion-button>
-          </ion-col>
+          <ion-button fill="clear" size="small" @click="openAddNutrimentModal()">
+            <ion-label v-if="foodDiaryEntryId === undefined" class="nutrition-add-item">+ {{ $t('add') }}</ion-label>
+            <ion-label v-else class="nutrition-add-item">+ {{ $t('update') }}</ion-label>
+          </ion-button>
         </template>
  
         <ion-card-content class="nutrition-overview-content">
@@ -144,13 +173,14 @@
 
       <BaseCard
         :title="$t('nutrition.nutriments')"
+        title-col-size="8"
+        title-end-col-offset="1"
+        title-end-col-size="3"
         :content="true"
         class="nutrition-overview-card ion-no-margin"
       >
         <template #titleEnd>
-          <ion-col offset="4" offset-md="2" offset-lg="1" size="3">
-              <ion-label class="nutrition-list-title-end">{{ $t('per') }} {{ $t('weightUnitSmall', 100) }}</ion-label>
-          </ion-col>
+          <ion-label class="nutrition-list-title-end">{{ $t('per') }} {{ $t('weightUnitSmall', 100) }}</ion-label>
         </template>
         <ion-list
           v-for="(detail, index) in nutritionDetails"
@@ -197,12 +227,16 @@
   }
   .nutrition-list-title-end {
     color: var(--ion-color-primary);
+    display: flex;
+    justify-content: flex-end;
   }
   .nutrition-add-item {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: flex;
+    justify-content: flex-end;
   }
   .nutrition-thumb {
     background: var(--ion-color-primary-tint);

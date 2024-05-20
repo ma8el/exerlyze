@@ -11,9 +11,13 @@ import { Workout,
          WorkoutSessionPerformance,
          FullWorkoutSession } from '@/types';
 import { ref, computed } from 'vue';
-import { useStorage } from '@vueuse/core';
 import { useUserSettingsStore } from './userSettingsStore';
 import { getDayIndex } from '@/helpers/time';
+import { MuscleDB, WorkoutMediaDB, WorkoutDB } from '@/db';
+import { getBucketUrlFromTable,
+         getSignedObjectUrl,
+         downloadObject,
+         defaultImage } from '@/composables/supabase';
 
 export const useDayOfWeekStore = defineStore({
     id: 'dayOfWeek',
@@ -107,15 +111,23 @@ export const useDayOfWeekStore = defineStore({
 });
 
 export const useMuscleStore = defineStore('muscle', () => {
-    const muscles = ref(useStorage('muscles', [] as any[]))
+    const muscles = ref([] as Muscle[])
 
-    const getMuscles = computed(() => muscles.value)
+    const getMuscles = computed(() => {
+        if (muscles.value.length === 0) {
+            const muscleDB = new MuscleDB()
+            muscleDB.muscles.toArray().then((data) => {
+                muscles.value = data
+            })
+        }
+        return muscles.value
+    })
 
     async function getMuscleById(id: number): Promise<Muscle | undefined> {
-        if (muscles.value.length === 0) {
+        if (getMuscles.value.length === 0) {
             await fetchMuscles()
         }
-        return muscles.value.find(w => w.id === id)
+        return getMuscles.value.find(w => w.id === id)
     }
 
     async function getMuscleNameById(id: number): Promise<string | undefined> {
@@ -136,11 +148,12 @@ export const useMuscleStore = defineStore('muscle', () => {
     }
 
     async function fetchMuscles() {
-        const { data, error } = await supabase.from('muscles').select('id, created_at, updated_at, name_en, name_de, name_fr')
+        const { data, error } = await supabase.from('muscles').select('id, created_at, updated_at, name_en, name_de, name_fr').returns<Muscle[]>()
+        const muscleDB = new MuscleDB()
         if (error) {
             console.error(error)
         } else {
-            muscles.value = data
+            muscleDB.muscles.bulkPut(data)
         }
     }
     return {
@@ -153,12 +166,25 @@ export const useMuscleStore = defineStore('muscle', () => {
 })
 
 export const useWorkoutStore = defineStore('workout', () => {
-    const workouts = ref(useStorage('workouts', [] as Workout[]))
+    const workouts = ref([] as Workout[])
 
     const getWorkouts = computed(() => workouts.value.filter(w => !w.deleted))
 
     function getNewId() {
         return uuidv4()
+    }
+
+    function saveWorkoutsToIndexDB() {
+        const workoutDB = new WorkoutDB()
+        const plainWorkouts = JSON.parse(JSON.stringify(workouts.value))
+        workoutDB.workouts.bulkPut(plainWorkouts)
+    }
+
+    function loadWorkoutsFromIndexDB() {
+        const workoutDB = new WorkoutDB()
+        workoutDB.workouts.toArray().then((data) => {
+            workouts.value = data
+        })
     }
 
     function getWorkoutById(id: string): Workout | undefined {
@@ -170,6 +196,114 @@ export const useWorkoutStore = defineStore('workout', () => {
         const session = await supabase.auth.getSession()
         if (session.data.session !== null) {
             await pushWorkout(workout)
+        }
+    }
+
+    async function cacheWorkoutImage(exercise_id: number) {
+        const workoutMediaDB = new WorkoutMediaDB()
+        const { data } = await getBucketUrlFromTable('exercises', exercise_id)
+        if (!data) return
+        const image = await downloadObject('exercise_images', `${data.ressource_name}.jpg`) 
+        const imageBlob = image.data
+        if (imageBlob == null) {
+            return
+        }
+        await workoutMediaDB.workoutImages.put({ exercise_id: exercise_id, image: imageBlob });
+    }
+
+    async function cacheWorkoutVideo(exercise_id: number) {
+        const workoutMediaDB = new WorkoutMediaDB()
+        const { data } = await getBucketUrlFromTable('exercises', exercise_id)
+        if (!data) return
+        const video = await downloadObject('exercise_videos', `${data.ressource_name}.mp4`) 
+        const videoBlob = video.data
+        if (videoBlob == null) {
+            return
+        }
+        await workoutMediaDB.workoutVideos.put({ exercise_id: exercise_id, video: videoBlob });
+    };
+
+    async function fetchImageUrlFromIndexDB(exercise_id: number): Promise<string | undefined> {
+        const workoutMediaDB = new WorkoutMediaDB()
+        const image = await workoutMediaDB.workoutImages.get(exercise_id);
+        if (image) {
+            const imageUrl = URL.createObjectURL(image.image);
+            if (imageUrl) {
+                return imageUrl;
+            }
+        }
+        return undefined;
+    };
+
+    async function fetchImageUrlFromSupabase(exercise_id: number): Promise<string | undefined> {
+        const response = await getBucketUrlFromTable('exercises', exercise_id)
+        const ressource_name = response.data?.ressource_name
+        if (!ressource_name) return undefined
+        const imageResponse = await getSignedObjectUrl('exercise_images', `${ressource_name}.jpg`)
+        const imageUrl = imageResponse.data?.signedUrl
+        return imageUrl
+    }
+
+    async function getWorkoutImageUrl(exercise_id: number): Promise<string> {
+        try {
+            const imageUrl = await fetchImageUrlFromIndexDB(exercise_id)
+            if (imageUrl) {
+                return imageUrl
+            }
+        } catch (error) {
+            console.error(error)
+        }
+        try {
+            const imageUrlFromSupabase = await fetchImageUrlFromSupabase(exercise_id)
+            if (imageUrlFromSupabase) {
+                return imageUrlFromSupabase
+            }
+            return defaultImage
+        } catch (error) {
+            console.error(error)
+            return defaultImage
+        }
+    }
+
+    async function fetchVideoUrlFromIndexDB(exercise_id: number): Promise<string | undefined> {
+        const workoutMediaDB = new WorkoutMediaDB()
+        const video = await workoutMediaDB.workoutVideos.get(exercise_id);
+        if (video) {
+            const videoUrl = URL.createObjectURL(video.video);
+            if (videoUrl) {
+                return videoUrl;
+            }
+        }
+        return undefined;
+    };
+
+    async function fetchVideoUrlFromSupabase(exercise_id: number): Promise<string | undefined> {
+        const response = await getBucketUrlFromTable('exercises', exercise_id)
+        const ressource_name = response.data?.ressource_name
+        if (!ressource_name) return undefined
+        const videoResponse = await getSignedObjectUrl('exercise_videos', `${ressource_name}.mp4`)
+        const videoUrl = videoResponse.data?.signedUrl
+        return videoUrl
+    }
+
+    async function getWorkoutVideoUrl(exercise_id: number): Promise<string | undefined> {
+        try {
+            const videoUrl = await fetchVideoUrlFromIndexDB(exercise_id)
+            if (videoUrl) {
+                return videoUrl
+            }
+        } catch (error) {
+            console.error(error)
+        }
+        try {
+            const videoUrlFromSupabase = await fetchVideoUrlFromSupabase(exercise_id)
+            if (videoUrlFromSupabase) {
+                return videoUrlFromSupabase
+            }
+            return undefined
+        } catch (error) {
+            console.error(error)
+            return undefined
         }
     }
 
@@ -210,7 +344,7 @@ export const useWorkoutStore = defineStore('workout', () => {
         if (session.data.session !== null) {
             const { data, error } = await supabase.from('workouts').
                                                    select(`*, exercises:workout_exercises(*, name:exercises(name_${locale}))`).
-                                                   eq('deleted', false).
+//                                                   eq('deleted', false).
                                                    returns<Workout[]>()
             if (error) {
                 console.error(error)
@@ -287,8 +421,14 @@ export const useWorkoutStore = defineStore('workout', () => {
         workouts,
         getWorkouts,
         getNewId,
+        saveWorkoutsToIndexDB,
+        loadWorkoutsFromIndexDB,
         getWorkoutById,
         addWorkout,
+        cacheWorkoutImage,
+        cacheWorkoutVideo,
+        getWorkoutImageUrl,
+        getWorkoutVideoUrl,
         updateWorkout,
         deleteWorkout,
         fetchWorkouts,
@@ -297,14 +437,32 @@ export const useWorkoutStore = defineStore('workout', () => {
 })
 
 export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
-    const workoutPlans = ref(useStorage('workoutPlans', [] as WorkoutPlan[]))
-    const plannedWorkouts = ref(useStorage('plannedWorkouts', [] as PlannedWorkout[]))
+    const workoutPlans = ref<WorkoutPlan[]>([])
+    const plannedWorkouts = ref<PlannedWorkout[]>([])
 
     const getPlannedWorkouts = computed(() => plannedWorkouts.value.filter(w => !w.deleted))
     const getWorkoutPlans = computed(() => workoutPlans.value.filter(w => !w.deleted))
 
     function getNewId() {
         return uuidv4()
+    }
+
+    function saveWorkoutPlansToIndexDB() {
+        const workoutDB = new WorkoutDB()
+        const plainWorkoutPlans = JSON.parse(JSON.stringify(workoutPlans.value))
+        const plainPlanndedWorkouts = JSON.parse(JSON.stringify(plannedWorkouts.value))
+        workoutDB.workoutPlans.bulkPut(plainWorkoutPlans)
+        workoutDB.plannedWorkouts.bulkPut(plainPlanndedWorkouts)
+    }
+
+    function loadWorkoutPlansFromIndexDB() {
+        const workoutDB = new WorkoutDB()
+        workoutDB.workoutPlans.toArray().then((data) => {
+            workoutPlans.value = data
+        })
+        workoutDB.plannedWorkouts.toArray().then((data) => {
+            plannedWorkouts.value = data
+        })
     }
 
     const getFullWorkoutPlans = computed(() => {
@@ -397,10 +555,10 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
 
     async function deleteWorkoutPlan(id: string) {
         const index = workoutPlans.value.findIndex(w => w.id === id)
-
         workoutPlans.value[index].deleted = true
         workoutPlans.value[index].updated_at = new Date()
-        plannedWorkouts.value.forEach(async (w: PlannedWorkout) => {
+        const plannedWorkouts = getPlannedWorkoutsByWorkoutPlanId(id)
+        plannedWorkouts.forEach(async (w: PlannedWorkout) => {
             await deletePlannedWorkout(w.id)
         })
 
@@ -529,6 +687,8 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
     return {
         workoutPlans,
         getWorkoutPlans,
+        loadWorkoutPlansFromIndexDB,
+        saveWorkoutPlansToIndexDB,
         getFullWorkoutPlansOfToday,
         getFullWorkoutPlans,
         getNewId,
@@ -552,8 +712,26 @@ export const useWorkoutPlanStore = defineStore('workoutPlan', () => {
 })
 
 export const useWorkoutSessionStore = defineStore('workoutSession', () => {
-    const workoutSessions = ref(useStorage('workoutSessions', [] as WorkoutSession[]))
-    const workoutSessionPerformances = ref(useStorage('workoutSessionPerformance', [] as WorkoutSessionPerformance[]))
+    const workoutSessions = ref<WorkoutSession[]>([])
+    const workoutSessionPerformances = ref<WorkoutSessionPerformance[]>([])
+
+    function saveWorkoutSessionsToIndexDB() {
+        const workoutDB = new WorkoutDB()
+        const plainWorkoutSessions = JSON.parse(JSON.stringify(workoutSessions.value))
+        const plainWorkoutSessionPerformances = JSON.parse(JSON.stringify(workoutSessionPerformances.value))
+        workoutDB.workoutSessions.bulkPut(plainWorkoutSessions)
+        workoutDB.workoutSessionPerformances.bulkPut(plainWorkoutSessionPerformances)
+    }
+
+    function loadWorkoutSessionsFromIndexDB() {
+        const workoutDB = new WorkoutDB()
+        workoutDB.workoutSessions.toArray().then((data) => {
+            workoutSessions.value = data
+        })
+        workoutDB.workoutSessionPerformances.toArray().then((data) => {
+            workoutSessionPerformances.value = data
+        })
+    }
 
     const getWorkoutSessions = computed(() => workoutSessions.value)
     const getWorkoutSessionPerformances = computed(() => workoutSessionPerformances.value)
@@ -821,17 +999,26 @@ export const useWorkoutSessionStore = defineStore('workoutSession', () => {
         if (session.data.session !== null) {
             await fetchWorkoutSessions()
             await fetchWorkoutSessionPerformances()
-            for (const workoutSession of workoutSessions.value) {
-                await pushWorkoutSession(workoutSession)
+            const { error: sessionError } = await supabase
+                .from('workout_sessions')
+                .upsert(workoutSessions.value)
+            if (sessionError) {
+                console.error(sessionError)
             }
-            for (const workoutSessionPerformance of workoutSessionPerformances.value) {
-                await pushWorkoutSessionPerformance(workoutSessionPerformance)
+
+            const { error } = await supabase
+                .from('workout_session_performances')
+                .upsert(workoutSessionPerformances.value)
+            if (error) {
+                console.error(error)
             }
-        }
+       }
     }
 
     return {
         workoutSessions,
+        saveWorkoutSessionsToIndexDB,
+        loadWorkoutSessionsFromIndexDB,
         workoutSessionPerformances,
         getWorkoutSessions,
         getWorkoutSessionPerformances,

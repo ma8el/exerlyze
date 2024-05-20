@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 
-import { IonicVue } from '@ionic/vue';
+import { IonicVue, isPlatform } from '@ionic/vue';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -20,6 +20,8 @@ import '@ionic/vue/css/text-transformation.css';
 import '@ionic/vue/css/flex-utils.css';
 import '@ionic/vue/css/display.css';
 
+import { StatusBar, Style } from '@capacitor/status-bar';
+
 /* Theme variables */
 import './theme/variables.css';
 
@@ -28,6 +30,11 @@ import 'v-calendar/style.css'
 
 import { createPinia } from 'pinia'
 import { installI18n } from './i18n';
+
+if (isPlatform('android') && !isPlatform('mobileweb')) {
+  StatusBar.setStyle({ style: Style.Dark });
+  StatusBar.setBackgroundColor({ color: '#111827' });
+}
 
 const pinia = createPinia();
 

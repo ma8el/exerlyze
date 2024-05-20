@@ -22,7 +22,7 @@
   const attributes = ref([{
     key: 'today',
     highlight: {
-      color: '#3F63C8',
+      color: '#7f93de',
       fillMode: 'light',
     },
     dates: new Date(),
@@ -31,7 +31,7 @@
     key: 'workoutEvent',
     dot: {
       style: {
-        backgroundColor: '#3F63C8',
+        backgroundColor: '#7f93de',
       },
     },
     dates: props.workoutEventDates,
@@ -97,10 +97,10 @@
   }
 
   .vc-container, :deep(.vc-title) {
-    background: #2b2a33;
+    background: var(--ion-background-color);
     pointer-events: none;
   }
   .vc-container, :deep(.vc-arrow, .vc-prev, .vc-focus) {
-    background: #2b2a33;
+    background: var(--ion-background-color);
   }
 </style>

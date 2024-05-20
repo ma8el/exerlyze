@@ -64,6 +64,10 @@ export const messages = {
             break: "Break",
             compound: "Compound",
             isolation: "Isolation",
+            addWarmup: "Add warmup sets",
+            warmup: "Warmup",
+            setAllSets: "Set all sets",
+            setAllReps: "Set all reps",
         },
         nutrition: {
             title: "Nutrition",
@@ -107,6 +111,7 @@ export const messages = {
             other: "Other",
             contactUs: "Contact us",
             privacyPolicy: "Privacy Policy",
+            termsOfService: "Terms of Service",
         },
         settings: {
             title: "Settings",
@@ -198,6 +203,7 @@ export const messages = {
         offlineMessage: "You are offline!",
         onlineMessage: "You are online!",
         when: "When?",
+        filterByExercise: "Filter by exercise",
     },
     de: {
         invalidEmail: "Ungültige E-Mail",
@@ -264,6 +270,10 @@ export const messages = {
             break: "Pause",
             compound: "Grundübung",
             isolation: "Isolationsübung",
+            addWarmup: "Aufwärmsätze hinzufügen",
+            warmup: "Aufwärmsätze",
+            setAllSets: "Sätze einstellen",
+            setAllReps: "Wdhs einstellen",
         },
         nutrition: {
             title: "Ernährung",
@@ -307,7 +317,7 @@ export const messages = {
             other: "Sonstiges",
             contactUs: "Kontaktiere uns",
             privacyPolicy: "Datenschutzvereinbarung",
- 
+            termsOfService: "Nutzungsbedingungen",
         },
         settings: {
             title: "Einstellungen",
@@ -398,6 +408,7 @@ export const messages = {
         offlineMessage: "Du bist offline!",
         onlineMessage: "Du bist online!",
         when: "Wann?",
+        filterByExercise: "Nach Übung filtern",
     },
     fr: {
         invalidEmail: "E-mail invalide",
@@ -436,7 +447,7 @@ export const messages = {
             schedule: "Programme",
             select: "Sélectionner",
             selectScheduleDuration: "Sélectionner la durée du programme",
-            reps: "Répétitions",
+            reps: "Répéts.",
             set: "Série | Séries",
             addWorkout: "@:add @:workouts.workout",
             deleteWorkout: "@:delete @:workouts.workout",
@@ -464,6 +475,10 @@ export const messages = {
             break: "Pause",
             compond: "Composé",
             isolation: "Isolation",
+            addWarmup: "Ajouter des séries d'échauffement",
+            warmup: "Échauffement",
+            setAllSets: "Définir les sets",
+            setAllReps: "Définir les répéts.",
         },
         nutrition: {
             title: "Nutrition",
@@ -507,6 +522,7 @@ export const messages = {
             other: "Autre",
             contactUs: "Contactez-nous",
             privacyPolicy: "Politique de confidentialité",
+            termsOfService: "Conditions d'utilisation",
         },
         settings: {
             title: "Paramètres",
@@ -598,5 +614,6 @@ export const messages = {
         offlineMessage: "Vous êtes hors ligne!",
         onlineMessage: "Vous êtes en ligne!",
         when: "Quand?",
+        filterByExercise: "Filtrer par exercice",
     },
 }
