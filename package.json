@@ -45,6 +45,7 @@
   "devDependencies": {
     "@capacitor/assets": "^3.0.4",
     "@capacitor/cli": "5.0.1",
+    "@types/jest": "^29.5.12",
     "@types/uuid": "^9.0.7",
     "@vitejs/plugin-legacy": "^4.0.2",
     "@vitejs/plugin-vue": "^4.0.0",
