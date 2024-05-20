@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import Workouts from '@/views/Workouts.vue'
+import Workouts from '../../src/views/Workouts.vue'
 import { describe, expect, test } from 'vitest'
 
 describe('Workouts.vue', () => {
