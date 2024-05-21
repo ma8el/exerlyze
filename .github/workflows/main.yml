@@ -33,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_SUPABASE_URL: localhost:54321
+      VITE_SUPABASE_ANON_KEY: your-anon-key-here
 
     steps:
       - name: Check out repository
@@ -53,6 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_SUPABASE_URL: localhost:54321
+      VITE_SUPABASE_ANON_KEY: your-anon-key-here
 
     steps:
       - name: Check out repository
