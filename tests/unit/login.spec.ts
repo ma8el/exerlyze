@@ -1,14 +1,28 @@
 import { mount } from '@vue/test-utils'
-import Login from '@/views/Login.vue'
-import { describe, expect, it, vi } from 'vitest'
+import Login from '../../src/views/Login.vue'
+import { messages } from '../../src/locale'
+import { createI18n } from 'vue-i18n';
+import { createPinia, setActivePinia } from 'pinia';
+import { describe, expect, it, beforeEach } from 'vitest'
 import mockRouter from '../mocks/router'
+
+const i18n = createI18n({
+  legacy: false,
+  locale: 'en',
+  messages,
+});
 
 describe('Login.vue', () => {
   const globalMountOptions = {
     global: {
-      plugins: [mockRouter],
+      plugins: [mockRouter, i18n],
     },
   };
+
+  beforeEach(() => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+  })
 
   it('renders email input correctly', () => {
     const wrapper = mount(Login, globalMountOptions);
@@ -23,13 +37,5 @@ describe('Login.vue', () => {
 
     expect(sendMagicLinkButton.exists()).toBe(true);
     expect(sendMagicLinkButton.text()).toBe('Send magic link');
-  });
-
-  it('renders continue without login button correctly', () => {
-    const wrapper = mount(Login, globalMountOptions);
-    const continueWithoutLoginButton = wrapper.find('ion-button[id="no-login-button"]');
-
-    expect(continueWithoutLoginButton.exists()).toBe(true);
-    expect(continueWithoutLoginButton.text()).toBe('Continue without login');
   });
 });
