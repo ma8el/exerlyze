@@ -17,7 +17,11 @@ export const useUserSettingsStore = defineStore('userSettings', () => {
         return locale.value
     }
     const setLocale = (newLang: string) => {
-        locale.value = newLang
+        let lang = newLang
+        if (lang !== 'en' && lang !== 'de' && lang !== 'fr') {
+            lang = 'en'
+        }
+        locale.value = lang
     }
     return {
         locale,
